@@ -209,9 +209,8 @@ def _rst_escape(text):
 
 
 def _strip_ansi(text):
-    """Remove ANSI escape sequences from text."""
-    text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
-    return re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', text)
+    """Remove all terminal escape sequences from text."""
+    return wcwidth.strip_sequences(text)
 
 
 def _is_garbled(text, threshold=0.3):
@@ -391,7 +390,10 @@ def _banner_to_html(text, maxlen=5000, maxlines=250, name=''):
 def _rst_heading(title, char):
     """Print an RST section heading with the given underline character."""
     print(title)
-    print(char * max(len(title), 4))
+    width = wcwidth.wcswidth(title)
+    if width < 0:
+        width = len(title)
+    print(char * max(width, 4))
     print()
 
 
@@ -1142,7 +1144,7 @@ def generate_details_rst(servers):
             seen_files.add(bbs_file)
             label = s.get('_bbs_toc_label',
                           f"{s['host']}:{s['port']}")
-            print(f"   {_rst_escape(label)} <bbs_detail/{bbs_file}>")
+            print(f"   {label} <bbs_detail/{bbs_file}>")
         print()
     print(f"  wrote {rst_path}", file=sys.stderr)
 
@@ -1167,6 +1169,8 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     # Banner
     banner = _combine_banners(server)
     if banner and not _is_garbled(banner):
+        print("**Connection Banner:**")
+        print()
         banner_html = _banner_to_html(banner, name=title)
         print(".. raw:: html")
         print()
@@ -1326,9 +1330,7 @@ def generate_bbs_detail(server, logs_dir=None, force=False,
 
     with open(detail_path, 'w') as fout, contextlib.redirect_stdout(fout):
         escaped_title = _rst_escape(title)
-        print(escaped_title)
-        print("=" * max(len(escaped_title), 4))
-        print()
+        _rst_heading(escaped_title, '=')
 
         _write_bbs_port_section(
             server, '-', logs_dir=logs_dir, data_dir=data_dir,
@@ -1359,18 +1361,14 @@ def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
     with open(detail_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         escaped_name = _rst_escape(display_name)
-        print(escaped_name)
-        print("=" * max(len(escaped_name), 4))
-        print()
+        _rst_heading(escaped_name, '=')
 
         for server in group_servers:
             host = server['host']
             port = server['port']
             sub_title = f"{host}:{port}"
             escaped_sub = _rst_escape(sub_title)
-            print(escaped_sub)
-            print("-" * max(len(escaped_sub), 4))
-            print()
+            _rst_heading(escaped_sub, '-')
 
             _write_bbs_port_section(
                 server, '~', logs_dir=logs_dir,
@@ -1454,9 +1452,7 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
         print(f".. _fp_{fp_hash}:")
         print()
         title = f"{fp_hash[:16]}"
-        print(title)
-        print("=" * max(len(title), 4))
-        print()
+        _rst_heading(title, '=')
 
         print(f"**Full hash**: ``{fp_hash}``")
         print()

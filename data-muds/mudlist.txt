@@ -2,7 +2,6 @@
 104.154.76.197 4333
 107.172.21.36 4000
 108.252.255.105 3333
-112.124.15.134 6666 gbk
 112.124.8.59 6666 gbk
 121.5.75.226 5555 gbk
 125.228.186.144 8000 big5
@@ -67,7 +66,6 @@
 4.222.184.103 4000
 44.235.126.228 4000
 45.90.220.35 4000
-47.110.8.228 5555 gbk
 4dimensions.org 6000
 5.182.18.140 4000
 50.16.123.54 6969
@@ -433,7 +431,7 @@ heroesassemble.mushhaven.com 3000
 hiddenworldsmud.com 4040
 holomuck.org 5757
 home.starmud.com 4000
-hopto.mud.ren 4000 big5
+hopto.mud.ren 4000
 hot-mess.net 9900
 hy1.jhfy.org 1863 gbk
 hyperborea.net 2000
@@ -817,7 +815,7 @@ t2tmud.org 9999
 tapestries.fur.com 2069
 taurosmud.com 5005
 tbamud.com 9091
-td.muds.net 5500 utf-8
+td.muds.net 5500 big5
 tdod.org 3000
 tdod.org 4000
 tdome.nukefire.org 4000
@@ -842,7 +840,7 @@ thresholdrpg.com 3333
 ti-legacy.com 5050
 timeslost.duckdns.org 4000
 timesmud.com 8500
-timespacedreamland.themuds.org 5500 utf-8
+timespacedreamland.themuds.org 5500 big5
 timmud.com 5555
 tinymush.net 6250
 tinymux.hodgeheg.co.uk 2860

@@ -34,10 +34,10 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import wcwidth
+
 _BAT = shutil.which("bat") or shutil.which("batcat")
 _JQ = shutil.which("jq")
-_ANSI_RE = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
-_MXP_RE = re.compile(r"\x1b\[\d+z")
 _DIGITS_RE = re.compile(r"\d+")
 
 # Default paths relative to this script
@@ -53,10 +53,8 @@ DEFAULT_DECISIONS = _HERE / "moderation_decisions.json"
 # ── Utility helpers ──────────────────────────────────────────────────────
 
 def _strip_ansi(text):
-    """Remove ANSI escape sequences and MXP mode switches."""
-    text = _ANSI_RE.sub("", text)
-    text = _MXP_RE.sub("", text)
-    return text
+    """Remove all terminal escape sequences (CSI, OSC, DCS, etc.)."""
+    return wcwidth.strip_sequences(text)
 
 
 def _normalize_banner(text):
@@ -1071,6 +1069,10 @@ def _get_argument_parser():
         help="show what would change without writing files",
     )
     parser.add_argument(
+        "--skip-dns", action="store_true",
+        help="skip DNS deduplication step",
+    )
+    parser.add_argument(
         "--no-cache", action="store_true",
         help="ignore cached decisions, re-prompt everything",
     )
@@ -1116,7 +1118,7 @@ def main():
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
-    do_dns = args.only_dns or not any_only
+    do_dns = (args.only_dns or not any_only) and not args.skip_dns
 
     # Cross-list and DNS modes require both lists
     if do_cross and (args.mud or args.bbs):

@@ -17,6 +17,9 @@
     "122.199.58.252:2323|bbs.tabakov.net:13023": {
       "action": "skip"
     },
+    "125.228.186.144:8000|catworld.muds.me:5555|catworld.muds.tw:4000|doom.twmuds.com:4000": {
+      "action": "skip"
+    },
     "125.228.186.144:8000|catworld.muds.tw:4000": {
       "action": "skip"
     },
@@ -131,7 +134,13 @@
     "210.59.236.38:3000|210.59.236.38:3001|210.59.236.38:3002|210.59.236.38:3003": {
       "action": "skip"
     },
+    "210.59.236.38:3000|210.59.236.38:3001|210.59.236.38:3002|210.59.236.38:3003|mud.revivalworld.org:4000|td.muds.net:5500|timespacedreamland.themuds.org:5500": {
+      "action": "skip"
+    },
     "210.59.236.38:5555|210.59.236.38:7000": {
+      "action": "skip"
+    },
+    "210.59.236.38:7788|fs.twkang.net:5555": {
       "action": "skip"
     },
     "211.68.71.66:23|bbs.byr.cn:23": {
@@ -141,6 +150,9 @@
       "action": "skip"
     },
     "216.226.128.180:4443|216.226.128.180:4444|216.226.128.180:6663|mucks.cyberleo.net:6660|mucks.cyberleo.net:7878": {
+      "action": "skip"
+    },
+    "221.226.96.186:5555|mud.ren:5555|zhyx.xguo.top:8888": {
       "action": "skip"
     },
     "24.245.105.161:6502|westwoodbbs.net:64738": {
@@ -334,6 +346,9 @@
     "borderlinebbs.dyndns.org:6400|cottonwoodbbs.dyndns.org:6502": {
       "action": "skip"
     },
+    "breakworld.themuds.org:4000|hopto.mud.ren:4000": {
+      "action": "skip"
+    },
     "btmux.com:3065|btmux.com:5555": {
       "action": "skip"
     },
@@ -367,7 +382,13 @@
     "cityofhope.genesismuds.com:8888|portent.genesismuds.com:4910": {
       "action": "skip"
     },
+    "coffeemud.net:2324|coffeemud.net:2325": {
+      "action": "skip"
+    },
     "coffeemud.net:23|coffeemud.net:2324|coffeemud.net:2325|coffeemud.net:2327": {
+      "action": "skip"
+    },
+    "coffeemud.net:23|coffeemud.net:2327": {
       "action": "skip"
     },
     "colossus.vineyard.haus:10000|dibrovamud.com:9000|mud.darkrisings.org:1313|www.darkrisings.org:1313": {
@@ -433,6 +454,9 @@
       "remove": [
         "dg.demonsgate.org:3011"
       ]
+    },
+    "dolba.net:4000|dolba.net:5200": {
+      "action": "skip"
     },
     "ds.enyc.org.uk:8688|haven.enyc.org.uk:7777|pit.enyc.org.uk:7422|zmc-place.enyc.org.uk:8682": {
       "action": "remove",
@@ -678,6 +702,12 @@
       "action": "skip"
     },
     "tlcbbs.dynu.net:6400|www.madworldbbs.com:52146": {
+      "action": "skip"
+    },
+    "toox.co.kr:4000|toox.co.kr:5800|toox.co.kr:6000|toox.co.kr:6255": {
+      "action": "skip"
+    },
+    "toox.co.kr:6025|toox.co.kr:6123": {
       "action": "skip"
     },
     "torilmud.com:9999|torilmud.org:9999": {

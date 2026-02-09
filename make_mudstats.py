@@ -227,7 +227,7 @@ def load_server_data(data_dir):
                 'has_mssp': bool(mssp),
                 'mssp': mssp,
                 # Extract commonly used MSSP fields
-                'name': _first_str(mssp.get('NAME', '')),
+                'name': _clean_mssp_str(_first_str(mssp.get('NAME', ''))),
                 'codebase': ', '.join(_listify(mssp.get('CODEBASE', ''))),
                 'family': ', '.join(_listify(mssp.get('FAMILY', ''))),
                 'genre': ', '.join(_listify(mssp.get('GENRE', ''))),
@@ -806,9 +806,29 @@ def _rst_escape(text):
 
 
 def _strip_ansi(text):
-    """Remove ANSI escape sequences from text."""
-    text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
-    return re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', text)
+    """Remove all terminal escape sequences from text."""
+    return wcwidth.strip_sequences(text)
+
+
+def _fix_mojibake(text):
+    """Try to recover UTF-8 text that was decoded as Latin-1.
+
+    Some servers send MSSP data as UTF-8 bytes but the scanner decodes
+    each byte as a Latin-1 codepoint, producing mojibake.  This tries
+    to reverse that by re-encoding as Latin-1 and decoding as UTF-8.
+    """
+    try:
+        recovered = text.encode('latin-1').decode('utf-8')
+        if recovered != text:
+            return recovered
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        pass
+    return text
+
+
+def _clean_mssp_str(text):
+    """Clean an MSSP string field: strip ANSI and fix mojibake."""
+    return _fix_mojibake(_strip_ansi(text))
 
 
 def _is_garbled(text, threshold=0.3):
@@ -1020,7 +1040,10 @@ def _mud_filename(server):
 def _rst_heading(title, char):
     """Print an RST section heading with the given underline character."""
     print(title)
-    print(char * max(len(title), 4))
+    width = wcwidth.wcswidth(title)
+    if width < 0:
+        width = len(title)
+    print(char * max(width, 4))
     print()
 
 
@@ -1086,7 +1109,7 @@ def _assign_mud_filenames(servers, ip_groups):
             s['_mud_file'], s['_mud_toc_label'] = grouped_keys[key]
         else:
             s['_mud_file'] = _mud_filename(s)
-            s['_mud_toc_label'] = s['name'] or s['host']
+            s['_mud_toc_label'] = _strip_ansi(s['name'] or s['host'])
 
 
 def print_datatable(table_str, caption=None):
@@ -1412,7 +1435,7 @@ def generate_details_rst(servers):
                 continue
             seen_files.add(mud_file)
             label = s.get('_mud_toc_label', s['name'] or s['host'])
-            print(f"   {_rst_escape(label)} <mud_detail/{mud_file}>")
+            print(f"   {label} <mud_detail/{mud_file}>")
         print()
     print(f"  wrote {rst_path}", file=sys.stderr)
 
@@ -1427,18 +1450,18 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None, fp_counts=None):
     """
     mud_file = server['_mud_file']
     detail_path = os.path.join(MUD_DETAIL_PATH, f"{mud_file}.rst")
-    name = server['name'] or server['host']
+    name = _strip_ansi(server['name'] or server['host'])
     footnotes = []
 
     with open(detail_path, 'w') as fout, contextlib.redirect_stdout(fout):
         escaped_name = _rst_escape(name)
-        print(escaped_name)
-        print("=" * max(len(escaped_name), 4))
-        print()
+        _rst_heading(escaped_name, '=')
 
         # Banner (first, before address)
         banner = _combine_banners(server)
         if banner and not _is_garbled(banner):
+            print("**Connection Banner:**")
+            print()
             banner_html = _banner_to_html(banner, name=name)
             print(".. raw:: html")
             print()
@@ -1675,13 +1698,15 @@ def _write_mud_port_section(server, sec_char, logs_dir=None, data_dir=None,
     :returns: list of footnote strings to print at page end
     """
     footnotes = []
-    name = server['name'] or server['host']
+    name = _strip_ansi(server['name'] or server['host'])
     host = server['host']
     port = server['port']
 
     # Banner
     banner = _combine_banners(server)
     if banner and not _is_garbled(banner):
+        print("**Connection Banner:**")
+        print()
         banner_html = _banner_to_html(banner, name=name)
         print(".. raw:: html")
         print()
@@ -1912,13 +1937,11 @@ def generate_mud_detail_group(ip, group_servers, logs_dir=None,
 
     with open(detail_path, 'w') as fout, contextlib.redirect_stdout(fout):
         escaped_name = _rst_escape(display_name)
-        print(escaped_name)
-        print("=" * max(len(escaped_name), 4))
-        print()
+        _rst_heading(escaped_name, '=')
 
         all_footnotes = []
         for server in group_servers:
-            name = server['name']
+            name = _strip_ansi(server['name'])
             host = server['host']
             port = server['port']
             if name:
@@ -1926,9 +1949,7 @@ def generate_mud_detail_group(ip, group_servers, logs_dir=None,
             else:
                 sub_title = f"{host}:{port}"
             escaped_sub = _rst_escape(sub_title)
-            print(escaped_sub)
-            print("-" * max(len(escaped_sub), 4))
-            print()
+            _rst_heading(escaped_sub, '-')
 
             footnotes = _write_mud_port_section(
                 server, '~', logs_dir=logs_dir, data_dir=data_dir,
@@ -2003,9 +2024,7 @@ def generate_fingerprint_detail(fp_hash, fp_servers):
         print(f".. _fp_{fp_hash}:")
         print()
         title = f"{fp_hash[:16]}"
-        print(title)
-        print("=" * max(len(title), 4))
-        print()
+        _rst_heading(title, '=')
 
         print(f"**Full hash**: ``{fp_hash}``")
         print()

@@ -63,7 +63,7 @@ def _kill_process_group(proc):
 
 
 def scan_host(host, port, data_dir, logs_dir, encoding=None,
-              refresh=False, banner_max_wait=10, connect_timeout=30):
+              banner_max_wait=10, connect_timeout=30):
     """Scan a single server.
 
     :param host: server hostname
@@ -71,18 +71,11 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
     :param data_dir: directory for fingerprint data output
     :param logs_dir: directory for log files
     :param encoding: optional encoding argument for telnetlib3-fingerprint
-    :param refresh: if True, rescan even if log file exists
     :param banner_max_wait: seconds to wait for banner data
     :param connect_timeout: seconds to wait for TCP connection
     :returns: (host, port, status_message)
     """
     logfile = os.path.join(logs_dir, f"{host}:{port}.log")
-
-    if not host or not port:
-        return (host, port, "skip: empty host or port")
-
-    if not refresh and os.path.isfile(logfile):
-        return (host, port, f"skip: file exists, {logfile}")
 
     try:
         os.remove(logfile)
@@ -134,8 +127,8 @@ def main():
         '--logs-dir', default=None,
         help='Directory for scan log files (default: ./logs)')
     parser.add_argument(
-        '--num-workers', type=int, default=32,
-        help='Number of parallel workers (default: 4)')
+        '--num-workers', type=int, default=16,
+        help='Number of parallel workers (default: 16)')
     parser.add_argument(
         '--banner-max-wait', type=int, default=10,
         help='Seconds to wait for banner data')
@@ -145,6 +138,9 @@ def main():
     parser.add_argument(
         '--refresh', action='store_true',
         help='Force rescan even if log file exists')
+    parser.add_argument(
+        '--default-encoding', default=None,
+        help='Default encoding when server list entry has none')
     parser.add_argument(
         '--connect-delay', type=float, default=0.15,
         help='Seconds between launching each scan (default: 0.15)')
@@ -165,19 +161,34 @@ def main():
     entries = parse_server_list(args.list)
     random.shuffle(entries)
 
-    print(f"Scanning {len(entries)} servers with {args.num_workers} workers...",
-          file=sys.stderr)
+    # Pre-filter: separate entries that need scanning from those
+    # that will be skipped, so --connect-delay only affects real scans.
+    to_scan = []
+    skipped = 0
+    for host, port, encoding in entries:
+        if not host or not port:
+            print(f"{host}:{port} -- skip: empty host or port")
+            skipped += 1
+        elif not args.refresh and os.path.isfile(
+                os.path.join(args.logs_dir, f"{host}:{port}.log")):
+            print(f"{host}:{port} -- skip: already scanned")
+            skipped += 1
+        else:
+            if not encoding and args.default_encoding:
+                encoding = args.default_encoding
+            to_scan.append((host, port, encoding))
+
+    print(f"Scanning {len(to_scan)} servers with"
+          f" {args.num_workers} workers"
+          f" ({skipped} skipped) ...", file=sys.stderr)
 
     scanned = 0
-    skipped = 0
     errors = 0
 
     def _report(future):
-        nonlocal scanned, skipped, errors
+        nonlocal scanned, errors
         host, port, status = future.result()
-        if status.startswith("skip"):
-            skipped += 1
-        elif status == "scanned":
+        if status == "scanned":
             scanned += 1
         else:
             errors += 1
@@ -185,10 +196,10 @@ def main():
 
     with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
         futures = set()
-        for host, port, encoding in entries:
+        for host, port, encoding in to_scan:
             future = pool.submit(
                 scan_host, host, port, args.data_dir, args.logs_dir,
-                encoding, args.refresh, args.banner_max_wait,
+                encoding, args.banner_max_wait,
                 args.connect_timeout)
             futures.add(future)
             time.sleep(args.connect_delay)
@@ -200,8 +211,8 @@ def main():
         for future in as_completed(futures):
             _report(future)
 
-    print(f"\nDone: {scanned} scanned, {skipped} skipped, {errors} errors",
-          file=sys.stderr)
+    print(f"\nDone: {scanned} scanned, {skipped} skipped,"
+          f" {errors} errors", file=sys.stderr)
 
 
 if __name__ == '__main__':

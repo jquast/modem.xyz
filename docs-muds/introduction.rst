@@ -79,12 +79,12 @@ data (such as accented characters or box-drawing symbols) in legacy encodings, l
 About This Site
 ---------------
 
-Although this site acts as a directory of MUDs to play, to provide a search interface and to learn
-about and preview them without connecting to them individually.  But most importantly, it is for
-MUD developers and TELNET negotiation nerds!
+This site acts as a discovery of international MUDs.
 
-It was created by the author of the Python `telnetlib3 <https://github.com/jquast/telnetlib3>`_
-library, and, uses the ``telnetlib3-fingerprint`` client to gather the results shown here.
+This directory is unique in that **fingerprinting** of the telnet options negotiated are captured,
+and serves are cataloged by this fingerprint.  It was created by the author of the Python
+`telnetlib3 <https://github.com/jquast/telnetlib3>`_ library, and, uses the
+``telnetlib3-fingerprint`` client to gather the results shown here.
 
 The list of MUDs scanned is from the github-managed file, `mudlist.txt
 <https://github.com/jquast/muds.modem.xyz/blob/master/data/mudlist.txt>`_, you are welcome to add
