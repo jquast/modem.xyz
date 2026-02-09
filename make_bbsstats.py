@@ -4,7 +4,8 @@
 Reads JSON session files from telnetlib3's data directory and produces:
 - docs/statistics.rst: summary stats and plots
 - docs/server_list.rst: searchable server table
-- docs/fingerprints.rst: fingerprint summary with links to detail pages
+- docs/fingerprints.rst: BBS by Fingerprint summary with links to detail pages
+- docs/bbs_software.rst: BBS by Software grouping
 - docs/servers.rst: index of per-BBS detail pages
 - docs/server_detail/*.rst: per-fingerprint detail pages
 - docs/bbs_detail/*.rst: per-BBS detail pages
@@ -1020,8 +1021,8 @@ def display_server_table(servers):
 
 def display_fingerprint_summary(servers):
     """Print summary table of protocol fingerprints."""
-    print("Fingerprints")
-    print("============")
+    print("BBS by Fingerprint")
+    print("==================")
     print()
     print("A fingerprint is a hash of a server's Telnet option negotiation")
     print("behavior -- which options it offers to the client, which it requests")
@@ -1112,6 +1113,53 @@ def generate_fingerprints_rst(servers):
     rst_path = os.path.join(DOCS_PATH, "fingerprints.rst")
     with open(rst_path, 'w') as fout, contextlib.redirect_stdout(fout):
         display_fingerprint_summary(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
+def display_bbs_software_groups(servers):
+    """Print BBS by Software page grouping servers by detected software."""
+    _rst_heading("BBS by Software", '=')
+    print("Servers grouped by the BBS software detected from their login")
+    print("banner. Detection is based on pattern matching against known")
+    print("software names. Servers whose software could not be identified")
+    print("are listed under *Unidentified*.")
+    print()
+
+    by_software = {}
+    for s in servers:
+        key = s['bbs_software'] or 'Unidentified'
+        by_software.setdefault(key, []).append(s)
+
+    # Summary table
+    rows = []
+    for name, members in sorted(by_software.items(),
+                                 key=lambda x: (-len(x[1]), x[0])):
+        rows.append({
+            'Software': f'`{_rst_escape(name)}`_' if name != 'Unidentified'
+                        else f'`Unidentified`_',
+            'Servers': str(len(members)),
+        })
+    table_str = tabulate_mod.tabulate(rows, headers="keys", tablefmt="rst")
+    print_datatable(table_str, caption="BBS Software")
+
+    # Per-software sections
+    for name, members in sorted(by_software.items(),
+                                 key=lambda x: (-len(x[1]), x[0])):
+        _rst_heading(name, '-')
+        for s in sorted(members, key=lambda s: s['host'].lower()):
+            bbs_file = s['_bbs_file']
+            label = f"{s['host']}:{s['port']}"
+            tls = ' :tls-lock:`\U0001f512`' if s['tls_support'] else ''
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <bbs_detail/{bbs_file}>`{tls}")
+        print()
+
+
+def generate_bbs_software_rst(servers):
+    """Generate the bbs_software.rst file grouping BBSes by software."""
+    rst_path = os.path.join(DOCS_PATH, "bbs_software.rst")
+    with open(rst_path, 'w') as fout, contextlib.redirect_stdout(fout):
+        display_bbs_software_groups(servers)
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -1658,6 +1706,7 @@ def main():
     generate_summary_rst(stats)
     generate_server_list_rst(servers)
     generate_fingerprints_rst(servers)
+    generate_bbs_software_rst(servers)
     generate_details_rst(servers)
     generate_bbs_details(servers, logs_dir=logs_dir,
                           force=args.force, data_dir=data_dir,

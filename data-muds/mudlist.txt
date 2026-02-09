@@ -2,6 +2,7 @@
 104.154.76.197 4333
 107.172.21.36 4000
 108.252.255.105 3333
+112.124.31.157 5555 gbk
 112.124.8.59 6666 gbk
 121.5.75.226 5555 gbk
 125.228.186.144 8000 big5
@@ -10,6 +11,7 @@
 130.61.212.175 4000
 130.61.249.129 4000
 136.38.83.106 8008
+138.197.134.82 4242
 138.68.247.72 5555
 143.109.10.156 5321
 143.109.10.156 8000
@@ -24,12 +26,14 @@
 164.138.29.223 4222
 165.227.179.255 4242
 170.187.150.187 1111
+172.232.4.129 3200
 173.230.135.147 4000
 176.122.177.178 9000
 176.9.151.147 1111
 178.79.173.99 7500
 180.153.120.36 5555 gbk
 185.25.151.230 4000
+185.26.59.68 6047
 188.128.39.239 4000
 191.252.194.206 4000
 192.175.22.156 1874
@@ -61,6 +65,7 @@
 35.88.139.46 4000
 37.59.41.114 3001
 37.59.41.114 4000
+38.210.209.169 4000
 3k.org 3000
 3m.vineyard.haus 3000
 4.222.184.103 4000
@@ -85,6 +90,7 @@
 78.131.8.20 4444
 7dof.org.uk 6715
 7thplane.net 8888
+81.201.49.14 443
 82.65.252.78 6666
 82.68.167.68 4242
 8bit.fansi.org 4201
@@ -128,6 +134,7 @@ ansalon.net 8662
 ansiblemoo.org 6000
 aod.genesismuds.com 23
 aoh.genesismuds.com 6969
+aoh.zitz.dk 2345
 aoh.zitz.dk 2348
 ap.dipterous.org 8888
 apocalypse6.com 6000
@@ -218,6 +225,7 @@ coffeemud.net 2327
 coffeemud.net 6502
 coimuck.com 1771
 colossus.vineyard.haus 10000
+connect.mu-gateway.net 6700
 connect.qmud.org 5000
 connect.vikingmud.org 2001
 continentsmud.com 5050
@@ -242,6 +250,7 @@ dark-legacy.com 9898
 darkeningsun.com 5678
 darkerrealms.org 2000
 darkgift.mushpark.com 6251
+darklord.no 5000
 darklordmud.duckdns.org 5000
 darkmetal2039.com 2039
 darkmists.org 2222
@@ -333,6 +342,7 @@ floodmoo.com 4000
 fluffmuck.org 8888
 foomoo.org 4500
 forgottenkingdoms.org 4000
+fortsackville.com 2020
 fr.hyssing.net 4001
 frandum.fr 2001
 frostmud.com 7000

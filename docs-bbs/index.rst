@@ -7,5 +7,6 @@ bbs.modem.xyz
    introduction
    server_list
    statistics
+   bbs_software
    fingerprints
    servers
