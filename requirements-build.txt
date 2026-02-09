@@ -1,0 +1,9 @@
+ansi2html
+matplotlib
+numpy
+sphinx
+sphinxcontrib-jquery
+sphinx-datatables
+sphinx-rtd-theme
+tabulate
+wcwidth

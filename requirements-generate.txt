@@ -1,0 +1,4 @@
+matplotlib
+numpy
+tabulate
+ansi2html

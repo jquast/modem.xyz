@@ -1,0 +1,336 @@
+/* muds.modem.xyz dark theme overrides for sphinx_rtd_theme
+ * Uses Perfect DOS VGA 437 Win font for code blocks and banners.
+ */
+
+@font-face {
+  font-family: 'Perfect DOS VGA 437 Win';
+  font-display: swap;
+  src: local('Perfect DOS VGA 437 Win'),
+       url('./fonts/PerfectDOSVGA437Win.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ── Dark background ─────────────────────────────────────────────────── */
+body,
+.wy-body-for-nav,
+.wy-nav-content-wrap {
+  background: #0c0c0c;
+}
+
+.wy-nav-content {
+  background: #111;
+  max-width: none;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────── */
+.wy-nav-side {
+  background: #1a1a2e;
+}
+
+.wy-side-scroll {
+  overflow-y: scroll !important;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.wy-side-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.wy-side-scroll::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+.wy-side-scroll::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+.wy-side-scroll::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Firefox */
+.wy-side-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #1a1a2e;
+}
+
+.wy-side-nav-search {
+  background: #16213e;
+}
+
+.wy-side-nav-search input[type="text"] {
+  background: #0f3460;
+  border-color: #0f3460;
+  color: #ccc;
+}
+
+.wy-menu-vertical a,
+.wy-menu-vertical li.toctree-l1 > a,
+.wy-menu-vertical li.toctree-l2 > a,
+.wy-menu-vertical li.toctree-l3 > a {
+  color: #aaa;
+}
+
+.wy-menu-vertical a:hover,
+.wy-menu-vertical li.current > a {
+  background: #0f3460;
+  color: #e0e0e0;
+}
+
+.wy-menu-vertical li.current {
+  background: #16213e;
+}
+
+.wy-menu-vertical li.on a,
+.wy-menu-vertical li.current > a,
+.wy-menu-vertical li.toctree-l2.current > a,
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a {
+  background: #16213e;
+  color: #e0e0e0;
+  border-color: #0f3460;
+}
+
+/* ── Text colors ─────────────────────────────────────────────────────── */
+body,
+.rst-content,
+.wy-nav-content {
+  color: #ccc;
+}
+
+h1, h2, h3, h4, h5, h6,
+.rst-content h1,
+.rst-content h2,
+.rst-content h3,
+.rst-content h4 {
+  color: #e0e0e0;
+}
+
+/* ── Links ───────────────────────────────────────────────────────────── */
+a,
+.rst-content a,
+.wy-nav-content a {
+  color: #55aaff;
+}
+
+a:hover {
+  color: #88ccff;
+}
+
+a:visited {
+  color: #55aaff;
+}
+
+/* ── Code blocks: DOS font, dark background ──────────────────────────── */
+code, pre, .rst-content code, .rst-content pre,
+.rst-content tt {
+  font-family: 'Perfect DOS VGA 437 Win', 'Courier New', monospace !important;
+}
+
+.rst-content code,
+.rst-content tt {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #55ff55;
+}
+
+.rst-content pre,
+.highlight pre {
+  background: #1a1a1a;
+  color: #aaa;
+  border: 1px solid #333;
+}
+
+.highlight {
+  background: #1a1a1a;
+}
+
+/* ── ANSI banner rendering ───────────────────────────────────────────── */
+pre.ansi-banner {
+  font-family: 'Perfect DOS VGA 437 Win', 'Courier New', monospace !important;
+  background: #1a1a1a;
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.2;
+  border: 1px solid #333;
+  padding: 0.5em;
+}
+
+/* ── Protocol support indicators ─────────────────────────────────────── */
+.proto-yes {
+  color: #55ff55 !important;
+  font-weight: bold;
+}
+
+.proto-no {
+  color: #666 !important;
+}
+
+.proto-negotiated {
+  color: #55aaff !important;
+  font-weight: bold;
+}
+
+/* ── Telnet links and copy buttons ───────────────────────────────────── */
+.mud-connect {
+  margin: 0.5em 0 1em 0;
+}
+
+.copy-btn {
+  display: inline-block;
+  background: none;
+  border: 1px solid #555;
+  color: #888;
+  cursor: pointer;
+  padding: 1px 5px;
+  margin-left: 6px;
+  font-family: 'Perfect DOS VGA 437 Win', 'Courier New', monospace;
+  font-size: 0.85em;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.copy-btn:hover {
+  border-color: #55aaff;
+  color: #55aaff;
+}
+
+.copy-icon {
+  pointer-events: none;
+}
+
+/* ── TLS/SSL padlock indicator ───────────────────────────────────────── */
+.tls-lock {
+  color: #55ff55;
+  font-size: 0.85em;
+  margin-left: 4px;
+  cursor: help;
+  vertical-align: middle;
+}
+
+/* ── Field description tables ────────────────────────────────────────── */
+.field-descriptions {
+  font-size: 0.9em;
+  margin-bottom: 1.5em;
+}
+
+.field-descriptions td:first-child {
+  white-space: nowrap;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────── */
+.rst-content table.docutils,
+.rst-content table.field-list {
+  border-color: #333 !important;
+}
+
+.rst-content table.docutils td,
+.rst-content table.docutils th,
+.rst-content table.field-list td,
+.rst-content table.field-list th {
+  border-color: #333 !important;
+  color: #ccc !important;
+  background: #111 !important;
+}
+
+.rst-content table.docutils thead th,
+.rst-content table.field-list thead th {
+  background: #1a1a2e !important;
+  color: #e0e0e0 !important;
+}
+
+.rst-content table.docutils tbody tr:nth-child(even) td {
+  background: #151515 !important;
+}
+
+.rst-content table.docutils tbody tr:nth-child(odd) td {
+  background: #111 !important;
+}
+
+/* DataTables overrides */
+table.dataTable thead th,
+table.dataTable thead td {
+  background: #1a1a2e !important;
+  color: #e0e0e0 !important;
+  border-bottom-color: #333 !important;
+}
+
+table.dataTable tbody td {
+  background: #111 !important;
+  color: #ccc !important;
+  border-color: #333 !important;
+}
+
+table.dataTable tbody tr:nth-child(even) td {
+  background: #151515 !important;
+}
+
+.dataTables_filter input,
+.dataTables_filter label {
+  color: #ccc !important;
+}
+
+.dataTables_filter input {
+  background: #1a1a1a !important;
+  border: 1px solid #555 !important;
+  color: #ccc !important;
+}
+
+/* ── Breadcrumbs / header bar ────────────────────────────────────────── */
+.wy-breadcrumbs-aside a,
+.rst-versions {
+  color: #888;
+}
+
+.wy-breadcrumbs li,
+.wy-breadcrumbs a {
+  color: #aaa;
+}
+
+/* ── Admonitions ─────────────────────────────────────────────────────── */
+.rst-content .admonition,
+.rst-content .note,
+.rst-content .warning,
+.rst-content .tip {
+  background: #1a1a1a;
+  border-left-color: #555;
+}
+
+.rst-content .admonition .admonition-title {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+footer,
+.rst-footer-buttons {
+  color: #666;
+}
+
+footer a {
+  color: #55aaff;
+}
+
+/* ── Prev/Next navigation ────────────────────────────────────────────── */
+.btn.btn-neutral {
+  background: #1a1a2e !important;
+  border-color: #2a2a4e !important;
+  color: #8899cc !important;
+}
+
+.btn.btn-neutral:hover {
+  background: #22224a !important;
+  border-color: #3a3a6e !important;
+  color: #aabbee !important;
+}
+
+/* ── Glossary terms ──────────────────────────────────────────────────── */
+.rst-content dl dt {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  border-top: 2px solid #333;
+}
+
+/* ── Selection ───────────────────────────────────────────────────────── */
+::selection {
+  background: #0f3460;
+  color: #e0e0e0;
+}
