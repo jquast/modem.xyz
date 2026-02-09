@@ -787,7 +787,7 @@ def create_all_plots(stats):
         stats, os.path.join(PLOTS_PATH, 'telnet_options.png'))
 
 
-_RST_SECTION_RE = re.compile(r'([=\-~#+^"]{4,})')
+_RST_SECTION_RE = re.compile(r'([=\-~#+^"._]{4,})')
 
 
 def _rst_escape(text):
@@ -796,7 +796,7 @@ def _rst_escape(text):
         return ''
     result = (text.replace('\\', '\\\\').replace('`', '\\`')
               .replace('*', '\\*').replace('|', '\\|'))
-    # Break up runs of RST section/transition characters (=-~#+^") so
+    # Break up runs of RST section/transition characters (=-~#+^"._) so
     # docutils does not interpret them as headings or transitions.
     result = _RST_SECTION_RE.sub(
         lambda m: m.group(0)[0] + '\u200B' + m.group(0)[1:], result)
@@ -1309,8 +1309,8 @@ def display_server_table(servers):
 
 def display_fingerprint_summary(servers):
     """Print summary table of protocol fingerprints."""
-    print("Fingerprints")
-    print("============")
+    print("MUDs by Fingerprint")
+    print("===================")
     print()
     print("A fingerprint is a hash of a server's Telnet option negotiation")
     print("behavior -- which options it offers to the client, which it requests")

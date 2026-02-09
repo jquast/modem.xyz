@@ -76,6 +76,14 @@ receive raw ASCII text, which is the spirit of the original standard.
 One special note, is that many MUD codebases predate general Unicode support and may emit non-ASCII
 data (such as accented characters or box-drawing symbols) in legacy encodings, like CP437 or latin1.
 
+See Also: BBSes
+----------------
+
+MUDs are related to **BBSes** (Bulletin Board Systems) -- both use Telnet, but MUDs typically
+operate in **line mode** with ASCII or UTF-8, while BBSes use **character-at-a-time** with legacy
+encodings like CP437 for ANSI art. A companion BBS census is at `bbs.modem.xyz
+<https://bbs.modem.xyz/>`_.
+
 About This Site
 ---------------
 

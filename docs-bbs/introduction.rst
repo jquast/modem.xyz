@@ -57,6 +57,13 @@ terminal emulator instead of any of these special emulators::
 
     telnetlib3-client --force-binary --encoding=cp437 
 
+See Also: MUDs
+--------------
+
+BBSes are related to **MUDs** (Multi-User Dungeons) -- both use Telnet, but BBSes typically operate
+**character-at-a-time** with legacy encodings like CP437, while MUDs use **line mode** with ASCII or
+UTF-8. A companion MUD census is at `muds.modem.xyz <https://muds.modem.xyz/>`_.
+
 About This Site
 ---------------
 

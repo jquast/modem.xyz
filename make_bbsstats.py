@@ -192,7 +192,7 @@ def _needs_rebuild(output_path, *source_paths):
     return False
 
 
-_RST_SECTION_RE = re.compile(r'([=\-~#+^"]{4,})')
+_RST_SECTION_RE = re.compile(r'([=\-~#+^"._]{4,})')
 
 
 def _rst_escape(text):
@@ -201,7 +201,7 @@ def _rst_escape(text):
         return ''
     result = (text.replace('\\', '\\\\').replace('`', '\\`')
               .replace('*', '\\*').replace('|', '\\|'))
-    # Break up runs of RST section/transition characters (=-~#+^") so
+    # Break up runs of RST section/transition characters (=-~#+^"._) so
     # docutils does not interpret them as headings or transitions.
     result = _RST_SECTION_RE.sub(lambda m: m.group(0)[0] + '\u200B' + m.group(0)[1:], result)
     if result.endswith('_'):

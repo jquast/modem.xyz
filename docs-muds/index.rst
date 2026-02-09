@@ -7,5 +7,5 @@ muds.modem.xyz
    introduction
    server_list
    statistics
-   fingerprints
    servers
+   fingerprints
