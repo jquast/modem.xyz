@@ -14,8 +14,10 @@ encodings like CP437.
 import argparse
 import os
 import random
+import signal
 import subprocess
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
@@ -41,8 +43,27 @@ def parse_server_list(path):
     return entries
 
 
+def _kill_process_group(proc):
+    """Kill a subprocess and all of its children via process group.
+
+    :param proc: a :class:`subprocess.Popen` started with ``start_new_session=True``
+    """
+    try:
+        os.killpg(proc.pid, signal.SIGTERM)
+    except OSError:
+        pass
+    try:
+        proc.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except OSError:
+            pass
+        proc.wait(timeout=5)
+
+
 def scan_host(host, port, data_dir, logs_dir, encoding=None,
-              refresh=False, banner_max_wait=6, connect_timeout=10):
+              refresh=False, banner_max_wait=10, connect_timeout=30):
     """Scan a single server.
 
     :param host: server hostname
@@ -83,9 +104,16 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
         cmd.extend(["--encoding", encoding])
 
     try:
-        subprocess.run(cmd, check=False, capture_output=True, timeout=30)
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        proc.wait(timeout=30)
         return (host, port, "scanned")
     except subprocess.TimeoutExpired:
+        _kill_process_group(proc)
         return (host, port, "timeout (subprocess)")
     except FileNotFoundError:
         return (host, port, "error: telnetlib3-fingerprint not found")
@@ -110,13 +138,16 @@ def main():
         help='Number of parallel workers (default: 4)')
     parser.add_argument(
         '--banner-max-wait', type=int, default=10,
-        help='Seconds to wait for banner data (default: 6)')
+        help='Seconds to wait for banner data')
     parser.add_argument(
         '--connect-timeout', type=int, default=30,
-        help='Seconds to wait for TCP connection (default: 10)')
+        help='Seconds to wait for TCP connection')
     parser.add_argument(
         '--refresh', action='store_true',
         help='Force rescan even if log file exists')
+    parser.add_argument(
+        '--connect-delay', type=float, default=0.15,
+        help='Seconds between launching each scan (default: 0.15)')
     args = parser.parse_args()
 
     if not os.path.isfile(args.list):
@@ -141,22 +172,33 @@ def main():
     skipped = 0
     errors = 0
 
+    def _report(future):
+        nonlocal scanned, skipped, errors
+        host, port, status = future.result()
+        if status.startswith("skip"):
+            skipped += 1
+        elif status == "scanned":
+            scanned += 1
+        else:
+            errors += 1
+        print(f"{host}:{port} -- {status}")
+
     with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
-        futures = {
-            pool.submit(scan_host, host, port, args.data_dir, args.logs_dir,
-                        encoding, args.refresh, args.banner_max_wait,
-                        args.connect_timeout): (host, port)
-            for host, port, encoding in entries
-        }
+        futures = set()
+        for host, port, encoding in entries:
+            future = pool.submit(
+                scan_host, host, port, args.data_dir, args.logs_dir,
+                encoding, args.refresh, args.banner_max_wait,
+                args.connect_timeout)
+            futures.add(future)
+            time.sleep(args.connect_delay)
+            # drain any futures that completed while we slept
+            done = {f for f in futures if f.done()}
+            for f in done:
+                _report(f)
+            futures -= done
         for future in as_completed(futures):
-            host, port, status = future.result()
-            if status.startswith("skip"):
-                skipped += 1
-            elif status == "scanned":
-                scanned += 1
-            else:
-                errors += 1
-            print(f"{host}:{port} -- {status}")
+            _report(future)
 
     print(f"\nDone: {scanned} scanned, {skipped} skipped, {errors} errors",
           file=sys.stderr)

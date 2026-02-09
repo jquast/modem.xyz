@@ -388,6 +388,13 @@ def _banner_to_html(text, maxlen=5000, maxlines=250, name=''):
             f'{html_content}</pre>')
 
 
+def _rst_heading(title, char):
+    """Print an RST section heading with the given underline character."""
+    print(title)
+    print(char * max(len(title), 4))
+    print()
+
+
 def _telnet_url(host, port):
     """Build a telnet:// URL string.
 
@@ -408,6 +415,71 @@ def _bbs_filename(server):
     """
     host_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', server['host'])
     return f"{host_safe}_{server['port']}"
+
+
+def _group_shared_ip(servers):
+    """Group servers sharing the same resolved IP address.
+
+    Servers with the same non-empty IP are grouped for a combined detail
+    page.  Groups with only one member are excluded -- those servers get
+    standalone pages.
+
+    :param servers: list of deduplicated server records
+    :returns: dict mapping IP address string to list of servers,
+              only for groups with 2+ members
+    """
+    by_ip = {}
+    for s in servers:
+        ip = s['ip']
+        if not ip:
+            continue
+        by_ip.setdefault(ip, []).append(s)
+
+    return {
+        ip: sorted(members, key=lambda s: (s['host'], s['port']))
+        for ip, members in by_ip.items()
+        if len(members) >= 2
+    }
+
+
+def _most_common_hostname(group_servers):
+    """Return the most common hostname among grouped servers.
+
+    :param group_servers: list of server records sharing an IP
+    :returns: most frequent hostname string
+    """
+    counts = Counter(s['host'] for s in group_servers)
+    return counts.most_common(1)[0][0]
+
+
+def _assign_bbs_filenames(servers, ip_groups):
+    """Assign ``_bbs_file`` and ``_bbs_toc_label`` to each server.
+
+    Grouped servers share an IP-based filename.  Ungrouped servers use
+    the ``host_port`` format from :func:`_bbs_filename`.
+
+    :param servers: list of server records (modified in place)
+    :param ip_groups: dict from :func:`_group_shared_ip`
+    """
+    grouped_keys = {}
+    for ip, members in ip_groups.items():
+        ip_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', ip)
+        filename = f"ip_{ip_safe}"
+        hostname_hint = _most_common_hostname(members)
+        if hostname_hint == ip:
+            toc_label = ip
+        else:
+            toc_label = f"{ip} ({hostname_hint})"
+        for s in members:
+            grouped_keys[(s['host'], s['port'])] = (filename, toc_label)
+
+    for s in servers:
+        key = (s['host'], s['port'])
+        if key in grouped_keys:
+            s['_bbs_file'], s['_bbs_toc_label'] = grouped_keys[key]
+        else:
+            s['_bbs_file'] = _bbs_filename(s)
+            s['_bbs_toc_label'] = f"{s['host']}:{s['port']}"
 
 
 def detect_bbs_software(banner_text):
@@ -914,7 +986,7 @@ def display_server_table(servers):
 
     rows = []
     for s in servers:
-        bbs_file = _bbs_filename(s)
+        bbs_file = s['_bbs_file']
         host_display = f"{s['host']}:{s['port']}"
         host_cell = f":doc:`{_rst_escape(host_display)} <bbs_detail/{bbs_file}>`"
         if s['website']:
@@ -1062,16 +1134,172 @@ def generate_details_rst(servers):
         print(".. toctree::")
         print("   :maxdepth: 1")
         print()
+        seen_files = set()
         for s in servers:
-            bbs_file = _bbs_filename(s)
-            label = f"{s['host']}:{s['port']}"
+            bbs_file = s['_bbs_file']
+            if bbs_file in seen_files:
+                continue
+            seen_files.add(bbs_file)
+            label = s.get('_bbs_toc_label',
+                          f"{s['host']}:{s['port']}")
             print(f"   {_rst_escape(label)} <bbs_detail/{bbs_file}>")
         print()
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
-def generate_bbs_detail(server, logs_dir=None, force=False, data_dir=None,
-                         fp_counts=None):
+def _write_bbs_port_section(server, sec_char, logs_dir=None,
+                             data_dir=None, fp_counts=None):
+    """Write the detail content sections for one BBS port.
+
+    Used by :func:`generate_bbs_detail_group` to emit each port's
+    content at a lower heading level than a standalone page.
+
+    :param server: server record dict
+    :param sec_char: RST underline character for section headings
+    :param logs_dir: path to log directory
+    :param data_dir: path to data directory
+    :param fp_counts: dict mapping fingerprint to server count
+    """
+    host = server['host']
+    port = server['port']
+    title = f"{host}:{port}"
+
+    # Banner
+    banner = _combine_banners(server)
+    if banner and not _is_garbled(banner):
+        banner_html = _banner_to_html(banner, name=title)
+        print(".. raw:: html")
+        print()
+        for line in banner_html.split('\n'):
+            print(f"   {line}")
+        print()
+    elif banner:
+        print("*Banner not shown (legacy encoding not supported).*")
+        print()
+
+    # Connection info with telnet link
+    url = _telnet_url(host, port)
+    print(f".. raw:: html")
+    print()
+    print(f'   <p class="mud-connect">')
+    print(f'   <a href="{url}" class="telnet-link">{host}:{port}</a>')
+    print(f'   <button class="copy-btn" data-host="{host}"'
+          f' data-port="{port}"'
+          f' title="Copy host and port"'
+          f' aria-label="Copy {host} port {port} to clipboard">')
+    print(f'   <span class="copy-icon" aria-hidden="true">'
+          f'&#x2398;</span>')
+    print(f'   </button>')
+    if server['tls_support']:
+        print(f'   <span class="tls-lock" title="Supports TLS">'
+              f'&#x1f512;</span>')
+    print(f'   </p>')
+    print()
+
+    # BBS software
+    if server['bbs_software']:
+        _rst_heading("BBS Software", sec_char)
+        print(f"**Detected**: {_rst_escape(server['bbs_software'])}")
+        print()
+
+    # Encoding info
+    effective_enc = server.get('encoding_override') or DEFAULT_ENCODING
+    scanner_enc = server.get('encoding', 'unknown')
+    _rst_heading("Encoding", sec_char)
+    print(f"- **Effective encoding**: {effective_enc}")
+    if server.get('encoding_override'):
+        print(f"- **Override**: {server['encoding_override']}"
+              " (from bbslist.txt)")
+    print(f"- **Scanner detected**: {scanner_enc}")
+    print()
+
+    # Website link if found
+    if server['website']:
+        href = server['website']
+        if not href.startswith(('http://', 'https://')):
+            href = f'http://{href}'
+        print(f"**Website**: `{_rst_escape(server['website'])}"
+              f" <{href}>`_")
+        print()
+
+    # Fingerprint link
+    fp = server['fingerprint']
+    _rst_heading("Telnet Fingerprint", sec_char)
+    print(f":ref:`{fp[:16]}... <fp_{fp}>`")
+    print()
+    if fp_counts:
+        other_count = fp_counts.get(fp, 1) - 1
+        if other_count > 0:
+            print(f"*This fingerprint is shared by {other_count} other "
+                  f"{'server' if other_count == 1 else 'servers'}.*")
+        else:
+            print("*This fingerprint is unique to this server.*")
+        print()
+    if server['offered']:
+        print("**Options offered by server**: "
+              + ', '.join(
+                  f"``{o}``" for o in sorted(server['offered'])))
+        print()
+    if server['requested']:
+        print("**Options requested from client**: "
+              + ', '.join(
+                  f"``{o}``" for o in sorted(server['requested'])))
+        print()
+
+    # Raw JSON data source
+    data_path = server.get('data_path', '')
+    if data_path and data_dir:
+        json_file = os.path.join(data_dir, "server", data_path)
+        github_url = f"{GITHUB_DATA_BASE}/{data_path}"
+        print(f"**Data source**: `{data_path} <{github_url}>`_")
+        print()
+        print("The complete JSON record collected during the scan,")
+        print("including Telnet negotiation results and banner data.")
+        print()
+        if os.path.isfile(json_file):
+            with open(json_file) as jf:
+                raw_json = jf.read().rstrip()
+            if raw_json:
+                print(".. code-block:: json")
+                print()
+                for line in raw_json.split('\n'):
+                    print(f"   {line}")
+                print()
+
+    # Connection log
+    if logs_dir:
+        log_path = os.path.join(
+            logs_dir, f"{host}:{port}.log")
+        if os.path.isfile(log_path):
+            with open(log_path) as lf:
+                log_text = lf.read().rstrip()
+            if log_text:
+                _rst_heading("Connection Log", sec_char)
+                print("Debug-level log of the Telnet negotiation"
+                      " session,")
+                print("showing each IAC (Interpret As Command)"
+                      " exchange")
+                print("between client and server.")
+                print()
+                print(".. code-block:: text")
+                print()
+                for line in log_text.split('\n'):
+                    for wrapped in _clean_log_line(line):
+                        print(f"   {wrapped}")
+                print()
+                print(f"*Generated by* "
+                      f"`telnetlib3-fingerprint "
+                      f"<https://github.com/jquast/telnetlib3>`_")
+                print()
+                print(".. code-block:: shell")
+                print()
+                print(f"   telnetlib3-fingerprint "
+                      f"--loglevel=debug {host} {port}")
+                print()
+
+
+def generate_bbs_detail(server, logs_dir=None, force=False,
+                         data_dir=None, fp_counts=None):
     """Generate a detail page for one BBS server.
 
     :param server: server record dict
@@ -1080,7 +1308,7 @@ def generate_bbs_detail(server, logs_dir=None, force=False, data_dir=None,
     :param data_dir: path to telnetlib3 data directory for mtime checks
     :param fp_counts: dict mapping fingerprint hash to server count
     """
-    bbs_file = _bbs_filename(server)
+    bbs_file = server['_bbs_file']
     detail_path = os.path.join(BBS_DETAIL_PATH, f"{bbs_file}.rst")
 
     if not force and data_dir:
@@ -1102,169 +1330,99 @@ def generate_bbs_detail(server, logs_dir=None, force=False, data_dir=None,
         print("=" * max(len(escaped_title), 4))
         print()
 
-        # Banner
-        banner = _combine_banners(server)
-        if banner and not _is_garbled(banner):
-            banner_html = _banner_to_html(banner, name=title)
-            print(".. raw:: html")
-            print()
-            for line in banner_html.split('\n'):
-                print(f"   {line}")
-            print()
-        elif banner:
-            print("*Banner not shown (legacy encoding not supported).*")
-            print()
+        _write_bbs_port_section(
+            server, '-', logs_dir=logs_dir, data_dir=data_dir,
+            fp_counts=fp_counts)
 
-        # Connection info with telnet link
-        url = _telnet_url(host, port)
-        print(f".. raw:: html")
-        print()
-        print(f'   <p class="mud-connect">')
-        print(f'   <a href="{url}" class="telnet-link">{host}:{port}</a>')
-        print(f'   <button class="copy-btn" data-host="{host}"'
-              f' data-port="{port}"'
-              f' title="Copy host and port"'
-              f' aria-label="Copy {host} port {port} to clipboard">')
-        print(f'   <span class="copy-icon" aria-hidden="true">'
-              f'&#x2398;</span>')
-        print(f'   </button>')
-        if server['tls_support']:
-            print(f'   <span class="tls-lock" title="Supports TLS">'
-                  f'&#x1f512;</span>')
-        print(f'   </p>')
-        print()
 
-        # BBS software
-        if server['bbs_software']:
-            print("BBS Software")
-            print("------------")
-            print()
-            print(f"**Detected**: {_rst_escape(server['bbs_software'])}")
-            print()
+def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
+                               data_dir=None, fp_counts=None):
+    """Generate a combined detail page for BBSes sharing an IP.
 
-        # Encoding info
-        effective_enc = server.get('encoding_override') or DEFAULT_ENCODING
-        scanner_enc = server.get('encoding', 'unknown')
-        print("Encoding")
-        print("--------")
-        print()
-        print(f"- **Effective encoding**: {effective_enc}")
-        if server.get('encoding_override'):
-            print(f"- **Override**: {server['encoding_override']}"
-                  " (from bbslist.txt)")
-        print(f"- **Scanner detected**: {scanner_enc}")
+    Each server gets its own sub-heading by ``hostname:port``, with all
+    detail sections nested underneath.
+
+    :param ip: shared IP address
+    :param group_servers: list of server records sharing this IP
+    :param logs_dir: path to log directory
+    :param data_dir: path to data directory
+    :param fp_counts: dict mapping fingerprint to server count
+    """
+    bbs_file = group_servers[0]['_bbs_file']
+    detail_path = os.path.join(BBS_DETAIL_PATH, f"{bbs_file}.rst")
+    hostname_hint = _most_common_hostname(group_servers)
+    if hostname_hint == ip:
+        display_name = ip
+    else:
+        display_name = f"{ip} ({hostname_hint})"
+
+    with open(detail_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        escaped_name = _rst_escape(display_name)
+        print(escaped_name)
+        print("=" * max(len(escaped_name), 4))
         print()
 
-        # Website link if found
-        if server['website']:
-            href = server['website']
-            if not href.startswith(('http://', 'https://')):
-                href = f'http://{href}'
-            print(f"**Website**: `{_rst_escape(server['website'])}"
-                  f" <{href}>`_")
+        for server in group_servers:
+            host = server['host']
+            port = server['port']
+            sub_title = f"{host}:{port}"
+            escaped_sub = _rst_escape(sub_title)
+            print(escaped_sub)
+            print("-" * max(len(escaped_sub), 4))
             print()
 
-        # Fingerprint link
-        fp = server['fingerprint']
-        print("Telnet Fingerprint")
-        print("------------------")
-        print()
-        print(f":ref:`{fp[:16]}... <fp_{fp}>`")
-        print()
-        if fp_counts:
-            other_count = fp_counts.get(fp, 1) - 1
-            if other_count > 0:
-                print(f"*This fingerprint is shared by {other_count} other "
-                      f"{'server' if other_count == 1 else 'servers'}.*")
-            else:
-                print("*This fingerprint is unique to this server.*")
-            print()
-        if server['offered']:
-            print("**Options offered by server**: "
-                  + ', '.join(f"``{o}``" for o in sorted(server['offered'])))
-            print()
-        if server['requested']:
-            print("**Options requested from client**: "
-                  + ', '.join(
-                      f"``{o}``" for o in sorted(server['requested'])))
-            print()
-
-        # Raw JSON data source
-        data_path = server.get('data_path', '')
-        if data_path and data_dir:
-            json_file = os.path.join(data_dir, "server", data_path)
-            github_url = f"{GITHUB_DATA_BASE}/{data_path}"
-            print(f"**Data source**: `{data_path} <{github_url}>`_")
-            print()
-            print("The complete JSON record collected during the scan,")
-            print("including Telnet negotiation results and banner data.")
-            print()
-            if os.path.isfile(json_file):
-                with open(json_file) as jf:
-                    raw_json = jf.read().rstrip()
-                if raw_json:
-                    print(".. code-block:: json")
-                    print()
-                    for line in raw_json.split('\n'):
-                        print(f"   {line}")
-                    print()
-
-        # Connection log
-        if logs_dir:
-            log_path = os.path.join(
-                logs_dir, f"{server['host']}:{server['port']}.log")
-            if os.path.isfile(log_path):
-                with open(log_path) as lf:
-                    log_text = lf.read().rstrip()
-                if log_text:
-                    print("Connection Log")
-                    print("--------------")
-                    print()
-                    print("Debug-level log of the Telnet negotiation session,")
-                    print("showing each IAC (Interpret As Command) exchange")
-                    print("between client and server.")
-                    print()
-                    print(".. code-block:: text")
-                    print()
-                    for line in log_text.split('\n'):
-                        for wrapped in _clean_log_line(line):
-                            print(f"   {wrapped}")
-                    print()
-                    print(f"*Generated by* "
-                          f"`telnetlib3-fingerprint "
-                          f"<https://github.com/jquast/telnetlib3>`_")
-                    print()
-                    print(".. code-block:: shell")
-                    print()
-                    print(f"   telnetlib3-fingerprint "
-                          f"--loglevel=debug {host} {port}")
-                    print()
+            _write_bbs_port_section(
+                server, '~', logs_dir=logs_dir,
+                data_dir=data_dir, fp_counts=fp_counts)
 
 
-def generate_bbs_details(servers, logs_dir=None, force=False, data_dir=None):
+def generate_bbs_details(servers, logs_dir=None, force=False,
+                          data_dir=None, ip_groups=None):
     """Generate all per-BBS detail pages.
 
     :param servers: list of server records
     :param logs_dir: path to directory containing per-host:port .log files
     :param force: if True, regenerate all files regardless of mtime
     :param data_dir: path to telnetlib3 data directory for mtime checks
+    :param ip_groups: dict from :func:`_group_shared_ip`, or None
     """
     if force:
         _clean_dir(BBS_DETAIL_PATH)
     os.makedirs(BBS_DETAIL_PATH, exist_ok=True)
 
     fp_counts = Counter(s['fingerprint'] for s in servers)
+
+    # Collect grouped server keys to skip in individual generation
+    grouped_keys = set()
+    if ip_groups:
+        for members in ip_groups.values():
+            for s in members:
+                grouped_keys.add((s['host'], s['port']))
+
     rebuilt = 0
     for s in servers:
+        if (s['host'], s['port']) in grouped_keys:
+            continue
         result = generate_bbs_detail(
             s, logs_dir=logs_dir, force=force, data_dir=data_dir,
             fp_counts=fp_counts)
         if result is not False:
             rebuilt += 1
 
-    if rebuilt < len(servers):
-        print(f"  wrote {rebuilt}/{len(servers)} BBS detail pages"
-              f" to {BBS_DETAIL_PATH} ({len(servers) - rebuilt} unchanged)",
+    # Generate combined pages for grouped servers
+    if ip_groups:
+        for ip, members in sorted(ip_groups.items()):
+            generate_bbs_detail_group(
+                ip, members, logs_dir=logs_dir,
+                data_dir=data_dir, fp_counts=fp_counts)
+            rebuilt += 1
+
+    total = (len(servers) - len(grouped_keys)
+             + len(ip_groups or {}))
+    if rebuilt < total:
+        print(f"  wrote {rebuilt}/{total} BBS detail pages"
+              f" to {BBS_DETAIL_PATH} ({total - rebuilt} unchanged)",
               file=sys.stderr)
     else:
         print(f"  wrote {rebuilt} BBS detail pages to {BBS_DETAIL_PATH}",
@@ -1366,7 +1524,7 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
         print()
 
         for s in fp_servers:
-            bbs_file = _bbs_filename(s)
+            bbs_file = s['_bbs_file']
             label = f"{s['host']}:{s['port']}"
             tls = ' :tls-lock:`\U0001f512`' if s['tls_support'] else ''
             print(f":doc:`{_rst_escape(label)}"
@@ -1484,6 +1642,14 @@ def main():
     print(f"  {len(servers)} servers after filtering by {args.bbslist}",
           file=sys.stderr)
 
+    ip_groups = _group_shared_ip(servers)
+    _assign_bbs_filenames(servers, ip_groups)
+    if ip_groups:
+        n_groups = len(ip_groups)
+        n_combined = sum(len(m) for m in ip_groups.values())
+        print(f"  {n_groups} IP groups ({n_combined} servers combined)",
+              file=sys.stderr)
+
     stats = compute_statistics(servers)
 
     # Generate plots
@@ -1498,12 +1664,13 @@ def main():
     generate_fingerprints_rst(servers)
     generate_details_rst(servers)
     generate_bbs_details(servers, logs_dir=logs_dir,
-                          force=args.force, data_dir=data_dir)
+                          force=args.force, data_dir=data_dir,
+                          ip_groups=ip_groups)
     generate_fingerprint_details(servers, force=args.force,
                                   data_dir=data_dir)
 
     _remove_stale_rst(BBS_DETAIL_PATH,
-                      {_bbs_filename(s) for s in servers})
+                      {s['_bbs_file'] for s in servers})
     _remove_stale_rst(DETAIL_PATH,
                       {s['fingerprint'] for s in servers})
 

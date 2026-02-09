@@ -1024,63 +1024,69 @@ def _rst_heading(title, char):
     print()
 
 
-def _group_shared_hostname(servers):
-    """Group servers sharing a hostname without unique MSSP names.
+def _group_shared_ip(servers):
+    """Group servers sharing the same resolved IP address.
 
-    Servers with the same hostname and the same display name (MSSP NAME, or
-    hostname when no MSSP NAME is set) are grouped for a combined detail page.
+    Servers with the same non-empty IP are grouped for a combined detail
+    page.  Groups with only one member are excluded -- those servers get
+    standalone pages.
 
     :param servers: list of deduplicated server records
-    :returns: dict mapping ``(hostname, display_name)`` to list of servers,
+    :returns: dict mapping IP address string to list of servers,
               only for groups with 2+ members
     """
-    by_key = {}
+    by_ip = {}
     for s in servers:
-        display_name = s['name'] or s['host']
-        key = (s['host'], display_name)
-        by_key.setdefault(key, []).append(s)
+        ip = s['ip']
+        if not ip:
+            continue
+        by_ip.setdefault(ip, []).append(s)
 
-    groups = {}
-    for key, members in by_key.items():
-        if len(members) >= 2:
-            groups[key] = sorted(members, key=lambda s: s['port'])
-    return groups
+    return {
+        ip: sorted(members, key=lambda s: (s['host'], s['port']))
+        for ip, members in by_ip.items()
+        if len(members) >= 2
+    }
 
 
-def _assign_mud_filenames(servers, hostname_groups):
-    """Assign ``_mud_file`` to each server record.
+def _most_common_hostname(group_servers):
+    """Return the most common hostname among grouped servers.
 
-    Grouped servers share a hostname-based filename.  Ungrouped servers use
+    :param group_servers: list of server records sharing an IP
+    :returns: most frequent hostname string
+    """
+    counts = Counter(s['host'] for s in group_servers)
+    return counts.most_common(1)[0][0]
+
+
+def _assign_mud_filenames(servers, ip_groups):
+    """Assign ``_mud_file`` and ``_mud_toc_label`` to each server record.
+
+    Grouped servers share an IP-based filename.  Ungrouped servers use
     the ``host_port`` format from :func:`_mud_filename`.
 
     :param servers: list of server records (modified in place)
-    :param hostname_groups: dict from :func:`_group_shared_hostname`
+    :param ip_groups: dict from :func:`_group_shared_ip`
     """
     grouped_keys = {}
-    hosts_with_groups = {}
-    for (host, name), members in hostname_groups.items():
-        hosts_with_groups.setdefault(host, []).append((name, members))
-
-    for host, host_groups in hosts_with_groups.items():
-        host_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', host)
-        if len(host_groups) == 1:
-            _name, members = host_groups[0]
-            for s in members:
-                grouped_keys[(s['host'], s['port'])] = host_safe
+    for ip, members in ip_groups.items():
+        ip_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', ip)
+        filename = f"ip_{ip_safe}"
+        hostname_hint = _most_common_hostname(members)
+        if hostname_hint == ip:
+            toc_label = ip
         else:
-            # Multiple groups on same hostname — disambiguate with name
-            for name, members in host_groups:
-                name_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
-                filename = f"{host_safe}_{name_safe}"
-                for s in members:
-                    grouped_keys[(s['host'], s['port'])] = filename
+            toc_label = f"{ip} ({hostname_hint})"
+        for s in members:
+            grouped_keys[(s['host'], s['port'])] = (filename, toc_label)
 
     for s in servers:
         key = (s['host'], s['port'])
         if key in grouped_keys:
-            s['_mud_file'] = grouped_keys[key]
+            s['_mud_file'], s['_mud_toc_label'] = grouped_keys[key]
         else:
             s['_mud_file'] = _mud_filename(s)
+            s['_mud_toc_label'] = s['name'] or s['host']
 
 
 def print_datatable(table_str, caption=None):
@@ -1405,8 +1411,8 @@ def generate_details_rst(servers):
             if mud_file in seen_files:
                 continue
             seen_files.add(mud_file)
-            name = s['name'] or s['host']
-            print(f"   {_rst_escape(name)} <mud_detail/{mud_file}>")
+            label = s.get('_mud_toc_label', s['name'] or s['host'])
+            print(f"   {_rst_escape(label)} <mud_detail/{mud_file}>")
         print()
     print(f"  wrote {rst_path}", file=sys.stderr)
 
@@ -1883,22 +1889,26 @@ def _write_mud_port_section(server, sec_char, logs_dir=None, data_dir=None,
     return footnotes
 
 
-def generate_mud_detail_group(hostname, group_servers, logs_dir=None,
+def generate_mud_detail_group(ip, group_servers, logs_dir=None,
                               data_dir=None, fp_counts=None):
-    """Generate a combined detail page for servers sharing a hostname.
+    """Generate a combined detail page for servers sharing an IP.
 
-    Each server gets its own sub-heading by ``hostname:port``, with all
-    detail sections nested underneath.
+    Each server gets its own sub-heading, with all detail sections
+    nested underneath.
 
-    :param hostname: shared hostname
-    :param group_servers: list of server records sharing this hostname
+    :param ip: shared IP address
+    :param group_servers: list of server records sharing this IP
     :param logs_dir: path to log directory
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
     """
     mud_file = group_servers[0]['_mud_file']
     detail_path = os.path.join(MUD_DETAIL_PATH, f"{mud_file}.rst")
-    display_name = group_servers[0]['name'] or hostname
+    hostname_hint = _most_common_hostname(group_servers)
+    if hostname_hint == ip:
+        display_name = ip
+    else:
+        display_name = f"{ip} ({hostname_hint})"
 
     with open(detail_path, 'w') as fout, contextlib.redirect_stdout(fout):
         escaped_name = _rst_escape(display_name)
@@ -1908,8 +1918,13 @@ def generate_mud_detail_group(hostname, group_servers, logs_dir=None,
 
         all_footnotes = []
         for server in group_servers:
+            name = server['name']
+            host = server['host']
             port = server['port']
-            sub_title = f"{hostname}:{port}"
+            if name:
+                sub_title = f"{name} ({host}:{port})"
+            else:
+                sub_title = f"{host}:{port}"
             escaped_sub = _rst_escape(sub_title)
             print(escaped_sub)
             print("-" * max(len(escaped_sub), 4))
@@ -1917,7 +1932,8 @@ def generate_mud_detail_group(hostname, group_servers, logs_dir=None,
 
             footnotes = _write_mud_port_section(
                 server, '~', logs_dir=logs_dir, data_dir=data_dir,
-                fp_counts=fp_counts, fn_suffix=f'_{port}')
+                fp_counts=fp_counts,
+                fn_suffix=f'_{host}_{port}')
             all_footnotes.extend(footnotes)
 
         for fn in all_footnotes:
@@ -1926,13 +1942,13 @@ def generate_mud_detail_group(hostname, group_servers, logs_dir=None,
 
 
 def generate_mud_details(servers, logs_dir=None, data_dir=None,
-                         hostname_groups=None):
+                         ip_groups=None):
     """Generate all per-MUD detail pages.
 
     :param servers: list of server records
     :param logs_dir: path to directory containing per-host:port .log files
     :param data_dir: path to telnetlib3 data directory for embedding raw JSON
-    :param hostname_groups: dict from :func:`_group_shared_hostname`, or None
+    :param ip_groups: dict from :func:`_group_shared_ip`, or None
     """
     _clean_dir(MUD_DETAIL_PATH)
     os.makedirs(MUD_DETAIL_PATH, exist_ok=True)
@@ -1941,8 +1957,8 @@ def generate_mud_details(servers, logs_dir=None, data_dir=None,
 
     # Collect grouped server keys to skip in individual generation
     grouped_keys = set()
-    if hostname_groups:
-        for members in hostname_groups.values():
+    if ip_groups:
+        for members in ip_groups.values():
             for s in members:
                 grouped_keys.add((s['host'], s['port']))
 
@@ -1957,14 +1973,14 @@ def generate_mud_details(servers, logs_dir=None, data_dir=None,
             rebuilt += 1
 
     # Generate combined pages for grouped servers
-    if hostname_groups:
-        for (_hostname, _name), members in sorted(hostname_groups.items()):
+    if ip_groups:
+        for ip, members in sorted(ip_groups.items()):
             generate_mud_detail_group(
-                _hostname, members, logs_dir=logs_dir,
+                ip, members, logs_dir=logs_dir,
                 data_dir=data_dir, fp_counts=fp_counts)
             rebuilt += 1
 
-    total = len(servers) - len(grouped_keys) + len(hostname_groups or {})
+    total = len(servers) - len(grouped_keys) + len(ip_groups or {})
     if rebuilt < total:
         print(f"  wrote {rebuilt}/{total} MUD detail pages"
               f" to {MUD_DETAIL_PATH} ({total - rebuilt} unchanged)",
@@ -2178,12 +2194,12 @@ def main():
     telnetsupport = _load_telnetsupport(data_dir)
     _annotate_lociterm(servers, telnetsupport)
 
-    hostname_groups = _group_shared_hostname(servers)
-    _assign_mud_filenames(servers, hostname_groups)
-    if hostname_groups:
-        n_groups = len(hostname_groups)
-        n_combined = sum(len(m) for m in hostname_groups.values())
-        print(f"  {n_groups} hostname groups ({n_combined} servers combined)",
+    ip_groups = _group_shared_ip(servers)
+    _assign_mud_filenames(servers, ip_groups)
+    if ip_groups:
+        n_groups = len(ip_groups)
+        n_combined = sum(len(m) for m in ip_groups.values())
+        print(f"  {n_groups} IP groups ({n_combined} servers combined)",
               file=sys.stderr)
 
     stats = compute_statistics(servers)
@@ -2200,7 +2216,7 @@ def main():
     generate_fingerprints_rst(servers)
     generate_details_rst(servers)
     generate_mud_details(servers, logs_dir=logs_dir, data_dir=data_dir,
-                         hostname_groups=hostname_groups)
+                         ip_groups=ip_groups)
     generate_fingerprint_details(servers)
 
     # Clean up old results.rst if it exists
