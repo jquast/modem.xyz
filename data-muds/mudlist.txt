@@ -7,19 +7,13 @@
 114.32.122.32 4002 big5
 114.34.189.30 7000 big5
 118.195.237.158 6666 gbk
-121.5.75.226 5555 gbk
 125.228.186.144 8000 big5
-129.211.106.247 5555 gbk
 13.251.165.162 9999
 130.61.212.175 4000
 130.61.249.129 4000
 130.95.13.14 4242
 136.38.83.106 8008
-138.197.134.82 4242
 138.68.247.72 5555
-143.109.10.156 5321
-143.109.10.156 8000
-143.109.10.156 8395
 146.168.137.126 6767
 15.157.195.64 4000
 15.204.237.15 5555
@@ -30,7 +24,6 @@
 164.138.29.223 4222
 165.227.179.255 4242
 170.187.150.187 1111
-172.232.4.129 3200
 173.230.135.147 4000
 176.122.177.178 9000
 176.9.151.147 1111
@@ -51,8 +44,6 @@
 210.59.236.38 3002 big5
 210.59.236.38 3003 big5
 210.59.236.38 7788 big5
-211.110.165.199 4000 euc-kr
-211.110.165.199 7032 euc-kr
 212.227.230.119 4000
 216.136.9.21 1085
 216.136.9.8 4919
@@ -97,7 +88,6 @@
 78.131.8.20 4444
 7dof.org.uk 6715
 7thplane.net 8888
-81.201.49.14 443
 82.65.252.78 6666
 82.68.167.68 4242
 8bit.fansi.org 4201
@@ -219,7 +209,6 @@ charis.servegame.com 4240
 charis.servegame.com 4242
 charis.servegame.com 5864
 chatmud.com 7777
-chechnya.meibu.net 8888 gbk
 cheeseworld.wtf 3000
 cheesymud.com 4001
 cityofhope.genesismuds.com 8888
@@ -235,7 +224,6 @@ coffeemud.net 2327
 coffeemud.net 6502
 coimuck.com 1771
 colossus.vineyard.haus 10000
-connect.mu-gateway.net 6700
 connect.qmud.org 5000
 connect.vikingmud.org 2001
 continentsmud.com 5050
@@ -261,7 +249,6 @@ darkeningsun.com 5678
 darkerrealms.org 2000
 darkgift.mushpark.com 6251
 darklord.no 5000
-darklordmud.duckdns.org 5000
 darkmetal2039.com 2039
 darkmists.org 2222
 darkwind.org 3000
@@ -358,7 +345,6 @@ frandum.fr 2001
 frostmud.com 7000
 fs.twkang.net 5555 big5
 fss.twcos.com 5000 big5
-ft.furtoonia.net 9999
 fta.darcness.net 2860
 fulcrum.mu 2601
 furrymuck.com 8888
@@ -408,7 +394,6 @@ game.tempestseason.com 6000
 game.theafterlifemud.com 7777
 game.towersmux.net 4201
 game.wotmud.org 2224
-game.xiaopal.com 4000 gbk
 games.world.co.uk 23
 gatewaymud.org 6969
 gathering.org.uk 5000
@@ -453,7 +438,6 @@ holomuck.org 5757
 home.starmud.com 4000
 hopto.mud.ren 4000 gbk
 hot-mess.net 9900
-hy1.jhfy.org 1863 gbk
 hyperborea.net 2000
 ianshirm.genesismuds.com 2250
 ianshirm.genesismuds.com 2251
@@ -478,7 +462,6 @@ jedimud.net 4000
 jointhesaga.com 1790
 jorm.kurowski.xyz 4001
 jupiter.iamyourgod.org 3169
-jura.atdt01410.com 9999 euc-kr
 jy.mud.com.tw 6666 big5
 kallindor.com 5800
 kallistimud.com 4000
@@ -488,7 +471,6 @@ keys.aresmush.com 4201
 killer-mud.pl 3003 iso-8859-2
 kingdoms.bithir.co.uk 1812
 kitsumuck.com 8888
-kk.muds.idv.tw 4000 big5
 kludgemush.com 10321
 kobramud.org 1138
 kombatmud.com 6969
@@ -498,7 +480,6 @@ krynn.d20mud.com 4300
 labmush.mushpark.com 3939
 lac.pl 4000
 lambda.moo.mud.org 8888
-lament.ghostglass.net 8181
 lament.ghostglass.net 8600
 last-outpost.com 4000
 latitude.muck.ca 23
@@ -519,13 +500,11 @@ luminarimud.com 4100
 lusternia.com 5000
 lustymud.net 2000
 madrom.net 1536
-majormud.gotdns.com 23
 mare.hoardersheaven.net 4201
 materiamagica.com 23
 mdhavian.net 7500
 mearth.mushpark.com 9376
 medievia.com 4000
-medinamud.tk 3232
 megamanmush.com 1997
 mf.deepfire.net 4242
 mg.mud.de 23
@@ -615,7 +594,6 @@ mud.landsofstone.org 4801
 mud.legendmud.org 9999
 mud.lysator.liu.se 2000
 mud.merentha.com 10000
-mud.morchronium.com 7777
 mud.mystic-adventure.org 4000
 mud.nemesis.de 2000
 mud.niflheim.one 3000
@@ -651,7 +629,6 @@ mud.timetoplaythegame.com 3334
 mud.valheru.com 4242
 mud.valinor.com.br 4000
 mud.wolfwings.us 4000
-mud.xkx100.com 5555 gbk
 mud.xyllomer.de 3000
 mud.zeemud.org 4000
 mud2.com 27723
@@ -790,7 +767,6 @@ scrozzle.noderunner.net 6700
 sdmud.com 7000
 secretoflife.pocketmud.com 5555
 seifenblase.mud.de 3333
-seikitin.com 6000 gbk
 selva.grogue.org 8888
 server.mudbest.com 1212 gbk
 sh.mudalumni.com 7000

@@ -7,7 +7,6 @@
 104.57.170.70 6840
 107.161.31.121 23
 107.175.69.10 60023
-107.195.72.202 1170
 108.216.156.236 2423
 108.242.55.251 23
 108.242.55.251 513
@@ -27,7 +26,6 @@
 142.11.212.221 23
 142.44.247.204 23
 142.93.52.94 23
-143.109.10.156 7775
 146.59.43.83 23
 148.251.169.181 23
 149.202.59.89 5000
@@ -44,7 +42,6 @@
 173.14.208.154 9911
 173.199.127.12 2002
 173.203.118.180 2323
-173.203.118.180 4567
 173.217.78.103 2323
 173.255.220.187 443
 173.61.230.102 23
@@ -92,7 +89,6 @@
 3.132.92.116 24
 3.72.83.34 23
 300baud.dynu.net 2525
-31.220.63.185 2323
 34.132.180.176 2323
 34.162.43.84 23
 34.68.85.161 49154
@@ -194,7 +190,6 @@
 97.76.12.194 23
 98.144.7.205 23
 98.152.200.190 6000
-98.212.225.126 23
 98.45.212.129 23
 98.5.235.199 2020
 99.106.75.128 95
@@ -250,7 +245,6 @@ bbbs.net 23
 bbs.2girl.net 23 big5
 bbs.4d2.org 23
 bbs.4wheelham.com 23
-bbs.4wheelham.com 513
 bbs.8-bitarchive.com 2223
 bbs.8bitboyz.com 6502
 bbs.8bitclub.com 6502
@@ -265,19 +259,16 @@ bbs.alecoexp.cz 23
 bbs.alsgeeklab.com 2323
 bbs.androidsdungeon.co.uk 23
 bbs.anduin.net 23
-bbs.animeyo.com 23 big5
 bbs.archaicbinary.net 23
 bbs.arcticzonebbs.net 23
 bbs.as.ntu.edu.tw 23 big5
 bbs.at2k.org 23
-bbs.atdt01410.com 23 euc-kr
 bbs.b-wells.us 23
 bbs.bajer.cz 32
 bbs.beanzilla.net 2323 big5
 bbs.beardy.se 23
 bbs.bearfather.net 23
 bbs.bigjim.ventures 6969
-bbs.bio.ncue.edu.tw 23 big5
 bbs.birdenuf.com 2003
 bbs.bnbbbs.net 2023
 bbs.bottomlessabyss.net 2023
@@ -285,7 +276,6 @@ bbs.buema.ch 2300
 bbs.byr.cn 23 gbk
 bbs.bytebarn.de 2300
 bbs.c64.pub 23
-bbs.cabanabar.net 11123
 bbs.canerduh.com 23905
 bbs.catracing.org 6400
 bbs.ccns.ncku.edu.tw 3456 big5
@@ -301,9 +291,7 @@ bbs.cooldavid.org 23 big5
 bbs.cortex-media.info 23
 bbs.crazyerics.com 23
 bbs.crnet.net 2323
-bbs.cs.nccu.edu.tw 23 big5
 bbs.cs.nthu.edu.tw 23 big5
-bbs.cs.pu.edu.tw 3001 big5
 bbs.cyrellia.com 23
 bbs.darkcarnival.org 23
 bbs.darkrealms.ca 23
@@ -337,7 +325,6 @@ bbs.f4fbbs.com 2323
 bbs.faithcollapsing.com 2323
 bbs.fozztexx.com 23
 bbs.ftelnet.ca 23
-bbs.fudan.edu.cn 23 gbk
 bbs.furryrefuge.com 23
 bbs.g00r00.com 23
 bbs.game-master.com 23 latin-1
@@ -353,7 +340,6 @@ bbs.hobbitempire.net 6501
 bbs.horizonbbs.org 23
 bbs.hyena.network 23
 bbs.ibbs.be 23
-bbs.ice.cycu.edu.tw 23 big5
 bbs.idbbs.ca 1581 topaz
 bbs.idbbs.ca 59 topaz
 bbs.impakt.net 6502
@@ -380,7 +366,6 @@ bbs.lowcrash.dev 8888
 bbs.lsnet.dev 23
 bbs.madetoraid.com 2323
 bbs.maidensrealm.com 23
-bbs.math.ntnu.edu.tw 8000 big5
 bbs.memphistw.org 2002
 bbs.memphistw.org 23
 bbs.millhill.org 2323
@@ -390,7 +375,6 @@ bbs.mozysswamp.org 23
 bbs.mozysswamp.org 24
 bbs.mycrowd.ca 23
 bbs.mythicalkingdom.com 5023
-bbs.ndhu.edu.tw 23 big5
 bbs.newtoncity.org 23
 bbs.nikom.org 2323
 bbs.ninthchevron.com.au 23
@@ -409,7 +393,6 @@ bbs.pharos.rocks 23 big5
 bbs.phospher.com 23
 bbs.pixelgrounds.net 8888
 bbs.powerbbs.com 23
-bbs.ptt.cc 23 big5
 bbs.qzwx.com 23
 bbs.ramifications.ca 5128
 bbs.retro32.com 1337
@@ -429,7 +412,6 @@ bbs.shift-bits.com 2000
 bbs.silverhawk.no 6400
 bbs.sinnershaven.com 23
 bbs.skynetbbs.com 20023
-bbs.sobbs.org 23
 bbs.soc4ever.com 23
 bbs.softsolutions.net.br 2023
 bbs.starbase11.de 2323
@@ -441,7 +423,6 @@ bbs.sunspothq.dyndns.org 23
 bbs.swissirc.net 2323
 bbs.tabakov.net 13023
 bbs.techware2k.com 23
-bbs.telearena.us 23
 bbs.telnix.com 6502
 bbs.terminaltavern.com 23
 bbs.tfsi.dev 23
@@ -471,7 +452,6 @@ bbs.wccastle.net 2424
 bbs.weather-station.org 23
 bbs.wehack.net 23
 bbs.whitewing.gr.jp 23 shift-jis
-bbs.wim888.tw 23 big5
 bbs.windcity.net 23 big5
 bbs.wreckhall.net 23
 bbs.wretchedbeagle.com 23
@@ -503,15 +483,12 @@ bookworm.synchro.net 2323
 borderlinebbs.dyndns.org 6400
 box.imzadi.de 23
 brazi.net 23
-bs2.io 23 big5
 bunnybbs.tw 23 big5
 bwrbbs.ddns.net 23
 byob.hopto.org 64128
 c3bbs.retronetworking.org 23
 c3bbs.retronetworking.org 513
 call.rofbbs.com 6400
-call.rofbbs.com 6800
-call.rofbbs.com 8502
 capitolcityonline.net 23
 capitolcityonline.net 513
 capitolshrill.com 23
@@ -547,7 +524,6 @@ corsysystem.org 2300
 cosmicrage.earth 7777
 cottonwoodbbs.dyndns.org 6502
 cpbbs.de 2323
-cpu.tfcis.org 23 big5
 cpugod.synchro.net 23
 cqbbs.ddns.net 6800
 crackintimebbs.ddns.net 2323
@@ -558,7 +534,6 @@ cvic.org 23 big5
 cyberspacebbs.net 23
 cyberspacebbs.net 2323
 cybersphere.net 7777
-d1st.org 23
 dangerbaybbs.dyndns.org 1337
 darkagesbbs.com 23
 darkendlessbbs.hopto.org 6510
@@ -573,7 +548,6 @@ dcastle.org 6666
 ddreams.synchro.net 23
 deadinternet.synchronetbbs.org 23
 deathrow.servebbs.org 1001
-decades.freeddns.org 6401
 deltacity.se 23
 demonsnet.com 23
 dhxy.info 23 gbk
@@ -602,7 +576,6 @@ endofthelinebbs.com 513
 eniacv2.net 1337
 enigma-bbs.com 23
 enterprisebbs.ddns.net 1701
-eod.tw 23 big5
 error404bbs.ddns.net 24
 error404bbs.ddns.net 404
 error404bbs.ddns.net 513
@@ -613,13 +586,11 @@ euts.org 1998
 excelsiorbbs.ddns.net 2000
 exciter.ws 2002
 ezycom.retroswim.net 2323
-f500.zxy.spb.ru 23
 fatcatsbbs.com 23
 fdd.one 23
 fedapoc.tel 2301
 fenglin.info 2323
 ferchobbs.ddns.net 2323
-fgisc.org 23 big5
 fibs.com 4321
 fido.alltsk.ru 23
 fido.bajtek.org 23
@@ -671,7 +642,6 @@ haciend.com 23
 halcyonbbs.scisweb.org 23
 hamshack.synchro.net 23
 heatwave.ddns.net 9640
-heightsbbs.heightspc.net 6860
 herbies-bbs.ddns.net 23
 herbies-bbs.ddns.net 2323
 herbies-bbs.ddns.net 2424
@@ -680,7 +650,6 @@ hexedbbs.com 23999
 highdesertbbs.ddns.net 6400
 hobbylinebbs.com 23
 hobbyspace.ddns.net 23
-home.bsrealm.net 23
 houseofbaud.com 8888
 houseoftna.xyz 23
 hovalbbs.com 2333
@@ -702,7 +671,6 @@ jp3tlc.com 23 shift-jis
 jsanchez.ddns.net 23 latin-1
 junglebbs.com 23
 jupiter.bbs.io 23
-kernelfortress.org 23
 kia.synchro.net 23
 kk4qbn.synchro.net 23
 klud.ge 23
@@ -756,7 +724,6 @@ mimac.bizzi.org 2323
 mistressoffire.com 23
 modem.serial-port.com 1333
 modematider.selstam.nu 50023
-moetiki.ddns.net 27
 mojo.synchro.net 23
 mono.org 23
 montereybbs.com 23
@@ -807,7 +774,6 @@ oldschool.synchronetbbs.org 513
 oldtimebbs.com 23
 on.the.net.nz 23
 onixbbs.servebbs.com 2525
-online.winserver.com 24
 onyx.the.net.nz 23
 opinsane.noip.me 23
 opivy-bbs.com 23
@@ -823,7 +789,6 @@ paladium.servebbs.com 20
 palantirbbs.ddns.net 23
 paradoxbbs.qc.to 57323
 paradoxbbs.synchronetbbs.org 513
-particlesbbs.dyndns.org 6400
 partybowlbbs.ddns.net 2323
 pathunknown.net 23
 pebkac.lol 23
@@ -840,12 +805,10 @@ pocbbs.duckdns.org 23
 pocbbs.duckdns.org 2323
 pocbbs.duckdns.org 6400
 pofobbs.ddns.net 992
-predikhe.synchro.net 2323
 proline.ksherlock.com 6523
 pruffino.com 23
 ps2.dc4.us 23
 ptbbs.ddns.net 8000
-ptt.cc 23 big5
 ptt2.cc 23 big5
 pulsebbs.hopto.org 1984
 pyroto.mysticmountain.us 8086
@@ -862,8 +825,6 @@ react-bbs.nikoh.it 2323
 reality.throwbackbbs.com 2323
 realitycheckbbs.org 23
 realitypoint.com 12112
-region15.net 23
-retr0aktiv.com 23
 retrobbs.sinclair.homepc.it 23
 retroconnect.org 23
 retrolair.amigaretro.net 6800
@@ -900,7 +861,6 @@ sgprobbs.com 1337
 shadowbbs.com 23
 shadowscope.noip.us 23
 shell.roughneckbbs.com 23
-shenks.dyndns.org 23
 shibboleths.org 800
 shinelp.hopto.org 3030
 shodanscore.com 8086
@@ -925,7 +885,6 @@ storm-mountain.ddns.net 24000
 stormgate.synchronetbbs.org 23
 strangeplanet.org 6800
 streetcorner.ddns.net 6400
-subcarrier.ignorelist.com 2323
 subhuman.ddns.net 1338 topaz
 suga.se 42512 latin-1
 sursum-corda.com 2002
@@ -935,7 +894,6 @@ synerchat.com 23
 sysgod.org 23000
 t0kerz.synchro.net 23
 tacopronto.bbs.io 23
-tainan.jal.tw 23 big5
 tbrasilis.ddns.net 23000
 tdod.org 2002
 tdod.org 23
@@ -999,7 +957,6 @@ tmz.synchronetbbs.org 23
 tmz.synchronetbbs.org 513
 tmzbbs01.synchro.net 23
 tnabbs.org 2323
-tnf.invisik.net 23
 toolazy.synchro.net 2323
 toolshed.synchro.net 2323
 top-swadba.de 2323
@@ -1043,11 +1000,9 @@ wccastle.synchro.net 24
 wd1cks.org 23
 westwoodbbs.net 64738
 wfido.ru 1234
-wforum.zixia.net 23 gbk
 wh2bbs.us 2321
 whodareswinsbbs.uk 23
 wilco.ydns.eu 2300
-willowcreekbbs.dynu.net 6400
 winnow.1q1.me 23
 wintermutebbs.ddns.net 23
 wizardsrainbow.com 23
@@ -1056,7 +1011,6 @@ wn2.wrgnbr.com 6405
 wn3.wrgnbr.com 6400
 wn4.wrgnbr.com 3000
 wn6.wrgnbr.com 6411
-wolf.tfcis.org 23 big5
 wordbbs.hopto.org 64128
 workstation.ddmcomputers.com.au 2323
 wwiv.bsbbs.com 2323
