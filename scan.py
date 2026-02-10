@@ -130,10 +130,10 @@ def main():
         '--num-workers', type=int, default=16,
         help='Number of parallel workers (default: 16)')
     parser.add_argument(
-        '--banner-max-wait', type=int, default=10,
+        '--banner-max-wait', type=int, default=30,
         help='Seconds to wait for banner data')
     parser.add_argument(
-        '--connect-timeout', type=int, default=30,
+        '--connect-timeout', type=int, default=60,
         help='Seconds to wait for TCP connection')
     parser.add_argument(
         '--refresh', action='store_true',
@@ -142,7 +142,7 @@ def main():
         '--default-encoding', default=None,
         help='Default encoding when server list entry has none')
     parser.add_argument(
-        '--connect-delay', type=float, default=0.15,
+        '--connect-delay', type=float, default=0.123,
         help='Seconds between launching each scan (default: 0.15)')
     args = parser.parse_args()
 
