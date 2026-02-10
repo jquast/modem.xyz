@@ -708,17 +708,11 @@ def display_encoding_groups(servers):
         key = s['display_encoding']
         by_encoding.setdefault(key, []).append(s)
 
-    rows = []
     for name, members in sorted(by_encoding.items(),
                                  key=lambda x: (-len(x[1]),
                                                 x[0])):
-        rows.append({
-            'Encoding': f'`{_rst_escape(name)}`_',
-            'Servers': str(len(members)),
-        })
-    table_str = tabulate_mod.tabulate(
-        rows, headers="keys", tablefmt="rst")
-    print_datatable(table_str, caption="BBS Encodings")
+        print(f"- `{_rst_escape(name)}`_: {len(members)}")
+    print()
 
     for name, members in sorted(by_encoding.items(),
                                  key=lambda x: (-len(x[1]),
@@ -740,8 +734,7 @@ def display_fidonet_servers(servers):
     emsi_servers = [s for s in servers if s['has_emsi']]
     _rst_heading("FidoNet (EMSI)", '=')
     print(f"{len(emsi_servers)} servers responded with an"
-          " `EMSI <https://en.wikipedia.org/wiki/"
-          "Electronic_Mail_Standard_Identification>`_")
+          " `EMSI <http://ftsc.org/docs/fsc-0056.001>`_")
     print("handshake sequence, indicating FidoNet"
           " capability.")
     print()
@@ -759,11 +752,14 @@ def display_fidonet_servers(servers):
         addrs = ', '.join(s['fidonet_addresses']) or ''
         software = s['bbs_software'] or ''
         mailer = s['emsi_mailer'] or ''
+        if software and mailer:
+            sw_mailer = f"{software}/{mailer}"
+        else:
+            sw_mailer = software or mailer
         rows.append({
             'Host': host_cell,
             'FidoNet Address': addrs,
-            'Software': _rst_escape(software),
-            'Mailer': _rst_escape(mailer),
+            'Software/Mailer': _rst_escape(sw_mailer),
         })
 
     table_str = tabulate_mod.tabulate(

@@ -43,6 +43,22 @@ PLOT_GRID = '#444444'
 ANSI2PNG = os.path.join(_PROJECT_ROOT, "ansi2png")
 _LD_LIBRARY_PATH = os.path.join(_PROJECT_ROOT, "libansilove", "build")
 
+# Mapping of libansilove font names to Python codecs for byte encoding.
+# Fonts that are valid Python codec names (CP437, CP850, etc.) are not listed;
+# their codec is derived from the font name directly.
+_FONT_TO_CODEC = {
+    'TOPAZ': 'latin-1',
+    'TOPAZ_PLUS': 'latin-1',
+    'TOPAZ500': 'latin-1',
+    'TOPAZ500_PLUS': 'latin-1',
+    'MICROKNIGHT': 'latin-1',
+    'MICROKNIGHT_PLUS': 'latin-1',
+    'MOSOUL': 'latin-1',
+    'POT_NOODLE': 'latin-1',
+    'TERMINUS': 'cp437',
+    'SPLEEN': 'cp437',
+}
+
 # Mapping of encoding names to libansilove font names (BBS superset)
 _ENCODING_TO_FONT = {
     'ascii': 'CP437',
@@ -62,16 +78,20 @@ _ENCODING_TO_FONT = {
     'cp865': 'CP865',
     'cp866': 'CP866',
     'cp869': 'CP869',
+    'latin_1': 'CP850',
+    'iso_8859_1': 'CP850',
+    'iso_8859_1:1987': 'CP850',
+    'iso_8859_2': 'CP852',
+    'koi8_r': 'CP866',
     'amiga': 'TOPAZ',
+    'topaz': 'TOPAZ',
     'petscii': 'CP437',
     'atarist': 'CP437',
-    'utf-8': 'CP437',
+    'utf_8': 'CP437',
     'unknown': 'CP437',
     'big5': 'CP437',
     'gbk': 'CP437',
-    'shift-jis': 'CP437',
     'shift_jis': 'CP437',
-    'euc-kr': 'CP437',
     'euc_kr': 'CP437',
 }
 
@@ -468,13 +488,12 @@ def _banner_to_png(text, output_path, encoding='cp437'):
     lines = text.split('\n')
     text = '\n'.join(_rstrip_ansi_line(line) for line in lines)
 
-    codec = encoding if encoding != 'ascii' else 'cp437'
+    font = _encoding_to_font(encoding)
+    codec = _FONT_TO_CODEC.get(font, font.lower().replace('_80x50', ''))
     try:
         raw_bytes = text.encode(codec, errors='replace')
     except LookupError:
-        raw_bytes = text.encode('latin-1', errors='surrogateescape')
-
-    font = _encoding_to_font(encoding)
+        raw_bytes = text.encode('cp437', errors='replace')
     env = os.environ.copy()
     env['ANSILOVE_FONT'] = font
     env['ANSILOVE_COLUMNS'] = '80'

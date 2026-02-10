@@ -961,17 +961,11 @@ def display_encoding_groups(servers):
         key = s['display_encoding']
         by_encoding.setdefault(key, []).append(s)
 
-    rows = []
     for name, members in sorted(by_encoding.items(),
                                  key=lambda x: (-len(x[1]),
                                                 x[0])):
-        rows.append({
-            'Encoding': f'`{_rst_escape(name)}`_',
-            'Servers': str(len(members)),
-        })
-    table_str = tabulate_mod.tabulate(
-        rows, headers="keys", tablefmt="rst")
-    print_datatable(table_str, caption="MUD Encodings")
+        print(f"- `{_rst_escape(name)}`_: {len(members)}")
+    print()
 
     for name, members in sorted(by_encoding.items(),
                                  key=lambda x: (-len(x[1]),
@@ -1149,11 +1143,11 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None,
             print()
 
         banner = _combine_banners(server)
-        encoding = server['encoding'].lower()
+        effective_enc = server['display_encoding']
         if banner and not _is_garbled(banner):
             banner_fname = f"{mud_file}_{port}.png"
             banner_path = os.path.join(BANNERS_PATH, banner_fname)
-            if _banner_to_png(banner, banner_path, encoding):
+            if _banner_to_png(banner, banner_path, effective_enc):
                 print("**Connection Banner:**")
                 print()
                 print(f".. image:: "
@@ -1178,7 +1172,7 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None,
                   " uses a legacy encoding such as CP437.*")
             print()
 
-        is_legacy_encoding = encoding not in (
+        is_legacy_encoding = effective_enc not in (
             'ascii', 'utf-8', 'unknown')
         banner_garbled = banner and _is_garbled(banner)
 
@@ -1233,14 +1227,14 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None,
                 print(f"- **Language**:"
                       f" {_rst_escape(server['language'])}")
             if is_legacy_encoding or banner_garbled:
-                enc_label = (server['encoding']
-                             if is_legacy_encoding else 'CP437')
+                enc_label = (effective_enc
+                             if is_legacy_encoding else 'cp437')
                 print(f"- **Encoding**: {enc_label}")
                 print()
                 print(f"  This server uses a legacy encoding:")
                 print()
                 print(f"  ``telnetlib3-client --encoding"
-                      f" {enc_label.lower()} --force-binary"
+                      f" {enc_label} --force-binary"
                       f" {host} {port}``")
                 print()
             if server['pay_to_play']:
@@ -1440,12 +1434,12 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
         print()
 
     banner = _combine_banners(server)
-    encoding = server['encoding'].lower()
+    effective_enc = server['display_encoding']
     if banner and not _is_garbled(banner):
         mud_file = server['_mud_file']
         banner_fname = f"{mud_file}_{port}.png"
         banner_path = os.path.join(BANNERS_PATH, banner_fname)
-        if _banner_to_png(banner, banner_path, encoding):
+        if _banner_to_png(banner, banner_path, effective_enc):
             print("**Connection Banner:**")
             print()
             print(f".. image:: "
@@ -1470,7 +1464,7 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
               " uses a legacy encoding such as CP437.*")
         print()
 
-    is_legacy_encoding = encoding not in (
+    is_legacy_encoding = effective_enc not in (
         'ascii', 'utf-8', 'unknown')
     banner_garbled = banner and _is_garbled(banner)
 
@@ -1525,14 +1519,14 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
             print(f"- **Language**:"
                   f" {_rst_escape(server['language'])}")
         if is_legacy_encoding or banner_garbled:
-            enc_label = (server['encoding']
-                         if is_legacy_encoding else 'CP437')
+            enc_label = (effective_enc
+                         if is_legacy_encoding else 'cp437')
             print(f"- **Encoding**: {enc_label}")
             print()
             print(f"  This server uses a legacy encoding:")
             print()
             print(f"  ``telnetlib3-client --encoding"
-                  f" {enc_label.lower()} --force-binary"
+                  f" {enc_label} --force-binary"
                   f" {host} {port}``")
             print()
         if server['pay_to_play']:
