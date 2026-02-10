@@ -11,6 +11,9 @@
     "108.242.55.251:513|bbs.tfsi.dev:513|datgsguy.com:513|endofthelinebbs.com:513|magnumbbs.net:513": {
       "action": "skip"
     },
+    "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|a1bbs.ddns.net:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|mistressoffire.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|thunder.synchro.net:23|tmzbbs01.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "122.199.12.99:8888|134.209.40.1:31337|bbs.lowcrash.dev:8888|kernelfortress.org:23|manalejandro.com:23": {
       "action": "skip"
     },
@@ -51,6 +54,9 @@
       ]
     },
     "173.14.208.154:9911|twyst.org:6666": {
+      "action": "skip"
+    },
+    "173.217.78.103:2323|1stchoicecore.co.nz:1030|206.189.226.31:23|24.80.160.127:23|37.27.85.185:2323|5.198.54.18:23|51.222.110.111:2323|70.123.70.30:23|82.64.227.162:23|bbs.androidsdungeon.co.uk:23|bbs.bytebarn.de:2300|bbs.canerduh.com:23905|bbs.crnet.net:2323|bbs.dicksonlabs.net:2325|bbs.digicombbs.com:2323|bbs.disconnected-by-peer.at:23|bbs.g00r00.com:23|bbs.greektimes.ca:23|bbs.jasonwalker.ca:2323|bbs.korenblom.nl:23|bbs.sdf1.net:5023|bbs.swissirc.net:2323|centralontarioremote.net:23|cloud.kanskje.com:23|csbbs.dyndns.org:23|djdave.uk:8088|error404bbs.ddns.net:404|gcbbs.net:2323|infonet-bbs.rclabs.com.br:2323|kuehlbox.wtf:23|looneybinbbs.com:2023|mail.hohimer.org:1336|mimac.bizzi.org:2323|modem.serial-port.com:1333|mv2k.com:23|mystic-hobbies.com:23|mysticrealms.ddns.net:11000|netpoint.webhop.me:23|nottinghambbs.com:2323|oldtimebbs.com:23|planetafr0.org:8888|radiostream.amigaz.org:2323|react-bbs.nikoh.it:2323|riverstyx.ddns.net:2323|rofbbs.ddns.net:2300|rtc.to:23|telnet.deadmodemsociety.com:1337|telnet.stormbbs.com:23|themegabbs.com:6400|thenineworlds.dnshome.de:923|top-swadba.de:2323|undernet.uy:23|vintagepi.asuscomm.com:23|whodareswinsbbs.uk:23|zahrl.ddns.net:2023|zen.kawasu.wtf:23": {
       "action": "skip"
     },
     "173.217.78.103:2323|206.189.226.31:23|217.198.137.127:23|24.80.160.127:23|37.27.85.185:2323|5.198.54.18:23|51.222.110.111:2323|70.123.70.30:23|82.64.227.162:23|bbs.8bitboyz.com:6502|bbs.androidsdungeon.co.uk:23|bbs.bytebarn.de:2300|bbs.canerduh.com:23905|bbs.crnet.net:2323|bbs.dicksonlabs.net:2325|bbs.digicombbs.com:2323|bbs.disconnected-by-peer.at:23|bbs.error200.tech:1337|bbs.g00r00.com:23|bbs.idbbs.ca:59|bbs.jasonwalker.ca:2323|bbs.korenblom.nl:23|bbs.sdf1.net:5023|centralontarioremote.net:23|cloud.kanskje.com:23|csbbs.dyndns.org:23|djdave.uk:8088|error404bbs.ddns.net:404|gcbbs.net:2323|infonet-bbs.rclabs.com.br:2323|joesbbs.com:23|kuehlbox.wtf:23|looneybinbbs.com:2023|mail.hohimer.org:1336|mimac.bizzi.org:2323|modem.serial-port.com:1333|mv2k.com:23|mystic-hobbies.com:23|netpoint.webhop.me:23|nottinghambbs.com:2323|oldtimebbs.com:23|planetafr0.org:8888|pulsebbs.hopto.org:1984|radiostream.amigaz.org:2323|react-bbs.nikoh.it:2323|retr0aktiv.com:23|riverstyx.ddns.net:2323|rofbbs.ddns.net:2300|rtc.to:23|subcarrier.ignorelist.com:2323|telnet.deadmodemsociety.com:1337|telnet.stormbbs.com:23|themegabbs.com:6400|thenineworlds.dnshome.de:923|top-swadba.de:2323|undernet.uy:23|vintagepi.asuscomm.com:23|zahrl.ddns.net:2023|zen.kawasu.wtf:23": {
@@ -110,6 +116,9 @@
         "203.96.209.7:23"
       ]
     },
+    "204.10.255.79:6023|24.30.241.107:23|24.96.157.17:23|73.170.192.62:23|bbs.dsbbs.ca:23|ccbbs.zapto.org:3143|fido.alltsk.ru:23|pyroto.mysticmountain.us:8086": {
+      "action": "skip"
+    },
     "204.10.255.79:6023|24.30.241.107:23|73.170.192.62:23|bbs.dsbbs.ca:23|ccbbs.zapto.org:3143|fido.alltsk.ru:23|opinsane.noip.me:23|pyroto.mysticmountain.us:8086": {
       "action": "skip"
     },
@@ -124,6 +133,9 @@
       "remove": [
         "207.148.108.123:443"
       ]
+    },
+    "207.90.251.241:2323|217.198.137.127:23|47.223.173.180:23|73.242.209.94:23|bbs.8bitboyz.com:6502|bbs.demigoth.com:23|bbs.error200.tech:1337|bbs.idbbs.ca:59|bbs.riddells.net:10023|excelsiorbbs.ddns.net:2000|joesbbs.com:23|nerdragebbs.ddns.net:23|neverneverlandbbs.com:2323|pulsebbs.hopto.org:1984|splatter.haus:666|swatsbbs.ddns.net:2323|tgr.freeddns.org:23|the.alienmindbenders.net:23|tnabbs.org:2323|www.amigaretro.com:23": {
+      "action": "skip"
     },
     "207.90.251.241:2323|73.242.209.94:23|swatsbbs.ddns.net:2323|the.alienmindbenders.net:23|www.amigaretro.com:23": {
       "action": "skip"
@@ -177,6 +189,12 @@
       "action": "skip"
     },
     "45.79.37.227:513|45.79.69.172:513|bbs.4wheelham.com:513|bbs.abon.us:513|bbs.decafbad.com:6513|c3bbs.retronetworking.org:513|dynamite.synchronetbbs.org:513|guardian.synchro.net:513|macos.retro-os.live:513|mtlgeek.synchro.net:513|oldschool.synchronetbbs.org:513|paradoxbbs.synchronetbbs.org:513|sestar.synchro.net:513|technoanarchy.synchronetbbs.org:513|threeblindmice.synchronetbbs.org:513|tmz.synchronetbbs.org:513": {
+      "action": "skip"
+    },
+    "45.79.37.227:513|45.79.69.172:513|bbs.abon.us:513|bbs.decafbad.com:6513|c3bbs.retronetworking.org:513|dynamite.synchronetbbs.org:513|guardian.synchro.net:513|lovelybits.org:513|macos.retro-os.live:513|mtlgeek.synchro.net:513|oldschool.synchronetbbs.org:513|paradoxbbs.synchronetbbs.org:513|sestar.synchro.net:513|technoanarchy.synchronetbbs.org:513|threeblindmice.synchronetbbs.org:513|tmz.synchronetbbs.org:513": {
+      "action": "skip"
+    },
+    "5.150.254.12:31337|blackflag.acid.org:23|blackflag.acid.org:27": {
       "action": "skip"
     },
     "5.150.254.12:31337|blackflag.acid.org:27": {
@@ -298,6 +316,9 @@
         "balderdash.su:9001"
       ]
     },
+    "basementbbs.ddns.net:9000|ptbbs.ddns.net:8000": {
+      "action": "skip"
+    },
     "bbs.c64.pub:23|bbs.circl.lu:23|halcyonbbs.scisweb.org:23|lunarout.synchro.net:8023": {
       "action": "skip"
     },
@@ -343,6 +364,12 @@
     "bcrgames.com:31337|wizardsrainbow.com:23": {
       "action": "skip"
     },
+    "bookworm.synchro.net:2323|predikhe.synchro.net:2323": {
+      "action": "remove",
+      "remove": [
+        "predikhe.synchro.net:2323"
+      ]
+    },
     "borderlinebbs.dyndns.org:6400|cottonwoodbbs.dyndns.org:6502": {
       "action": "skip"
     },
@@ -356,6 +383,9 @@
       "action": "skip"
     },
     "call.rofbbs.com:6800|call.rofbbs.com:8502": {
+      "action": "skip"
+    },
+    "capitolcityonline.net:23|capitolcityonline.net:513": {
       "action": "skip"
     },
     "capitolcityonline.net:513|moetiki.ddns.net:27": {

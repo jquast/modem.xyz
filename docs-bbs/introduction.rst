@@ -50,12 +50,13 @@ The most popular BBS Telnet clients are:
 
 As BBS's are telnet-accessible, you would think you could just telnet to it, and you can, but you
 will find corrupted screen draws and characters on most bbs's that feature non-ascii artwork. And
-that is why these special emulators are suggested as they negotiate about these legacy codepages.
+that is why these special emulators are suggested as they negotiate about these legacy codepages
+and enforce the strict 80x24 or 80x25 screen modes required to correctly display art and menus.
 
 The python ``telnetlib3-client`` CLI can translate CP437, allowing use of telnet with your preferred
 terminal emulator instead of any of these special emulators::
 
-    telnetlib3-client --force-binary --encoding=cp437 
+    telnetlib3-client --force-binary --encoding=cp437 example.com
 
 See Also: MUDs
 --------------

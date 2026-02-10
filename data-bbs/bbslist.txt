@@ -12,9 +12,6 @@
 108.242.55.251 513
 108.52.154.224 23
 109.247.190.78 2323
-114.32.122.32 4002 big5
-114.34.189.30 7000 big5
-118.195.237.158 6666 gbk
 120.92.212.76 23 gbk
 122.199.12.99 8888
 122.199.58.252 2323
@@ -105,7 +102,6 @@
 37.27.85.185 2323
 38.188.130.43 23
 39.106.161.147 23 gbk
-39.152.42.32 7777 gbk
 40.115.76.212 4040
 44.204.35.120 4400
 44.31.91.213 23
@@ -131,7 +127,7 @@
 50.47.85.64 23
 51.148.188.78 24
 51.222.110.111 2323
-52.40.49.152 23
+52.40.49.152 23 latin-1
 54.238.90.108 23
 59.167.142.49 12800
 61.160.23.27 2006
@@ -245,7 +241,6 @@ atari-bbs.zapto.org 8888
 atari8.us 10001
 ataribbs.ddns.net 6502
 atl.ddns.net 6401
-atp.pedia.szote.u-szeged.hu 3500
 aturiondynasty.hopto.org 4444
 avastbbs.servegame.com 23
 aws1.fmerino.com.br 23
@@ -348,7 +343,7 @@ bbs.ftelnet.ca 23
 bbs.fudan.edu.cn 23 gbk
 bbs.furryrefuge.com 23
 bbs.g00r00.com 23
-bbs.game-master.com 23
+bbs.game-master.com 23 latin-1
 bbs.gamer.com.tw 23 big5
 bbs.gglab.cloud 2323
 bbs.gigabite.se 23
@@ -537,7 +532,7 @@ centralontarioremote.net 1123
 centralontarioremote.net 23
 cfbbs.net 23
 chaotix.ddns.net 2323
-chimia.se 2323
+chimia.se 2323 latin-1
 chrysalisbbs.org 8888
 cib.dyndns.org 6404
 citadel.dc540.org 23230
@@ -548,7 +543,7 @@ claudes.lovelybits.org 23
 cloud.kanskje.com 23
 conchaos.synchro.net 2002
 conchaos.synchro.net 23
-condor.rorscha.ch 1234
+condor.rorscha.ch 1234 latin-1
 connect.rayzer.net 2112
 connect.serionbbs.com 23
 convolution.us 23
@@ -708,7 +703,7 @@ javatrek.org 1764
 joesbbs.com 23
 joestavern.ddns.net 2002
 jp3tlc.com 23 shift-jis
-jsanchez.ddns.net 23
+jsanchez.ddns.net 23 latin-1
 junglebbs.com 23
 jupiter.bbs.io 23
 kernelfortress.org 23
@@ -720,7 +715,6 @@ kraaby.synchro.net 23
 krion.io 1337
 kuehlbox.wtf 23
 lakehouse.lilpenguins.com 2333
-lament.ghostglass.net 8181
 landofthelost.ca 2300
 landover.synchronetbbs.org 23
 lastrangers.com 23
@@ -895,7 +889,7 @@ sbbs.dmine.net 24
 sbbs.hologramcomputing.net 23
 sbbs.kingdomsendbbs.net 23
 scbbs.nsupdate.info 61023
-scenelist.org 23
+scenelist.org 23 latin-1
 scenewall.bbs.io 4000
 scoobysdoo.ddns.net 2023
 sdf.org 23
@@ -938,7 +932,7 @@ strangeplanet.org 6800
 streetcorner.ddns.net 6400
 subcarrier.ignorelist.com 2323
 subhuman.ddns.net 1338
-suga.se 42512
+suga.se 42512 latin-1
 sursum-corda.com 2002
 swatsbbs.ddns.net 2323
 sylvanus.net 4343
@@ -1033,7 +1027,7 @@ undernet.uy 23
 userclub-bbs.com 23
 vadv.fireballex.com 2323
 vague.ddns.net 23
-valley64.com 6400
+valley64.com 6400 petscii
 verify-nebula.kicks-ass.net 23
 vern.cc 23
 vert.synchro.net 23

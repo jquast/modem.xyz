@@ -483,12 +483,13 @@ def _print_group_member(idx, rec, removals, source_label=None):
     print()
 
 
-def _review_groups(groups, label, decisions=None):
+def _review_groups(groups, label, decisions=None, logs_dir=None):
     """Interactive review of duplicate groups.
 
     :param groups: dict of group key -> list of record dicts
     :param label: display label for the group type
     :param decisions: mutable decisions dict for caching, or None
+    :param logs_dir: path to logs directory for rescan, or None
     :returns: set of (host, port) to remove
     """
     removals = set()
@@ -534,7 +535,7 @@ def _review_groups(groups, label, decisions=None):
         for i, rec in enumerate(members, 1):
             _print_group_member(i, rec, removals)
 
-        print("  Enter numbers to remove (e.g. '2 3'), [s]kip, [q]uit")
+        print("  Enter numbers to remove (e.g. '2 3'), [*] rescan all, [s]kip, [q]uit")
         try:
             choice = input("  > ").strip().lower()
         except (EOFError, KeyboardInterrupt):
@@ -543,6 +544,19 @@ def _review_groups(groups, label, decisions=None):
 
         if choice == "q":
             return removals
+        if choice == "*":
+            if logs_dir:
+                logs_path = Path(logs_dir)
+                deleted = 0
+                for rec in members:
+                    logfile = logs_path / f"{rec['host']}:{rec['port']}.log"
+                    if logfile.is_file():
+                        logfile.unlink()
+                        deleted += 1
+                print(f"    -> {deleted}/{len(members)} log(s) deleted for rescan")
+            else:
+                print("    (no logs directory -- use --logs)")
+            continue
         if choice in ("s", "k", ""):
             if decisions is not None:
                 decisions["dupes"][cache_key] = {"action": "skip"}
@@ -676,7 +690,8 @@ def prune_dead(list_path, data_dir, logs_dir, report_only=False,
 # ── Within-list duplicates ──────────────────────────────────────────────
 
 def find_duplicates(list_path, data_dir, report_only=False,
-                    prune_data=False, dry_run=False, decisions=None):
+                    prune_data=False, dry_run=False, decisions=None,
+                    logs_dir=None):
     """Find and review duplicate entries within a single server list.
 
     :param list_path: path to server list file
@@ -685,6 +700,7 @@ def find_duplicates(list_path, data_dir, report_only=False,
     :param prune_data: if True, offer to delete data files
     :param dry_run: if True, don't write changes
     :param decisions: mutable decisions dict for caching, or None
+    :param logs_dir: path to logs directory for rescan, or None
     :returns: set of (host, port) removed
     """
     list_path = Path(list_path)
@@ -744,15 +760,18 @@ def find_duplicates(list_path, data_dir, report_only=False,
     removals = set()
     if fp_ip_groups:
         r = _review_groups(
-            fp_ip_groups, "Fingerprint + IP duplicates", decisions)
+            fp_ip_groups, "Fingerprint + IP duplicates", decisions,
+            logs_dir=logs_dir)
         removals.update(r)
     if extra_banner:
         r = _review_groups(
-            extra_banner, "Banner similarity duplicates", decisions)
+            extra_banner, "Banner similarity duplicates", decisions,
+            logs_dir=logs_dir)
         removals.update(r)
     if extra_mssp:
         r = _review_groups(
-            extra_mssp, "MSSP NAME duplicates", decisions)
+            extra_mssp, "MSSP NAME duplicates", decisions,
+            logs_dir=logs_dir)
         removals.update(r)
 
     if not removals:
@@ -1155,13 +1174,15 @@ def main():
                             report_only=args.report_only,
                             prune_data=args.prune_data,
                             dry_run=args.dry_run,
-                            decisions=decisions)
+                            decisions=decisions,
+                            logs_dir=args.logs)
         if do_bbs and os.path.isfile(args.bbs_list):
             find_duplicates(args.bbs_list, args.bbs_data,
                             report_only=args.report_only,
                             prune_data=args.prune_data,
                             dry_run=args.dry_run,
-                            decisions=decisions)
+                            decisions=decisions,
+                            logs_dir=args.logs)
 
     # Cross-list conflicts
     if do_cross:

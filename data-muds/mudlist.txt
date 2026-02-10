@@ -4,6 +4,9 @@
 108.252.255.105 3333
 112.124.31.157 5555 gbk
 112.124.8.59 6666 gbk
+114.32.122.32 4002 big5
+114.34.189.30 7000 big5
+118.195.237.158 6666 gbk
 121.5.75.226 5555 gbk
 125.228.186.144 8000 big5
 129.211.106.247 5555 gbk
@@ -65,7 +68,8 @@
 35.88.139.46 4000
 37.59.41.114 3001
 37.59.41.114 4000
-38.210.209.169 4000
+38.210.209.169 4000 latin-1
+39.152.42.32 7777 gbk
 3k.org 3000
 3m.vineyard.haus 3000
 4.222.184.103 4000
@@ -128,7 +132,7 @@ ancientempires.net 5011
 angalon.net 3011
 animemuck.org 2035
 animeplanet.co 3334
-animud.net 6667
+animud.net 6667 cp437
 anothermux.org 2860
 ansalon.net 8662
 ansiblemoo.org 6000
@@ -156,6 +160,7 @@ atbmud.dune.net 4000
 ateraan.com 4002
 atlantis.mushpark.com 7777
 atp.pedia.szote.u-szeged.hu 3000
+atp.pedia.szote.u-szeged.hu 3500
 ats.trekmush.org 1700
 ats.trekmush.org 1701
 avalon.mud.de 7777
@@ -175,8 +180,8 @@ baymoo.org 8888
 bc.kelotz.net 2018
 bigdamn.com 7777
 biyg.org 1801
-bl.mud.at 5678
-bl.mud.at 5679
+bl.mud.at 5678 latin-1
+bl.mud.at 5679 latin-1
 blackfire.online 4000
 blackmud.com 2000
 bod.westeros.org 3000
@@ -193,11 +198,11 @@ btvos.wolfpaw.net 9000
 bunkicenter.net 7979
 burbs.org 4567
 burningmud.com 4000
-c64u.club 6400
+c64u.club 6400 petscii
 callandor.es 4444
 carrionfields.net 4449
-catworld.muds.me 5555 utf-8
-catworld.muds.tw 4000 utf-8
+catworld.muds.me 5555 big5
+catworld.muds.tw 4000 big5
 cave.extricate.org 4000
 cavemuck.jameslick.com 2283
 cavemush.com 6116
@@ -242,7 +247,7 @@ cthulhumud.com 8889
 cubanbar.hochstenbach.net 1234
 culturalwasteland.tv 4000
 cyberassault.org 11111
-cyberlife.es 7777
+cyberlife.es 7777 latin-1
 dalazonen.com 9009
 dangunland.iptime.org 5002 euc-kr
 darcness.net 4201
@@ -266,7 +271,7 @@ dden.discordia.org 2222
 dead-souls.net 6666
 deadofnight.org 5000
 deathrisingmud.com 7500
-debomud.org 4000
+debomud.org 4000 latin-1
 deepertrouble.org 4242
 delphi.aresmush.com 4201
 delusionsmuck.com 4999
@@ -294,14 +299,14 @@ dreamscapes.dyn.dhs.org 4500
 drygulch.aresmush.com 4201
 ds.enyc.org.uk 8688
 dsl-mud.org 4000
-dsmush.com 4000
+dsmush.com 4000 cp437
 dum.acc.umu.se 2001
 dunemud.net 6788
 dunemud.net 6789
 dungeon.name 20022
 dw.kicks-ass.org 1111
 dynamix.fansi.org 4200
-eden-test.rpgframework.de 4000
+eden-test.rpgframework.de 4000 cp437
 edgeofmidnight.org 8010
 elaramud.com 4000
 eldertaleonline.com 7705
@@ -475,7 +480,7 @@ kallistimud.com 4000
 kbs-cloud.com 4000
 kerovnia.com 1984
 keys.aresmush.com 4201
-killer-mud.pl 3003
+killer-mud.pl 3003 iso-8859-2
 kingdoms.bithir.co.uk 1812
 kitsumuck.com 8888
 kk.muds.idv.tw 4000 big5
@@ -488,6 +493,7 @@ krynn.d20mud.com 4300
 labmush.mushpark.com 3939
 lac.pl 4000
 lambda.moo.mud.org 8888
+lament.ghostglass.net 8181
 lament.ghostglass.net 8600
 last-outpost.com 4000
 latitude.muck.ca 23
@@ -581,9 +587,9 @@ mud.df2.ru 4000
 mud.divineblood.org 4000
 mud.dizzymud.com 4000
 mud.dominiamud.net 3333
-mud.drastical.net 9099
+mud.drastical.net 9099 cp437
 mud.dreamverse.org 9600
-mud.durismud.com 7777
+mud.durismud.com 7777 cp437
 mud.dusk.org 7000
 mud.elveszettvilag.hu 6666
 mud.emeraldvalley.net 4000
@@ -597,9 +603,9 @@ mud.highlands3.org 9001
 mud.hu 5555
 mud.infinityforgotten.com 5555
 mud.kallindor.org 5800
-mud.kharkov.org 3000
-mud.kharkov.org 4000
-mud.kharkov.org 7000
+mud.kharkov.org 3000 koi8-r
+mud.kharkov.org 4000 koi8-r
+mud.kharkov.org 7000 koi8-r
 mud.landsofstone.org 4801
 mud.legendmud.org 9999
 mud.lysator.liu.se 2000
@@ -649,7 +655,7 @@ mudlib.anarres.org 5000
 mudpuddle.shwaine.com 3000
 mudrealms.net 3333
 mudrealms.net 4300
-muds.maldorne.org 5002
+muds.maldorne.org 5002 latin-1
 muds.toccobrator.com 4201
 muds.toccobrator.com 9901
 mudz.org 6969
@@ -885,11 +891,11 @@ typotown.net 6666
 tzone.nxly.org 5000
 uberworld.org 2020
 unitedheroesmush.com 1999
-unitopia.de 23
+unitopia.de 23 latin-1
 uossmud.sandwich.net 9000
 us.muds.net 4000 utf-8
 valhalla.com 4242
-vanciamud.fr 4000
+vanciamud.fr 4000 latin-1
 vitaliamud.com.br 8242
 void.greenfinch.com 1234
 vor.voidofreality.org 7777
