@@ -130,7 +130,7 @@
 52.40.49.152 23 latin-1
 54.238.90.108 23
 59.167.142.49 12800
-61.160.23.27 2006
+61.160.23.27 2006 gbk
 64.227.89.30 1138
 64life.net 1983
 65.108.245.243 23
@@ -206,7 +206,7 @@ a-net.online 23
 a-net.online 513
 a1bbs.ddns.net 23
 abandonedstardock.ddns.net 2002
-absinthebbs.net 1940
+absinthebbs.net 1940 topaz
 acentauribbs.no-ip.org 2424
 adeptbbs.com 23
 adibbs.sytes.net 6800
