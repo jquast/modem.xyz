@@ -65,6 +65,34 @@ BBS_SOFTWARE_PATTERNS = [
     (re.compile(r'SBBS', re.IGNORECASE), 'SBBS'),
 ]
 
+# EMSI / FidoNet detection patterns
+_EMSI_RE = re.compile(r'\*\*EMSI_')
+_FIDONET_ADDR_RE = re.compile(r'(\d+:\d+/\d+(?:\.\d+)?(?:@\w+)?)')
+_EMSI_MAILER_RE = re.compile(r'\*\*EMSI_MD5[0-9A-Fa-f]{4}<[^>]*-([^>]+)>')
+
+
+def detect_fidonet(banner_before, banner_after):
+    """Detect EMSI handshake and extract FidoNet information from banners.
+
+    :param banner_before: raw banner text before carriage return
+    :param banner_after: raw banner text after carriage return
+    :returns: dict with ``has_emsi``, ``fidonet_addresses``, ``emsi_mailer``
+    """
+    full = (banner_before or '') + (banner_after or '')
+    has_emsi = bool(_EMSI_RE.search(full))
+    addresses = []
+    mailer = ''
+    if has_emsi:
+        addresses = sorted(set(_FIDONET_ADDR_RE.findall(full)))
+        mailer_match = _EMSI_MAILER_RE.search(full)
+        if mailer_match:
+            mailer = mailer_match.group(1)
+    return {
+        'has_emsi': has_emsi,
+        'fidonet_addresses': addresses,
+        'emsi_mailer': mailer,
+    }
+
 
 # ---------------------------------------------------------------------------
 # BBS helpers
@@ -188,6 +216,16 @@ def load_server_data(data_dir, encoding_overrides=None):
                 record, default_encoding=DEFAULT_ENCODING)
             record['bbs_software'] = detect_bbs_software(banner)
 
+            stripped = _strip_ansi(banner) if banner else ''
+            record['display_encoding'] = (
+                record['encoding_override']
+                or ('ascii' if stripped and stripped.isascii()
+                    else DEFAULT_ENCODING))
+
+            fidonet = detect_fidonet(
+                record['banner_before'], record['banner_after'])
+            record.update(fidonet)
+
             record['website'] = ''
             for banner_key in ('banner_before', 'banner_after'):
                 banner_text = record[banner_key]
@@ -239,9 +277,10 @@ def compute_statistics(servers):
 
     encoding_counts = Counter()
     for s in servers:
-        enc = s.get('encoding_override') or DEFAULT_ENCODING
-        encoding_counts[enc] += 1
+        encoding_counts[s['display_encoding']] += 1
     stats['encoding_counts'] = dict(encoding_counts)
+
+    stats['emsi_count'] = sum(1 for s in servers if s['has_emsi'])
 
     option_offered = Counter()
     option_requested = Counter()
@@ -410,6 +449,9 @@ def display_summary_stats(stats):
               f" {stats['bbs_software_detected']}"
               f" ({len(stats['bbs_software_counts'])}"
               f" unique packages)")
+    if stats['emsi_count']:
+        print(f"- **FidoNet (EMSI) detected**:"
+              f" {stats['emsi_count']}")
     print()
     print("These statistics reflect the most recent scan of all"
           " servers in the")
@@ -521,7 +563,7 @@ def display_server_table(servers):
             host_cell += ' :tls-lock:`\U0001f512`'
 
         software = s['bbs_software'] or ''
-        encoding = s.get('encoding_override') or DEFAULT_ENCODING
+        encoding = s['display_encoding']
         fp = s['fingerprint'][:12] + '...'
 
         banner = _combine_banners(
@@ -670,6 +712,43 @@ def display_bbs_software_groups(servers):
         print()
 
 
+def display_fidonet_servers(servers):
+    """Print FidoNet/EMSI servers page."""
+    emsi_servers = [s for s in servers if s['has_emsi']]
+    _rst_heading("FidoNet (EMSI)", '=')
+    print(f"{len(emsi_servers)} servers responded with an"
+          " `EMSI <https://en.wikipedia.org/wiki/"
+          "Electronic_Mail_Standard_Identification>`_")
+    print("handshake sequence, indicating FidoNet"
+          " capability.")
+    print()
+
+    rows = []
+    for s in sorted(emsi_servers,
+                    key=lambda s: s['host'].lower()):
+        bbs_file = s['_bbs_file']
+        label = f"{s['host']}:{s['port']}"
+        host_cell = (f":doc:`{_rst_escape(label)}"
+                     f" <bbs_detail/{bbs_file}>`")
+        tls = (' :tls-lock:`\U0001f512`'
+               if s['tls_support'] else '')
+        host_cell += tls
+        addrs = ', '.join(s['fidonet_addresses']) or ''
+        software = s['bbs_software'] or ''
+        mailer = s['emsi_mailer'] or ''
+        rows.append({
+            'Host': host_cell,
+            'FidoNet Address': addrs,
+            'Software': _rst_escape(software),
+            'Mailer': _rst_escape(mailer),
+        })
+
+    table_str = tabulate_mod.tabulate(
+        rows, headers="keys", tablefmt="rst")
+    print_datatable(table_str, caption="FidoNet (EMSI) Servers")
+    print()
+
+
 # ---------------------------------------------------------------------------
 # RST generation
 # ---------------------------------------------------------------------------
@@ -699,6 +778,15 @@ def generate_fingerprints_rst(servers):
     with open(rst_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         display_fingerprint_summary(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
+def generate_fidonet_rst(servers):
+    """Generate the fidonet.rst file."""
+    rst_path = os.path.join(DOCS_PATH, "fidonet.rst")
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        display_fidonet_servers(servers)
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -838,11 +926,23 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
               f" {_rst_escape(server['bbs_software'])}")
         print()
 
-    effective_enc = (server.get('encoding_override')
-                     or DEFAULT_ENCODING)
+    if server['has_emsi']:
+        _rst_heading("FidoNet", sec_char)
+        print("This server responded with an EMSI handshake"
+              " sequence.")
+        print()
+        if server['fidonet_addresses']:
+            print("- **Address**: "
+                  + ', '.join(f"``{a}``"
+                              for a in server['fidonet_addresses']))
+        if server['emsi_mailer']:
+            print(f"- **Mailer**: {_rst_escape(server['emsi_mailer'])}")
+        print()
+
+    display_enc = server['display_encoding']
     scanner_enc = server.get('encoding', 'unknown')
     _rst_heading("Encoding", sec_char)
-    print(f"- **Effective encoding**: {effective_enc}")
+    print(f"- **Effective encoding**: {display_enc}")
     if server.get('encoding_override'):
         print(f"- **Override**: {server['encoding_override']}"
               " (from bbslist.txt)")
@@ -1307,6 +1407,7 @@ def run(args):
     generate_server_list_rst(servers)
     generate_fingerprints_rst(servers)
     generate_bbs_software_rst(servers)
+    generate_fidonet_rst(servers)
     generate_details_rst(servers)
     generate_bbs_details(servers, logs_dir=logs_dir,
                           force=force, data_dir=data_dir,

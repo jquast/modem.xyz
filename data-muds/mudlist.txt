@@ -13,6 +13,7 @@
 13.251.165.162 9999
 130.61.212.175 4000
 130.61.249.129 4000
+130.95.13.14 4242
 136.38.83.106 8008
 138.197.134.82 4242
 138.68.247.72 5555
@@ -53,6 +54,7 @@
 211.110.165.199 4000 euc-kr
 211.110.165.199 7032 euc-kr
 212.227.230.119 4000
+216.136.9.21 1085
 216.136.9.8 4919
 216.226.128.180 4443
 216.226.128.180 4444
@@ -85,6 +87,7 @@
 61.160.23.27 66 gbk
 63.142.253.253 4001
 64.182.46.8 4445
+67.205.140.34 2020
 71.171.93.80 1510
 71.94.107.83 4000
 73.185.130.92 4000
@@ -121,6 +124,7 @@ ageofdragons.com 3333
 ageofdragonsmud.com 4000
 ageofinsanity.org 4000
 akanbar.com 23
+aladon.sovintel.ru 9000
 alcatraz.wolfpaw.net 8070
 aldebaran-mud.de 2000
 alexmud.stacken.kth.se 4000
@@ -199,6 +203,7 @@ bunkicenter.net 7979
 burbs.org 4567
 burningmud.com 4000
 c64u.club 6400 petscii
+cajunnights.com 7373
 callandor.es 4444
 carrionfields.net 4449
 catworld.muds.me 5555 big5
@@ -697,6 +702,7 @@ noreality.org 4000
 nuclearwarmud.com 4080
 obsidianreverie.com 4201
 oim.wolfpaw.net 1960
+oit.ndsu.edu 8888
 omen.genesismuds.com 1100
 onjin.net 4000
 otherspace.aresmush.com 2650
@@ -885,6 +891,7 @@ tsunami.thebigwave.net 23
 tubmud.de 7680
 turf.org 4000
 twyst.org 3333
+twyst.org 6666
 tx.sjever.net 6666 gbk
 tymemud.com 6969
 typotown.net 6666

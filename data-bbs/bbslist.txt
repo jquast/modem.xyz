@@ -15,7 +15,6 @@
 120.92.212.76 23 gbk
 122.199.12.99 8888
 122.199.58.252 2323
-130.95.13.14 4242
 132.226.155.29 23
 134.185.84.52 2323
 134.209.40.1 31337
@@ -57,7 +56,7 @@
 192.243.111.121 2323
 192.82.254.205 8888
 198.71.48.13 7777
-1stchoicecore.co.nz 1028
+1stchoicecore.co.nz 1028 big5
 1stchoicecore.co.nz 1030
 1stchoicecore.co.nz 23
 20.245.25.86 23
@@ -75,7 +74,6 @@
 211.133.151.119 23
 211.68.71.66 23 gbk
 213.166.5.201 23
-216.136.9.21 1085
 216.136.9.5 1809
 216.136.9.8 23
 217.154.107.144 23
@@ -128,7 +126,7 @@
 51.148.188.78 24
 51.222.110.111 2323
 52.40.49.152 23 latin-1
-54.238.90.108 23
+54.238.90.108 23 big5
 59.167.142.49 12800
 61.160.23.27 2006 gbk
 64.227.89.30 1138
@@ -141,7 +139,6 @@
 67.149.17.69 23
 67.163.148.95 23
 67.190.218.57 2323
-67.205.140.34 2020
 67.205.168.255 2323
 68.134.179.115 2023
 68.145.253.237 23
@@ -210,9 +207,8 @@ absinthebbs.net 1940 topaz
 acentauribbs.no-ip.org 2424
 adeptbbs.com 23
 adibbs.sytes.net 6800
-aeug.asuscomm.com 8888
+aeug.asuscomm.com 8888 big5
 agency.bbs.nz 23
-aladon.sovintel.ru 9000
 alamobbs.mywire.org 6400
 alcatrazbbs.ddns.net 9000
 alco.bbs.io 23
@@ -250,7 +246,7 @@ basementbbs.ddns.net 9000
 bay.jayscafe.net 6401
 bayvillewireless.com 23
 bbbs.net 23
-bbs.2girl.net 23
+bbs.2girl.net 23 big5
 bbs.4d2.org 23
 bbs.4wheelham.com 23
 bbs.4wheelham.com 513
@@ -276,7 +272,7 @@ bbs.at2k.org 23
 bbs.atdt01410.com 23 euc-kr
 bbs.b-wells.us 23
 bbs.bajer.cz 32
-bbs.beanzilla.net 2323
+bbs.beanzilla.net 2323 big5
 bbs.beardy.se 23
 bbs.bearfather.net 23
 bbs.bigjim.ventures 6969
@@ -300,7 +296,7 @@ bbs.cittadellabbs.it 4001
 bbs.clutchbbs.com 23
 bbs.coldwinterknights.net 8888
 bbs.conf.eti.br 23
-bbs.cooldavid.org 23
+bbs.cooldavid.org 23 big5
 bbs.cortex-media.info 23
 bbs.crazyerics.com 23
 bbs.crnet.net 2323
@@ -373,7 +369,7 @@ bbs.kd8hfx.net 23
 bbs.kiwi.net 23
 bbs.kn6q.org 2002
 bbs.korenblom.nl 23
-bbs.kry.pt 2323
+bbs.kry.pt 2323 big5
 bbs.lightly-salted.com 8023
 bbs.lizardmaster.com 23
 bbs.lizsugar.me 6000
@@ -512,7 +508,6 @@ bwrbbs.ddns.net 23
 byob.hopto.org 64128
 c3bbs.retronetworking.org 23
 c3bbs.retronetworking.org 513
-cajunnights.com 7373
 call.rofbbs.com 6400
 call.rofbbs.com 6800
 call.rofbbs.com 8502
@@ -807,7 +802,6 @@ nuke.club 513
 oasisbbs.hopto.org 6400
 ofo.tw 23 big5
 ohb.synchronetbbs.org 23
-oit.ndsu.edu 8888
 oldschool.synchronetbbs.org 513
 oldtimebbs.com 23
 on.the.net.nz 23
@@ -1019,7 +1013,6 @@ tw.worldsapart.net 2002
 tw2002.briancmoses.com 23
 twb.wrgnbr.com 6896
 twgs.geekm0nkey.com 23
-twyst.org 6666
 ufpgc.com 2323
 uncensored.citadel.org 23
 undercurrents.io 8088
