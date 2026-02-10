@@ -1271,7 +1271,7 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
             if s['bbs_software']:
                 print(f"  - Software:"
                       f" {_rst_escape(s['bbs_software'])}")
-            enc = s.get('encoding_override') or DEFAULT_ENCODING
+            enc = s['display_encoding']
             print(f"  - Encoding: {enc}")
             if s['website']:
                 href = s['website']

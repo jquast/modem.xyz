@@ -8,5 +8,6 @@ bbs.modem.xyz
    server_list
    statistics
    bbs_software
+   fidonet
    fingerprints
    servers
