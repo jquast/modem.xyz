@@ -16,7 +16,7 @@ from make_stats.common import (
     TELNET_OPTIONS_OF_INTEREST,
     PLOT_BG, PLOT_FG, PLOT_GREEN, PLOT_CYAN, PLOT_YELLOW, PLOT_BLUE,
     _listify, _first_str, _parse_int, _format_scan_time,
-    _parse_server_list,
+    _parse_server_list, _load_encoding_overrides,
     _rst_escape, _strip_ansi, _is_garbled, _strip_mxp_sgml,
     _clean_log_line, _combine_banners, _truncate,
     _banner_to_html, _banner_to_png, _banner_alt_text, _telnet_url,
@@ -271,12 +271,16 @@ def _detect_protocols(record):
 # Data loading
 # ---------------------------------------------------------------------------
 
-def load_server_data(data_dir):
+def load_server_data(data_dir, encoding_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
+    :param encoding_overrides: dict mapping (host, port) to encoding
     :returns: list of parsed server record dicts
     """
+    if encoding_overrides is None:
+        encoding_overrides = {}
+
     server_dir = os.path.join(data_dir, "server")
     if not os.path.isdir(server_dir):
         print(f"Error: {server_dir} is not a directory",
@@ -355,6 +359,12 @@ def load_server_data(data_dir):
                     _listify(mssp.get('LANGUAGE', ''))),
                 'discord': _first_str(mssp.get('DISCORD', '')),
             }
+
+            record['encoding_override'] = encoding_overrides.get(
+                (record['host'], record['port']), '')
+            record['display_encoding'] = (
+                record['encoding_override']
+                or record['encoding']).lower()
 
             record['tls_port'] = _detect_tls_port(record)
             record['uptime_days'] = _parse_uptime_days(
@@ -939,6 +949,46 @@ def display_fingerprint_summary(servers):
     print()
 
 
+def display_encoding_groups(servers):
+    """Print MUDs by Encoding page."""
+    _rst_heading("MUDs by Encoding", '=')
+    print("Servers grouped by their detected or configured"
+          " character encoding.")
+    print()
+
+    by_encoding = {}
+    for s in servers:
+        key = s['display_encoding']
+        by_encoding.setdefault(key, []).append(s)
+
+    rows = []
+    for name, members in sorted(by_encoding.items(),
+                                 key=lambda x: (-len(x[1]),
+                                                x[0])):
+        rows.append({
+            'Encoding': f'`{_rst_escape(name)}`_',
+            'Servers': str(len(members)),
+        })
+    table_str = tabulate_mod.tabulate(
+        rows, headers="keys", tablefmt="rst")
+    print_datatable(table_str, caption="MUD Encodings")
+
+    for name, members in sorted(by_encoding.items(),
+                                 key=lambda x: (-len(x[1]),
+                                                x[0])):
+        _rst_heading(name, '-')
+        for s in sorted(members,
+                        key=lambda s: (s['name']
+                                       or s['host']).lower()):
+            mud_file = s['_mud_file']
+            label = s['name'] or f"{s['host']}:{s['port']}"
+            tls = (' :tls-lock:`\U0001f512`'
+                   if s.get('tls_port') else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <mud_detail/{mud_file}>`{tls}")
+        print()
+
+
 # ---------------------------------------------------------------------------
 # RST generation
 # ---------------------------------------------------------------------------
@@ -971,6 +1021,15 @@ def generate_fingerprints_rst(servers):
     with open(rst_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         display_fingerprint_summary(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
+def generate_encoding_rst(servers):
+    """Generate the encodings.rst file."""
+    rst_path = os.path.join(DOCS_PATH, "encodings.rst")
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        display_encoding_groups(servers)
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -1886,9 +1945,15 @@ def run(args):
         print(f"Using logs from {logs_dir}", file=sys.stderr)
     else:
         logs_dir = None
+
+    encoding_overrides = _load_encoding_overrides(server_list)
+    if encoding_overrides:
+        print(f"Loaded {len(encoding_overrides)} encoding"
+              f" overrides from {server_list}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
 
-    records = load_server_data(data_dir)
+    records = load_server_data(data_dir, encoding_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 
@@ -1928,6 +1993,7 @@ def run(args):
     generate_summary_rst(stats)
     generate_server_list_rst(servers)
     generate_fingerprints_rst(servers)
+    generate_encoding_rst(servers)
     generate_details_rst(servers)
     generate_mud_details(servers, logs_dir=logs_dir,
                          data_dir=data_dir,

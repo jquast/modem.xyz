@@ -7,5 +7,6 @@ muds.modem.xyz
    introduction
    server_list
    statistics
+   encodings
    servers
    fingerprints

@@ -16,7 +16,7 @@ from make_stats.common import (
     TELNET_OPTIONS_OF_INTEREST,
     PLOT_BG, PLOT_FG, PLOT_GREEN, PLOT_CYAN, PLOT_YELLOW, PLOT_BLUE,
     _listify, _first_str, _parse_int, _format_scan_time,
-    _parse_server_list,
+    _parse_server_list, _load_encoding_overrides,
     _rst_escape, _strip_ansi, _is_garbled, _strip_mxp_sgml,
     _clean_log_line, _combine_banners, _truncate,
     _banner_to_html, _banner_to_png, _banner_alt_text, _telnet_url,
@@ -119,23 +119,7 @@ def load_bbslist_encodings(bbslist_path):
     :param bbslist_path: path to bbslist.txt
     :returns: dict mapping (host, port) to encoding string
     """
-    overrides = {}
-    if not os.path.isfile(bbslist_path):
-        return overrides
-    with open(bbslist_path) as f:
-        for line in f:
-            line = line.split('#', 1)[0].strip()
-            if not line:
-                continue
-            parts = line.split(None, 2)
-            if len(parts) >= 3:
-                host = parts[0]
-                try:
-                    port = int(parts[1])
-                except ValueError:
-                    continue
-                overrides[(host, port)] = parts[2].strip()
-    return overrides
+    return _load_encoding_overrides(bbslist_path)
 
 
 # ---------------------------------------------------------------------------
@@ -712,6 +696,45 @@ def display_bbs_software_groups(servers):
         print()
 
 
+def display_encoding_groups(servers):
+    """Print BBS by Encoding page."""
+    _rst_heading("BBS by Encoding", '=')
+    print("Servers grouped by their detected or configured"
+          " character encoding.")
+    print()
+
+    by_encoding = {}
+    for s in servers:
+        key = s['display_encoding']
+        by_encoding.setdefault(key, []).append(s)
+
+    rows = []
+    for name, members in sorted(by_encoding.items(),
+                                 key=lambda x: (-len(x[1]),
+                                                x[0])):
+        rows.append({
+            'Encoding': f'`{_rst_escape(name)}`_',
+            'Servers': str(len(members)),
+        })
+    table_str = tabulate_mod.tabulate(
+        rows, headers="keys", tablefmt="rst")
+    print_datatable(table_str, caption="BBS Encodings")
+
+    for name, members in sorted(by_encoding.items(),
+                                 key=lambda x: (-len(x[1]),
+                                                x[0])):
+        _rst_heading(name, '-')
+        for s in sorted(members,
+                        key=lambda s: s['host'].lower()):
+            bbs_file = s['_bbs_file']
+            label = f"{s['host']}:{s['port']}"
+            tls = (' :tls-lock:`\U0001f512`'
+                   if s['tls_support'] else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <bbs_detail/{bbs_file}>`{tls}")
+        print()
+
+
 def display_fidonet_servers(servers):
     """Print FidoNet/EMSI servers page."""
     emsi_servers = [s for s in servers if s['has_emsi']]
@@ -796,6 +819,15 @@ def generate_bbs_software_rst(servers):
     with open(rst_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         display_bbs_software_groups(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
+def generate_encoding_rst(servers):
+    """Generate the encodings.rst file."""
+    rst_path = os.path.join(DOCS_PATH, "encodings.rst")
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        display_encoding_groups(servers)
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -1407,6 +1439,7 @@ def run(args):
     generate_server_list_rst(servers)
     generate_fingerprints_rst(servers)
     generate_bbs_software_rst(servers)
+    generate_encoding_rst(servers)
     generate_fidonet_rst(servers)
     generate_details_rst(servers)
     generate_bbs_details(servers, logs_dir=logs_dir,

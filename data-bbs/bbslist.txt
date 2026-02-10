@@ -50,7 +50,7 @@
 173.61.230.102 23
 174.1.49.147 2323
 174.3.235.112 230
-178.232.208.156 23
+178.232.208.156 23 topaz
 185.114.193.46 3340
 186.123.101.23 23
 192.184.90.222 256
@@ -166,7 +166,7 @@
 80.189.184.12 23
 80.211.167.123 23
 80.229.19.209 23
-80.7.90.17 31337
+80.7.90.17 31337 topaz
 81.82.241.129 4000
 82.64.227.162 23
 84.104.78.157 23
@@ -182,7 +182,7 @@
 94.32.85.38 2023
 95.179.176.16 4000
 95.217.16.88 8888
-96.126.98.54 23
+96.126.98.54 23 topaz
 96.231.233.46 23
 96.231.233.47 23
 96.231.233.52 23
@@ -217,11 +217,11 @@ alephbbs.com 2626
 altairiv.ddns.net 2323
 altarofwaresbbs.hopto.org 6464
 alterant.bbs.dege.au 23
-amibbs.amigaretro.com 6880
-amiganer.amms-bbs.de 23
-amigaunderground.com 1985
-amigaunderground.com 2002
-amigaunderground.com 2300
+amibbs.amigaretro.com 6880 topaz
+amiganer.amms-bbs.de 23 topaz
+amigaunderground.com 1985 topaz
+amigaunderground.com 2002 topaz
+amigaunderground.com 2300 topaz
 amis86.ddns.net 9000
 amnesiabbs.duckdns.org 23
 amstrad.simulant.uk 464
@@ -236,7 +236,7 @@ asanocomp.ddns.net 2300
 ascii.dynu.net 4096
 atari-bbs.zapto.org 8888
 atari8.us 10001
-ataribbs.ddns.net 6502
+ataribbs.ddns.net 6502 atarist
 atl.ddns.net 6401
 aturiondynasty.hopto.org 4444
 avastbbs.servegame.com 23
@@ -354,8 +354,8 @@ bbs.horizonbbs.org 23
 bbs.hyena.network 23
 bbs.ibbs.be 23
 bbs.ice.cycu.edu.tw 23 big5
-bbs.idbbs.ca 1581
-bbs.idbbs.ca 59
+bbs.idbbs.ca 1581 topaz
+bbs.idbbs.ca 59 topaz
 bbs.impakt.net 6502
 bbs.interlinked.us 23
 bbs.intersrv.net 23
@@ -578,7 +578,7 @@ deltacity.se 23
 demonsnet.com 23
 dhxy.info 23 gbk
 digdist.synchro.net 23
-digitalx.ddns.net 7411
+digitalx.ddns.net 7411 topaz
 din.asciiattic.com 23
 diskhopp.synchro.net 23
 djdave.uk 8088
@@ -586,7 +586,7 @@ dl2.net 4000
 doozy.thruhere.net 23
 dose.0wnz.at 23
 downlinkbbs.com 2323
-dragon.vk3heg.net 6800
+dragon.vk3heg.net 6800 topaz
 dumuzi.lykaina.com 23
 dungeon.name 20020
 dungeon.synchro.net 23
@@ -642,7 +642,7 @@ frontierbbs.co.uk 23
 funtopia.synchro.net 3023
 futureland.today 23
 futureland.today 2323
-fw2.cnetbbs.net 6800
+fw2.cnetbbs.net 6800 topaz
 g-point.tunk.org 500
 galaxy74bbs.com 23
 galaxybbs.net 23
@@ -764,7 +764,7 @@ moratahack.com 23
 mortuary.ddns.net 23
 mozz.us 23
 msmacbbs.maletazul.pt 23
-mstation.servebbs.com 23
+mstation.servebbs.com 23 topaz
 mtlgeek.synchro.net 2002
 mtlgeek.synchro.net 23
 mtlgeek.synchro.net 513
@@ -829,7 +829,7 @@ pathunknown.net 23
 pebkac.lol 23
 penisys.online 5200
 perlbbs.tw 23 big5
-phantasm.bbs.io 4489
+phantasm.bbs.io 4489 topaz
 phoenix.bnbbbs.net 23
 phoenix.bnbbbs.net 2323
 planetafr0.org 8888
@@ -878,14 +878,14 @@ rofbbs.ddns.net 2300
 ror.us.to 3000
 rtc.to 23
 sacrebase.mywire.org 486
-sanctuary.zapto.org 1541
+sanctuary.zapto.org 1541 topaz
 sanctumbbs.com 6502
 sbbs.dmine.net 24
 sbbs.hologramcomputing.net 23
 sbbs.kingdomsendbbs.net 23
 scbbs.nsupdate.info 61023
 scenelist.org 23 latin-1
-scenewall.bbs.io 4000
+scenewall.bbs.io 4000 topaz
 scoobysdoo.ddns.net 2023
 sdf.org 23
 seabreeze.servegame.com 23
@@ -912,7 +912,7 @@ slipstreambbs.net 23
 solarflow.dynu.net 23
 sos-bbs.net 23
 sotanomsxbbs.org 23
-southcentral.se 1023
+southcentral.se 1023 topaz
 southernamis.ddns.net 23
 spaghettihut.amigaretro.net 6800
 sparx.bbs.io 23
@@ -926,7 +926,7 @@ stormgate.synchronetbbs.org 23
 strangeplanet.org 6800
 streetcorner.ddns.net 6400
 subcarrier.ignorelist.com 2323
-subhuman.ddns.net 1338
+subhuman.ddns.net 1338 topaz
 suga.se 42512 latin-1
 sursum-corda.com 2002
 swatsbbs.ddns.net 2323
@@ -954,7 +954,7 @@ telnet.sanctumbbs.com 23
 telnet.stormbbs.com 23
 telnet.unknownrealm.org 23
 telnetbible.com 23
-terminal-obsession.hopto.org 1541
+terminal-obsession.hopto.org 1541 topaz
 terrorkom-server.de 56656
 tfb-bbs.org 23
 tfcbbs.com 6400
@@ -976,7 +976,7 @@ thegateb.synchro.net 2424
 themegabbs.com 6400
 thenervoushospital.com 1996
 thenineworlds.dnshome.de 923
-thenorthernpalace.com 2020
+thenorthernpalace.com 2020 topaz
 theoldnet.com 6400
 theparityerror.com 23
 thepenaltybox.org 23

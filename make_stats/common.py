@@ -157,6 +157,31 @@ def _parse_server_list(path):
     return result
 
 
+def _load_encoding_overrides(path):
+    """Load encoding overrides from a server list file.
+
+    :param path: path to server list file (host port [encoding])
+    :returns: dict mapping (host, port) to encoding string
+    """
+    overrides = {}
+    if not os.path.isfile(path):
+        return overrides
+    with open(path) as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            parts = line.split(None, 2)
+            if len(parts) >= 3:
+                host = parts[0]
+                try:
+                    port = int(parts[1])
+                except ValueError:
+                    continue
+                overrides[(host, port)] = parts[2].strip()
+    return overrides
+
+
 # ---------------------------------------------------------------------------
 # Text processing
 # ---------------------------------------------------------------------------

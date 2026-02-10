@@ -190,7 +190,7 @@ blackfire.online 4000
 blackmud.com 2000
 bod.westeros.org 3000
 brazilmux.tinymux.org 2860
-breakworld.themuds.org 4000
+breakworld.themuds.org 4000 gbk
 brigandine.org 9390
 british-legends.com 27750
 brokenwindows.aresmush.com 4201
@@ -451,7 +451,7 @@ heroesassemble.mushhaven.com 3000
 hiddenworldsmud.com 4040
 holomuck.org 5757
 home.starmud.com 4000
-hopto.mud.ren 4000
+hopto.mud.ren 4000 gbk
 hot-mess.net 9900
 hy1.jhfy.org 1863 gbk
 hyperborea.net 2000
