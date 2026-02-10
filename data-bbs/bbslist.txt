@@ -1,6 +1,7 @@
 # encoding is optional, defaults to cp437 if omitted
-# generated from https://www.ipingthereforeiam.com/bbs/dir/relay.cfg
-# host port [encoding]
+# sourced from https://www.ipingthereforeiam.com/bbs/dir/relay.cfg Feb. 2026
+# maybe i'll sync up again later
+# host port [encoding|font]
 104.142.112.149 9000
 104.174.3.6 23
 104.57.170.70 6840
