@@ -63,7 +63,7 @@ def _kill_process_group(proc):
 
 
 def scan_host(host, port, data_dir, logs_dir, encoding=None,
-              banner_max_wait=10, connect_timeout=30):
+              banner_max_wait=20, connect_timeout=60):
     """Scan a single server.
 
     :param host: server hostname
@@ -103,7 +103,7 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
             stderr=subprocess.DEVNULL,
             start_new_session=True,
         )
-        proc.wait(timeout=30)
+        proc.wait(timeout=connect_timeout + (banner_max_wait * 2) + 3)
         return (host, port, "scanned")
     except subprocess.TimeoutExpired:
         _kill_process_group(proc)
@@ -130,7 +130,7 @@ def main():
         '--num-workers', type=int, default=16,
         help='Number of parallel workers (default: 16)')
     parser.add_argument(
-        '--banner-max-wait', type=int, default=30,
+        '--banner-max-wait', type=int, default=20,
         help='Seconds to wait for banner data')
     parser.add_argument(
         '--connect-timeout', type=int, default=60,
