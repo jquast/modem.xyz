@@ -505,7 +505,7 @@ centralontarioremote.net 1123
 centralontarioremote.net 23
 cfbbs.net 23
 chaotix.ddns.net 2323
-chimia.se 2323 latin-1
+chimia.se 2323 utf-8
 chrysalisbbs.org 8888
 cib.dyndns.org 6404
 citadel.dc540.org 23230
@@ -516,7 +516,7 @@ claudes.lovelybits.org 23
 cloud.kanskje.com 23
 conchaos.synchro.net 2002
 conchaos.synchro.net 23
-condor.rorscha.ch 1234 latin-1
+condor.rorscha.ch 1234 utf-8
 connect.rayzer.net 2112
 connect.serionbbs.com 23
 convolution.us 23
@@ -668,7 +668,7 @@ javatrek.org 1764
 joesbbs.com 23
 joestavern.ddns.net 2002
 jp3tlc.com 23 shift-jis
-jsanchez.ddns.net 23 latin-1
+jsanchez.ddns.net 23 utf-8
 junglebbs.com 23
 jupiter.bbs.io 23
 kia.synchro.net 23

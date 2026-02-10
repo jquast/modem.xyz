@@ -174,7 +174,7 @@ baymoo.org 8888
 bc.kelotz.net 2018
 bigdamn.com 7777
 biyg.org 1801
-bl.mud.at 5678 latin-1
+bl.mud.at 5678 utf-8
 bl.mud.at 5679 latin-1
 blackfire.online 4000
 blackmud.com 2000
@@ -291,14 +291,14 @@ dreamscapes.dyn.dhs.org 4500
 drygulch.aresmush.com 4201
 ds.enyc.org.uk 8688
 dsl-mud.org 4000
-dsmush.com 4000 cp437
+dsmush.com 4000 utf-8
 dum.acc.umu.se 2001
 dunemud.net 6788
 dunemud.net 6789
 dungeon.name 20022
 dw.kicks-ass.org 1111
 dynamix.fansi.org 4200
-eden-test.rpgframework.de 4000 cp437
+eden-test.rpgframework.de 4000 utf-8
 edgeofmidnight.org 8010
 elaramud.com 4000
 eldertaleonline.com 7705
@@ -571,7 +571,7 @@ mud.df2.ru 4000
 mud.divineblood.org 4000
 mud.dizzymud.com 4000
 mud.dominiamud.net 3333
-mud.drastical.net 9099 cp437
+mud.drastical.net 9099 utf-8
 mud.dreamverse.org 9600
 mud.durismud.com 7777 cp437
 mud.dusk.org 7000
@@ -637,7 +637,7 @@ mudlib.anarres.org 5000
 mudpuddle.shwaine.com 3000
 mudrealms.net 3333
 mudrealms.net 4300
-muds.maldorne.org 5002 latin-1
+muds.maldorne.org 5002 utf-8
 muds.toccobrator.com 4201
 muds.toccobrator.com 9901
 mudz.org 6969
@@ -874,7 +874,7 @@ typotown.net 6666
 tzone.nxly.org 5000
 uberworld.org 2020
 unitedheroesmush.com 1999
-unitopia.de 23 latin-1
+unitopia.de 23 utf-8
 uossmud.sandwich.net 9000
 us.muds.net 4000 utf-8
 valhalla.com 4242
