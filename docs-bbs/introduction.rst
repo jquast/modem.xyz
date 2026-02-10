@@ -79,7 +79,7 @@ The list of BBSes scanned is sourced from the `IPTIA BBS Directory
 <https://www.ipingthereforeiam.com/bbs/>`_ relay.cfg, cross-referenced against the MUD list at
 `muds.modem.xyz <https://muds.modem.xyz/>`_ to exclude MUD servers. The resulting list is
 github-managed at `bbslist.txt
-<https://github.com/jquast/modem.xyz/blob/master/data/bbslist.txt>`_. Feel free to suggest
+<https://github.com/jquast/modem.xyz/blob/master/data-bbs/bbslist.txt>`_. Feel free to suggest
 any changes by pull request.
 
 BBS Resources
