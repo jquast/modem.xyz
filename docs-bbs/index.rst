@@ -9,6 +9,7 @@ bbs.modem.xyz
    statistics
    bbs_software
    encodings
+   banner_gallery
    fidonet
    fingerprints
    servers

@@ -21,7 +21,7 @@ from make_stats.common import (
     _clean_log_line, _combine_banners, _truncate,
     _banner_to_html, _banner_to_png, _banner_alt_text, _telnet_url,
     _rst_heading, print_datatable,
-    _group_shared_ip, _most_common_hostname,
+    _group_shared_ip, _group_by_banner, _most_common_hostname,
     _clean_dir, deduplicate_servers,
     _setup_plot_style, _group_small_slices, _pie_colors,
     create_telnet_options_plot,
@@ -1027,6 +1027,77 @@ def generate_encoding_rst(servers):
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
+def display_banner_gallery(servers):
+    """Print the Banner Gallery page grouping servers by shared banner."""
+    _rst_heading("Banner Gallery", '=')
+    print("A gallery of ANSI connection banners collected from responding")
+    print("MUD servers. Servers that display identical visible banner text")
+    print("are grouped together. Each group shows the shared banner image")
+    print("and a list of all servers in that group.")
+    print()
+
+    groups = _group_by_banner(servers)
+    sorted_groups = sorted(
+        groups.values(),
+        key=lambda g: (-len(g['servers']),
+                       (g['servers'][0].get('name')
+                        or g['servers'][0]['host']).lower()))
+
+    total = sum(len(g['servers']) for g in sorted_groups)
+    print(f"{len(sorted_groups)} unique banners across {total} servers.")
+    print()
+
+    for group in sorted_groups:
+        members = group['servers']
+        count = len(members)
+        rep = members[0]
+        banner = group['banner']
+
+        name = rep.get('name') or rep['host']
+        mud_file = rep['_mud_file']
+        port = rep['port']
+        if count > 1:
+            heading = f"{name} (+{count - 1} more)"
+        else:
+            heading = name
+        _rst_heading(heading, '-')
+
+        banner_fname = f"{mud_file}_{port}.png"
+        banner_path = os.path.join(BANNERS_PATH, banner_fname)
+        if os.path.isfile(banner_path):
+            print(f".. image:: /_static/banners/{banner_fname}")
+            print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
+            print(f"   :class: ansi-banner")
+            print()
+        else:
+            banner_html = _banner_to_html(
+                banner, name=name, wrap_width=100,
+                brighten_blue=True,
+                default_aria='MUD server')
+            print(".. raw:: html")
+            print()
+            for line in banner_html.split('\n'):
+                print(f"   {line}")
+            print()
+
+        for s in members:
+            label = s.get('name') or f"{s['host']}:{s['port']}"
+            tls = (' :tls-lock:`\U0001f512`'
+                   if s.get('tls_port') else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <mud_detail/{s['_mud_file']}>`{tls}")
+        print()
+
+
+def generate_banner_gallery_rst(servers):
+    """Generate the banner_gallery.rst file."""
+    rst_path = os.path.join(DOCS_PATH, "banner_gallery.rst")
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        display_banner_gallery(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
 def generate_details_rst(servers):
     """Generate the servers.rst index page with toctree."""
     rst_path = os.path.join(DOCS_PATH, "servers.rst")
@@ -1993,6 +2064,7 @@ def run(args):
                          data_dir=data_dir,
                          ip_groups=ip_groups)
     generate_fingerprint_details(servers)
+    generate_banner_gallery_rst(servers)
 
     old_results = os.path.join(DOCS_PATH, "results.rst")
     if os.path.exists(old_results):

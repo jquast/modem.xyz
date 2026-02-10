@@ -1,5 +1,6 @@
 """Shared utilities for MUD and BBS statistics generation."""
 
+import hashlib
 import os
 import re
 import subprocess
@@ -586,6 +587,35 @@ def _group_shared_ip(servers):
         for ip, members in by_ip.items()
         if len(members) >= 2
     }
+
+
+def _group_by_banner(servers, default_encoding=None):
+    """Group servers by normalized visible banner text.
+
+    Servers with no banner or garbled banners are excluded.
+    Within each group, servers are sorted by hostname.
+
+    :param servers: list of server records
+    :param default_encoding: passed to :func:`_combine_banners`
+    :returns: dict mapping banner hash to dict with keys
+        ``banner`` (raw combined text) and ``servers`` (list)
+    """
+    groups = {}
+    for s in servers:
+        banner = _combine_banners(s, default_encoding=default_encoding)
+        if not banner or _is_garbled(banner):
+            continue
+        visible = _strip_mxp_sgml(_strip_ansi(banner))
+        normalized = ' '.join(visible.split())
+        if not normalized:
+            continue
+        key = hashlib.sha256(normalized.encode('utf-8')).hexdigest()
+        if key not in groups:
+            groups[key] = {'banner': banner, 'servers': []}
+        groups[key]['servers'].append(s)
+    for group in groups.values():
+        group['servers'].sort(key=lambda s: s['host'].lower())
+    return groups
 
 
 def _most_common_hostname(group_servers):

@@ -8,5 +8,6 @@ muds.modem.xyz
    server_list
    statistics
    encodings
+   banner_gallery
    servers
    fingerprints

@@ -227,11 +227,12 @@ anotherbbs.dynu.net 1337
 antidote.triad.se 64128
 anybox.freedyndns.de 23
 arda-bbs.com 23
+area52.tk 5200 ascii
 asanocomp.ddns.net 2300
 ascii.dynu.net 4096
 atari-bbs.zapto.org 8888
 atari8.us 10001
-ataribbs.ddns.net 6502 atarist
+ataribbs.ddns.net 6502
 atl.ddns.net 6401
 aturiondynasty.hopto.org 4444
 avastbbs.servegame.com 23
