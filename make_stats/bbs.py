@@ -500,7 +500,7 @@ def display_plots():
 
 def display_server_table(servers):
     """Print the main server listing table with telnet:// links."""
-    print("BBS Servers")
+    print("Server List")
     print("===========")
     print()
     print("All servers that responded to a Telnet connection"
@@ -570,8 +570,8 @@ def display_server_table(servers):
 
 def display_fingerprint_summary(servers):
     """Print summary table of protocol fingerprints."""
-    print("BBS by Fingerprint")
-    print("==================")
+    print("Fingerprints")
+    print("============")
     print()
     print("A fingerprint is a hash of a server's Telnet option"
           " negotiation")
@@ -651,7 +651,7 @@ def display_fingerprint_summary(servers):
 
 def display_bbs_software_groups(servers):
     """Print BBS by Software page."""
-    _rst_heading("BBS by Software", '=')
+    _rst_heading("Software", '=')
     print("Servers grouped by the BBS software detected from"
           " their login")
     print("banner. Detection is based on pattern matching against"
@@ -698,7 +698,7 @@ def display_bbs_software_groups(servers):
 
 def display_encoding_groups(servers):
     """Print BBS by Encoding page."""
-    _rst_heading("BBS by Encoding", '=')
+    _rst_heading("Encodings", '=')
     print("Servers grouped by their detected or configured"
           " character encoding.")
     print()
@@ -732,7 +732,7 @@ def display_encoding_groups(servers):
 def display_fidonet_servers(servers):
     """Print FidoNet/EMSI servers page."""
     emsi_servers = [s for s in servers if s['has_emsi']]
-    _rst_heading("FidoNet (EMSI)", '=')
+    _rst_heading("FidoNet", '=')
     print(f"{len(emsi_servers)} servers responded with an"
           " `EMSI <http://ftsc.org/docs/fsc-0056.001>`_")
     print("handshake sequence, indicating FidoNet"
@@ -783,11 +783,26 @@ def generate_summary_rst(stats):
 
 
 def generate_server_list_rst(servers):
-    """Generate the server_list.rst file."""
+    """Generate the server_list.rst file with detail page toctree."""
     rst_path = os.path.join(DOCS_PATH, "server_list.rst")
     with open(rst_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         display_server_table(servers)
+        print()
+        print(".. toctree::")
+        print("   :maxdepth: 1")
+        print("   :hidden:")
+        print()
+        seen_files = set()
+        for s in servers:
+            bbs_file = s['_bbs_file']
+            if bbs_file in seen_files:
+                continue
+            seen_files.add(bbs_file)
+            label = s.get('_bbs_toc_label',
+                          f"{s['host']}:{s['port']}")
+            print(f"   {label} <bbs_detail/{bbs_file}>")
+        print()
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -829,6 +844,8 @@ def generate_encoding_rst(servers):
 
 def display_banner_gallery(servers):
     """Print the Banner Gallery page grouping servers by shared banner."""
+    print(":tocdepth: 1")
+    print()
     _rst_heading("Banner Gallery", '=')
     print("A gallery of ANSI connection banners collected from responding")
     print("BBSes. Servers that display identical visible banner text are")
@@ -1502,7 +1519,6 @@ def run(args):
     generate_bbs_software_rst(servers)
     generate_encoding_rst(servers)
     generate_fidonet_rst(servers)
-    generate_details_rst(servers)
     generate_bbs_details(servers, logs_dir=logs_dir,
                           force=force, data_dir=data_dir,
                           ip_groups=ip_groups)

@@ -5,9 +5,6 @@ muds.modem.xyz
    :maxdepth: 2
 
    introduction
-   server_list
    statistics
-   encodings
    banner_gallery
-   servers
-   fingerprints
+   mud_indices

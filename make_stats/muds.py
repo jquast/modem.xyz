@@ -782,7 +782,7 @@ def display_plots():
 
 def display_server_table(servers):
     """Print the main server listing table with telnet:// links."""
-    print("MUD Servers")
+    print("Server List")
     print("===========")
     print()
     print("All servers that responded to a Telnet connection"
@@ -871,8 +871,8 @@ def display_server_table(servers):
 
 def display_fingerprint_summary(servers):
     """Print summary table of protocol fingerprints."""
-    print("MUDs by Fingerprint")
-    print("===================")
+    print("Fingerprints")
+    print("============")
     print()
     print("A fingerprint is a hash of a server's Telnet option"
           " negotiation")
@@ -951,7 +951,7 @@ def display_fingerprint_summary(servers):
 
 def display_encoding_groups(servers):
     """Print MUDs by Encoding page."""
-    _rst_heading("MUDs by Encoding", '=')
+    _rst_heading("Encodings", '=')
     print("Servers grouped by their detected or configured"
           " character encoding.")
     print()
@@ -1001,11 +1001,26 @@ def generate_summary_rst(stats):
 
 
 def generate_server_list_rst(servers):
-    """Generate the server_list.rst file."""
+    """Generate the server_list.rst file with detail page toctree."""
     rst_path = os.path.join(DOCS_PATH, "server_list.rst")
     with open(rst_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         display_server_table(servers)
+        print()
+        print(".. toctree::")
+        print("   :maxdepth: 1")
+        print("   :hidden:")
+        print()
+        seen_files = set()
+        for s in servers:
+            mud_file = s['_mud_file']
+            if mud_file in seen_files:
+                continue
+            seen_files.add(mud_file)
+            label = s.get('_mud_toc_label',
+                          s['name'] or s['host'])
+            print(f"   {label} <mud_detail/{mud_file}>")
+        print()
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -1029,6 +1044,8 @@ def generate_encoding_rst(servers):
 
 def display_banner_gallery(servers):
     """Print the Banner Gallery page grouping servers by shared banner."""
+    print(":tocdepth: 1")
+    print()
     _rst_heading("Banner Gallery", '=')
     print("A gallery of ANSI connection banners collected from responding")
     print("MUD servers. Servers that display identical visible banner text")
@@ -2059,7 +2076,6 @@ def run(args):
     generate_server_list_rst(servers)
     generate_fingerprints_rst(servers)
     generate_encoding_rst(servers)
-    generate_details_rst(servers)
     generate_mud_details(servers, logs_dir=logs_dir,
                          data_dir=data_dir,
                          ip_groups=ip_groups)
