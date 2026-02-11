@@ -485,6 +485,7 @@ last-outpost.com 4000
 latitude.muck.ca 23
 legacyofthesith.com 3000
 legendsofthejedi.com 5656
+lions.cs.ndsu.nodak.edu 7777
 leu.mclink.it 6000
 lit.klfree.cz 7680
 live.darkemud.com 5559

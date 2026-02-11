@@ -62,7 +62,7 @@
 202.90.240.159 23
 204.10.255.79 6023
 205.166.250.238 23
-206.123.129.162 23 petscii
+206.123.129.162 23 topaz
 206.189.226.31 23
 207.58.151.67 9999
 207.90.251.241 2323
@@ -688,7 +688,6 @@ lexiconbbs.com 6400
 libido.cx 23 big5
 lilacbbs.com 23 gbk
 linuxdoc.no-ip.org 23
-lions.cs.ndsu.nodak.edu 7777
 literature.twbbs.io 23 big5
 livewirebbs.com 1025
 localyocalbbs.com 23

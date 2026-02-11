@@ -3,6 +3,7 @@ matplotlib
 numpy
 sphinx
 sphinxcontrib-jquery
+sphinxcontrib-youtube
 sphinx-datatables
 sphinx-rtd-theme
 tabulate

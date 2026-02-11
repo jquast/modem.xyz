@@ -66,15 +66,16 @@ embedded systems. Its longevity comes from its simplicity: it is portable, acces
 develop for, which is why MUD communities have adopted it for so long.
 
 When you connect to a MUD, your client opens a TCP connection to the server's address and port,
-this is the most basic networking connection, the server to write sends text and for you to read,
+this is the most basic networking connection, the server sends text and for you to read,
 and you type commands that are sent back.
 
-Although telnet supports **option negotiation**, a majority of the servers surveyed do not perform
-any Telnet option negotiation, using ``IAC`` "Is A Command" bytes at all! They simply send and
-receive raw ASCII text, which is the spirit of the original standard.
+Although the Telnet protocol has **option negotiation**, a complex procedure of negotiating extended
+options, a majority of the MUD servers surveyed do not perform any Telnet option negotiation at all.
+They simply send and receive raw ASCII text, which is fully compliant with the original standard.
 
 One special note, is that many MUD codebases predate general Unicode support and may emit non-ASCII
-data (such as accented characters or box-drawing symbols) in legacy encodings, like CP437 or latin1.
+data for art or language accents, usually in UTF-8 though some older code bases may still use legacy
+encodings like CP437 or latin1.
 
 See Also: BBSes
 ----------------
@@ -108,3 +109,4 @@ data, user reviews and descriptions, these other sites are probably a lot more h
 - https://www.topmudsites.com/
 - https://mudstats.com
 - https://www.mudverse.com/
+- https://telnet.org/
