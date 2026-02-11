@@ -117,43 +117,34 @@ For systems that do not support UTF-8, you'll see encoding errors:
   .. image:: /_static/ghostty-cp437-telnet.png
      :alt: This "Main" menu, meant to be stylized art, is presented as a font error marked by ``?``
 
-The `telnetlib3`_ client CLI can be used to resolve these issues. Because this BBS Software,
-`MajorBBS <https://en.wikipedia.org/wiki/The_Major_BBS>`_ is designed for IBM PC clients, and
-so ``--encoding=cp437`` is used to perform encoding translation:
+This encoding issue can be resolved with the Python `telnetlib3`_ CLI, ``telnetlib3-client``
+argument ``--encoding``.
+
+Because the BBS Software pictured is advertised as `MajorBBS
+<https://en.wikipedia.org/wiki/The_Major_BBS>`_ we can infer it is designed for IBM PC clients, and
+``--encoding=cp437`` is used to perform encoding translation::
 
     telnetlib3-client --encoding=cp437 bbs.ccxbbs.net
 
-  .. image:: /_static/ghostty-cp437-telnetlib3.png
-     :alt: This "Main" menu is now stylized
+.. image:: /_static/ghostty-cp437-telnetlib3.png
+   :alt: This "Main" menu is now stylized
 
-  .. hint:: `telnetlib3`_ can automatically negotiate encoding using `CHARSET RFC
-      2066<https://www.rfc-editor.org/rfc/rfc2066.html>`_, but this telnet standard is not
-      in general use by Telnet BBS servers.
+.. hint:: although `telnetlib3`_ negotiates encoding using `CHARSET RFC
+   2066<https://www.rfc-editor.org/rfc/rfc2066.html>`_, but this telnet standard is not in general
+   use by Telnet BBS servers, though it may be found on MUDs..
 
-.. ::TODO
+.. todo--finish telnetlib3
 
-    And, with Commodore `PETSCII <https://github.com/damianvila/font-bescii/releases>`_
-    ``Bescii-Mono.ttf`` or.  Atari ASCII, `ATASCII
-    <https://atari8bit.net/projects/artwork/atari-fonts/>`_ ``EightBit Atari-Classic.ttf`` fonts
-    installed,
-
-    - Connect to an 8-bit Atari BBS::
+    With the 8-bit Commodore `PETSCII <https://github.com/damianvila/font-bescii/releases>`_
+    ``Bescii-Mono.ttf`` or Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atari-fonts/>`_
+    ``EightBit Atari-Classic.ttf`` fonts installed, `telnetlib3`_ can be used to connect to an 8-bit
+    Atari BBS::
 
         telnetlib3-client --force-binary --encoding=ATASCII area52.tk 5200
 
-    - Connect to a Commodore 64 BBS:
+    - Or an 8-bit Commodore BBS:
 
         telnetlib3-client --force-binary --encoding=PETSCII valley64.com 6400
-
-    .. hint::
-
-        ``--force-binary`` instructs telnetlib3 to ignore telnet compliance that forbids non-ASCII
-        transmission of characters ``0x80-0xFF`` unless otherwise negotiated by BINARY.  Many BBS
-        systems fail to negotiate BINARY.
-
-    .. warning::
-        BBS Clients do not support UTF-8, emoji, wide or zero-width or any *Eastern* languages.
-
 
 Server Software
 ~~~~~~~~~~~~~~~
@@ -184,14 +175,18 @@ develop for, which is why BBS communities have adopted it for so long.
 About This Site
 ---------------
 
-This site is a census of Telnet-accessible Bulletin Board Systems. It provides a search interface to
-browse BBSes, preview their login banners, and examine their Telnet protocol behavior without
-connecting to them individually.
+This site is a *census* of Telnet-accessible BBSs.
 
-It was created by the author of the Python telnetlib3_
-library, and uses the ``telnetlib3-fingerprint`` client to gather the results shown here.
+It provides a fast web interface to
 
-The list of BBSes scanned is sourced from the `IPTIA BBS Directory
+- browse BBSs,
+- preview their login banners
+- examine their Telnet protocol
+
+It was created by the author of the Python telnetlib3_ library, and uses the
+``telnetlib3-fingerprint`` client to gather the results shown here.
+
+The list of BBSs scanned is sourced from the `IPTIA BBS Directory
 <https://www.ipingthereforeiam.com/bbs/>`_ relay.cfg, cross-referenced against the MUD list at
 `muds.modem.xyz <https://muds.modem.xyz/>`_ to exclude MUD servers. The resulting list is
 github-managed at `bbslist.txt
@@ -209,6 +204,8 @@ ANSI art, these other sites are excellent resources:
 - https://www.telnetbbsguide.com/
 - https://telnet.org/
 
-.. [#f1] Most western BBSs support only CP437 with UTF-8 *translation*, limitting the ~154,000
+.. [#f1] Most western BBSs support only CP437, or UTF-8 by *translation*, limitting the ~154,000
    possible codepoints to only the ~255 representable by CP437. Eastern languges, Narrow, Full-Width
-   and Zero-width emojis are not supported.
+   and Zero-width emojis are very rarely supported by BBSs.
+
+.. _telnetlib3: https://telnetlib3.readthedocs.org/
