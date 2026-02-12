@@ -341,7 +341,7 @@ eternaldarkness.net 9700
 eternalfantasy.org 3333
 eternalfantasy.org 3334
 eternitymud.com 23
-euphoria.mudinfo.net 8888
+euphoria.mudinfo.net 8888 cp437
 euts.org 2000
 everdark.org 3000
 everwarmud.net 4545

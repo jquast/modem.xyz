@@ -8,3 +8,10 @@ sphinx-datatables
 sphinx-rtd-theme
 tabulate
 wcwidth
+# here's a strange dependency, we abuse our telnetlib3.color_match code
+# to convert "bold as bright" to 24-bit color, kitty author doesn't appear
+# to wish to support it. https://github.com/kovidgoyal/kitty/issues/8276
+#
+# ghostty is probably better? But i'm having trouble with window dimens,
+# there are other options, anyway.
+telnetlib3

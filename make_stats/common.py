@@ -326,9 +326,6 @@ def _combine_banners(server, default_encoding=None):
     return banner_before or banner_after
 
 
-_banner_png_cache = {}
-
-
 def _banner_to_png(text, banners_dir, encoding='cp437'):
     """Render ANSI banner text to a deduplicated PNG file.
 
@@ -344,29 +341,27 @@ def _banner_to_png(text, banners_dir, encoding='cp437'):
     """
     if _ghostty_pool is None:
         return None
-    text = text.replace('\r\n', '\n').replace('\n\r', '\n')
-    text = _strip_mxp_sgml(text)
-    text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
-    # Strip terminal report/query sequences (DSR, DA, window ops)
-    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
+    key = hashlib.sha1(
+        (text + '\x00' + encoding).encode('utf-8')).hexdigest()[:12]
+
+    fname = f"banner_{key}.png"
+
+    # can't remember .. ?!
+    # text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
     # lines = text.split('\n')
     # text = '\n'.join(_rstrip_ansi_line(line) for line in lines)
     # text = text.rstrip()
 
-    key = hashlib.sha1(
-        (text + '\x00' + encoding).encode('utf-8')).hexdigest()[:12]
-    fname = f"banner_{key}.png"
-
-    if fname in _banner_png_cache:
-        return fname
-
     output_path = os.path.join(banners_dir, fname)
     if os.path.isfile(output_path):
-        _banner_png_cache[fname] = True
         return fname
 
+    text = text.replace('\r\n', '\n').replace('\n\r', '\n')
+    text = _strip_mxp_sgml(text)
+    # Strip terminal report/query sequences (DSR, DA, window ops)
+    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
+
     if _ghostty_pool.capture(text, output_path, encoding):
-        _banner_png_cache[fname] = True
         return fname
     return None
 
