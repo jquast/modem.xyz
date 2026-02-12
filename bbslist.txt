@@ -659,7 +659,6 @@ greywolf.synchro.net 23
 gridlock.synchronetbbs.org 23
 grimoirebbs.sytes.net 23
 guardian.synchro.net 23
-guardian.synchro.net 513
 guis.es 23
 haciend.com 8821
 hagars.org.uk 24

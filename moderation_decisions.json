@@ -778,6 +778,12 @@
         "www.godwars.net:4888"
       ]
     },
+    "guardian.synchro.net:23|guardian.synchro.net:513": {
+      "action": "remove",
+      "remove": [
+        "guardian.synchro.net:513"
+      ]
+    },
     "halcyon.bluecows.com:4201|holomuck.org:5757": {
       "action": "skip"
     },

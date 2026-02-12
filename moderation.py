@@ -677,23 +677,21 @@ def prune_dead(list_path, data_dir, logs_dir, report_only=False,
     if report_only:
         return set()
 
-    while True:
-        answer = _prompt(f"\n  Remove {len(dead)} dead entries? [y/N/x] ", "ynx")
-        if answer == "x":
-            # Expunge log files for rescan
-            logs_path = Path(logs_dir)
-            deleted = 0
-            for host, port, _ in dead:
-                logfile = logs_path / f"{host}:{port}.log"
-                if logfile.is_file():
-                    try:
-                        logfile.unlink()
-                        deleted += 1
-                    except OSError:
-                        pass
-            print(f"  Expunged {deleted}/{len(dead)} log file(s) for rescan")
-            continue
-        break
+    answer = _prompt(f"\n  Remove {len(dead)} dead entries? [y/N/x] ", "ynx")
+    if answer == "x":
+        # Expunge log files for rescan
+        logs_path = Path(logs_dir)
+        deleted = 0
+        for host, port, _ in dead:
+            logfile = logs_path / f"{host}:{port}.log"
+            if logfile.is_file():
+                try:
+                    logfile.unlink()
+                    deleted += 1
+                except OSError:
+                    pass
+        print(f"  Expunged {deleted}/{len(dead)} log file(s) for rescan")
+        answer = _prompt(f"  Now remove from list? [y/N] ", "yn")
 
     if answer != "y":
         print("  Skipped.")
