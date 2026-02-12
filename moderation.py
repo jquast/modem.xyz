@@ -297,7 +297,7 @@ def discover_encoding_issues(data_dir, list_path):
             banner = banner_before or banner_after
 
             max_width, _ = _measure_banner_columns(banner)
-            if max_width >= 200:
+            if max_width < 80 or max_width >= 200:
                 continue
 
             suggested_enc, replacement_count = _find_best_encoding(banner)

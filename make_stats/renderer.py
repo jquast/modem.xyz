@@ -1,0 +1,501 @@
+"""Terminal screenshot renderer for ANSI banners.
+
+Launches real terminal instances (one per font group) and captures
+screenshots via ``xdotool`` + ImageMagick ``import``.  Communication
+uses named pipes (FIFOs) with bidirectional signaling: a data pipe
+sends banner text to the helper script, and a ready pipe signals back
+when painting is complete.
+
+Supports kitty and wezterm backends, selected automatically or via
+the ``MODEM_RENDERER`` environment variable.
+
+Requires: kitty or wezterm, xdotool, ImageMagick (import + convert),
+X11 DISPLAY.
+"""
+
+import abc
+import os
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+import time
+
+_HELPER_SCRIPT = os.path.join(os.path.dirname(__file__), 'terminal_helper.sh')
+
+# CGA/VGA 16-color palette matching ansilove defaults.
+_PALETTE = {
+    0: '#000000', 1: '#aa0000', 2: '#00aa00', 3: '#aa5500',
+    4: '#0000aa', 5: '#aa00aa', 6: '#00aaaa', 7: '#aaaaaa',
+    8: '#555555', 9: '#ff5555', 10: '#55ff55', 11: '#ffff55',
+    12: '#5555ff', 13: '#ff55ff', 14: '#55ffff', 15: '#ffffff',
+}
+
+# Font groups: each maps a font family to the set of encodings it handles.
+_FONT_GROUPS = {
+    'ibm_vga': {
+        'font_family': 'Px IBM VGA8',
+        'encodings': frozenset({
+            'cp437', 'cp437_art', 'cp437-art',
+            'cp737', 'cp775', 'cp850', 'cp852', 'cp855',
+            'cp857', 'cp860', 'cp861', 'cp862', 'cp863',
+            'cp865', 'cp866', 'cp869', 'koi8_r', 'unknown',
+        }),
+    },
+    'topaz': {
+        'font_family': 'Amiga Topaz',
+        'encodings': frozenset({'amiga', 'topaz'}),
+    },
+    'petscii': {
+        'font_family': 'Bescii Mono',
+        'encodings': frozenset({'petscii'}),
+        'aspect_ratio': 1.2,  # C64 320x200 on 4:3 CRT (6:5)
+        'columns': 40,
+    },
+    'atascii': {
+        'font_family': 'EightBit Atari',
+        'encodings': frozenset({'atarist', 'atascii'}),
+        'aspect_ratio': 1.25,  # Atari 320x192 on 4:3 CRT (5:4)
+        'columns': 40,
+    },
+    'hack': {
+        'font_family': 'Hack',
+        'encodings': frozenset({
+            'ascii', 'latin_1', 'iso_8859_1', 'iso_8859_1:1987',
+            'iso_8859_2', 'utf_8', 'big5', 'gbk', 'shift_jis', 'euc_kr',
+        }),
+    },
+}
+
+_EAST_ASIAN_ENCODINGS = frozenset({
+    'big5', 'gbk', 'shift_jis', 'euc_kr', 'euc_jp', 'gb2312',
+})
+
+
+def _encoding_to_font_group(encoding):
+    """Map a server encoding to its font group name.
+
+    :param encoding: encoding string from scanner or server list
+    :returns: font group key from ``_FONT_GROUPS``
+    """
+    normalized = encoding.lower().replace('-', '_')
+    for group_name, group_info in _FONT_GROUPS.items():
+        if normalized in group_info['encodings']:
+            return group_name
+    return 'ibm_vga'
+
+
+def _is_east_asian_encoding(group_name):
+    """Check if a font group handles east Asian encodings.
+
+    :param group_name: font group key from ``_FONT_GROUPS``
+    :returns: True if the group includes any CJK encodings
+    """
+    group_info = _FONT_GROUPS.get(group_name, {})
+    return bool(group_info.get('encodings', frozenset()) & _EAST_ASIAN_ENCODINGS)
+
+
+class _FifoTimeout(Exception):
+    """Raised when a FIFO operation exceeds its timeout."""
+
+
+def _alarm_handler(signum, frame):
+    raise _FifoTimeout("FIFO operation timed out")
+
+
+class TerminalInstance(abc.ABC):
+    """Abstract base for a terminal process that renders banners.
+
+    Subclasses implement :meth:`_build_command` to produce the
+    terminal-specific launch command.  All FIFO communication,
+    xdotool window finding, and ImageMagick screenshot logic lives
+    in this base class.
+
+    :param font_family: terminal font family config value
+    :param group_name: identifier used for window title and FIFO naming
+    :param columns: terminal width in columns
+    :param rows: terminal height in rows
+    :param font_size: font size config value
+    :param east_asian_wide: enable ambiguous-width-as-wide for CJK
+    """
+
+    def __init__(self, font_family, group_name, columns=80, rows=70,
+                 font_size=12, east_asian_wide=False):
+        self._font_family = font_family
+        self._group_name = group_name
+        self._columns = columns
+        self._rows = rows
+        self._font_size = font_size
+        self._east_asian_wide = east_asian_wide
+        self._window_title = f'render-{os.getpid()}-{group_name}'
+        self._proc = None
+        self._window_id = None
+        self._tmpdir = None
+        self._data_fifo = None
+        self._ready_fifo = None
+
+    @abc.abstractmethod
+    def _build_command(self):
+        """Return the full command list to launch the terminal.
+
+        :returns: list of strings suitable for ``subprocess.Popen``
+        """
+
+    @abc.abstractmethod
+    def _required_tool(self):
+        """Return the executable name to check in PATH.
+
+        :returns: string like ``'kitty'`` or ``'wezterm'``
+        """
+
+    def start(self):
+        """Launch the terminal process and find its X11 window ID.
+
+        Creates a temporary directory with two named pipes, launches
+        the terminal running the helper script, and locates the window
+        via ``xdotool search --sync --name``.
+
+        :raises RuntimeError: if the terminal fails to start or window
+            not found
+        """
+        self._tmpdir = tempfile.mkdtemp(
+            prefix=f'render-{self._group_name}-')
+        self._data_fifo = os.path.join(self._tmpdir, 'data.fifo')
+        self._ready_fifo = os.path.join(self._tmpdir, 'ready.fifo')
+        os.mkfifo(self._data_fifo)
+        os.mkfifo(self._ready_fifo)
+
+        cmd = self._build_command()
+        tool = self._required_tool()
+
+        self._proc = subprocess.Popen(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+
+        try:
+            result = subprocess.run(
+                ['xdotool', 'search', '--sync',
+                 '--name', self._window_title],
+                capture_output=True, text=True, timeout=10,
+            )
+        except subprocess.TimeoutExpired as exc:
+            self.stop()
+            raise RuntimeError(
+                f"Timed out waiting for {tool} window "
+                f"({self._window_title})") from exc
+
+        window_ids = result.stdout.strip().split('\n')
+        if not window_ids or not window_ids[0]:
+            self.stop()
+            raise RuntimeError(
+                f"Could not find {tool} window ({self._window_title})")
+        self._window_id = window_ids[0]
+
+        print(f"  {tool} [{self._group_name}] started: "
+              f"window {self._window_id}, font '{self._font_family}'",
+              file=sys.stderr)
+
+    def stop(self):
+        """Shut down the terminal process and clean up FIFOs.
+
+        Sends an empty payload to trigger the helper's exit condition,
+        then waits for the process to terminate.  Falls back to SIGTERM
+        and SIGKILL if needed.
+        """
+        if self._proc is not None and self._proc.poll() is None:
+            try:
+                fd = os.open(self._data_fifo, os.O_WRONLY | os.O_NONBLOCK)
+                os.close(fd)
+            except OSError:
+                pass
+
+            try:
+                self._proc.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                self._proc.terminate()
+                try:
+                    self._proc.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    self._proc.kill()
+                    self._proc.wait()
+
+        if self._tmpdir and os.path.isdir(self._tmpdir):
+            shutil.rmtree(self._tmpdir, ignore_errors=True)
+
+    @property
+    def alive(self):
+        """Return True if the terminal process is running."""
+        return self._proc is not None and self._proc.poll() is None
+
+    def capture(self, text, output_path):
+        """Render banner text and capture a screenshot.
+
+        Writes the banner to the data FIFO, waits for the helper to
+        signal readiness on the ready FIFO, raises the window to front,
+        then captures via ImageMagick ``import`` and trims with ``convert``.
+
+        :param text: UTF-8 banner text with ANSI escape sequences
+        :param output_path: path to write the output PNG
+        :returns: True if PNG was successfully created
+        """
+        if not self.alive:
+            return False
+
+        tool = self._required_tool()
+
+        # Write banner text to data FIFO
+        old_handler = signal.signal(signal.SIGALRM, _alarm_handler)
+        try:
+            signal.alarm(5)
+            fd = os.open(self._data_fifo, os.O_WRONLY)
+            try:
+                os.write(fd, text.encode('utf-8', errors='surrogateescape'))
+            finally:
+                os.close(fd)
+            signal.alarm(0)
+        except (_FifoTimeout, OSError) as exc:
+            signal.alarm(0)
+            print(f"  {tool} [{self._group_name}] data write "
+                  f"failed: {exc}", file=sys.stderr)
+            return False
+        finally:
+            signal.signal(signal.SIGALRM, old_handler)
+
+        # Wait for helper to signal "ready"
+        old_handler = signal.signal(signal.SIGALRM, _alarm_handler)
+        try:
+            signal.alarm(10)
+            with open(self._ready_fifo, 'r') as f:
+                ready = f.readline().strip()
+            signal.alarm(0)
+        except (_FifoTimeout, OSError) as exc:
+            signal.alarm(0)
+            print(f"  {tool} [{self._group_name}] ready signal "
+                  f"failed: {exc}", file=sys.stderr)
+            return False
+        finally:
+            signal.signal(signal.SIGALRM, old_handler)
+
+        if ready != 'ready':
+            print(f"  {tool} [{self._group_name}] unexpected "
+                  f"signal: {ready!r}", file=sys.stderr)
+            return False
+
+        # Raise window to front before capture
+        subprocess.run(
+            ['xdotool', 'windowactivate', '--sync', self._window_id],
+            capture_output=True, timeout=5,
+        )
+
+        # Capture screenshot
+        try:
+            result = subprocess.run(
+                ['import', '-window', self._window_id, output_path],
+                capture_output=True, timeout=10,
+            )
+            if result.returncode != 0:
+                print(f"  import failed for {output_path}: "
+                      f"{result.stderr.decode(errors='replace').strip()}",
+                      file=sys.stderr)
+                return False
+        except subprocess.TimeoutExpired:
+            print(f"  import timed out for {output_path}",
+                  file=sys.stderr)
+            return False
+
+        # Crop to content height (full width) + 3px bottom padding.
+        try:
+            result = subprocess.run(
+                ['convert', output_path, '-fuzz', '1%', '-trim',
+                 '-format', '%Y %h', 'info:'],
+                capture_output=True, text=True, timeout=10,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                parts = result.stdout.strip().split()
+                y_offset = int(parts[0])
+                trim_h = int(parts[1])
+                crop_h = y_offset + trim_h + 3
+                subprocess.run(
+                    ['convert', output_path,
+                     '-crop', f'x{crop_h}+0+0', '+repage',
+                     output_path],
+                    capture_output=True, timeout=10,
+                )
+        except (subprocess.TimeoutExpired, ValueError, IndexError):
+            pass  # cropping is optional, keep original image
+
+        if (not os.path.isfile(output_path)
+                or os.path.getsize(output_path) == 0):
+            print(f"  {tool} produced empty output: {output_path}",
+                  file=sys.stderr)
+            return False
+
+        return True
+
+
+class RendererPool:
+    """Pool of terminal instances, one per font group and column width.
+
+    Instances are created lazily on first use for each font group.
+    Acts as a context manager: on exit, shuts down all instances.
+
+    :param backend: ``'kitty'``, ``'wezterm'``, or ``'auto'``
+    :param columns: default terminal width in columns
+    :param rows: terminal height in rows
+    :param font_size: font size for all instances
+    """
+
+    def __init__(self, backend='auto', columns=80, rows=60, font_size=12):
+        self._backend = self._resolve_backend(backend)
+        self._columns = columns
+        self._rows = rows
+        self._font_size = font_size
+        self._instances = {}
+
+    @staticmethod
+    def _resolve_backend(backend):
+        """Resolve ``'auto'`` to a concrete backend name.
+
+        Checks ``MODEM_RENDERER`` env var first, then probes for
+        available terminals in order: kitty, wezterm.
+
+        :param backend: ``'kitty'``, ``'wezterm'``, or ``'auto'``
+        :returns: ``'kitty'`` or ``'wezterm'``
+        :raises RuntimeError: if no backend is available
+        """
+        if backend != 'auto':
+            return backend
+        env = os.environ.get('MODEM_RENDERER', '').lower()
+        if env in ('kitty', 'wezterm'):
+            return env
+        if shutil.which('kitty'):
+            return 'kitty'
+        if shutil.which('wezterm'):
+            return 'wezterm'
+        raise RuntimeError("No terminal renderer backend found "
+                           "(need kitty or wezterm)")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        for name, instance in self._instances.items():
+            try:
+                instance.stop()
+            except Exception as e:
+                print(f"  Warning: failed to stop renderer "
+                      f"[{name}]: {e}", file=sys.stderr)
+        self._instances.clear()
+
+    def _determine_columns(self, group_name):
+        return _FONT_GROUPS.get(group_name, {}).get('columns', self._columns)
+
+    def _make_instance(self, group_name, effective_cols):
+        """Create the right TerminalInstance subclass.
+
+        :param group_name: font group key from ``_FONT_GROUPS``
+        :param effective_cols: resolved column width
+        :returns: a TerminalInstance subclass instance
+        """
+        group_info = _FONT_GROUPS[group_name]
+        east_asian = _is_east_asian_encoding(group_name)
+        display = (f"{group_name}-{effective_cols}"
+                   if effective_cols != 80 else group_name)
+        kwargs = dict(
+            font_family=group_info['font_family'],
+            group_name=display,
+            columns=effective_cols,
+            rows=self._rows,
+            font_size=self._font_size,
+            east_asian_wide=east_asian,
+        )
+        if self._backend == 'kitty':
+            from make_stats.renderer_kitty import KittyInstance
+            return KittyInstance(**kwargs)
+        from make_stats.renderer_wezterm import WeztermInstance
+        return WeztermInstance(**kwargs)
+
+    def _get_instance(self, group_name, columns=None):
+        """Get or lazily create an instance for the given group.
+
+        :param group_name: font group key from ``_FONT_GROUPS``
+        :param columns: optional column width override
+        :returns: TerminalInstance or None on failure
+        """
+        effective_cols = (columns if columns is not None
+                          else self._determine_columns(group_name))
+        instance_key = (group_name, effective_cols)
+
+        if instance_key in self._instances:
+            inst = self._instances[instance_key]
+            if inst.alive:
+                return inst
+            print(f"  renderer [{group_name}@{effective_cols}c] died, "
+                  f"restarting...", file=sys.stderr)
+            try:
+                inst.stop()
+            except Exception:
+                pass
+
+        group_info = _FONT_GROUPS.get(group_name)
+        if group_info is None:
+            return None
+
+        inst = self._make_instance(group_name, effective_cols)
+        try:
+            inst.start()
+        except RuntimeError as exc:
+            print(f"  renderer [{group_name}] failed to start: {exc}",
+                  file=sys.stderr)
+            return None
+
+        self._instances[instance_key] = inst
+        return inst
+
+    def capture(self, text, output_path, encoding='cp437', columns=None):
+        """Route a banner to the appropriate terminal instance.
+
+        :param text: preprocessed banner text
+        :param output_path: path to write the output PNG
+        :param encoding: server encoding for font group selection
+        :param columns: optional column width override
+        :returns: True if PNG was successfully created
+        """
+        group_name = _encoding_to_font_group(encoding)
+        instance = self._get_instance(group_name, columns=columns)
+        if instance is None:
+            return False
+        if not instance.capture(text, output_path):
+            return False
+
+        # Correct for non-square pixel aspect ratio (CRT platforms).
+        group_info = _FONT_GROUPS.get(group_name, {})
+        aspect = group_info.get('aspect_ratio')
+        if aspect and os.path.isfile(output_path):
+            pct = int(aspect * 100)
+            subprocess.run(
+                ['convert', output_path,
+                 '-filter', 'point', '-resize', f'100%x{pct}%',
+                 output_path],
+                capture_output=True, timeout=10,
+            )
+        return True
+
+    @staticmethod
+    def available():
+        """Check if terminal screenshot rendering is possible.
+
+        :returns: True if DISPLAY is set and at least one backend
+            plus xdotool and import are found in PATH
+        """
+        if not os.environ.get('DISPLAY'):
+            return False
+        for tool in ('xdotool', 'import'):
+            if shutil.which(tool) is None:
+                return False
+        return (shutil.which('kitty') is not None
+                or shutil.which('wezterm') is not None)
