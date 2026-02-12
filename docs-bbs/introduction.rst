@@ -104,14 +104,14 @@ available.
 
 **Alternatively**, the Python `telnetlib3`_ client CLI performs "color correction" by
 transliteration of ANSI color sequences to `24-bit Color Sequences
-<https://github.com/termstandard/colors>`_ on supporting terminals::
+<https://github.com/termstandard/colors>`_ bypassing the palette issue::
 
    telnetlib3-client manalejandro.com 23
 
 .. figure:: /_static/ghostty-telnetlib3.png
    :width: 600px
 
-   80x24 ANSI art of a skull and graffiti, color-corrected
+   80x24 ANSI art of a skull and graffiti, color-corrected by telnetlib3-client
 
 Encoding correction
 -------------------
@@ -126,7 +126,7 @@ For systems that do not support UTF-8 [#f1]_, you'll see encoding errors:
 cp437
 ~~~~~
 
-The BBS Software pictured advertised itself as `MajorBBS
+The BBS Software pictured above advertised itself as `MajorBBS
 <https://en.wikipedia.org/wiki/The_Major_BBS>`_; we can infer it is designed for IBM PC-DOS
 (:ref:`CP437 <cp437>`) encoding, and can use the Python `telnetlib3`_ CLI ``telnetlib3-client`` argument
 ``--encoding=cp437`` to correct for it::

@@ -912,14 +912,14 @@ def display_encoding_groups(servers, detail_subdir, file_key,
 
     for name, members in sorted(
             by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
-        print()
-        print(f'.. _{name}:')
-        print()
         print(f"- `{_rst_escape(name)}`_: {len(members)}")
     print()
 
     for name, members in sorted(
             by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
+        print()
+        print(f'.. _{name}:')
+        print()
         _rst_heading(name, '-')
         for s in sorted(members, key=server_sort_key):
             detail_file = s[file_key]
@@ -994,6 +994,7 @@ def _display_banner_page(page_groups, page_num, total_pages,
             print(f"   :alt:"
                   f" {_rst_escape(_banner_alt_text(banner))}")
             print(f"   :class: ansi-banner")
+            print(f"   :loading: lazy")
             print()
 
         for s in members:
