@@ -249,3 +249,18 @@ ANSI art, these other sites are excellent resources:
    and Zero-width emojis are very rarely supported by BBSs.
 
 .. _telnetlib3: https://telnetlib3.readthedocs.org/
+
+Questions
+---------
+
+Exercises for the reader!
+
+- How do BBSs differ from `MUDs <https://muds.modem.xyz/>`_?
+- Why do BBS sign-ups ask for your location, birthdate, phone number, and gender?
+- Did you find a BBS with message areas? When was the last message posted?
+- Why is artwork so common? What common "themes" do you find in the art styles?
+- Why do BBS Servers require special clients?
+- Why is IBM PC-DOS (:ref:`CP437 <cp437>`) the most popular encoding behind ASCII?
+- Can you find the name of a historical BBSs that is no longer online?
+- Can you find a historical BBS that is still online today?
+- What kind of systems did BBSs run on? What do they run on now?
