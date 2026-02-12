@@ -631,8 +631,8 @@ def display_summary_stats(stats):
     print("These statistics reflect the most recent scan of all"
           " servers in the")
     print("`mudlist.txt "
-          "<https://github.com/jquast/muds.modem.xyz/blob/master/"
-          "data/mudlist.txt>`_ input list.")
+          "<https://github.com/jquast/modem.xyz/blob/master/"
+          "mudlist.txt>`_ input list.")
     print("Each server is probed using `telnetlib3 "
           "<https://github.com/jquast/telnetlib3>`_,")
     print("which connects to each address, performs Telnet option"
@@ -920,8 +920,8 @@ def generate_details_rst(servers):
               " and the")
         print("full Telnet negotiation log.")
         print()
-        mudlist_url = ("https://github.com/jquast/muds.modem.xyz"
-                       "/blob/master/data/mudlist.txt")
+        mudlist_url = ("https://github.com/jquast/modem.xyz"
+                       "/blob/master/mudlist.txt")
         print(f"Missing a MUD? `Submit a pull request "
               f"<{mudlist_url}>`_ to add it.")
         print()
@@ -1696,7 +1696,7 @@ def run(args):
         or os.path.join(_PROJECT_ROOT, 'logs'))
     server_list = (
         args.server_list
-        or os.path.join(data_dir, 'mudlist.txt'))
+        or os.path.join(_PROJECT_ROOT, 'mudlist.txt'))
 
     if os.path.isdir(logs_dir):
         print(f"Using logs from {logs_dir}", file=sys.stderr)

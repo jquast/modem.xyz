@@ -1,0 +1,137 @@
+DONE?
+
+Please examine the fingerprint json of the following servers, and, examine why were their banners so
+poorly displayed, either by wrong encoding or maybe some "ansi stripping" gone wrong?
+
+Bad encodings, please identify:
+- breakworld.themuds.org
+- 209.141.35.127
+
+slightly bad formatting maybe?
+- 210.59.236.38 3000
+- 210.59.236.38 3000
+- 210.59.236.38 3001
+
+This is definitly the wrong encoding !
+- 209.141.35.127 23
+
+Why is this wrong ?? mystic bbs ??
+- 23.151.152.245 23
+
+Why was this CP437 bbs encoded as ascii???? or something is wrong ..
+- 35.138.222.251 23
+- 45.79.37.227 23
+- 45.79.69.172 513
+- 47.223.173.180 23
+- 47.38.20.227 23
+- 5.150.254.12 31337
+- 23.151.152.245 23
+
+I think we added "detect and display/encode as ascii if no cp437 characters are used", but this code
+is corrupting and not detecting correctly.
+
+This banner,
+- 210.59.236.38 3003
+
+
+
+-1.
+
+Move data-muds/mudlist.txt and data-bbs/bbslist.txt to root folder.
+
+Make sure to update all code, and, hyperlinks in our documentation.
+
+
+TODO items,
+
+Check website, https://www.commodorebbs.com/
+- and compare their list of "Commodore BBS"s with ours
+- adding to @bbslist.txt as necessary.
+- most bbs's that run on a C64 are in PETSCII,
+- Amiga is in 'topaz'
+- Linux/Synchronet go ahead and check, many are cp437 and should remain
+
+---
+
+"23.95.146.28 8282" contains 'http://forum.revivialworld.org/...html' in the banner,
+but why isn't it extracted with 'Server Info' item of Websites?
+
+Similarly, for auto-detection of bbs software,
+- Detect bbs software, by "bbs100" in banner, at least 1, 52.40.49.152 23
+- and any "GALACTICOMM" in a banner is "MajorBBS" software
+- Also, categorize "Renegade" as Renegade BBS.
+
+
+0.
+
+Some banners are completely empty, ""! We should be able to add to our moderation.py, should propose
+option to remove all logfiles of all "empty" banners, or, delete them from bbslist.txt and
+mudlist.txt, or skip/do nothing.
+
+This way we can easily re-scan them. Maybe they were having a bad day. a CLI argument for
+banner-lines-minimum=1 default, we can check 2, 3, or 4-line banners too, individually for
+"rescan" (delete logfile), delete (remove from bbs/mudlist),
+
+I could swear we already had something like that!
+
+
+1.
+
+search data for occurrence of word 'ATASCII' and 'ATARI', check encoding against bbslist and
+mudlist.txt, they may require 'atascii' encoding
+
+2.
+
+
+4.
+
+All Enigma1/2 bbs's have some encoding error that looks like
+a terminal error ??  https://bbs.modem.xyz/server_detail/fc62c63bc2cd14a0.html
+
+
+5.
+
+
+6.
+
+kitty
+do these need "ambiguous_width=wide" ?? I bet so !!
+not possible by kitty, possible with WezTerm
+
+and neither is bold as bright, jesus ..
+
+
+
+7.
+
+crt effect on images, by post-processing
+- bloom by brightness if possible
+- and scanlines
+
+
+2.
+- add country name and flag emoji of IP address (shodan? something cheap!!)
+
+
+
+
+1.
+
+When showing "This server responded with an EMSI handshake sequence", should the fidonet details on
+the server page. And, put this information under "Telnet Fingerprint", and, make each telnet
+fingerprint thing itemized, eg.
+
+Telnet Fingerprint
+
+- Data source: cfa317a91359cb0b/2e9a6aa81240e9f5.json
+- Server fingerprint is cfa317a91359cb0b[clipboard copy button],
+  - This fingerprint shared by 33 other servers.
+- Session finger print is 2e9a6aa81240e9f5[clipboard copy button],
+- Options offered by server: BINARY, ECHO, SGA
+- Options requested from client: BINARY, SGA
+
+We need per-application terminal sizes, eg.
+- galaxy.silvren.com:2112 demands 90 columns or something
+- 45.79.69.172 513 also
+
+

@@ -15,8 +15,8 @@ import sys
 import urllib.request
 
 RELAY_CFG_URL = 'https://www.ipingthereforeiam.com/bbs/dir/relay.cfg'
-DEFAULT_MUDLIST = os.path.join(os.path.dirname(__file__), 'data-muds', 'mudlist.txt')
-DEFAULT_OUTPUT = os.path.join(os.path.dirname(__file__), 'data-bbs', 'bbslist.txt')
+DEFAULT_MUDLIST = os.path.join(os.path.dirname(__file__), 'mudlist.txt')
+DEFAULT_OUTPUT = os.path.join(os.path.dirname(__file__), 'bbslist.txt')
 
 
 def fetch_relay_cfg(source):

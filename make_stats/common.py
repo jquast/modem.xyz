@@ -19,7 +19,7 @@ import wcwidth  # noqa: E402
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 LINK_REGEX = re.compile(r'[^a-zA-Z0-9]')
-_URL_RE = re.compile(r'https?://[^\s<>"\']+')
+_URL_RE = re.compile(r'https?://[^\s<>"\']+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:/[^\s<>"\']*)?')
 _RST_SECTION_RE = re.compile(r'([=\-~#+^"._]{4,})')
 
 TELNET_OPTIONS_OF_INTEREST = [
@@ -305,8 +305,8 @@ def _combine_banners(server, default_encoding=None):
         for BBS), or None to skip re-decoding (MUD mode)
     :returns: combined banner text
     """
-    banner_before = (server['banner_before'] or '').replace('\ufffd', '')
-    banner_after = (server['banner_after'] or '').replace('\ufffd', '')
+    banner_before = server['banner_before'] or ''
+    banner_after = server['banner_after'] or ''
 
     if default_encoding is not None:
         effective_enc = (server.get('encoding_override')
@@ -318,6 +318,11 @@ def _combine_banners(server, default_encoding=None):
                 banner_before, scanner_enc, effective_enc)
             banner_after = _redecode_banner(
                 banner_after, scanner_enc, effective_enc)
+
+    # Strip replacement characters after re-decoding so that
+    # surrogateescape round-trips can recover the original bytes first.
+    banner_before = banner_before.replace('\ufffd', '')
+    banner_after = banner_after.replace('\ufffd', '')
 
     before_clean = _strip_mxp_sgml(_strip_ansi(banner_before)).strip()
     after_clean = _strip_mxp_sgml(_strip_ansi(banner_after)).strip()

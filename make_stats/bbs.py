@@ -62,7 +62,7 @@ BBS_SOFTWARE_PATTERNS = [
     (re.compile(r'Synchronet', re.IGNORECASE), 'Synchronet'),
     (re.compile(r'Mystic\s*BBS', re.IGNORECASE), 'Mystic BBS'),
     (re.compile(r'WWIV', re.IGNORECASE), 'WWIV'),
-    (re.compile(r'Renegade', re.IGNORECASE), 'Renegade'),
+    (re.compile(r'Renegade', re.IGNORECASE), 'Renegade BBS'),
     (re.compile(r'ENiGMA.*BBS', re.IGNORECASE), 'ENiGMA'),
     (re.compile(r'Talisman', re.IGNORECASE), 'Talisman'),
     (re.compile(r'Wildcat!?', re.IGNORECASE), 'Wildcat!'),
@@ -73,13 +73,14 @@ BBS_SOFTWARE_PATTERNS = [
      'RemoteAccess'),
     (re.compile(r'Oblivion/?2|Obv/?2', re.IGNORECASE),
      'Oblivion/2'),
-    (re.compile(r'MBBS|Major\s*BBS', re.IGNORECASE), 'MajorBBS'),
+    (re.compile(r'MBBS|Major\s*BBS|GALACTICOMM', re.IGNORECASE), 'MajorBBS'),
     (re.compile(r'TBBS|TriBBS', re.IGNORECASE), 'TriBBS'),
     (re.compile(r'EleBBS', re.IGNORECASE), 'EleBBS'),
     (re.compile(r'Iniquity', re.IGNORECASE), 'Iniquity'),
     (re.compile(r'Citadel', re.IGNORECASE), 'Citadel'),
     (re.compile(r'TAG\s*BBS', re.IGNORECASE), 'TAG BBS'),
     (re.compile(r'Hermes\s*II?', re.IGNORECASE), 'Hermes'),
+    (re.compile(r'bbs100', re.IGNORECASE), 'bbs100'),
     (re.compile(r'SBBS', re.IGNORECASE), 'SBBS'),
 ]
 
@@ -219,9 +220,12 @@ def load_server_data(data_dir, encoding_overrides=None):
             record['bbs_software'] = detect_bbs_software(banner)
 
             stripped = _strip_ansi(banner) if banner else ''
+            has_replacement = ('\ufffd' in (record['banner_before'] or '')
+                               or '\ufffd' in (record['banner_after'] or ''))
             record['display_encoding'] = (
                 record['encoding_override']
                 or ('ascii' if stripped and stripped.isascii()
+                    and not has_replacement
                     else DEFAULT_ENCODING))
 
             fidonet = detect_fidonet(
@@ -388,8 +392,8 @@ def display_summary_stats(stats):
     print("These statistics reflect the most recent scan of all"
           " servers in the")
     print("`bbslist.txt "
-          "<https://github.com/jquast/bbs.modem.xyz/blob/master/"
-          "data/bbslist.txt>`_ input list.")
+          "<https://github.com/jquast/modem.xyz/blob/master/"
+          "bbslist.txt>`_ input list.")
     print("Each server is probed using `telnetlib3 "
           "<https://github.com/jquast/telnetlib3>`_,")
     print("which connects to each address, performs Telnet option"
@@ -726,8 +730,8 @@ def generate_details_rst(servers):
               " and the")
         print("full Telnet negotiation log.")
         print()
-        bbslist_url = ("https://github.com/jquast/bbs.modem.xyz"
-                       "/blob/master/data/bbslist.txt")
+        bbslist_url = ("https://github.com/jquast/modem.xyz"
+                       "/blob/master/bbslist.txt")
         print(f"Missing a BBS? `Submit a pull request "
               f"<{bbslist_url}>`_ to add it.")
         print()
@@ -1159,7 +1163,7 @@ def run(args):
         or os.path.join(_PROJECT_ROOT, 'logs'))
     bbslist = (
         args.server_list
-        or os.path.join(data_dir, 'bbslist.txt'))
+        or os.path.join(_PROJECT_ROOT, 'bbslist.txt'))
     force = args.force
 
     if os.path.isdir(logs_dir):

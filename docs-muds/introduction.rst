@@ -102,7 +102,7 @@ and serves are cataloged by this fingerprint.  It was created by the author of t
 ``telnetlib3-fingerprint`` client to gather the results shown here.
 
 The list of MUDs scanned is from the github-managed file, `mudlist.txt
-<https://github.com/jquast/modem.xyz/blob/master/data-muds/mudlist.txt>`_, you are welcome to add
+<https://github.com/jquast/modem.xyz/blob/master/mudlist.txt>`_, you are welcome to add
 anything by pull request, or to make any other changes or recommendations to this website.
 
 Better Sites
@@ -131,3 +131,4 @@ Exercises for the reader!
 - MUD clients offer scripting, what kind of tasks could you automate?
 - What popular games started with MUD codebases? Any famous game developers?
 - Sometimes games require customized clients, why?
+- Why are so few MUDs on the IANA_designated port 23?

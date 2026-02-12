@@ -42,8 +42,8 @@ _DIGITS_RE = re.compile(r"\d+")
 
 # Default paths relative to this script
 _HERE = Path(__file__).resolve().parent
-DEFAULT_MUD_LIST = _HERE / "data-muds" / "mudlist.txt"
-DEFAULT_BBS_LIST = _HERE / "data-bbs" / "bbslist.txt"
+DEFAULT_MUD_LIST = _HERE / "mudlist.txt"
+DEFAULT_BBS_LIST = _HERE / "bbslist.txt"
 DEFAULT_MUD_DATA = _HERE / "data-muds"
 DEFAULT_BBS_DATA = _HERE / "data-bbs"
 DEFAULT_LOGS = _HERE / "logs"

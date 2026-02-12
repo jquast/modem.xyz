@@ -39,16 +39,15 @@ mode**.  Their preferred clients and servers are sometimes incompatible with eac
 Popular `BBS door <https://en.wikipedia.org/wiki/BBS_door>`_ games, like `Legend of the Red Dragon
 <https://en.wikipedia.org/wiki/Legend_of_the_Red_Dragon>`_, `Usurper <https://www.usurper.info/>`_,
 `Trade Wars <https://en.wikipedia.org/wiki/Trade_Wars>`_, `Barren Realms Elite
-<https://www.johndaileysoftware.com/products/bbsdoors/barrenrealmselite>`_ have the same Multi-User
-dungeon gameplay, but game design differs due to the need to limit or even paywall the amount of
-allowed turns and time each day, to keep the telephone line free for other "Callers".
+<https://www.johndaileysoftware.com/products/bbsdoors/barrenrealmselite>`_ have similar gameplay,
+but game design differs due to time limitations to free the telephone line free for other "Callers".
 
 BBSing Today
 ------------
 
-During the 1980s and 1990s, tens of thousands of BBSs operated worldwide over telephone lines using
-a modem.  By the late '90s, dial-up internet, graphics, E-mail, FTP, and the web browser rapidly
-displaced use of the BBS in homes and workplaces.
+During the 1980s and 1990s, tens of thousands of BBSs operated worldwide over telephone lines and
+modems.  By the late '90s, dial-up internet, graphics, E-mail, FTP, and the web browser rapidly
+displaced the use of the BBS in homes and workplaces.
 
 Many still remain today and can be reached over telnet.  Hobbyist `Sysops
 <https://en.wikipedia.org/wiki/Sysop>`_ continue to run BBSs on retrocomputers, like 16 or 32-bit
@@ -228,7 +227,7 @@ This list of BBSs was primarily sourced from the `IPTIA BBS Directory
 `muds.modem.xyz <https://muds.modem.xyz/>`_.
 
 The file is hosted on Github and all scanning and documentation is automatic. Suggest a change to
-`bbslist.txt <https://github.com/jquast/modem.xyz/blob/master/data-bbs/bbslist.txt>`_ to
+`bbslist.txt <https://github.com/jquast/modem.xyz/blob/master/bbslist.txt>`_ to
 add or remove or fix an encoding as a pull request.  Feel free to suggest any other changes
 or fixes.
 
@@ -264,3 +263,4 @@ Exercises for the reader!
 - Can you find the name of a historical BBSs that is no longer online?
 - Can you find a historical BBS that is still online today?
 - What kind of systems did BBSs run on? What do they run on now?
+- Why are so few BBSs on the IANA_designated port 23?
