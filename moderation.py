@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 """Interactive moderation tool for MUD and BBS server lists.
 
-Combines dead-entry pruning, within-list duplicate detection, and
-cross-list conflict resolution into a single interactive workflow.
+Combines dead-entry pruning, within-list duplicate detection, cross-list
+conflict resolution, and encoding issue discovery into a single workflow.
 
 Modes (run all by default, or select one):
-  --only-dns      Only remove IP entries that duplicate a hostname (auto)
-  --only-prune    Only prune dead servers (no fingerprint data)
-  --only-dupes    Only find within-list duplicates
-  --only-cross    Only find entries present in both MUD and BBS lists
+  --only-dns        Only remove IP entries that duplicate a hostname (auto)
+  --only-prune      Only prune dead servers (no fingerprint data)
+  --only-dupes      Only find within-list duplicates
+  --only-cross      Only find entries present in both MUD and BBS lists
+  --only-encodings  Only discover and suggest encoding fixes
 
 Scope (moderate both by default, or select one):
   --mud           Only moderate the MUD list
@@ -215,6 +216,164 @@ def _group_cache_key(members):
     """
     parts = sorted(f"{r['host']}:{r['port']}" for r in members)
     return "|".join(parts)
+
+
+# ── Encoding discovery ─────────────────────────────────────────────────────
+
+def _find_best_encoding(text):
+    """Find the encoding that produces the cleanest decode of text.
+
+    :param text: string with possible surrogate escapes or replacement chars
+    :returns: tuple of (encoding_name, replacement_char_count)
+    """
+    if not text or '\ufffd' not in text:
+        return None, 0
+
+    candidates = ['cp437', 'cp850', 'atascii', 'iso-8859-1', 'ascii']
+    best_encoding = None
+    best_score = text.count('\ufffd')
+
+    for encoding in candidates:
+        try:
+            raw = text.encode('utf-8', errors='surrogateescape')
+            decoded = raw.decode(encoding, errors='replace')
+            score = decoded.count('\ufffd')
+            if score < best_score:
+                best_score = score
+                best_encoding = encoding
+        except (UnicodeDecodeError, UnicodeEncodeError, LookupError):
+            pass
+
+    return best_encoding, best_score
+
+
+def discover_encoding_issues(data_dir, list_path):
+    """Scan JSON fingerprint data to find servers with encoding issues.
+
+    :param data_dir: path to server data directory
+    :param list_path: path to server list file (mud/bbs list)
+    :returns: list of dicts with host, port, suggested_encoding
+    """
+    issues = []
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    # Load server list to know which servers to check
+    list_entries = load_server_list(list_path)
+    allowed_servers = {(h, p) for h, p, _ in list_entries if h and p}
+
+    # Scan fingerprint data
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8', errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                continue
+
+            probe = data.get('server-probe', {})
+            sessions = data.get('sessions', [])
+            if not sessions:
+                continue
+
+            session = sessions[-1]
+            host = session.get('host', session.get('ip', 'unknown'))
+            port = session.get('port', 0)
+
+            if (host, port) not in allowed_servers:
+                continue
+
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+            banner = banner_before or banner_after
+
+            suggested_enc, replacement_count = _find_best_encoding(banner)
+            if suggested_enc and replacement_count > 0:
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'suggested_encoding': suggested_enc,
+                    'replacement_count': replacement_count,
+                })
+
+    return issues
+
+
+def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
+                           logs_dir, report_only=False, dry_run=False):
+    """Interactively review and apply encoding fixes.
+
+    :param mud_issues: list of encoding issues from MUD data
+    :param bbs_issues: list of encoding issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    """
+    all_issues = [('mud', mud_issues, mud_list), ('bbs', bbs_issues, bbs_list)]
+    applied_count = 0
+
+    for mode, issues, list_path in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n{mode.upper()} encoding issues found: {len(issues)}")
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            suggested = issue['suggested_encoding']
+            print(f"\n  {host}:{port}")
+            print(f"    Suggested encoding: {suggested}")
+            print(f"    Replacement chars in banner: {issue['replacement_count']}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(f"    Apply {suggested}? (y/n/q) ", "ynq")
+            if choice == 'q':
+                return applied_count
+            if choice != 'y':
+                continue
+
+            # Load list and update
+            entries = load_server_list(list_path)
+
+            # Find and update the entry
+            updated = False
+            new_entries = []
+            for h, p, line in entries:
+                if h == host and p == port:
+                    # Update line with encoding override
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        parts[2:] = [suggested]
+                    new_entries.append((h, p, ' '.join(parts)))
+                    updated = True
+                else:
+                    new_entries.append((h, p, line))
+
+            if updated and not dry_run:
+                with open(list_path, 'w', encoding='utf-8') as f:
+                    for _, _, line in new_entries:
+                        f.write(line + '\n')
+                print(f"    ✓ Updated {list_path}")
+
+                # Delete old log file so next scan uses new encoding
+                log_file = os.path.join(logs_dir, f"{host}:{port}.log")
+                if os.path.isfile(log_file):
+                    os.remove(log_file)
+                    print(f"    ✓ Deleted {log_file}")
+
+                applied_count += 1
 
 
 # ── Server list I/O ─────────────────────────────────────────────────────
@@ -1089,6 +1248,10 @@ def _get_argument_parser():
         "--only-dns", action="store_true",
         help="only remove IP entries that duplicate a hostname",
     )
+    mode_mx.add_argument(
+        "--only-encodings", action="store_true",
+        help="only discover and fix encoding issues in banners",
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -1149,12 +1312,13 @@ def main():
     do_mud = not args.bbs
     do_bbs = not args.mud
     only_flags = (args.only_prune, args.only_dupes,
-                  args.only_cross, args.only_dns)
+                  args.only_cross, args.only_dns, args.only_encodings)
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
     do_dns = (args.only_dns or not any_only) and not args.skip_dns
+    do_encodings = args.only_encodings
 
     # Cross-list and DNS modes require both lists
     if do_cross and (args.mud or args.bbs):
@@ -1210,6 +1374,23 @@ def main():
                 report_only=args.report_only,
                 dry_run=args.dry_run,
                 decisions=decisions)
+
+    # Encoding discovery and fixes
+    if do_encodings:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_encoding_issues(args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_encoding_issues(args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            review_encoding_issues(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                report_only=args.report_only, dry_run=args.dry_run)
+        else:
+            print("No encoding issues detected.")
 
     # Save decisions cache
     if decisions is not None:

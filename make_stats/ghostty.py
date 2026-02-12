@@ -237,7 +237,7 @@ class GhosttyInstance:
             signal.alarm(5)
             fd = os.open(self._data_fifo, os.O_WRONLY)
             try:
-                os.write(fd, text.encode('utf-8'))
+                os.write(fd, text.encode('utf-8', errors='surrogateescape'))
             finally:
                 os.close(fd)
             signal.alarm(0)

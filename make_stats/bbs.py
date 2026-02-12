@@ -14,7 +14,8 @@ from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
     _parse_server_list, _load_encoding_overrides,
     _rst_escape, _strip_ansi, _is_garbled,
-    _clean_log_line, _combine_banners, _truncate,
+    _clean_log_line, _combine_banners, _redecode_banner,
+    _has_encoding_issues, _truncate,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer,
     _rst_heading, print_datatable,
@@ -171,7 +172,7 @@ def load_server_data(data_dir, encoding_overrides=None):
                 continue
             fpath = os.path.join(fp_path, fname)
             try:
-                with open(fpath) as f:
+                with open(fpath, encoding='utf-8', errors='surrogateescape') as f:
                     data = json.load(f)
             except (json.JSONDecodeError, OSError):
                 continue
@@ -189,6 +190,20 @@ def load_server_data(data_dir, encoding_overrides=None):
                                session.get('ip', 'unknown'))
             port = session.get('port', 0)
 
+            detected_encoding = session_data.get('encoding', 'unknown')
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+
+            # Clean surrogate escapes from JSON by re-decoding with the
+            # detected encoding. These surrogates represent bytes that were
+            # not valid UTF-8 in the original telnet session.
+            if banner_before:
+                banner_before = _redecode_banner(
+                    banner_before, detected_encoding, 'utf-8')
+            if banner_after:
+                banner_after = _redecode_banner(
+                    banner_after, detected_encoding, 'utf-8')
+
             record = {
                 'host': host,
                 'ip': session.get('ip', ''),
@@ -204,14 +219,11 @@ def load_server_data(data_dir, encoding_overrides=None):
                     'server_offered', {}),
                 'server_requested': option_states.get(
                     'server_requested', {}),
-                'encoding': session_data.get(
-                    'encoding', 'unknown'),
+                'encoding': detected_encoding,
                 'encoding_override': encoding_overrides.get(
                     (host, port), ''),
-                'banner_before': session_data.get(
-                    'banner_before_return', ''),
-                'banner_after': session_data.get(
-                    'banner_after_return', ''),
+                'banner_before': banner_before,
+                'banner_after': banner_after,
                 'timing': session_data.get('timing', {}),
             }
 
@@ -892,7 +904,7 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
               " banner data.")
         print()
         if os.path.isfile(json_file):
-            with open(json_file) as jf:
+            with open(json_file, encoding='utf-8', errors='surrogateescape') as jf:
                 raw_json = jf.read().rstrip()
             if raw_json:
                 print(".. code-block:: json")
@@ -905,7 +917,7 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
         log_path = os.path.join(
             logs_dir, f"{host}:{port}.log")
         if os.path.isfile(log_path):
-            with open(log_path) as lf:
+            with open(log_path, encoding='utf-8', errors='surrogateescape') as lf:
                 log_text = lf.read().rstrip()
             if log_text:
                 _rst_heading("Connection Log", sec_char)

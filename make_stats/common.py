@@ -21,6 +21,7 @@ _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LINK_REGEX = re.compile(r'[^a-zA-Z0-9]')
 _URL_RE = re.compile(r'https?://[^\s<>"\']+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:/[^\s<>"\']*)?')
 _RST_SECTION_RE = re.compile(r'([=\-~#+^"._]{4,})')
+_SURROGATES_RE = re.compile(r'[\udc80-\udcff]')
 
 TELNET_OPTIONS_OF_INTEREST = [
     'BINARY', 'ECHO', 'SGA', 'STATUS', 'TTYPE', 'TSPEED',
@@ -293,6 +294,24 @@ def _redecode_banner(text, from_encoding, to_encoding):
         return text
 
 
+def _has_encoding_issues(text):
+    """Check if text has unresolved encoding problems.
+
+    These indicate encoding mismatches that should be addressed via
+    mudlist.txt or bbslist.txt encoding overrides.
+
+    :param text: banner text to check
+    :returns: True if text has encoding issues
+    """
+    if not text:
+        return False
+    try:
+        text.encode('utf-8')
+        return '\ufffd' in text
+    except UnicodeEncodeError:
+        return True
+
+
 def _combine_banners(server, default_encoding=None):
     """Combine banner_before and banner_after when they contain unique content.
 
@@ -319,10 +338,11 @@ def _combine_banners(server, default_encoding=None):
             banner_after = _redecode_banner(
                 banner_after, scanner_enc, effective_enc)
 
-    # Strip replacement characters after re-decoding so that
-    # surrogateescape round-trips can recover the original bytes first.
-    banner_before = banner_before.replace('\ufffd', '')
-    banner_after = banner_after.replace('\ufffd', '')
+    # Strip replacement characters and surrogate escapes after re-decoding
+    # so that surrogateescape round-trips can recover the original bytes
+    # first.  Any remaining surrogates (\udc80-\udcff) would crash print().
+    banner_before = _SURROGATES_RE.sub('', banner_before.replace('\ufffd', ''))
+    banner_after = _SURROGATES_RE.sub('', banner_after.replace('\ufffd', ''))
 
     before_clean = _strip_mxp_sgml(_strip_ansi(banner_before)).strip()
     after_clean = _strip_mxp_sgml(_strip_ansi(banner_after)).strip()
@@ -347,7 +367,7 @@ def _banner_to_png(text, banners_dir, encoding='cp437'):
     if _ghostty_pool is None:
         return None
     key = hashlib.sha1(
-        (text + '\x00' + encoding).encode('utf-8')).hexdigest()[:12]
+        (text + '\x00' + encoding).encode('utf-8', errors='surrogateescape')).hexdigest()[:12]
 
     fname = f"banner_{key}.png"
 
