@@ -8,24 +8,27 @@ import sys
 from collections import Counter
 from datetime import datetime
 
-import matplotlib.pyplot as plt
 import tabulate as tabulate_mod
 
 from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
-    TELNET_OPTIONS_OF_INTEREST,
-    PLOT_BG, PLOT_FG, PLOT_GREEN, PLOT_CYAN, PLOT_YELLOW, PLOT_BLUE,
-    _listify, _first_str, _parse_int, _format_scan_time,
     _parse_server_list, _load_encoding_overrides,
-    _rst_escape, _strip_ansi, _is_garbled, _strip_mxp_sgml,
+    _rst_escape, _strip_ansi, _is_garbled,
     _clean_log_line, _combine_banners, _truncate,
-    _banner_to_html, _banner_to_png, _banner_alt_text, _telnet_url,
+    _banner_to_png, _banner_alt_text, _telnet_url,
+    init_renderer, close_renderer,
     _rst_heading, print_datatable,
-    _group_shared_ip, _group_by_banner, _most_common_hostname,
+    _group_shared_ip, _most_common_hostname,
     _clean_dir, _remove_stale_rst, _needs_rebuild,
     deduplicate_servers,
-    _setup_plot_style, _group_small_slices, _pie_colors,
+    _setup_plot_style, _create_pie_chart,
     create_telnet_options_plot,
+    _assign_filenames,
+    display_fingerprint_summary as _display_fingerprint_summary,
+    _write_fingerprint_options_section,
+    display_encoding_groups as _display_encoding_groups,
+    generate_banner_gallery as _generate_banner_gallery,
+    generate_fingerprint_details as _generate_fingerprint_details,
 )
 
 DOCS_PATH = os.path.join(_PROJECT_ROOT, "docs-bbs")
@@ -292,36 +295,9 @@ def create_bbs_software_plot(stats, output_path):
     software_counts = stats['bbs_software_counts']
     if not software_counts:
         return
-
     sorted_items = sorted(software_counts.items(),
                           key=lambda x: x[1], reverse=True)
-    labels = [s for s, _ in sorted_items]
-    counts = [c for _, c in sorted_items]
-    labels, counts = _group_small_slices(
-        labels, counts, min_count=1)
-    colors = _pie_colors(len(labels), labels)
-
-    fig, ax = plt.subplots(figsize=(10, 8))
-    wedges, texts, autotexts = ax.pie(
-        counts, labels=None, autopct='%1.0f%%', startangle=140,
-        colors=colors, pctdistance=0.82,
-        wedgeprops={'edgecolor': '#222222', 'linewidth': 1.5})
-    for t in autotexts:
-        t.set_color('#222222')
-        t.set_fontsize(9)
-        t.set_fontweight('bold')
-
-    ax.legend(
-        wedges,
-        [f'{l} ({c})' for l, c in zip(labels, counts)],
-        loc='center left', bbox_to_anchor=(1, 0.5),
-        fontsize=9, facecolor='none', edgecolor=PLOT_FG,
-        labelcolor=PLOT_FG)
-
-    plt.tight_layout()
-    plt.savefig(output_path, dpi=100, bbox_inches='tight',
-                transparent=True, metadata={'CreationDate': None})
-    plt.close()
+    _create_pie_chart(sorted_items, output_path)
 
 
 def create_encoding_plot(stats, output_path):
@@ -329,36 +305,9 @@ def create_encoding_plot(stats, output_path):
     encoding_counts = stats['encoding_counts']
     if not encoding_counts:
         return
-
     sorted_items = sorted(encoding_counts.items(),
                           key=lambda x: x[1], reverse=True)
-    labels = [e for e, _ in sorted_items]
-    counts = [c for _, c in sorted_items]
-    labels, counts = _group_small_slices(
-        labels, counts, min_count=1)
-    colors = _pie_colors(len(labels), labels)
-
-    fig, ax = plt.subplots(figsize=(10, 8))
-    wedges, texts, autotexts = ax.pie(
-        counts, labels=None, autopct='%1.0f%%', startangle=140,
-        colors=colors, pctdistance=0.82,
-        wedgeprops={'edgecolor': '#222222', 'linewidth': 1.5})
-    for t in autotexts:
-        t.set_color('#222222')
-        t.set_fontsize(9)
-        t.set_fontweight('bold')
-
-    ax.legend(
-        wedges,
-        [f'{l} ({c})' for l, c in zip(labels, counts)],
-        loc='center left', bbox_to_anchor=(1, 0.5),
-        fontsize=9, facecolor='none', edgecolor=PLOT_FG,
-        labelcolor=PLOT_FG)
-
-    plt.tight_layout()
-    plt.savefig(output_path, dpi=100, bbox_inches='tight',
-                transparent=True, metadata={'CreationDate': None})
-    plt.close()
+    _create_pie_chart(sorted_items, output_path)
 
 
 def create_all_plots(stats):
@@ -390,27 +339,11 @@ def _assign_bbs_filenames(servers, ip_groups):
     :param servers: list of server records (modified in place)
     :param ip_groups: dict from :func:`_group_shared_ip`
     """
-    grouped_keys = {}
-    for ip, members in ip_groups.items():
-        ip_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', ip)
-        filename = f"ip_{ip_safe}"
-        hostname_hint = _most_common_hostname(members)
-        if hostname_hint == ip:
-            toc_label = ip
-        else:
-            toc_label = f"{ip} ({hostname_hint})"
-        for s in members:
-            grouped_keys[(s['host'], s['port'])] = (
-                filename, toc_label)
-
-    for s in servers:
-        key = (s['host'], s['port'])
-        if key in grouped_keys:
-            s['_bbs_file'], s['_bbs_toc_label'] = (
-                grouped_keys[key])
-        else:
-            s['_bbs_file'] = _bbs_filename(s)
-            s['_bbs_toc_label'] = f"{s['host']}:{s['port']}"
+    _assign_filenames(
+        servers, ip_groups,
+        file_key='_bbs_file', toc_key='_bbs_toc_label',
+        filename_fn=_bbs_filename,
+        standalone_label_fn=lambda s: f"{s['host']}:{s['port']}")
 
 
 # ---------------------------------------------------------------------------
@@ -570,83 +503,9 @@ def display_server_table(servers):
 
 def display_fingerprint_summary(servers):
     """Print summary table of protocol fingerprints."""
-    print("Fingerprints")
-    print("============")
-    print()
-    print("A fingerprint is a hash of a server's Telnet option"
-          " negotiation")
-    print("behavior -- which options it offers to the client,"
-          " which it requests")
-    print("from the client, and which it refuses. Servers running"
-          " the same software")
-    print("version typically produce identical fingerprints."
-          " A majority of servers")
-    print("perform no negotiation at all and share the same"
-          " empty fingerprint.")
-    print()
-    print("Click a fingerprint link to see the full negotiation"
-          " details and all")
-    print("servers in that group.")
-    print()
-    print(".. list-table:: Column Descriptions")
-    print("   :widths: 20 80")
-    print("   :class: field-descriptions")
-    print()
-    print("   * - **Fingerprint**")
-    print("     - Truncated hash identifying the negotiation"
-          " pattern."
-          " Click to see the full detail page.")
-    print("   * - **Servers**")
-    print("     - Number of servers sharing this exact"
-          " negotiation behavior.")
-    print("   * - **Offers**")
-    print("     - Telnet options the server offers"
-          " (WILL) to the client during negotiation.")
-    print("   * - **Requests**")
-    print("     - Telnet options the server requests (DO)"
-          " from the client.")
-    print("   * - **Examples**")
-    print("     - Sample server addresses sharing this"
-          " fingerprint.")
-    print()
-
-    by_fp = {}
-    for s in servers:
-        fp = s['fingerprint']
-        by_fp.setdefault(fp, []).append(s)
-
-    rows = []
-    for fp, fp_servers in sorted(by_fp.items(),
-                                  key=lambda x: len(x[1]),
-                                  reverse=True):
-        offered = ', '.join(fp_servers[0]['offered']) or 'none'
-        requested = (', '.join(fp_servers[0]['requested'])
-                     or 'none')
-        server_addrs = ', '.join(
-            f"{s['host']}:{s['port']}" for s in fp_servers[:3])
-        if len(fp_servers) > 3:
-            server_addrs += f', ... (+{len(fp_servers) - 3})'
-
-        rows.append({
-            'Fingerprint': f':ref:`{fp[:16]}... <fp_{fp}>`',
-            'Servers': str(len(fp_servers)),
-            'Offers': _rst_escape(offered[:30]),
-            'Requests': _rst_escape(requested[:30]),
-            'Examples': _rst_escape(server_addrs[:50]),
-        })
-
-    table_str = tabulate_mod.tabulate(
-        rows, headers="keys", tablefmt="rst")
-    print_datatable(table_str, caption="Protocol Fingerprints")
-
-    print()
-    print(".. toctree::")
-    print("   :maxdepth: 1")
-    print("   :hidden:")
-    print()
-    for fp in sorted(by_fp.keys()):
-        print(f"   server_detail/{fp}")
-    print()
+    _display_fingerprint_summary(
+        servers,
+        server_label_fn=lambda s: f"{s['host']}:{s['port']}")
 
 
 def display_bbs_software_groups(servers):
@@ -698,35 +557,13 @@ def display_bbs_software_groups(servers):
 
 def display_encoding_groups(servers):
     """Print BBS by Encoding page."""
-    _rst_heading("Encodings", '=')
-    print("Servers grouped by their detected or configured"
-          " character encoding.")
-    print()
-
-    by_encoding = {}
-    for s in servers:
-        key = s['display_encoding']
-        by_encoding.setdefault(key, []).append(s)
-
-    for name, members in sorted(by_encoding.items(),
-                                 key=lambda x: (-len(x[1]),
-                                                x[0])):
-        print(f"- `{_rst_escape(name)}`_: {len(members)}")
-    print()
-
-    for name, members in sorted(by_encoding.items(),
-                                 key=lambda x: (-len(x[1]),
-                                                x[0])):
-        _rst_heading(name, '-')
-        for s in sorted(members,
-                        key=lambda s: s['host'].lower()):
-            bbs_file = s['_bbs_file']
-            label = f"{s['host']}:{s['port']}"
-            tls = (' :tls-lock:`\U0001f512`'
-                   if s['tls_support'] else '')
-            print(f"- :doc:`{_rst_escape(label)}"
-                  f" <bbs_detail/{bbs_file}>`{tls}")
-        print()
+    _display_encoding_groups(
+        servers,
+        detail_subdir='bbs_detail',
+        file_key='_bbs_file',
+        server_label_fn=lambda s: f"{s['host']}:{s['port']}",
+        server_sort_key=lambda s: s['host'].lower(),
+        tls_fn=lambda s: s['tls_support'])
 
 
 def display_fidonet_servers(servers):
@@ -842,71 +679,19 @@ def generate_encoding_rst(servers):
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
-def display_banner_gallery(servers):
-    """Print the Banner Gallery page grouping servers by shared banner."""
-    print(":tocdepth: 1")
-    print()
-    _rst_heading("Banner Gallery", '=')
-    print("A gallery of ANSI connection banners collected from responding")
-    print("BBSes. Servers that display identical visible banner text are")
-    print("grouped together. Each group shows the shared banner image")
-    print("and a list of all servers in that group.")
-    print()
-
-    groups = _group_by_banner(servers, default_encoding=DEFAULT_ENCODING)
-    sorted_groups = sorted(
-        groups.values(),
-        key=lambda g: (-len(g['servers']),
-                       g['servers'][0]['host'].lower()))
-
-    total = sum(len(g['servers']) for g in sorted_groups)
-    print(f"{len(sorted_groups)} unique banners across {total} servers.")
-    print()
-
-    for group in sorted_groups:
-        members = group['servers']
-        count = len(members)
-        rep = members[0]
-        banner = group['banner']
-
-        host_label = f"{rep['host']}:{rep['port']}"
-        if count > 1:
-            heading = f"{host_label} (+{count - 1} more)"
-        else:
-            heading = host_label
-        _rst_heading(heading, '-')
-
-        banner_fname = f"{rep['_bbs_file']}_{rep['port']}.png"
-        banner_path = os.path.join(BANNERS_PATH, banner_fname)
-        if os.path.isfile(banner_path):
-            print(f".. image:: /_static/banners/{banner_fname}")
-            print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
-            print(f"   :class: ansi-banner")
-            print()
-        else:
-            banner_html = _banner_to_html(banner, name=host_label)
-            print(".. raw:: html")
-            print()
-            for line in banner_html.split('\n'):
-                print(f"   {line}")
-            print()
-
-        for s in members:
-            label = f"{s['host']}:{s['port']}"
-            tls = (' :tls-lock:`\U0001f512`'
-                   if s['tls_support'] else '')
-            print(f"- :doc:`{_rst_escape(label)}"
-                  f" <bbs_detail/{s['_bbs_file']}>`{tls}")
-        print()
-
-
 def generate_banner_gallery_rst(servers):
-    """Generate the banner_gallery.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "banner_gallery.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_banner_gallery(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    """Generate paginated banner_gallery*.rst files."""
+    _generate_banner_gallery(
+        servers,
+        docs_path=DOCS_PATH,
+        entity_name='BBSes',
+        file_key='_bbs_file',
+        banners_path=BANNERS_PATH,
+        detail_subdir='bbs_detail',
+        default_encoding=DEFAULT_ENCODING,
+        server_name_fn=lambda s: f"{s['host']}:{s['port']}",
+        server_sort_key=lambda g: g['servers'][0]['host'].lower(),
+        tls_fn=lambda s: s['tls_support'])
 
 
 def generate_details_rst(servers):
@@ -1004,26 +789,16 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
         effective_enc = (
             server.get('encoding_override')
             or DEFAULT_ENCODING)
-        bbs_file = server['_bbs_file']
-        banner_fname = f"{bbs_file}_{port}.png"
-        banner_path = os.path.join(BANNERS_PATH, banner_fname)
-        if _banner_to_png(banner, banner_path, effective_enc):
+        banner_fname = _banner_to_png(
+            banner, BANNERS_PATH, effective_enc)
+        if banner_fname:
+            server['_banner_png'] = banner_fname
             print("**Connection Banner:**")
             print()
             print(f".. image:: "
                   f"/_static/banners/{banner_fname}")
             print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
             print(f"   :class: ansi-banner")
-            print()
-        else:
-            print("**Connection Banner:**")
-            print()
-            banner_html = _banner_to_html(
-                banner, name=title)
-            print(".. raw:: html")
-            print()
-            for line in banner_html.split('\n'):
-                print(f"   {line}")
             print()
     elif banner:
         print("*Banner not shown (legacy encoding"
@@ -1288,82 +1063,9 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
                               __file__):
             return False
 
-    sample = fp_servers[0]
-
     with open(detail_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
-        print(f".. _fp_{fp_hash}:")
-        print()
-        title = f"{fp_hash[:16]}"
-        _rst_heading(title, '=')
-
-        print(f"**Full hash**: ``{fp_hash}``")
-        print()
-        print(f"**Servers sharing this fingerprint**:"
-              f" {len(fp_servers)}")
-        print()
-
-        print("Telnet Options")
-        print("--------------")
-        print()
-
-        if sample['offered']:
-            print("**Offered by server**: "
-                  + ', '.join(
-                      f"``{o}``"
-                      for o in sorted(sample['offered'])))
-        else:
-            print("**Offered by server**: none")
-        print()
-
-        if sample['requested']:
-            print("**Requested from client**: "
-                  + ', '.join(
-                      f"``{o}``"
-                      for o in sorted(sample['requested'])))
-        else:
-            print("**Requested from client**: none")
-        print()
-
-        refused_display = [
-            o for o in sorted(sample['refused'])
-            if o in TELNET_OPTIONS_OF_INTEREST
-        ]
-        other_refused = (len(sample['refused'])
-                         - len(refused_display))
-        if refused_display:
-            print("**Refused (notable)**: "
-                  + ', '.join(
-                      f"``{o}``" for o in refused_display))
-            if other_refused > 0:
-                print(f"  *(and {other_refused} other"
-                      f" standard options)*")
-        print()
-
-        negotiated_offered = {
-            k: v for k, v in sample['server_offered'].items()
-            if v
-        }
-        negotiated_requested = {
-            k: v for k, v in sample['server_requested'].items()
-            if v
-        }
-        if negotiated_offered or negotiated_requested:
-            print("Negotiation Results")
-            print("~~~~~~~~~~~~~~~~~~~")
-            print()
-            if negotiated_offered:
-                print("**Server offered (accepted)**: "
-                      + ', '.join(
-                          f"``{o}``"
-                          for o in sorted(negotiated_offered)))
-                print()
-            if negotiated_requested:
-                print("**Server requested (accepted)**: "
-                      + ', '.join(
-                          f"``{o}``"
-                          for o in sorted(negotiated_requested)))
-                print()
+        _write_fingerprint_options_section(fp_hash, fp_servers)
 
         print("Servers")
         print("-------")
@@ -1393,27 +1095,16 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
                       f" <{href}>`_")
             print()
 
-            banner = _combine_banners(
-                s, default_encoding=DEFAULT_ENCODING)
-            if banner and not _is_garbled(banner):
-                bfname = f"{bbs_file}_{s['port']}.png"
-                bpath = os.path.join(BANNERS_PATH, bfname)
-                if os.path.isfile(bpath):
-                    print(f"  .. image:: "
-                          f"/_static/banners/{bfname}")
-                    print(f"     :alt: "
-                          f"{_rst_escape(_banner_alt_text(banner))}")
-                    print(f"     :class: ansi-banner")
-                    print()
-                else:
-                    banner_html = _banner_to_html(
-                        banner, maxlen=300, maxlines=10,
-                        name=label)
-                    print("  .. raw:: html")
-                    print()
-                    for line in banner_html.split('\n'):
-                        print(f"     {line}")
-                    print()
+            bfname = s.get('_banner_png')
+            if bfname:
+                banner = _combine_banners(
+                    s, default_encoding=DEFAULT_ENCODING)
+                print(f"  .. image:: "
+                      f"/_static/banners/{bfname}")
+                print(f"     :alt: "
+                      f"{_rst_escape(_banner_alt_text(banner))}")
+                print(f"     :class: ansi-banner")
+                print()
 
 
 def generate_fingerprint_details(servers, force=False,
@@ -1424,30 +1115,13 @@ def generate_fingerprint_details(servers, force=False,
     :param force: if True, regenerate all files
     :param data_dir: path to data directory
     """
-    if force:
-        _clean_dir(DETAIL_PATH)
-    os.makedirs(DETAIL_PATH, exist_ok=True)
-
-    by_fp = {}
-    for s in servers:
-        by_fp.setdefault(s['fingerprint'], []).append(s)
-
-    rebuilt = 0
-    for fp_hash, fp_servers in sorted(by_fp.items()):
-        result = generate_fingerprint_detail(
+    def _gen(fp_hash, fp_servers):
+        return generate_fingerprint_detail(
             fp_hash, fp_servers, force=force,
             data_dir=data_dir)
-        if result is not False:
-            rebuilt += 1
 
-    if rebuilt < len(by_fp):
-        print(f"  wrote {rebuilt}/{len(by_fp)} fingerprint detail"
-              f" pages to {DETAIL_PATH}"
-              f" ({len(by_fp) - rebuilt} unchanged)",
-              file=sys.stderr)
-    else:
-        print(f"  wrote {rebuilt} fingerprint detail pages"
-              f" to {DETAIL_PATH}", file=sys.stderr)
+    _generate_fingerprint_details(
+        servers, DETAIL_PATH, _gen, force=force)
 
 
 # ---------------------------------------------------------------------------
@@ -1511,20 +1185,23 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
-
-    print("Generating RST ...", file=sys.stderr)
-    generate_summary_rst(stats)
-    generate_server_list_rst(servers)
-    generate_fingerprints_rst(servers)
-    generate_bbs_software_rst(servers)
-    generate_encoding_rst(servers)
-    generate_fidonet_rst(servers)
-    generate_bbs_details(servers, logs_dir=logs_dir,
-                          force=force, data_dir=data_dir,
-                          ip_groups=ip_groups)
-    generate_fingerprint_details(servers, force=force,
-                                  data_dir=data_dir)
-    generate_banner_gallery_rst(servers)
+    init_renderer()
+    try:
+        print("Generating RST ...", file=sys.stderr)
+        generate_summary_rst(stats)
+        generate_server_list_rst(servers)
+        generate_fingerprints_rst(servers)
+        generate_bbs_software_rst(servers)
+        generate_encoding_rst(servers)
+        generate_fidonet_rst(servers)
+        generate_bbs_details(servers, logs_dir=logs_dir,
+                              force=force, data_dir=data_dir,
+                              ip_groups=ip_groups)
+        generate_fingerprint_details(servers, force=force,
+                                      data_dir=data_dir)
+        generate_banner_gallery_rst(servers)
+    finally:
+        close_renderer()
 
     _remove_stale_rst(BBS_DETAIL_PATH,
                       {s['_bbs_file'] for s in servers})

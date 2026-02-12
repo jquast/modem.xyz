@@ -6,24 +6,40 @@ What is a BBS?
 
 A **BBS** (`Bulletin Board System <https://en.wikipedia.org/wiki/Bulletin_board_system>`_) is a
 computer system that hosts an online meeting place accessible over a network connection. Users
-connect to a BBS to interact through text-based menus, exchange local messages or through networks,
-trade files, and play `door games <https://en.wikipedia.org/wiki/BBS_door>`_ games.
+connect to a BBS to interact through text-based menus, exchange messages locally or through networks,
+trade files, and play games.  The first BBS, `CBBS <https://en.wikipedia.org/wiki/CBBS>`_, was
+created in 1978 by Ward Christensen and Randy Suess in Chicago.
 
-.. hint::
+`The BBS Documentary <http://www.bbsdocumentary.com/>`_ by Jason Scott provides a great
+introduction:
 
-    The first BBS, `CBBS <https://en.wikipedia.org/wiki/CBBS>`_, was created in 1978
-    by Ward Christensen and Randy Suess in Chicago.
+.. youtube:: Dddbe9OuJLU
+   :url_parameters: ?start=12&list=PL7nj3G6Jpv2G6Gp6NvN1kUtQuW8QshBWE
 
-Please enjoy the BBS Documentary:
+What is Telnet?
+---------------
 
-.. youtube:: LHAkuMHBDKX-s_jE
+`Telnet <https://en.wikipedia.org/wiki/Telnet>`_ is one of the earliest network protocols still in
+use today. Developed for `ARPANET <https://en.wikipedia.org/wiki/ARPANET>`_ in 1969 and described in
+`RFC 97 <https://datatracker.ietf.org/doc/html/rfc97>`_), it allowed systems to establish a two-way
+text-only connection over the internet. Despite its age, Telnet remains widely deployed and used all
+over the world and for embedded/IoT systems. Its longevity comes from its simplicity: it is
+portable, accessible, and easy to develop for.
 
 See Also: MUDs
 ~~~~~~~~~~~~~~
 
-BBSs are very related to **MUDs** (Multi-User Dungeons): both primarily use telnet, but many BBSs
-operate in **character-at-a-time** mode, while MUDs use **line mode**, their preferred clients and
-servers are sometimes incompatible with each other.
+BBSs are closely related to `Multi-User Dungeon <https://en.wikipedia.org/wiki/Multi-user_dungeon>`_
+("MUDs"): both primarily use telnet, but many BBSs operate in **character-at-a-time** mode, while
+MUDs use **line mode**, their preferred clients and servers are sometimes incompatible with each
+other.
+
+Popular `BBS door <https://en.wikipedia.org/wiki/BBS_door>`_ games, like `Legend of the Red Dragon
+<https://en.wikipedia.org/wiki/Legend_of_the_Red_Dragon>`_, `Usurper <https://www.usurper.info/>`_,
+`Trade Wars <https://en.wikipedia.org/wiki/Trade_Wars>`_, `Barren Realms Elite
+<https://www.johndaileysoftware.com/products/bbsdoors/barrenrealmselite>`_ have the same Multi-User
+dungeon gameplay, but game design differs due to the need to limit or even paywall the amount of
+allowed turns and time each day, to keep the telephone line free for other "Callers".
 
 A census of MUD Telnet servers is at `muds.modem.xyz <https://muds.modem.xyz/>`_.
 
@@ -31,113 +47,129 @@ BBSing Today
 ------------
 
 During the 1980s and 1990s, tens of thousands of BBSs operated worldwide over telephone lines using
-a modem.  By the late 90's, dial-up internet, graphics, E-mail, FTP, and the web browser rapidly
+a modem.  By the late '90s, dial-up internet, graphics, E-mail, FTP, and the web browser rapidly
 displaced use of the BBS in homes and workplaces.
 
 Many still remain today and can be reached over telnet.  Hobbyist `Sysops
-<https://en.wikipedia.org/wiki/Sysop>`_ continue to run BBSs on retrocomputers, like
-16 or 32-bit IBM PC-DOS (CP437_), 8-bit Atari (ATASCII_), 8 and 16-bit Commodore (PETSCII_, Topaz_),
-and on modern 64-bit Linux and Windows PC's (UTF-8 [#f1]_).
+<https://en.wikipedia.org/wiki/Sysop>`_ continue to run BBSs on retrocomputers, like 16 or 32-bit
+IBM PC-DOS (:ref:`CP437 <cp437>`), 8-bit Atari (:ref:`ATASCII <atascii>`), 8 and 16-bit Commodore (:ref:`PETSCII <petscii>`,
+:ref:`Topaz <topaz>`), and on modern 64-bit Linux and Windows PCs (UTF-8 [#f1]_).
+
+BBS Software is made by and for `Sysops <https://en.wikipedia.org/wiki/Sysop>`_.  Some people
+continue to write (and rewrite!) their own BBS Software to this day, in private and in small
+communities, targeting a specific retro computing platform, art style, or programming language.
 
 Many of today's BBSs are interlinked through message networks, such as `fidonet
 <https://www.fidonet.org/>`_, `Zer0net <https://jackphla.sh/zer0net/>`_, `ArakNet
-<https://www.facebook.com/groups/araknet/>`_, and 'fsxNet <https://fsxnet.nz/>`_, though in
-significantly reduced volume than their heyday.
+<https://www.facebook.com/groups/araknet/>`_, and `fsxNet <https://fsxnet.nz/>`_, though at
+significantly reduced volume compared to their heyday.
 
 Client Software
 ~~~~~~~~~~~~~~~
 
-The most popular open source clients with accurate font and color presentation of *Western* BBS
-Systems are:
+The most popular open source clients with accurate font, color, and encoding presentation of
+*Western* BBS Systems are:
 
-- Icy Term https://github.com/mkrueger/icy_tools
-- SyncTERM https://syncterm.bbsdev.net/
+- `Icy Term <https://github.com/mkrueger/icy_tools>`_
+- `SyncTERM <https://syncterm.bbsdev.net/>`_
 
 Modern Terminals
 ~~~~~~~~~~~~~~~~
 
-Most any modern terminal emulator that you like will do "ok", especially for ASCII-only systems,
-and any telnet client that may be installed or may already be present on your computer is fine.
-You might be surprised what strange devices you can telnet from!
+Most any modern terminal will work for ASCII-only BBS systems, and any telnet client that may be
+installed or may already be present on your computer is fine.  You might be surprised what strange
+devices you can telnet from!
 
 .. hint::
 
-   If cursor position seems incorrect, try seting your window dimension to exactly 80x25, required
-   for almost all legacy "screen-drawing" systems.
-
-An example of using the telnet::
-
-    telnet 1984.ws
-
-Font correction
-~~~~~~~~~~~~~~~
-
-For systems with art, **you should adjust the font** of your terminal to match the target system
-to more accurately represent it.
-
-- Download and install matching fonts:
-
-  - IBM-PC `Code Page 437 <https://int10h.org/oldschool-pc-fonts/download/>`_,
-    ``AcPlus_IBM_VGA_9x8.ttf``
-  - Commodore `Amiga Topaz <https://fontstruct.com/fontstructions/show/675155/amiga_topaz>`_,
-    ``amiga-topaz.ttf``.
-
-.. image:: 
-
-  .. image:: /_static/konsole-telnet.png
-     :alt: 80x24 ANSI art of a skull with graffiti-stylized writing, "ENiGMA½"
-
-.. important::
-
-   Steller graphics! Something seems off though.. are these colors right ??
+   Most BBSs require that you set a window size of 80 ``COLUMNS`` by 25 ``LINES``,
+   or corruption of screen draw and cursor position can be expected.
 
 Color correction
-~~~~~~~~~~~~~~~~
+----------------
 
-For systems with art, **you should also set colors** of your terminal to match.  Modern terminals
-often default to "color palettes" that are so far derived from the IBM VGA, Atari, PETSCII or Amiga
-colors used in BBS systems that their artwork becomes distorted and rotten!
+.. figure:: /_static/ghostty-telnet.png
+   :width: 600px
 
-You can configure the first 16 colors used to match the original colors somewhere in your Terminal's
-settings.  Alternatively, the python `telnetlib3`_ client CLI has a nice trick of converting the
-first 16 colors to the 24-bit color values intended by the artist::
+   80x24 CP437 ANSI art of a skull with graffiti-stylized writing, "ENiGMA½"
+
+Modern terminals often default to "Solarized" or reversed color palettes with disastrous
+results to the artwork and colors chosen for retrocomputers.
+
+**You should set the colors** of your terminal to match something like the
+`ANSI escape code colors <https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit>`_. Even
+the default xterm colors differ.  You can configure the first 16 colors used to match these colors
+somewhere in your Terminal's settings.  It is also suggested to enable "Bold as bright" when
+available.
+
+**Alternatively**, the Python `telnetlib3`_ client CLI performs "color correction" by
+transliteration of ANSI color sequences to `24-bit Color Sequences
+<https://github.com/termstandard/colors>`_ on supporting terminals::
 
    telnetlib3-client manalejandro.com 23
 
-.. image:: 
+.. figure:: /_static/ghostty-telnetlib3.png
+   :width: 600px
 
-  .. image:: /_static/konsole-telnetlib3.png
-     :alt: 80x24 ANSI art of a skull with graffiti-stylized writing, "ENiGMA½"
+   80x24 ANSI art of a skull and graffiti, color-corrected
 
 Encoding correction
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
-For systems that do not support UTF-8, you'll see encoding errors:
+For systems that do not support UTF-8 [#f1]_, you'll see encoding errors:
 
-  .. image:: /_static/ghostty-cp437-telnet.png
-     :alt: This "Main" menu, meant to be stylized art, is presented as a font error marked by ``?``
+.. figure:: /_static/ghostty-cp437-telnet.png
+   :width: 600px
 
-This encoding issue can be resolved with the Python `telnetlib3`_ CLI, ``telnetlib3-client``
-argument ``--encoding``.
+   This "Main Menu" is meant to be stylized art, but contains encoding errors, marked by '�'.
 
-Because the BBS Software pictured is advertised as `MajorBBS
-<https://en.wikipedia.org/wiki/The_Major_BBS>`_ we can infer it is designed for IBM PC clients, and
-``--encoding=cp437`` is used to perform encoding translation::
+cp437
+~~~~~
+
+The BBS Software pictured advertised itself as `MajorBBS
+<https://en.wikipedia.org/wiki/The_Major_BBS>`_; we can infer it is designed for IBM PC-DOS
+(:ref:`CP437 <cp437>`) encoding, and can use the Python `telnetlib3`_ CLI ``telnetlib3-client`` argument
+``--encoding=cp437`` to correct for it::
 
     telnetlib3-client --encoding=cp437 bbs.ccxbbs.net
 
-.. image:: /_static/ghostty-cp437-telnetlib3.png
-   :alt: This "Main" menu is now stylized
+.. figure:: /_static/ghostty-cp437-telnetlib3.png
+   :width: 600px
 
-.. hint:: although `telnetlib3`_ negotiates encoding using `CHARSET RFC
-   2066<https://www.rfc-editor.org/rfc/rfc2066.html>`_, but this telnet standard is not in general
-   use by Telnet BBS servers, though it may be found on MUDs..
+   The Main title and border are now correctly displayed as "block art".
 
-.. todo--finish telnetlib3
+topaz
+~~~~~
+
+Another BBS, this time **Amiga**:
+
+.. figure:: /_static/konsole-amiga-telnet.png
+   :width: 600px
+
+   This Amiga art also contains encoding errors, marked by ``�``.
+
+The Amiga encoding is `latin1
+<https://blog.glyphdrawing.club/amiga-ascii-art/#233-what-is-amiga-ascii-art>`_ and can similarly be
+fixed by `telnetlib3`_::
+
+    telnetlib3-client --encoding=latin1 absinthebbs.net 1940
+
+.. figure:: /_static/konsole-amiga-telnetlib3.png
+   :width: 600px
+
+   The same Amiga art now corrected by the *encoding* specified.
+
+.. todo
+
+    --finish telnetlib3
 
     With the 8-bit Commodore `PETSCII <https://github.com/damianvila/font-bescii/releases>`_
     ``Bescii-Mono.ttf`` or Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atari-fonts/>`_
     ``EightBit Atari-Classic.ttf`` fonts installed, `telnetlib3`_ can be used to connect to an 8-bit
+
+    atascii
+    petscii
+
     Atari BBS::
 
         telnetlib3-client --force-binary --encoding=ATASCII area52.tk 5200
@@ -146,31 +178,34 @@ Because the BBS Software pictured is advertised as `MajorBBS
 
         telnetlib3-client --force-binary --encoding=PETSCII valley64.com 6400
 
+Fonts
+-----
+
+Though optional for IBM PC-DOS (:ref:`CP437 <cp437>`), as that artwork is faithfully reproduced,
+it is **highly suggested** to use a faithful font for ASCII-based 8-bit Atari (:ref:`ATASCII <atascii>`),
+and 8 and 16-bit Commodore (:ref:`PETSCII <petscii>`, :ref:`Topaz <topaz>`) systems. 
+
+  - IBM-PC `Code Page 437 <https://int10h.org/oldschool-pc-fonts/download/>`_,
+    ``AcPlus_IBM_VGA_9x8.ttf``
+  - Commodore `Amiga Topaz <https://gitlab.com/Screwtapello/topaz-unicode#topaz-unicode>`_,
+    ``amiga-topaz.ttf``.
+  - 8-bit Commodore `PETSCII <https://github.com/damianvila/font-bescii/releases>`_,
+    ``Bescii-Mono.ttf``.
+  - Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atari-fonts/>`_,
+    ``EightBit Atari-Classic.ttf``.
+
 Server Software
 ~~~~~~~~~~~~~~~
 
 A few BBS software packages continue to be developed, are open source, support UTF-8 [#f1]_, and are
 compatible with modern computers:
 
-- Sycnrhonet BBS https://www.synchro.net/
-- ENiGMA½ https://enigma-bbs.github.io/
+- `Synchronet BBS <https://www.synchro.net/>`_
+- `ENiGMA\u00bd <https://enigma-bbs.github.io/>`_
 
 And some continue to be developed for retro computing platforms,
 
-- AmiExpress https://github.com/dmcoles/AmiExpress (Amiga)
-
-BBS Software is made by and for `Sysops <https://en.wikipedia.org/wiki/Sysop>`_.  Some people
-continue to write (and rewrite!) their own BBS Software to this day, in private and in small
-communities, targeting a specific retro computing platform, art style, or programming language.
-
-What is Telnet?
----------------
-
-**Telnet** is a network protocol from 1969 (`RFC 854
-<https://datatracker.ietf.org/doc/html/rfc854>`_) that establishes a two-way text connection over
-the internet. Despite its age, Telnet remains widely deployed and used all over the world for
-embedded systems. Its longevity comes from its simplicity: it is portable, accessible, and easy to
-develop for, which is why BBS communities have adopted it for so long.
+- `AmiExpress <https://github.com/dmcoles/AmiExpress>`_ (Amiga)
 
 About This Site
 ---------------
@@ -179,19 +214,22 @@ This site is a *census* of Telnet-accessible BBSs.
 
 It provides a fast web interface to
 
-- browse BBSs,
-- preview their login banners
-- examine their Telnet protocol
+- Browse BBSs,
+- Preview login banners,
+- and examine their Telnet protocol details
 
-It was created by the author of the Python telnetlib3_ library, and uses the
-``telnetlib3-fingerprint`` client to gather the results shown here.
+It was created by the author of the Python telnetlib3_ library, and uses the `telnetlib3-fingerprint
+<https://telnetlib3.readthedocs.io/en/latest/guidebook.html#fingerprinting-client>`_ CLI to gather
+the results shown here.
 
-The list of BBSs scanned is sourced from the `IPTIA BBS Directory
-<https://www.ipingthereforeiam.com/bbs/>`_ relay.cfg, cross-referenced against the MUD list at
-`muds.modem.xyz <https://muds.modem.xyz/>`_ to exclude MUD servers. The resulting list is
-github-managed at `bbslist.txt
-<https://github.com/jquast/modem.xyz/blob/master/data-bbs/bbslist.txt>`_. Feel free to suggest
-any changes by pull request.
+This list of BBSs was primarily sourced from the `IPTIA BBS Directory
+<https://www.ipingthereforeiam.com/bbs/>`_ and cross-referenced against the MUD list maintained for
+`muds.modem.xyz <https://muds.modem.xyz/>`_.
+
+The file is hosted on Github and all scanning and documentation is automatic. Suggest a change to
+`bbslist.txt <https://github.com/jquast/modem.xyz/blob/master/data-bbs/bbslist.txt>`_ to
+add or remove or fix an encoding as a pull request.  Feel free to suggest any other changes
+or fixes.
 
 Better Sites
 ------------
@@ -202,10 +240,11 @@ ANSI art, these other sites are excellent resources:
 - https://www.ipingthereforeiam.com/bbs/
 - https://sixteencolors.net/
 - https://www.telnetbbsguide.com/
+- https://breakintochat.com/wiki/Break_Into_Chat
 - https://telnet.org/
 
-.. [#f1] Most western BBSs support only CP437, or UTF-8 by *translation*, limitting the ~154,000
-   possible codepoints to only the ~255 representable by CP437. Eastern languges, Narrow, Full-Width
+.. [#f1] Most western BBSs support only CP437, or UTF-8 by *translation*, limiting the ~154,000
+   possible codepoints to only the ~255 representable by CP437. Eastern languages, Narrow, Full-Width
    and Zero-width emojis are very rarely supported by BBSs.
 
 .. _telnetlib3: https://telnetlib3.readthedocs.org/

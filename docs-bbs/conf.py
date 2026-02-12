@@ -9,11 +9,13 @@ if datetime.datetime.now().year != 2026:
 else:
     copyright = f"2026 Jeff Quast"
 author = "Jeff Quast"
-release = "0.1.0"
+# set release as monthy version
+release = f"{datetime.datetime.now().year}.{datetime.datetime.now().month:02}"
 
 extensions = [
     "sphinxcontrib.jquery",
     "sphinx_datatables",
+    "sphinxcontrib.youtube",
 ]
 
 datatables_options = {

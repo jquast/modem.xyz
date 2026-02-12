@@ -97,8 +97,6 @@
 37.27.85.185 2323
 38.188.130.43 23
 39.106.161.147 23 gbk
-40.115.76.212 4040
-44.204.35.120 4400
 44.31.91.213 23
 45.33.40.193 443
 45.72.180.214 23
@@ -217,7 +215,7 @@ amiganer.amms-bbs.de 23 topaz
 amigaunderground.com 1985 topaz
 amigaunderground.com 2002 topaz
 amigaunderground.com 2300 topaz
-amis86.ddns.net 9000
+amis86.ddns.net 9000 atascii
 amnesiabbs.duckdns.org 23
 amstrad.simulant.uk 464
 andcycle.idv.tw 23 big5

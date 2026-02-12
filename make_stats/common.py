@@ -1,11 +1,10 @@
 """Shared utilities for MUD and BBS statistics generation."""
 
+import contextlib
 import hashlib
 import os
 import re
-import subprocess
 import sys
-import tempfile
 import textwrap
 from collections import Counter
 from datetime import datetime
@@ -16,11 +15,8 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import tabulate as tabulate_mod  # noqa: E402
 import wcwidth  # noqa: E402
-from ansi2html import Ansi2HTMLConverter  # noqa: E402
 
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-_ANSI_CONV = Ansi2HTMLConverter(inline=True, dark_bg=True, scheme='xterm')
 
 LINK_REGEX = re.compile(r'[^a-zA-Z0-9]')
 _URL_RE = re.compile(r'https?://[^\s<>"\']+')
@@ -41,70 +37,9 @@ PLOT_YELLOW = '#AA9955'
 PLOT_BLUE = '#6666AA'
 PLOT_GRID = '#444444'
 
-ANSI2PNG = os.path.join(_PROJECT_ROOT, "ansi2png")
-_LD_LIBRARY_PATH = os.path.join(_PROJECT_ROOT, "libansilove", "build")
 
-# Mapping of libansilove font names to Python codecs for byte encoding.
-# Fonts that are valid Python codec names (CP437, CP850, etc.) are not listed;
-# their codec is derived from the font name directly.
-_FONT_TO_CODEC = {
-    'TOPAZ': 'latin-1',
-    'TOPAZ_PLUS': 'latin-1',
-    'TOPAZ500': 'latin-1',
-    'TOPAZ500_PLUS': 'latin-1',
-    'MICROKNIGHT': 'latin-1',
-    'MICROKNIGHT_PLUS': 'latin-1',
-    'MOSOUL': 'latin-1',
-    'POT_NOODLE': 'latin-1',
-    'TERMINUS': 'cp437',
-    'SPLEEN': 'cp437',
-}
-
-# Mapping of encoding names to libansilove font names (BBS superset)
-_ENCODING_TO_FONT = {
-    'ascii': 'CP437',
-    'cp437': 'CP437',
-    'cp437_art': 'CP437',
-    'cp437-art': 'CP437',
-    'cp737': 'CP737',
-    'cp775': 'CP775',
-    'cp850': 'CP850',
-    'cp852': 'CP852',
-    'cp855': 'CP855',
-    'cp857': 'CP857',
-    'cp860': 'CP860',
-    'cp861': 'CP861',
-    'cp862': 'CP862',
-    'cp863': 'CP863',
-    'cp865': 'CP865',
-    'cp866': 'CP866',
-    'cp869': 'CP869',
-    'latin_1': 'CP850',
-    'iso_8859_1': 'CP850',
-    'iso_8859_1:1987': 'CP850',
-    'iso_8859_2': 'CP852',
-    'koi8_r': 'CP866',
-    'amiga': 'TOPAZ',
-    'topaz': 'TOPAZ',
-    'petscii': 'CP437',
-    'atarist': 'CP437',
-    'utf_8': 'CP437',
-    'unknown': 'CP437',
-    'big5': 'CP437',
-    'gbk': 'CP437',
-    'shift_jis': 'CP437',
-    'euc_kr': 'CP437',
-}
-
-
-def _encoding_to_font(encoding):
-    """Map a server encoding name to a libansilove font name.
-
-    :param encoding: encoding string from scanner or bbslist
-    :returns: libansilove font name string
-    """
-    return _ENCODING_TO_FONT.get(
-        encoding.lower().replace('-', '_'), 'CP437')
+# Ghostty rendering pool, initialized by init_renderer().
+_ghostty_pool = None
 
 
 # ---------------------------------------------------------------------------
@@ -391,143 +326,80 @@ def _combine_banners(server, default_encoding=None):
     return banner_before or banner_after
 
 
-def _banner_to_html(text, maxlen=5000, maxlines=250, name='',
-                    wrap_width=80, brighten_blue=False,
-                    default_aria='BBS'):
-    """Convert ANSI banner text to inline-styled HTML.
-
-    :param text: raw banner text with possible ANSI escape sequences
-    :param maxlen: maximum visible character length for truncation
-    :param maxlines: maximum number of lines to include
-    :param name: server name for the aria-label attribute
-    :param wrap_width: column width for wrapping long lines
-    :param brighten_blue: if True, brighten dark blues for dark backgrounds
-    :param default_aria: fallback aria-label name if *name* is empty
-    :returns: HTML string suitable for ``.. raw:: html`` embedding
-    """
-    import html as html_mod
-
-    text = text.replace('\r\n', '\n').replace('\n\r', '\n').replace('\r', '\n')
-    text = _strip_mxp_sgml(text)
-    text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
-    cleaned = []
-    i = 0
-    while i < len(text):
-        if text[i] == '\x1b':
-            j = i + 1
-            while j < len(text) and not text[j].isalpha():
-                j += 1
-            if j < len(text):
-                j += 1
-            cleaned.append(text[i:j])
-            i = j
-        elif (text[i] == '\n'
-              or (text[i].isprintable() and ord(text[i]) < 0xFFFD)):
-            cleaned.append(text[i])
-            i += 1
-        else:
-            i += 1
-    text = ''.join(cleaned)
-
-    lines = text.split('\n')[:maxlines]
-    text = '\n'.join(lines)
-
-    visible_len = len(_strip_ansi(text))
-    if visible_len > maxlen:
-        result = []
-        count = 0
-        i = 0
-        while i < len(text) and count < maxlen:
-            if text[i] == '\x1b':
-                j = i + 1
-                while j < len(text) and not text[j].isalpha():
-                    j += 1
-                if j < len(text):
-                    j += 1
-                result.append(text[i:j])
-                i = j
-            else:
-                result.append(text[i])
-                count += 1
-                i += 1
-        text = ''.join(result) + '\x1b[0m...'
-
-    wrapped_lines = []
-    for line in text.split('\n'):
-        wrapped = wcwidth.wrap(
-            line, width=wrap_width, drop_whitespace=False,
-            break_long_words=True, break_on_hyphens=False,
-        )
-        wrapped_lines.extend(wrapped if wrapped else [''])
-    text = '\n'.join(wrapped_lines)
-
-    html_content = _ANSI_CONV.convert(text, full=False)
-    if brighten_blue:
-        html_content = html_content.replace('#0000ee', '#5555ff')
-        html_content = html_content.replace('#5c5cff', '#7777ff')
-    aria_name = html_mod.escape(name or default_aria)
-    return (f'<pre class="ansi-banner" role="img"'
-            f' aria-label="ANSI art banner for {aria_name}">'
-            f'{html_content}</pre>')
+_banner_png_cache = {}
 
 
-def _banner_to_png(text, output_path, encoding='cp437'):
-    """Render ANSI banner text to a PNG file via ansi2png.
+def _banner_to_png(text, banners_dir, encoding='cp437'):
+    """Render ANSI banner text to a deduplicated PNG file.
 
-    Writes the raw banner text to a temporary file, invokes the
-    ansi2png C program, and verifies the output.
+    Preprocesses the banner text, hashes it with the encoding to
+    produce a canonical filename, and renders only if that file does
+    not already exist.  Multiple servers with identical banners share
+    the same PNG.
 
     :param text: raw banner text with ANSI escape sequences
-    :param output_path: path to write the output PNG
-    :param encoding: server encoding for font selection
-    :returns: True if PNG was successfully created
+    :param banners_dir: directory for output PNG files
+    :param encoding: server encoding for font group selection
+    :returns: PNG filename (basename) or None on failure
     """
+    if _ghostty_pool is None:
+        return None
     text = text.replace('\r\n', '\n').replace('\n\r', '\n')
     text = _strip_mxp_sgml(text)
     text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
-
+    # Strip terminal report/query sequences (DSR, DA, window ops)
+    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text)
     lines = text.split('\n')
     text = '\n'.join(_rstrip_ansi_line(line) for line in lines)
+    text = text.rstrip()
 
-    font = _encoding_to_font(encoding)
-    codec = _FONT_TO_CODEC.get(font, font.lower().replace('_80x50', ''))
-    try:
-        raw_bytes = text.encode(codec, errors='replace')
-    except LookupError:
-        raw_bytes = text.encode('cp437', errors='replace')
-    env = os.environ.copy()
-    env['ANSILOVE_FONT'] = font
-    env['ANSILOVE_COLUMNS'] = '80'
-    ld = _LD_LIBRARY_PATH
-    if env.get('LD_LIBRARY_PATH'):
-        ld += ':' + env['LD_LIBRARY_PATH']
-    env['LD_LIBRARY_PATH'] = ld
+    key = hashlib.sha1(
+        (text + '\x00' + encoding).encode('utf-8')).hexdigest()[:12]
+    fname = f"banner_{key}.png"
 
-    with tempfile.NamedTemporaryFile(
-        suffix='.ans', delete=False
-    ) as tmp:
-        tmp.write(raw_bytes)
-        tmp_path = tmp.name
+    if fname in _banner_png_cache:
+        return fname
 
-    result = subprocess.run(
-        [ANSI2PNG, tmp_path, output_path],
-        env=env, capture_output=True,
-    )
-    os.unlink(tmp_path)
+    output_path = os.path.join(banners_dir, fname)
+    if os.path.isfile(output_path):
+        _banner_png_cache[fname] = True
+        return fname
 
-    if result.returncode != 0:
-        stderr_msg = result.stderr.decode(errors='replace')
-        print(f"  ansi2png failed for {output_path}: "
-              f"{stderr_msg.strip()}", file=sys.stderr)
-        return False
+    if _ghostty_pool.capture(text, output_path, encoding):
+        _banner_png_cache[fname] = True
+        return fname
+    return None
 
-    if (not os.path.isfile(output_path)
-            or os.path.getsize(output_path) == 0):
-        print(f"  ansi2png produced empty output: "
-              f"{output_path}", file=sys.stderr)
-        return False
 
-    return True
+def init_renderer(**kwargs):
+    """Initialize the Ghostty rendering pool.
+
+    Call at the beginning of a rendering session.  If Ghostty is
+    unavailable, the pool remains ``None`` and :func:`_banner_to_png`
+    will return False for all calls.
+
+    :param kwargs: forwarded to :class:`~make_stats.ghostty.GhosttyPool`
+    """
+    global _ghostty_pool
+    from make_stats.ghostty import GhosttyPool
+    if not GhosttyPool.available():
+        print("  kitty not available (need DISPLAY + kitty/xdotool/import),"
+              " banners will be skipped", file=sys.stderr)
+        return
+    _ghostty_pool = GhosttyPool(**kwargs)
+    _ghostty_pool.__enter__()
+
+
+def close_renderer():
+    """Shut down the Ghostty rendering pool.
+
+    Safe to call even if :func:`init_renderer` was never called
+    or failed.
+    """
+    global _ghostty_pool
+    if _ghostty_pool is not None:
+        _ghostty_pool.__exit__(None, None, None)
+        _ghostty_pool = None
 
 
 # ---------------------------------------------------------------------------
@@ -774,6 +646,517 @@ def _pie_colors(n, labels=None):
             if label == 'Other':
                 colors[i] = '#888888'
     return colors
+
+
+def _create_pie_chart(sorted_items, output_path, min_count=None, top_n=None):
+    """Create a standard pie chart from sorted (label, count) pairs.
+
+    :param sorted_items: list of (label, count) tuples, sorted descending
+    :param output_path: path to write the output PNG
+    :param min_count: group slices at or below this count into 'Other'
+    :param top_n: if set, keep only the top N items before grouping
+    """
+    if not sorted_items:
+        return
+    if top_n is not None:
+        sorted_items = sorted_items[:top_n]
+    labels = [s for s, _ in sorted_items]
+    counts = [c for _, c in sorted_items]
+    labels, counts = _group_small_slices(
+        labels, counts,
+        min_count=min_count if min_count is not None else 1)
+    colors = _pie_colors(len(labels), labels)
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    wedges, texts, autotexts = ax.pie(
+        counts, labels=None, autopct='%1.0f%%', startangle=140,
+        colors=colors, pctdistance=0.82,
+        wedgeprops={'edgecolor': '#222222', 'linewidth': 1.5})
+    for t in autotexts:
+        t.set_color('#222222')
+        t.set_fontsize(9)
+        t.set_fontweight('bold')
+
+    ax.legend(
+        wedges,
+        [f'{l} ({c})' for l, c in zip(labels, counts)],
+        loc='center left', bbox_to_anchor=(1, 0.5),
+        fontsize=9, facecolor='none', edgecolor=PLOT_FG,
+        labelcolor=PLOT_FG)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100, bbox_inches='tight',
+                transparent=True, metadata={'CreationDate': None})
+    plt.close()
+
+
+def _assign_filenames(servers, ip_groups, file_key, toc_key,
+                      filename_fn, standalone_label_fn):
+    """Assign detail-page filename and toc label to each server.
+
+    Servers sharing an IP get a combined ``ip_<addr>`` filename.
+    Standalone servers use *filename_fn* and *standalone_label_fn*.
+
+    :param servers: list of server records (modified in place)
+    :param ip_groups: dict from :func:`_group_shared_ip`
+    :param file_key: record key for the filename (e.g. ``'_bbs_file'``)
+    :param toc_key: record key for the toc label (e.g. ``'_bbs_toc_label'``)
+    :param filename_fn: callable(server) -> filesystem-safe filename
+    :param standalone_label_fn: callable(server) -> toc label string
+    """
+    grouped_keys = {}
+    for ip, members in ip_groups.items():
+        ip_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', ip)
+        filename = f"ip_{ip_safe}"
+        hostname_hint = _most_common_hostname(members)
+        if hostname_hint == ip:
+            toc_label = ip
+        else:
+            toc_label = f"{ip} ({hostname_hint})"
+        for s in members:
+            grouped_keys[(s['host'], s['port'])] = (
+                filename, toc_label)
+
+    for s in servers:
+        key = (s['host'], s['port'])
+        if key in grouped_keys:
+            s[file_key], s[toc_key] = grouped_keys[key]
+        else:
+            s[file_key] = filename_fn(s)
+            s[toc_key] = standalone_label_fn(s)
+
+
+def display_fingerprint_summary(servers, server_label_fn):
+    """Print summary table of protocol fingerprints.
+
+    :param servers: list of server records
+    :param server_label_fn: callable(server) -> display label string
+    """
+    print("Fingerprints")
+    print("============")
+    print()
+    print("A fingerprint is a hash of a server's Telnet option"
+          " negotiation")
+    print("behavior -- which options it offers to the client,"
+          " which it requests")
+    print("from the client, and which it refuses. Servers running"
+          " the same software")
+    print("version typically produce identical fingerprints."
+          " A majority of servers")
+    print("perform no negotiation at all and share the same"
+          " empty fingerprint.")
+    print()
+    print("Click a fingerprint link to see the full negotiation"
+          " details and all")
+    print("servers in that group.")
+    print()
+    print(".. list-table:: Column Descriptions")
+    print("   :widths: 20 80")
+    print("   :class: field-descriptions")
+    print()
+    print("   * - **Fingerprint**")
+    print("     - Truncated hash identifying the negotiation"
+          " pattern."
+          " Click to see the full detail page.")
+    print("   * - **Servers**")
+    print("     - Number of servers sharing this exact"
+          " negotiation behavior.")
+    print("   * - **Offers**")
+    print("     - Telnet options the server offers"
+          " (WILL) to the client during negotiation.")
+    print("   * - **Requests**")
+    print("     - Telnet options the server requests (DO)"
+          " from the client.")
+    print("   * - **Examples**")
+    print("     - Sample server names sharing this fingerprint.")
+    print()
+
+    by_fp = {}
+    for s in servers:
+        fp = s['fingerprint']
+        by_fp.setdefault(fp, []).append(s)
+
+    rows = []
+    for fp, fp_servers in sorted(by_fp.items(),
+                                  key=lambda x: len(x[1]),
+                                  reverse=True):
+        offered = ', '.join(fp_servers[0]['offered']) or 'none'
+        requested = (', '.join(fp_servers[0]['requested'])
+                     or 'none')
+        server_labels = ', '.join(
+            server_label_fn(s) for s in fp_servers[:3])
+        if len(fp_servers) > 3:
+            server_labels += f', ... (+{len(fp_servers) - 3})'
+
+        rows.append({
+            'Fingerprint': f':ref:`{fp[:16]}... <fp_{fp}>`',
+            'Servers': str(len(fp_servers)),
+            'Offers': _rst_escape(offered[:30]),
+            'Requests': _rst_escape(requested[:30]),
+            'Examples': _rst_escape(server_labels[:50]),
+        })
+
+    table_str = tabulate_mod.tabulate(
+        rows, headers="keys", tablefmt="rst")
+    print_datatable(table_str, caption="Protocol Fingerprints")
+
+    print()
+    print(".. toctree::")
+    print("   :maxdepth: 1")
+    print("   :hidden:")
+    print()
+    for fp in sorted(by_fp.keys()):
+        print(f"   server_detail/{fp}")
+    print()
+
+
+def _write_fingerprint_options_section(fp_hash, fp_servers):
+    """Write the Telnet Options and Negotiation Results sections.
+
+    Shared RST output for fingerprint detail pages in both BBS
+    and MUD modes.
+
+    :param fp_hash: fingerprint hash string
+    :param fp_servers: list of server records sharing this fingerprint
+    """
+    sample = fp_servers[0]
+
+    print(f".. _fp_{fp_hash}:")
+    print()
+    title = f"{fp_hash[:16]}"
+    _rst_heading(title, '=')
+
+    print(f"**Full hash**: ``{fp_hash}``")
+    print()
+    print(f"**Servers sharing this fingerprint**:"
+          f" {len(fp_servers)}")
+    print()
+
+    print("Telnet Options")
+    print("--------------")
+    print()
+
+    if sample['offered']:
+        print("**Offered by server**: "
+              + ', '.join(
+                  f"``{o}``"
+                  for o in sorted(sample['offered'])))
+    else:
+        print("**Offered by server**: none")
+    print()
+
+    if sample['requested']:
+        print("**Requested from client**: "
+              + ', '.join(
+                  f"``{o}``"
+                  for o in sorted(sample['requested'])))
+    else:
+        print("**Requested from client**: none")
+    print()
+
+    refused_display = [
+        o for o in sorted(sample['refused'])
+        if o in TELNET_OPTIONS_OF_INTEREST
+    ]
+    other_refused = (len(sample['refused'])
+                     - len(refused_display))
+    if refused_display:
+        print("**Refused (notable)**: "
+              + ', '.join(
+                  f"``{o}``" for o in refused_display))
+        if other_refused > 0:
+            print(f"  *(and {other_refused} other"
+                  f" standard options)*")
+    print()
+
+    negotiated_offered = {
+        k: v for k, v in sample['server_offered'].items()
+        if v
+    }
+    negotiated_requested = {
+        k: v for k, v in sample['server_requested'].items()
+        if v
+    }
+    if negotiated_offered or negotiated_requested:
+        print("Negotiation Results")
+        print("~~~~~~~~~~~~~~~~~~~")
+        print()
+        if negotiated_offered:
+            print("**Server offered (accepted)**: "
+                  + ', '.join(
+                      f"``{o}``"
+                      for o in sorted(negotiated_offered)))
+            print()
+        if negotiated_requested:
+            print("**Server requested (accepted)**: "
+                  + ', '.join(
+                      f"``{o}``"
+                      for o in sorted(negotiated_requested)))
+            print()
+
+
+def display_encoding_groups(servers, detail_subdir, file_key,
+                            server_label_fn, server_sort_key, tls_fn):
+    """Print servers-by-encoding page.
+
+    :param servers: list of server records
+    :param detail_subdir: subdirectory for detail links (e.g. ``'bbs_detail'``)
+    :param file_key: record key for the detail filename (e.g. ``'_bbs_file'``)
+    :param server_label_fn: callable(server) -> display label string
+    :param server_sort_key: callable(server) -> sort key
+    :param tls_fn: callable(server) -> truthy if TLS supported
+    """
+    _rst_heading("Encodings", '=')
+    print("Servers grouped by their detected or configured"
+          " character encoding.")
+
+    by_encoding = {}
+    for s in servers:
+        key = s['display_encoding']
+        by_encoding.setdefault(key, []).append(s)
+
+    for name, members in sorted(
+            by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
+        print()
+        print(f'.. _{name}:')
+        print()
+        print(f"- `{_rst_escape(name)}`_: {len(members)}")
+    print()
+
+    for name, members in sorted(
+            by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
+        _rst_heading(name, '-')
+        for s in sorted(members, key=server_sort_key):
+            detail_file = s[file_key]
+            label = server_label_fn(s)
+            tls = (' :tls-lock:`\U0001f512`'
+                   if tls_fn(s) else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <{detail_subdir}/{detail_file}>`{tls}")
+        print()
+
+
+
+
+def _page_initial_range(page_groups, server_name_fn):
+    """Compute the letter range label for a page of banner groups.
+
+    Returns ``'[A]'`` when all entries share the same initial, or
+    ``'[A-F]'`` when they span a range.
+
+    :param page_groups: list of banner group dicts
+    :param server_name_fn: callable(server) -> display name
+    :returns: bracket-enclosed range string, or ``''``
+    """
+    initials = set()
+    for group in page_groups:
+        name = server_name_fn(group['servers'][0])
+        if name:
+            initials.add(name[0].upper())
+    if not initials:
+        return ''
+    ordered = sorted(initials)
+    if ordered[0] == ordered[-1]:
+        return f'[{ordered[0]}]'
+    return f'[{ordered[0]}-{ordered[-1]}]'
+
+
+def _display_banner_page(page_groups, page_num, total_pages,
+                         page_label,
+                         file_key, banners_path,
+                         detail_subdir, server_name_fn, tls_fn):
+    """Write one page of the banner gallery to stdout.
+
+    :param page_groups: list of banner group dicts for this page
+    :param page_num: current page number (1-based)
+    :param total_pages: total number of pages
+    :param page_label: letter-range label (e.g. ``'[A-F]'``)
+    :param file_key: record key for the detail filename
+    :param banners_path: path to banner PNG directory
+    :param detail_subdir: subdirectory for detail links
+    :param server_name_fn: callable(server) -> display name
+    :param tls_fn: callable(server) -> truthy if TLS supported
+    """
+    title = f"Page {page_num} of {total_pages} {page_label}"
+    _rst_heading(title, '=')
+
+    for group in page_groups:
+        members = group['servers']
+        count = len(members)
+        rep = members[0]
+        banner = group['banner']
+
+        name = server_name_fn(rep)
+        if count > 1:
+            heading = f"{name} (+{count - 1} more)"
+        else:
+            heading = name
+        _rst_heading(heading, '-')
+
+        banner_fname = rep.get('_banner_png')
+        if banner_fname:
+            print(f".. image:: /_static/banners/{banner_fname}")
+            print(f"   :alt:"
+                  f" {_rst_escape(_banner_alt_text(banner))}")
+            print(f"   :class: ansi-banner")
+            print()
+
+        for s in members:
+            label = server_name_fn(s)
+            tls = (' :tls-lock:`\U0001f512`'
+                   if tls_fn(s) else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <{detail_subdir}/{s[file_key]}>`{tls}")
+        print()
+
+
+
+def generate_banner_gallery(servers, docs_path, page_size=100,
+                            entity_name='servers', file_key='_file',
+                            banners_path=None,
+                            detail_subdir='detail',
+                            default_encoding=None,
+                            server_name_fn=None,
+                            server_sort_key=None,
+                            tls_fn=None):
+    """Generate paginated banner gallery RST files.
+
+    Writes a landing page ``banner_gallery.rst`` with intro text
+    and a toctree, then ``banner_gallery_1.rst`` through
+    ``banner_gallery_N.rst`` with the actual banner groups.
+    Stale pages from previous runs are removed.
+
+    :param servers: list of server records
+    :param docs_path: Sphinx docs directory to write RST into
+    :param page_size: number of banner groups per page
+    :param entity_name: plural entity label (e.g. ``'BBSes'``)
+    :param file_key: record key for the detail filename
+    :param banners_path: path to banner PNG directory
+    :param detail_subdir: subdirectory for detail links
+    :param default_encoding: passed to :func:`_combine_banners`
+    :param server_name_fn: callable(server) -> display name
+    :param server_sort_key: callable for sorting groups
+    :param tls_fn: callable(server) -> truthy if TLS supported
+    """
+    if server_name_fn is None:
+        server_name_fn = lambda s: f"{s['host']}:{s['port']}"  # noqa: E731
+    if tls_fn is None:
+        tls_fn = lambda s: False  # noqa: E731
+
+    groups = _group_by_banner(
+        servers, default_encoding=default_encoding)
+
+    if server_sort_key is None:
+        server_sort_key = lambda g: g['servers'][0]['host'].lower()  # noqa: E731
+
+    sorted_groups = sorted(
+        groups.values(),
+        key=lambda g: (-len(g['servers']), server_sort_key(g)))
+
+    total_groups = len(sorted_groups)
+    total_servers = sum(len(g['servers']) for g in sorted_groups)
+
+    pages = []
+    for i in range(0, max(len(sorted_groups), 1), page_size):
+        pages.append(sorted_groups[i:i + page_size])
+    total_pages = len(pages)
+
+    # Write landing page: banner_gallery.rst
+    landing_path = os.path.join(docs_path, "banner_gallery.rst")
+    with open(landing_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        _rst_heading("Banner Gallery", '=')
+        print("A gallery of ANSI connection banners collected"
+              " from responding")
+        print(f"{entity_name}. Servers that display identical"
+              " visible banner text are")
+        print("grouped together. Each group shows the shared"
+              " banner image")
+        print("and a list of all servers in that group.")
+        print()
+        print(f"{total_groups} unique banners across"
+              f" {total_servers} servers.")
+        print()
+        # Compute labels for all pages before writing toctree
+        page_labels = []
+        for p_groups in pages:
+            page_labels.append(
+                _page_initial_range(p_groups, server_name_fn))
+
+        print(".. toctree::")
+        print("   :maxdepth: 1")
+        print()
+        for p in range(1, total_pages + 1):
+            label = page_labels[p - 1]
+            print(f"   Page {p} {label}"
+                  f" <banner_gallery_{p}>")
+        print()
+    print(f"  wrote {landing_path}", file=sys.stderr)
+
+    # Write content pages: banner_gallery_1.rst .. _N.rst
+    for page_num, page_groups in enumerate(pages, 1):
+        page_label = _page_initial_range(
+            page_groups, server_name_fn)
+        rst_path = os.path.join(
+            docs_path, f"banner_gallery_{page_num}.rst")
+        with open(rst_path, 'w') as fout, \
+                contextlib.redirect_stdout(fout):
+            _display_banner_page(
+                page_groups, page_num, total_pages,
+                page_label=page_label,
+                file_key=file_key,
+                banners_path=banners_path,
+                detail_subdir=detail_subdir,
+                server_name_fn=server_name_fn,
+                tls_fn=tls_fn)
+        print(f"  wrote {rst_path}", file=sys.stderr)
+
+    # Remove stale banner_gallery_*.rst from previous runs
+    expected = {'banner_gallery'}
+    expected.update(
+        f'banner_gallery_{p}' for p in range(1, total_pages + 1))
+    for fname in os.listdir(docs_path):
+        if (fname.startswith('banner_gallery')
+                and fname.endswith('.rst')):
+            stem = fname[:-4]
+            if stem not in expected:
+                os.remove(os.path.join(docs_path, fname))
+                print(f"  removed stale {fname}",
+                      file=sys.stderr)
+
+
+def generate_fingerprint_details(servers, detail_path, generate_detail_fn,
+                                 force=False):
+    """Generate all fingerprint detail pages.
+
+    :param servers: list of server records
+    :param detail_path: directory for fingerprint detail RST files
+    :param generate_detail_fn: callable(fp_hash, fp_servers) to generate
+        one detail page; should return False if skipped
+    :param force: if True, clean directory before regenerating
+    """
+    if force:
+        _clean_dir(detail_path)
+    os.makedirs(detail_path, exist_ok=True)
+
+    by_fp = {}
+    for s in servers:
+        by_fp.setdefault(s['fingerprint'], []).append(s)
+
+    rebuilt = 0
+    for fp_hash, fp_servers in sorted(by_fp.items()):
+        result = generate_detail_fn(fp_hash, fp_servers)
+        if result is not False:
+            rebuilt += 1
+
+    if rebuilt < len(by_fp):
+        print(f"  wrote {rebuilt}/{len(by_fp)} fingerprint detail"
+              f" pages to {detail_path}"
+              f" ({len(by_fp) - rebuilt} unchanged)",
+              file=sys.stderr)
+    else:
+        print(f"  wrote {rebuilt} fingerprint detail pages"
+              f" to {detail_path}", file=sys.stderr)
 
 
 def create_telnet_options_plot(stats, output_path):
