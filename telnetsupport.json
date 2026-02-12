@@ -1,0 +1,1115 @@
+[
+  {
+    "host": "unitopia.de",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"STATUS\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"TSPEED\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"AUTHENTICATION\",\"NEW-ENVIRON\",\"CHARSET\",\"UNKNOWN-46\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "unitopia.de",
+    "port": 3333,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"STATUS\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"TSPEED\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"AUTHENTICATION\",\"NEW-ENVIRON\",\"CHARSET\",\"UNKNOWN-46\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "sdf.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"STATUS\",\"TIMING MARK\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"LFLOW\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"AUTHENTICATION\",\"ENCRYPT\",\"NEW-ENVIRON\"]"
+  },
+  {
+    "host": "eden-test.rpgframework.de",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MSP\",\"MXP\",\"ZMP\",\"AARDWOLF MUSHCLIENT\",\"GMCP\"]"
+  },
+  {
+    "host": "game.petriamud.com",
+    "port": 6600,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"UNKNOWN-100\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "dragonfiremud.com",
+    "port": 1999,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"STATUS\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"TSPEED\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"GMCP\"]"
+  },
+  {
+    "host": "finalfrontier.mud.de",
+    "port": 7600,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"STATUS\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"NEW-ENVIRON\",\"MCCP1\",\"MCCP2\"]"
+  },
+  {
+    "host": "cryosphere.uk",
+    "port": 6666,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP1\",\"MCCP2\",\"MCCPX\",\"UNKNOWN-96\",\"UNKNOWN-112\",\"GMCP\"]"
+  },
+  {
+    "host": "vitaliamud.com.br",
+    "port": 8242,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MCCP3\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "materiamagica.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "godwars.net",
+    "port": 9000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "mud.merentha.com",
+    "port": 10000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "play.aelisus.com",
+    "port": 1848,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "godwars2.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ZMP\",\"ATCP\"]"
+  },
+  {
+    "host": "play.awakemud.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "mud.elveszettvilag.hu",
+    "port": 6666,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "legendsofthejedi.com",
+    "port": 5656,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "avatar.outland.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "new-leu.leu.it",
+    "port": 6000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "coffeemud.net",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "awakemud.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "mudii.co.uk",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"STATUS\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"LFLOW\",\"XDISPLOC\",\"NEW-ENVIRON\"]"
+  },
+  {
+    "host": "elaramud.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "silentheaven.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "mud.tamedhon.de",
+    "port": 4712,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP1\",\"MCCP2\"]"
+  },
+  {
+    "host": "aelandris.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "godwars.net",
+    "port": 9999,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "godwars.net",
+    "port": 1111,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "stockmud.com",
+    "port": 5001,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "thresholdrpg.com",
+    "port": 3333,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "eotmud.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "4dimensions.org",
+    "port": 6000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "mystavaria.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "astariamud.com",
+    "port": 5000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "tdome.nukefire.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "client.addemud.net",
+    "port": 5000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "slothmud.org",
+    "port": 6101,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "nethack.alt.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"STATUS\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"LFLOW\",\"XDISPLOC\",\"NEW-ENVIRON\"]"
+  },
+  {
+    "host": "www.last-outpost.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "midgardmud.de",
+    "port": 4711,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"UNKNOWN-46\",\"MSSP\"]"
+  },
+  {
+    "host": "lost.wishes.net",
+    "port": 5555,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "ansalon.net",
+    "port": 8662,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "kallistimud.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "discworld.starturtle.net",
+    "port": 4242,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "xaosmud.org",
+    "port": 5000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "rlmud.org",
+    "port": 5001,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "empiremud.net",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "swmud.org",
+    "port": 6666,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\",\"GMCP\"]"
+  },
+  {
+    "host": "fr.hyssing.net",
+    "port": 4001,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "discworld.starturtle.net",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "gra.cygnusreborn.pl",
+    "port": 1111,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "aragond.net",
+    "port": 9000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "erionmud.com",
+    "port": 1234,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "krynn.d20mud.com",
+    "port": 4300,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "ckmud.com",
+    "port": 8500,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "ansalon.net",
+    "port": 8679,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "stickmud.com",
+    "port": 7670,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "realmsofdespair.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
+    "host": "bbs.c64.pub",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"NEW-ENVIRON\"]"
+  },
+  {
+    "host": "darcness.net",
+    "port": 4201,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\"]"
+  },
+  {
+    "host": "mud.primaldarkness.com",
+    "port": 5000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\"]"
+  },
+  {
+    "host": "mud.rod.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\"]"
+  },
+  {
+    "host": "icesus.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "aardwolf.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MCCP1\",\"MCCP2\",\"AARDWOLF MUSHCLIENT\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "thewalkingdead.apocalypto.org.uk",
+    "port": 8000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "aardmud.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MCCP1\",\"MCCP2\",\"AARDWOLF MUSHCLIENT\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "eternalfantasy.org",
+    "port": 3334,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "dunemud.net",
+    "port": 6789,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"GMCP\"]"
+  },
+  {
+    "host": "darkwiz.org",
+    "port": 6969,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MCCPX\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "icesus.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "dunemud.net",
+    "port": 6788,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"GMCP\"]"
+  },
+  {
+    "host": "bl.mud.at",
+    "port": 5679,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP1\",\"MCCP2\"]"
+  },
+  {
+    "host": "tenebraemush.net",
+    "port": 4001,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\"]"
+  },
+  {
+    "host": "sunderingshadows.com",
+    "port": 8080,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MSP\",\"GMCP\"]"
+  },
+  {
+    "host": "mume.org",
+    "port": 4242,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"GMCP\"]"
+  },
+  {
+    "host": "telehack.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"OLD-ENVIRON\",\"NEW-ENVIRON\"]"
+  },
+  {
+    "host": "toobis.org",
+    "port": 4420,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "yuriba.com",
+    "port": 4201,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "yormush.com",
+    "port": 9988,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "starmourn.com",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"MSSP\",\"MCCP2\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "edgeofmidnight.org",
+    "port": 8010,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSDP\",\"MSSP\",\"MSP\",\"GMCP\"]"
+  },
+  {
+    "host": "ats.trekmush.org",
+    "port": 1701,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "penultimatemush.com",
+    "port": 9501,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "muffinmush.club",
+    "port": 2469,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "www.swaoa-mush.com",
+    "port": 5500,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "dreamchasers.space",
+    "port": 4767,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "iberia.jdai.pt",
+    "port": 5899,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\"]"
+  },
+  {
+    "host": "heroesassemble.mushhaven.com",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "proceduralrealms.com",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "ats.trekmush.org",
+    "port": 1700,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "mud.legendmud.org",
+    "port": 9999,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "aetolia.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP2\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "cthulhumud.com",
+    "port": 8889,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP2\",\"MXP\"]"
+  },
+  {
+    "host": "tirradyn.com",
+    "port": 9010,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\"]"
+  },
+  {
+    "host": "realmofmagic.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"END OF RECORD\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "omen.genesismuds.com",
+    "port": 1100,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\"]"
+  },
+  {
+    "host": "achaea.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP2\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "ranmamuck.dyndns.org",
+    "port": 1212,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSSP\",\"MCCP2\"]"
+  },
+  {
+    "host": "towers.t2tmud.org",
+    "port": 9999,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MCCP1\",\"MCCP2\",\"GMCP\"]"
+  },
+  {
+    "host": "bbs.erb.pw",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"
+  },
+  {
+    "host": "bbs.throwbackbbs.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"
+  },
+  {
+    "host": "20forbeers.com",
+    "port": 1337,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"
+  },
+  {
+    "host": "tempusmud.com",
+    "port": 2023,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"END OF RECORD\",\"NEW-ENVIRON\",\"MSDP\",\"MSSP\",\"MCCP2\"]"
+  },
+  {
+    "host": "tgmud.net",
+    "port": 9010,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\"]"
+  },
+  {
+    "host": "cleftofdimensions.net",
+    "port": 4354,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"UNKNOWN-177\",\"GMCP\"]"
+  },
+  {
+    "host": "crimsonstainedlands.net",
+    "port": 4001,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"MSSP\",\"MXP\"]"
+  },
+  {
+    "host": "mapscii.me",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "thechattingzone.uk",
+    "port": 8342,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\"]"
+  },
+  {
+    "host": "forgottenkingdoms.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\"]"
+  },
+  {
+    "host": "vor.voidofreality.org",
+    "port": 7777,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"CHARSET\",\"MSDP\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "mud.theforestsedge.com",
+    "port": 3999,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "chatmud.com",
+    "port": 7777,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NEW-ENVIRON\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "mud.theforestsedge.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "play.cosrintwo.com",
+    "port": 31000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"CHARSET\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "pokemonfusion.servegame.org",
+    "port": 4321,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"MCCP2\"]"
+  },
+  {
+    "host": "fss.twcos.com",
+    "port": 5000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "dungeon.name",
+    "port": 20022,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"NAWS\",\"MCCP1\"]"
+  },
+  {
+    "host": "warlock.pl",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "sanitysedge.com",
+    "port": 2020,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "dynamix.fansi.org",
+    "port": 4200,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\"]"
+  },
+  {
+    "host": "mud.genesismud.org",
+    "port": 3011,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "phoenixmud.net",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSDP\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "warlock.pl",
+    "port": 2424,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "fierymud.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "newmoonmud.org",
+    "port": 7680,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "emptynight.aresmush.com",
+    "port": 4201,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NAWS\",\"CHARSET\"]"
+  },
+  {
+    "host": "stellaraeon.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"MSP\"]"
+  },
+  {
+    "host": "realm.majicrealm.com",
+    "port": 28375,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\"]"
+  },
+  {
+    "host": "delphi.aresmush.com",
+    "port": 4201,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NAWS\",\"CHARSET\"]"
+  },
+  {
+    "host": "lament.ghostglass.net",
+    "port": 8600,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "alteraeon.com",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"MSP\"]"
+  },
+  {
+    "host": "retromud.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "live.darkemud.com",
+    "port": 5559,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "alteraeon.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"MSP\"]"
+  },
+  {
+    "host": "jorm.kurowski.xyz",
+    "port": 4001,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "ateraan.com",
+    "port": 4002,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "icewindmud.org",
+    "port": 2021,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "void.greenfinch.com",
+    "port": 1234,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\"]"
+  },
+  {
+    "host": "wildsofpern.aresmush.com",
+    "port": 2021,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NAWS\",\"CHARSET\"]"
+  },
+  {
+    "host": "pern.gaslightswitch.com",
+    "port": 4201,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NAWS\",\"CHARSET\"]"
+  },
+  {
+    "host": "dark-legacy.com",
+    "port": 9898,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"END OF RECORD\",\"MCCP1\"]"
+  },
+  {
+    "host": "darkwind.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "mud.durismud.com",
+    "port": 7777,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MCCP1\",\"MCCP2\"]"
+  },
+  {
+    "host": "ti-legacy.com",
+    "port": 5050,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"MXP\"]"
+  },
+  {
+    "host": "uossmud.sandwich.net",
+    "port": 9000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "wocmud.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"NAWS\"]"
+  },
+  {
+    "host": "atp.pedia.szote.u-szeged.hu",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "gt.gamingmuseum.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\"]"
+  },
+  {
+    "host": "play.ropmud.com",
+    "port": 4443,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "moo.squidsoft.net",
+    "port": 7777,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\"]"
+  },
+  {
+    "host": "aldebaran-mud.de",
+    "port": 2000,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "wolfery.com",
+    "port": 6455,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "3k.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\"]"
+  },
+  {
+    "host": "prometheus-enterprises.com",
+    "port": 2223,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "dbinfinity.bounceme.net",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"CHARSET\"]"
+  },
+  {
+    "host": "darkmists.org",
+    "port": 2222,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "toastsoft.net",
+    "port": 1443,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "lostsouls.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NAWS\"]"
+  },
+  {
+    "host": "connect.vikingmud.org",
+    "port": 2001,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"LINEMODE\"]"
+  }
+]
