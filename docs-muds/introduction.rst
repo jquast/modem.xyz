@@ -22,39 +22,45 @@ Types of Servers
 The term "MUD" is used loosely to describe many kinds of text-based multiplayer servers. They vary
 widely in purpose:
 
-**MUD** (Multi-User Dungeon)
-    The original type. Focused on combat, exploration, quests, and character advancement, usually in
-    a fantasy or science fiction setting. Common codebase families include `DikuMUD
-    <https://en.wikipedia.org/wiki/DikuMUD>`_, `LPMud <https://en.wikipedia.org/wiki/LPMud>`_, and
-    ROM.
+- **MUD** (Multi-User Dungeon)
 
-**MUSH** (Multi-User Shared Hallucination)
-    Focused on collaborative storytelling and roleplay rather than combat mechanics. Players can
-    build rooms and objects using an in-game scripting language. Common codebases include PennMUSH,
-    TinyMUSH, and RhostMUSH.
+  The original type. Focused on combat, exploration, quests, and character advancement, usually in
+  a fantasy or science fiction setting. Common codebase families include `DikuMUD
+  <https://en.wikipedia.org/wiki/DikuMUD>`_, `LPMud <https://en.wikipedia.org/wiki/LPMud>`_, and
+  `ROM <https://muds.fandom.com/wiki/ROM>`.
 
-**MUX** (Multi-User eXperience)
-    Similar to MUSHes, based on the TinyMUX codebase. Often used for freeform roleplay games set in
-    licensed universes (superhero comics, TV shows, etc.).
+- **MUSH** (Multi-User Shared Hallucination)
 
-**MOO** (MUD, Object-Oriented)
-    A programmable virtual environment where the world is built from objects with attached code.
-    `LambdaMOO <https://en.wikipedia.org/wiki/LambdaMOO>`_ is the most well-known example.
+  Focused on collaborative storytelling and roleplay rather than combat mechanics. Players can
+  build rooms and objects using an in-game scripting language. Common codebases include PennMUSH,
+  TinyMUSH, and RhostMUSH.
 
-**MUCK** (Multi-User Created Kingdom)
-    Social and creative environments where players build areas and write programs in MUF (Multi-User
-    Forth). Fuzzball MUCK is the dominant codebase. MUCKs are popular in the furry community.
+- **MUX** (Multi-User eXperience)
 
-**Talker**
-    Someone quickly figured out they could just remove the dungeon from a MUD codebase and have a
-    basic "chat server", A text-based chat system with rooms but minimal or no game mechanics.
+  Similar to MUSHes, based on the TinyMUX codebase. Often used for freeform roleplay games set in
+  licensed universes (superhero comics, TV shows, etc.).
 
-.. warning::
+- **MOO** (MUD, Object-Oriented)
 
-   **Adult Content** -- Some of the most popular servers in this census by player count are not
-   traditional games at all -- they are adult chat rooms. Servers detected as having adult content
-   (via MSSP ``ADULT MATERIAL`` or ``MINIMUM AGE`` >= 18) are tagged with ``/Adult`` in the genre
-   column of the :doc:`server_list`.
+  A programmable virtual environment where the world is built from objects with attached code.
+  `LambdaMOO <https://en.wikipedia.org/wiki/LambdaMOO>`_ is the most well-known example.
+
+- **MUCK** (Multi-User Created Kingdom)
+
+  Social and creative environments where players build areas and write programs in MUF (Multi-User
+  Forth). Fuzzball MUCK is the dominant codebase. MUCKs are popular in the furry community.
+
+  .. warning::
+
+     **Adult Content** -- Some of the most popular servers in this census by player count are not
+     traditional games at all but sophisticated adult chat rooms. Servers detected as having adult
+     content (via MSSP ``ADULT MATERIAL`` or ``MINIMUM AGE`` >= 18) are tagged with ``Adult`` in the
+     genre column of the :doc:`server_list`.
+
+- **Talker**
+
+  Someone quickly figured out they could just remove the dungeon from a MUD codebase and have a
+  basic "chat server", A text-based chat system with rooms but minimal or no game mechanics.
 
 What is Telnet?
 ---------------
@@ -110,3 +116,18 @@ data, user reviews and descriptions, these other sites are probably a lot more h
 - https://mudstats.com
 - https://www.mudverse.com/
 - https://telnet.org/
+
+Questions
+---------
+
+Exercises for the reader!
+
+- How do MUDs differ from text adventure games and `BBSs <https://bbs.modem.xyz/>`_?
+- Why is ASCII so common? Why are colors optional?
+- Why do MUDs often suggest using special clients?
+- How do MUD clients differ from BBS clients?
+- What kind of systems did MUDs run on and why is linemode preferred?
+- Why are MUDs popular with the visually impaired?
+- MUD clients offer scripting, what kind of tasks could you automate?
+- What popular games started with MUD codebases? Any famous game developers?
+- Sometimes games require customized clients, why?

@@ -29,10 +29,12 @@ portable, accessible, and easy to develop for.
 See Also: MUDs
 ~~~~~~~~~~~~~~
 
-BBSs are closely related to `Multi-User Dungeon <https://en.wikipedia.org/wiki/Multi-user_dungeon>`_
-("MUDs"): both primarily use telnet, but many BBSs operate in **character-at-a-time** mode, while
-MUDs use **line mode**, their preferred clients and servers are sometimes incompatible with each
-other.
+- A companion website of MUD Telnet servers is at `muds.modem.xyz <https://muds.modem.xyz/>`_.
+
+BBSs are closely related to `Multi-User Dungeons
+<https://en.wikipedia.org/wiki/Multi-user_dungeon>`_: both primarily use telnet, and are used to
+play games and chat, BBSs chiefly operate in **character-at-a-time** mode, while MUDs use **line
+mode**.  Their preferred clients and servers are sometimes incompatible with each other.
 
 Popular `BBS door <https://en.wikipedia.org/wiki/BBS_door>`_ games, like `Legend of the Red Dragon
 <https://en.wikipedia.org/wiki/Legend_of_the_Red_Dragon>`_, `Usurper <https://www.usurper.info/>`_,
@@ -40,8 +42,6 @@ Popular `BBS door <https://en.wikipedia.org/wiki/BBS_door>`_ games, like `Legend
 <https://www.johndaileysoftware.com/products/bbsdoors/barrenrealmselite>`_ have the same Multi-User
 dungeon gameplay, but game design differs due to the need to limit or even paywall the amount of
 allowed turns and time each day, to keep the telephone line free for other "Callers".
-
-A census of MUD Telnet servers is at `muds.modem.xyz <https://muds.modem.xyz/>`_.
 
 BBSing Today
 ------------
@@ -200,8 +200,9 @@ Server Software
 A few BBS software packages continue to be developed, are open source, support UTF-8 [#f1]_, and are
 compatible with modern computers:
 
-- `Synchronet BBS <https://www.synchro.net/>`_
-- `ENiGMA\u00bd <https://enigma-bbs.github.io/>`_
+- Synchronet BBS https://www.synchro.net/
+
+- ENiGMA½ https://enigma-bbs.github.io/
 
 And some continue to be developed for retro computing platforms,
 
