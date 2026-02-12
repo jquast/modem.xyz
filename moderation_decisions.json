@@ -1,11 +1,20 @@
 {
-  "cross": {},
+  "cross": {
+    "210.59.236.38:7000": "m",
+    "95.179.176.16:4000": "m"
+  },
   "dns": {},
   "dupes": {
     "104.57.170.70:6840|absinthebbs.net:1940|adibbs.sytes.net:6800|lv426bbs.hopto.org:6464|strangeplanet.org:6800|wn3.wrgnbr.com:6400": {
       "action": "skip"
     },
     "104.57.170.70:6840|adibbs.sytes.net:6800|lv426bbs.hopto.org:6464|wn3.wrgnbr.com:6400": {
+      "action": "skip"
+    },
+    "104.57.170.70:6840|adibbs.sytes.net:6800|wn3.wrgnbr.com:6400": {
+      "action": "skip"
+    },
+    "107.172.21.36:4000|130.61.212.175:4000|155.138.231.112:4000|158.69.222.152:4000|162.250.189.123:4000|185.25.151.230:4000|191.252.194.206:4000|212.227.230.119:4000|23.254.128.113:4000|23.95.67.109:4000|35.85.221.31:4000|35.88.139.46:4000|4.222.184.103:4000|44.204.35.120:4400|45.90.220.35:4000|5.182.18.140:4000|52.90.102.82:4000|71.94.107.83:4000|77.169.172.37:4000|95.179.176.16:4000|elaramud.com:4000|empiremush.org:4000|floodmoo.com:4000|mnm.glassdragon.xyz:4444|mud.emeraldvalley.net:4000|songofavaria.com:4000|summerlands.undo.it:4000|trekmud.com:1701": {
       "action": "skip"
     },
     "107.172.21.36:4000|130.61.212.175:4000|155.138.231.112:4000|158.69.222.152:4000|162.250.189.123:4000|185.25.151.230:4000|191.252.194.206:4000|212.227.230.119:4000|23.254.128.113:4000|23.95.67.109:4000|35.85.221.31:4000|35.88.139.46:4000|4.222.184.103:4000|45.90.220.35:4000|5.182.18.140:4000|51.38.48.187:4000|52.90.102.82:4000|71.94.107.83:4000|77.169.172.37:4000|elaramud.com:4000|empiremush.org:4000|floodmoo.com:4000|mnm.glassdragon.xyz:4444|mud.emeraldvalley.net:4000|songofavaria.com:4000|summerlands.undo.it:4000|trekmud.com:1701": {
@@ -143,6 +152,9 @@
     "1stchoicecore.co.nz:1030|80.211.167.123:23|bbs.demigoth.com:23|bbs.greektimes.ca:23|bbs.riddells.net:10023|bbs.swissirc.net:2323|mysticrealms.ddns.net:11000|netpoint.webhop.me:513|tbrasilis.ddns.net:23000|whodareswinsbbs.uk:23": {
       "action": "skip"
     },
+    "1stchoicecore.co.nz:1030|bbs.androidsdungeon.co.uk:23|bbs.g00r00.com:23|bbs.greektimes.ca:23|bbs.korenblom.nl:23|bbs.tabakov.net:13023|mail.hohimer.org:1336|nottinghambbs.com:2323|undernet.uy:23|zen.kawasu.wtf:23": {
+      "action": "skip"
+    },
     "1stchoicecore.co.nz:1030|bbs.androidsdungeon.co.uk:23|bbs.g00r00.com:23|bbs.korenblom.nl:23|bbs.tabakov.net:13023|mail.hohimer.org:1336|nottinghambbs.com:2323|undernet.uy:23|zen.kawasu.wtf:23": {
       "action": "skip"
     },
@@ -197,10 +209,16 @@
     "210.59.236.38:5555|210.59.236.38:7000": {
       "action": "skip"
     },
+    "210.59.236.38:7000|210.59.236.38:7788|fs.twkang.net:5555": {
+      "action": "skip"
+    },
     "210.59.236.38:7788|fs.twkang.net:5555": {
       "action": "skip"
     },
     "211.68.71.66:23|bbs.byr.cn:23": {
+      "action": "skip"
+    },
+    "216.136.9.8:4919|dawnbe.genesismuds.com:3448": {
       "action": "skip"
     },
     "216.136.9.8:4919|dawnbe.genesismuds.com:3448|potp-mud.com:6400": {
@@ -209,10 +227,16 @@
     "216.226.128.180:4443|216.226.128.180:4444|216.226.128.180:6663|mucks.cyberleo.net:6660|mucks.cyberleo.net:7878": {
       "action": "skip"
     },
+    "216.226.128.180:4444|216.226.128.180:6663|mucks.cyberleo.net:6660|mucks.cyberleo.net:7878": {
+      "action": "skip"
+    },
     "221.226.96.186:5555|mud.ren:5555|zhyx.xguo.top:8888": {
       "action": "skip"
     },
     "24.245.105.161:6502|westwoodbbs.net:64738": {
+      "action": "skip"
+    },
+    "24.30.241.107:23|bbs.dsbbs.ca:23|fido.alltsk.ru:23|pyroto.mysticmountain.us:8086": {
       "action": "skip"
     },
     "31.220.94.14:6000|leu.mclink.it:6000": {
@@ -230,6 +254,9 @@
     "3m.vineyard.haus:3000|timesmud.com:8500|wotl.vineyard.haus:3000": {
       "action": "skip"
     },
+    "40.115.76.212:4040|tmux.wonko.info:4042": {
+      "action": "skip"
+    },
     "44.204.35.120:4400|95.179.176.16:4000": {
       "action": "skip"
     },
@@ -237,6 +264,9 @@
       "action": "skip"
     },
     "45.79.37.227:513|45.79.69.172:513|bbs.abon.us:513|bbs.decafbad.com:6513|c3bbs.retronetworking.org:513|dynamite.synchronetbbs.org:513|guardian.synchro.net:513|lovelybits.org:513|macos.retro-os.live:513|mtlgeek.synchro.net:513|oldschool.synchronetbbs.org:513|paradoxbbs.synchronetbbs.org:513|sestar.synchro.net:513|technoanarchy.synchronetbbs.org:513|threeblindmice.synchronetbbs.org:513|tmz.synchronetbbs.org:513": {
+      "action": "skip"
+    },
+    "5.150.254.12:31337|blackflag.acid.org:23|blackflag.acid.org:26|blackflag.acid.org:27": {
       "action": "skip"
     },
     "5.150.254.12:31337|blackflag.acid.org:23|blackflag.acid.org:27": {
@@ -282,6 +312,9 @@
       "action": "skip"
     },
     "74.208.126.44:3100|krynn.d20mud.com:4300": {
+      "action": "skip"
+    },
+    "74.208.126.44:3100|krynn.d20mud.com:4300|luminarimud.com:4100": {
       "action": "skip"
     },
     "75.3.200.42:9000|aragond.net:9000": {
@@ -358,6 +391,9 @@
     "ansiblemoo.org:6000|foomoo.org:4500": {
       "action": "skip"
     },
+    "aoh.genesismuds.com:6969|dragonballrevolt.genesismuds.com:6969|elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|rom.genesismuds.com:4422": {
+      "action": "skip"
+    },
     "aoh.genesismuds.com:6969|dragonballrevolt.genesismuds.com:6969|rom.genesismuds.com:4422": {
       "action": "skip"
     },
@@ -367,10 +403,19 @@
     "apothica.kozow.com:6464|infiniumgame.com:6060|tbamud.com:9091|timeslost.duckdns.org:4000": {
       "action": "skip"
     },
+    "area52.tk:5200|penisys.online:5200": {
+      "action": "remove",
+      "remove": [
+        "penisys.online:5200"
+      ]
+    },
     "ataribbs.ddns.net:6502|nitelite.ddns.net:9000": {
       "action": "skip"
     },
     "atlantis.mushpark.com:7777|darkgift.mushpark.com:6251|rhostshyl.mushpark.com:4096": {
+      "action": "skip"
+    },
+    "atp.pedia.szote.u-szeged.hu:3000|atp.pedia.szote.u-szeged.hu:3500": {
       "action": "skip"
     },
     "balderdash.su:9000|balderdash.su:9001": {
@@ -380,6 +425,9 @@
       ]
     },
     "basementbbs.ddns.net:9000|ptbbs.ddns.net:8000": {
+      "action": "skip"
+    },
+    "bay.jayscafe.net:6401|bbs.jayscafe.net:6402": {
       "action": "skip"
     },
     "bbs.c64.pub:23|bbs.circl.lu:23|halcyonbbs.scisweb.org:23|lunarout.synchro.net:8023": {
@@ -394,6 +442,9 @@
     "bbs.dosnetz.de:3232|netasylum.com:2323": {
       "action": "skip"
     },
+    "bbs.furryrefuge.com:23|freeway.vkradio.com:23|kneesurgery.moe:23|mysticalrealmbbs.com:23|tdod.org:5000|vern.cc:23": {
+      "action": "skip"
+    },
     "bbs.furryrefuge.com:23|freeway.vkradio.com:23|kneesurgery.moe:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
@@ -404,6 +455,9 @@
       "action": "skip"
     },
     "bbs.ptt.cc:23|ptt.cc:23": {
+      "action": "skip"
+    },
+    "bbs.ramifications.ca:5128|tfcbbs.com:6400": {
       "action": "skip"
     },
     "bbs.sbbsystems.com:8888|dydo.erb.pw:1337": {
@@ -521,6 +575,9 @@
         "dott.synchro.net:2424"
       ]
     },
+    "crusify.kharkov.org:5000|mud.kharkov.org:3000|mud.kharkov.org:4000": {
+      "action": "skip"
+    },
     "crusify.kharkov.org:5000|mud.kharkov.org:5000": {
       "action": "remove",
       "remove": [
@@ -578,6 +635,9 @@
     "ds.enyc.org.uk:8688|pit.enyc.org.uk:7422|zmc-place.enyc.org.uk:8682": {
       "action": "skip"
     },
+    "echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
+      "action": "skip"
+    },
     "elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|terabithia.genesismuds.com:4700": {
       "action": "skip"
     },
@@ -600,6 +660,9 @@
         "error1202bbs.ddns.net:1202",
         "sysopsolaris.ddns.net:2323"
       ]
+    },
+    "eternaldarkness.net:9700|kallindor.com:5800|mud.kallindor.org:5800|potp-mud.com:6400|solareclipse.genesismuds.com:4321": {
+      "action": "skip"
     },
     "eternaldarkness.net:9700|kallindor.com:5800|mud.kallindor.org:5800|solareclipse.genesismuds.com:4321": {
       "action": "skip"
@@ -688,7 +751,13 @@
     "lovelybits.org:1337|lovelybits.org:513": {
       "action": "skip"
     },
+    "lpcdb.themuds.org:4000|wotf.org:23": {
+      "action": "skip"
+    },
     "lunaticsunleashed.ddns.net:2333|mystic-anet.online:23|mystic-anet.online:513": {
+      "action": "skip"
+    },
+    "lv426bbs.hopto.org:6464|strangeplanet.org:6800": {
       "action": "skip"
     },
     "mastodon.uy:23|undernet.uy:23": {
@@ -702,6 +771,9 @@
       "remove": [
         "mongoose.moo.mud.org:7777"
       ]
+    },
+    "moo.squidsoft.net:4444|moo.squidsoft.net:7777|moo.squidsoft.net:7888": {
+      "action": "skip"
     },
     "moo.squidsoft.net:4444|moo.squidsoft.net:7888": {
       "action": "skip"

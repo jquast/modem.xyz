@@ -172,7 +172,6 @@
 92.91.25.209 2323
 94.22.232.77 23
 94.32.85.38 2023
-95.179.176.16 4000
 95.217.16.88 8888
 96.126.98.54 23 topaz
 96.231.233.46 23
@@ -788,7 +787,6 @@ paradoxbbs.synchronetbbs.org 513
 partybowlbbs.ddns.net 2323
 pathunknown.net 23
 pebkac.lol 23
-penisys.online 5200
 perlbbs.tw 23 big5
 phantasm.bbs.io 4489 topaz
 phoenix.bnbbbs.net 23
