@@ -12,7 +12,7 @@ import tabulate as tabulate_mod
 
 from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
-    _parse_server_list, _load_encoding_overrides,
+    _parse_server_list, _load_encoding_overrides, _load_column_overrides,
     _rst_escape, _strip_ansi, _is_garbled,
     _clean_log_line, _combine_banners, _redecode_banner,
     _has_encoding_issues, _truncate,
@@ -54,7 +54,9 @@ def _ensure_banner(server):
     if banner and not _is_garbled(banner):
         effective_enc = (
             server.get('encoding_override') or DEFAULT_ENCODING)
-        banner_fname = _banner_to_png(banner, BANNERS_PATH, effective_enc)
+        banner_fname = _banner_to_png(
+            banner, BANNERS_PATH, effective_enc,
+            columns=server.get('column_override'))
         if banner_fname:
             server['_banner_png'] = banner_fname
 
@@ -146,15 +148,19 @@ def load_bbslist_encodings(bbslist_path):
 # Data loading
 # ---------------------------------------------------------------------------
 
-def load_server_data(data_dir, encoding_overrides=None):
+def load_server_data(data_dir, encoding_overrides=None,
+                     column_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
     :param encoding_overrides: dict mapping (host, port) to encoding
+    :param column_overrides: dict mapping (host, port) to column width
     :returns: list of parsed server record dicts
     """
     if encoding_overrides is None:
         encoding_overrides = {}
+    if column_overrides is None:
+        column_overrides = {}
 
     server_dir = os.path.join(data_dir, "server")
     if not os.path.isdir(server_dir):
@@ -222,6 +228,8 @@ def load_server_data(data_dir, encoding_overrides=None):
                 'encoding': detected_encoding,
                 'encoding_override': encoding_overrides.get(
                     (host, port), ''),
+                'column_override': column_overrides.get(
+                    (host, port)),
                 'banner_before': banner_before,
                 'banner_after': banner_after,
                 'timing': session_data.get('timing', {}),
@@ -821,7 +829,8 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
             server.get('encoding_override')
             or DEFAULT_ENCODING)
         banner_fname = _banner_to_png(
-            banner, BANNERS_PATH, effective_enc)
+            banner, BANNERS_PATH, effective_enc,
+            columns=server.get('column_override'))
         if banner_fname:
             server['_banner_png'] = banner_fname
             print("**Connection Banner:**")
@@ -1188,8 +1197,14 @@ def run(args):
         print(f"Loaded {len(encoding_overrides)} encoding"
               f" overrides from {bbslist}", file=sys.stderr)
 
+    column_overrides = _load_column_overrides(bbslist)
+    if column_overrides:
+        print(f"Loaded {len(column_overrides)} column width"
+              f" overrides from {bbslist}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
-    records = load_server_data(data_dir, encoding_overrides)
+    records = load_server_data(data_dir, encoding_overrides,
+                               column_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Helper script running inside a kitty terminal instance.
+# Helper script running inside a terminal instance (kitty or wezterm).
 # Reads banner payloads from a named pipe, clears screen, displays each one,
 # then signals readiness for screenshot via a second named pipe.
 #

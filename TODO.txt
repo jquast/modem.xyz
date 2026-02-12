@@ -1,3 +1,7 @@
+We need per-application terminal sizes, eg.
+- galaxy.silvren.com:2112 demands 90 columns or something
+- 45.79.69.172 513 also
+
 DONE?
 
 Please examine the fingerprint json of the following servers, and, examine why were their banners so
@@ -51,6 +55,18 @@ Check website, https://www.commodorebbs.com/
 - Amiga is in 'topaz'
 - Linux/Synchronet go ahead and check, many are cp437 and should remain
 
+
+Some banners are completely empty, ""! We should be able to add to our moderation.py, should propose
+option to remove all logfiles of all "empty" banners, or, delete them from bbslist.txt and
+mudlist.txt, or skip/do nothing.
+
+This way we can easily re-scan them. Maybe they were having a bad day. a CLI argument for
+banner-lines-minimum=1 default, we can check 2, 3, or 4-line banners too, individually for
+"rescan" (delete logfile), delete (remove from bbs/mudlist),
+
+I could swear we already had something like that!
+
+
 ---
 
 "23.95.146.28 8282" contains 'http://forum.revivialworld.org/...html' in the banner,
@@ -63,17 +79,6 @@ Similarly, for auto-detection of bbs software,
 
 
 0.
-
-Some banners are completely empty, ""! We should be able to add to our moderation.py, should propose
-option to remove all logfiles of all "empty" banners, or, delete them from bbslist.txt and
-mudlist.txt, or skip/do nothing.
-
-This way we can easily re-scan them. Maybe they were having a bad day. a CLI argument for
-banner-lines-minimum=1 default, we can check 2, 3, or 4-line banners too, individually for
-"rescan" (delete logfile), delete (remove from bbs/mudlist),
-
-I could swear we already had something like that!
-
 
 1.
 
@@ -110,16 +115,19 @@ crt effect on images, by post-processing
 
 
 2.
-- add country name and flag emoji of IP address (shodan? something cheap!!)
 
 
 
 
 1.
 
+- add country name and flag emoji of IP address (shodan? something cheap!!)
+
+--
+
 When showing "This server responded with an EMSI handshake sequence", should the fidonet details on
 the server page. And, put this information under "Telnet Fingerprint", and, make each telnet
-fingerprint thing itemized, eg.
+fingerprint thing itemized, eg:
 
 Telnet Fingerprint
 
@@ -130,8 +138,8 @@ Telnet Fingerprint
 - Options offered by server: BINARY, ECHO, SGA
 - Options requested from client: BINARY, SGA
 
-We need per-application terminal sizes, eg.
-- galaxy.silvren.com:2112 demands 90 columns or something
-- 45.79.69.172 513 also
+Also, we hyperlink to github for the raw json data, "Data source:", remove that.
 
+
+99.
 

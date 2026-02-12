@@ -198,7 +198,7 @@ blackfire.online 4000
 blackmud.com 2000
 bod.westeros.org 3000
 brazilmux.tinymux.org 2860
-breakworld.themuds.org 4000 gbk
+breakworld.themuds.org 4000 cp437
 brigandine.org 9390
 british-legends.com 27750
 brokenwindows.aresmush.com 4201

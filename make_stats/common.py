@@ -39,8 +39,8 @@ PLOT_BLUE = '#6666AA'
 PLOT_GRID = '#444444'
 
 
-# Ghostty rendering pool, initialized by init_renderer().
-_ghostty_pool = None
+# Terminal rendering pool, initialized by init_renderer().
+_renderer_pool = None
 
 
 # ---------------------------------------------------------------------------
@@ -117,7 +117,7 @@ def _parse_server_list(path):
 def _load_encoding_overrides(path):
     """Load encoding overrides from a server list file.
 
-    :param path: path to server list file (host port [encoding])
+    :param path: path to server list file (host port [encoding [columns]])
     :returns: dict mapping (host, port) to encoding string
     """
     overrides = {}
@@ -128,14 +128,40 @@ def _load_encoding_overrides(path):
             line = line.split('#', 1)[0].strip()
             if not line:
                 continue
-            parts = line.split(None, 2)
+            parts = line.split()
             if len(parts) >= 3:
                 host = parts[0]
                 try:
                     port = int(parts[1])
                 except ValueError:
                     continue
-                overrides[(host, port)] = parts[2].strip()
+                overrides[(host, port)] = parts[2]
+    return overrides
+
+
+def _load_column_overrides(path):
+    """Load column width overrides from a server list file.
+
+    :param path: path to server list file (host port [encoding [columns]])
+    :returns: dict mapping (host, port) to column width int
+    """
+    overrides = {}
+    if not os.path.isfile(path):
+        return overrides
+    with open(path) as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            parts = line.split()
+            if len(parts) >= 4:
+                host = parts[0]
+                try:
+                    port = int(parts[1])
+                    columns = int(parts[3])
+                except ValueError:
+                    continue
+                overrides[(host, port)] = columns
     return overrides
 
 
@@ -351,31 +377,29 @@ def _combine_banners(server, default_encoding=None):
     return banner_before or banner_after
 
 
-def _banner_to_png(text, banners_dir, encoding='cp437'):
+def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     """Render ANSI banner text to a deduplicated PNG file.
 
-    Preprocesses the banner text, hashes it with the encoding to
-    produce a canonical filename, and renders only if that file does
-    not already exist.  Multiple servers with identical banners share
-    the same PNG.
+    Preprocesses the banner text, hashes it with the encoding and
+    column width to produce a canonical filename, and renders only
+    if that file does not already exist.  Multiple servers with
+    identical banners share the same PNG.
 
     :param text: raw banner text with ANSI escape sequences
     :param banners_dir: directory for output PNG files
     :param encoding: server encoding for font group selection
+    :param columns: optional terminal column width override
     :returns: PNG filename (basename) or None on failure
     """
-    if _ghostty_pool is None:
+    if _renderer_pool is None:
         return None
+    hash_input = text + '\x00' + encoding
+    if columns is not None:
+        hash_input += '\x00' + str(columns)
     key = hashlib.sha1(
-        (text + '\x00' + encoding).encode('utf-8', errors='surrogateescape')).hexdigest()[:12]
+        hash_input.encode('utf-8', errors='surrogateescape')).hexdigest()[:12]
 
     fname = f"banner_{key}.png"
-
-    # can't remember .. ?!
-    # text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
-    # lines = text.split('\n')
-    # text = '\n'.join(_rstrip_ansi_line(line) for line in lines)
-    # text = text.rstrip()
 
     output_path = os.path.join(banners_dir, fname)
     if os.path.isfile(output_path):
@@ -386,40 +410,41 @@ def _banner_to_png(text, banners_dir, encoding='cp437'):
     # Strip terminal report/query sequences (DSR, DA, window ops)
     text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
 
-    if _ghostty_pool.capture(text, output_path, encoding):
+    if _renderer_pool.capture(text, output_path, encoding, columns=columns):
         return fname
     return None
 
 
 def init_renderer(**kwargs):
-    """Initialize the Ghostty rendering pool.
+    """Initialize the terminal rendering pool.
 
-    Call at the beginning of a rendering session.  If Ghostty is
-    unavailable, the pool remains ``None`` and :func:`_banner_to_png`
-    will return False for all calls.
+    Call at the beginning of a rendering session.  If no terminal
+    backend is available, the pool remains ``None`` and
+    :func:`_banner_to_png` will return None for all calls.
 
-    :param kwargs: forwarded to :class:`~make_stats.ghostty.GhosttyPool`
+    :param kwargs: forwarded to :class:`~make_stats.renderer.RendererPool`
     """
-    global _ghostty_pool
-    from make_stats.ghostty import GhosttyPool
-    if not GhosttyPool.available():
-        print("kitty not available (need DISPLAY + kitty/xdotool/import),"
-              " banners will be skipped", file=sys.stderr)
+    global _renderer_pool
+    from make_stats.renderer import RendererPool
+    if not RendererPool.available():
+        print("renderer not available (need DISPLAY + kitty or wezterm"
+              " + xdotool/import), banners will be skipped",
+              file=sys.stderr)
         return
-    _ghostty_pool = GhosttyPool(**kwargs)
-    _ghostty_pool.__enter__()
+    _renderer_pool = RendererPool(**kwargs)
+    _renderer_pool.__enter__()
 
 
 def close_renderer():
-    """Shut down the Ghostty rendering pool.
+    """Shut down the terminal rendering pool.
 
     Safe to call even if :func:`init_renderer` was never called
     or failed.
     """
-    global _ghostty_pool
-    if _ghostty_pool is not None:
-        _ghostty_pool.__exit__(None, None, None)
-        _ghostty_pool = None
+    global _renderer_pool
+    if _renderer_pool is not None:
+        _renderer_pool.__exit__(None, None, None)
+        _renderer_pool = None
 
 
 # ---------------------------------------------------------------------------

@@ -10,6 +10,7 @@ Modes (run all by default, or select one):
   --only-dupes      Only find within-list duplicates
   --only-cross      Only find entries present in both MUD and BBS lists
   --only-encodings  Only discover and suggest encoding fixes
+  --only-columns    Only discover and suggest column width overrides
 
 Scope (moderate both by default, or select one):
   --mud           Only moderate the MUD list
@@ -295,6 +296,10 @@ def discover_encoding_issues(data_dir, list_path):
             banner_after = session_data.get('banner_after_return', '')
             banner = banner_before or banner_after
 
+            max_width, _ = _measure_banner_columns(banner)
+            if max_width >= 200:
+                continue
+
             suggested_enc, replacement_count = _find_best_encoding(banner)
             if suggested_enc and replacement_count > 0:
                 issues.append({
@@ -352,9 +357,11 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
             new_entries = []
             for h, p, line in entries:
                 if h == host and p == port:
-                    # Update line with encoding override
+                    # Update encoding, preserving columns if present
                     parts = line.split()
-                    if len(parts) >= 2:
+                    if len(parts) >= 4:
+                        parts[2] = suggested
+                    elif len(parts) >= 2:
                         parts[2:] = [suggested]
                     new_entries.append((h, p, ' '.join(parts)))
                     updated = True
@@ -373,6 +380,202 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
                     os.remove(log_file)
                     print(f"    ✓ Deleted {log_file}")
 
+                applied_count += 1
+
+
+# ── Column width discovery ────────────────────────────────────────────────
+
+def _measure_banner_columns(text):
+    """Measure visible line widths in banner text.
+
+    :param text: banner text, may contain ANSI escape sequences
+    :returns: tuple of (max_width, all_narrow) where *all_narrow* is
+        True when no line exceeds 40 columns
+    """
+    if not text:
+        return 0, True
+    max_width = 0
+    for line in text.splitlines():
+        stripped = _strip_ansi(line).rstrip()
+        w = wcwidth.wcswidth(stripped)
+        if w < 0:
+            w = len(stripped)
+        if w > max_width:
+            max_width = w
+    return max_width, max_width <= 40
+
+
+def _suggest_columns(max_width):
+    """Round a measured width to the nearest 10 at or above, minimum 40.
+
+    :param max_width: maximum observed line width
+    :returns: suggested column width (multiple of 10, at least 40)
+    """
+    return max(40, ((max_width + 9) // 10) * 10)
+
+
+def discover_column_width_issues(data_dir, list_path):
+    """Scan JSON fingerprint data to find servers needing column overrides.
+
+    Flags servers whose banners exceed 80 columns or never exceed 40.
+
+    :param data_dir: path to server data directory
+    :param list_path: path to server list file (mud/bbs list)
+    :returns: list of dicts with host, port, max_width, suggested_columns
+    """
+    issues = []
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed_servers = {(h, p) for h, p, _ in list_entries if h and p}
+
+    # Build set of servers that already have a column override
+    has_override = set()
+    for h, p, line in list_entries:
+        if h and p:
+            parts = line.split()
+            if len(parts) >= 4:
+                try:
+                    int(parts[3])
+                    has_override.add((h, p))
+                except ValueError:
+                    pass
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                continue
+
+            probe = data.get('server-probe', {})
+            sessions = data.get('sessions', [])
+            if not sessions:
+                continue
+
+            session = sessions[-1]
+            host = session.get('host', session.get('ip', 'unknown'))
+            port = session.get('port', 0)
+
+            if (host, port) not in allowed_servers:
+                continue
+            if (host, port) in has_override:
+                continue
+
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get(
+                'banner_before_return', '')
+            banner_after = session_data.get(
+                'banner_after_return', '')
+            banner = banner_before or banner_after
+            if not banner:
+                continue
+
+            max_width, all_narrow = _measure_banner_columns(banner)
+
+            if max_width > 80 or (all_narrow and max_width > 0):
+                suggested = _suggest_columns(max_width)
+                if suggested == 80:
+                    continue
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'max_width': max_width,
+                    'suggested_columns': suggested,
+                    'banner': banner,
+                })
+
+    return issues
+
+
+def review_column_width_issues(mud_issues, bbs_issues,
+                               mud_list, bbs_list, logs_dir,
+                               report_only=False, dry_run=False):
+    """Interactively review and apply column width overrides.
+
+    :param mud_issues: list of column width issues from MUD data
+    :param bbs_issues: list of column width issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    """
+    all_issues = [
+        ('mud', mud_issues, mud_list),
+        ('bbs', bbs_issues, bbs_list),
+    ]
+    applied_count = 0
+
+    for mode, issues, list_path in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n{mode.upper()} column width issues: {len(issues)}")
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            max_w = issue['max_width']
+            suggested = issue['suggested_columns']
+            banner = issue['banner']
+
+            print(f"\n  {host}:{port}")
+            print(f"    Max line width: {max_w}")
+            print(f"    Suggested columns: {suggested}")
+
+            # Preview: wrap each paragraph at the suggested width
+            print(f"    Preview at {suggested} columns:")
+            print(f"    {'─' * suggested}")
+            for para in _strip_ansi(banner).splitlines():
+                if not para.strip():
+                    print()
+                    continue
+                for wrapped in wcwidth.wrap(para, suggested):
+                    print(f"    {wrapped}")
+            print(f"    {'─' * suggested}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(
+                f"    Apply {suggested} columns? (Y/n/q) ", "ynq")
+            if choice == 'q':
+                return applied_count
+            if choice == 'n':
+                continue
+
+            entries = load_server_list(list_path)
+            updated = False
+            new_entries = []
+            for h, p, line in entries:
+                if h == host and p == port:
+                    parts = line.split()
+                    if len(parts) >= 4:
+                        parts[3] = str(suggested)
+                    elif len(parts) >= 3:
+                        parts.append(str(suggested))
+                    elif len(parts) >= 2:
+                        parts.extend(['utf-8', str(suggested)])
+                    new_entries.append((h, p, ' '.join(parts)))
+                    updated = True
+                else:
+                    new_entries.append((h, p, line))
+
+            if updated and not dry_run:
+                with open(list_path, 'w', encoding='utf-8') as f:
+                    for _, _, line in new_entries:
+                        f.write(line + '\n')
+                print(f"    ✓ Updated {list_path}")
                 applied_count += 1
 
 
@@ -1252,6 +1455,10 @@ def _get_argument_parser():
         "--only-encodings", action="store_true",
         help="only discover and fix encoding issues in banners",
     )
+    mode_mx.add_argument(
+        "--only-columns", action="store_true",
+        help="only discover and suggest column width overrides",
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -1312,13 +1519,15 @@ def main():
     do_mud = not args.bbs
     do_bbs = not args.mud
     only_flags = (args.only_prune, args.only_dupes,
-                  args.only_cross, args.only_dns, args.only_encodings)
+                  args.only_cross, args.only_dns,
+                  args.only_encodings, args.only_columns)
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
     do_dns = (args.only_dns or not any_only) and not args.skip_dns
     do_encodings = args.only_encodings
+    do_columns = args.only_columns
 
     # Cross-list and DNS modes require both lists
     if do_cross and (args.mud or args.bbs):
@@ -1391,6 +1600,26 @@ def main():
                 report_only=args.report_only, dry_run=args.dry_run)
         else:
             print("No encoding issues detected.")
+
+    # Column width discovery and fixes
+    if do_columns:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_column_width_issues(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_column_width_issues(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            review_column_width_issues(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No column width issues detected.")
 
     # Save decisions cache
     if decisions is not None:

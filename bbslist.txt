@@ -539,7 +539,7 @@ convolution.us 23
 corsysystem.org 2300
 cosmicrage.earth 7777
 cottonwoodbbs.dyndns.org 6502
-cpbbs.de 2323
+cpbbs.de 2323 cp437
 cpugod.synchro.net 23
 cqbbs.ddns.net 6800
 crackintimebbs.ddns.net 2323
@@ -757,7 +757,7 @@ mistressoffire.com 23
 modem.serial-port.com 1333
 modematider.selstam.nu 50023
 mojo.synchro.net 23
-mono.org 23
+mono.org 23 utf-8 40
 montereybbs.com 23
 moratahack.com 23
 mortuary.ddns.net 23
@@ -889,7 +889,7 @@ scbbs.nsupdate.info 61023
 scenelist.org 23 latin-1
 scenewall.bbs.io 4000 topaz
 scoobysdoo.ddns.net 2023
-sdf.org 23
+sdf.org 23 utf-8 40
 seabreeze.servegame.com 23
 seaoffantasy.synchronetbbs.org 23
 seattle.tw 23 big5
