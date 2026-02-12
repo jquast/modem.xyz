@@ -1,7 +1,5 @@
-# encoding is optional, defaults to cp437 if omitted
-# sourced from https://www.ipingthereforeiam.com/bbs/dir/relay.cfg Feb. 2026
-# maybe i'll sync up again later
-# host port [encoding|font]
+# format,
+# ip address [port number [encoding]]
 104.142.112.149 9000
 104.174.3.6 23
 104.57.170.70 6840
@@ -228,9 +226,9 @@ arda-bbs.com 23
 area52.tk 5200 ascii
 asanocomp.ddns.net 2300
 ascii.dynu.net 4096
-atari-bbs.zapto.org 8888
-atari8.us 10001
-ataribbs.ddns.net 6502
+atari-bbs.zapto.org 8888 atascii
+atari8.us 10001 atascii
+ataribbs.ddns.net 6502 atascii
 atl.ddns.net 6401
 aturiondynasty.hopto.org 4444
 avastbbs.servegame.com 23
@@ -899,6 +897,7 @@ tdod.org 5000
 technoanarchy.synchronetbbs.org 513
 technotron.asuscomm.com 23
 techrono.synchro.net 23
+telehack.com 23
 telnet.arcadiabbs.com 23
 telnet.bluewavebbs.com 23
 telnet.deadmodemsociety.com 1337

@@ -160,24 +160,24 @@ def _strip_ansi(text):
     return wcwidth.strip_sequences(text)
 
 
-def _rstrip_ansi_line(line, columns=80):
-    """Strip trailing visible whitespace from lines that would cause wrapping.
-
-    When libansilove renders a line whose visible width equals the column
-    count, the cursor auto-wraps and the following newline produces a
-    double-spaced blank line.  Detect this with :func:`wcwidth.wcswidth`
-    on the ANSI-stripped text and remove trailing whitespace + ANSI resets
-    when the visible width meets or exceeds *columns*.
-
-    :param line: single line of text, possibly containing ANSI escapes
-    :param columns: rendering column width (default 80)
-    :returns: line with trailing visible whitespace removed when needed
-    """
-    visible = _strip_ansi(line)
-    if wcwidth.wcswidth(visible) < columns:
-        return line
-    # Strip trailing whitespace and any surrounding ANSI SGR sequences
-    return re.sub(r'(?:\s|\x1b\[[0-9;]*m)*$', '', line)
+#def _rstrip_ansi_line(line, columns=80):
+#    """Strip trailing visible whitespace from lines that would cause wrapping.
+#
+#    When libansilove renders a line whose visible width equals the column
+#    count, the cursor auto-wraps and the following newline produces a
+#    double-spaced blank line.  Detect this with :func:`wcwidth.wcswidth`
+#    on the ANSI-stripped text and remove trailing whitespace + ANSI resets
+#    when the visible width meets or exceeds *columns*.
+#
+#    :param line: single line of text, possibly containing ANSI escapes
+#    :param columns: rendering column width (default 80)
+#    :returns: line with trailing visible whitespace removed when needed
+#    """
+#    visible = _strip_ansi(line)
+#    if wcwidth.wcswidth(visible) < columns:
+#        return line
+#    # Strip trailing whitespace and any surrounding ANSI SGR sequences
+#    return re.sub(r'(?:\s|\x1b\[[0-9;]*m)*$', '', line)
 
 
 def _banner_alt_text(text):
@@ -348,10 +348,10 @@ def _banner_to_png(text, banners_dir, encoding='cp437'):
     text = _strip_mxp_sgml(text)
     text = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z]', '', text)
     # Strip terminal report/query sequences (DSR, DA, window ops)
-    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text)
-    lines = text.split('\n')
-    text = '\n'.join(_rstrip_ansi_line(line) for line in lines)
-    text = text.rstrip()
+    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
+    # lines = text.split('\n')
+    # text = '\n'.join(_rstrip_ansi_line(line) for line in lines)
+    # text = text.rstrip()
 
     key = hashlib.sha1(
         (text + '\x00' + encoding).encode('utf-8')).hexdigest()[:12]
@@ -383,7 +383,7 @@ def init_renderer(**kwargs):
     global _ghostty_pool
     from make_stats.ghostty import GhosttyPool
     if not GhosttyPool.available():
-        print("  kitty not available (need DISPLAY + kitty/xdotool/import),"
+        print("kitty not available (need DISPLAY + kitty/xdotool/import),"
               " banners will be skipped", file=sys.stderr)
         return
     _ghostty_pool = GhosttyPool(**kwargs)
