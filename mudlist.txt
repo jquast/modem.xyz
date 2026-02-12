@@ -210,7 +210,6 @@ btvos.wolfpaw.net 9000
 bunkicenter.net 7979
 burbs.org 4567
 burningmud.com 4000
-c64u.club 6400 petscii
 cajunnights.com 7373
 callandor.es 4444
 carrionfields.net 4449

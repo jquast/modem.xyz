@@ -44,8 +44,8 @@ _DIGITS_RE = re.compile(r"\d+")
 _HERE = Path(__file__).resolve().parent
 DEFAULT_MUD_LIST = _HERE / "mudlist.txt"
 DEFAULT_BBS_LIST = _HERE / "bbslist.txt"
-DEFAULT_MUD_DATA = _HERE / "data-muds"
-DEFAULT_BBS_DATA = _HERE / "data-bbs"
+DEFAULT_MUD_DATA = _HERE  # scan.py defaults to list file directory
+DEFAULT_BBS_DATA = _HERE  # scan.py defaults to list file directory
 DEFAULT_LOGS = _HERE / "logs"
 DEFAULT_DECISIONS = _HERE / "moderation_decisions.json"
 
@@ -677,7 +677,24 @@ def prune_dead(list_path, data_dir, logs_dir, report_only=False,
     if report_only:
         return set()
 
-    answer = _prompt(f"\n  Remove {len(dead)} dead entries? [y/N] ", "yn")
+    while True:
+        answer = _prompt(f"\n  Remove {len(dead)} dead entries? [y/N/x] ", "ynx")
+        if answer == "x":
+            # Expunge log files for rescan
+            logs_path = Path(logs_dir)
+            deleted = 0
+            for host, port, _ in dead:
+                logfile = logs_path / f"{host}:{port}.log"
+                if logfile.is_file():
+                    try:
+                        logfile.unlink()
+                        deleted += 1
+                    except OSError:
+                        pass
+            print(f"  Expunged {deleted}/{len(dead)} log file(s) for rescan")
+            continue
+        break
+
     if answer != "y":
         print("  Skipped.")
         return set()
@@ -1107,11 +1124,13 @@ def _get_argument_parser():
     )
     paths.add_argument(
         "--mud-data", default=str(DEFAULT_MUD_DATA),
-        help=f"MUD data directory (default: {DEFAULT_MUD_DATA})",
+        help=f"MUD data directory, containing server/ subdirectory "
+             f"(default: {DEFAULT_MUD_DATA})",
     )
     paths.add_argument(
         "--bbs-data", default=str(DEFAULT_BBS_DATA),
-        help=f"BBS data directory (default: {DEFAULT_BBS_DATA})",
+        help=f"BBS data directory, containing server/ subdirectory "
+             f"(default: {DEFAULT_BBS_DATA})",
     )
     paths.add_argument(
         "--logs", default=str(DEFAULT_LOGS),

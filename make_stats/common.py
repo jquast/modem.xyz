@@ -917,6 +917,7 @@ def display_encoding_groups(servers, detail_subdir, file_key,
 
     for name, members in sorted(
             by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
+        print()
         print(f"- `{_rst_escape(name)}`_: {len(members)}")
     print()
 
