@@ -42,6 +42,21 @@ GITHUB_DATA_BASE = ("https://github.com/jquast/modem.xyz"
 # Default encoding assumed for all BBSes unless overridden
 DEFAULT_ENCODING = 'cp437'
 
+
+def _ensure_banner(server):
+    """Generate the banner PNG for a server without writing RST.
+
+    Called for servers whose detail pages are unchanged, to ensure
+    the banner PNG exists on disk and ``server['_banner_png']`` is set.
+    """
+    banner = _combine_banners(server, default_encoding=DEFAULT_ENCODING)
+    if banner and not _is_garbled(banner):
+        effective_enc = (
+            server.get('encoding_override') or DEFAULT_ENCODING)
+        banner_fname = _banner_to_png(banner, BANNERS_PATH, effective_enc)
+        if banner_fname:
+            server['_banner_png'] = banner_fname
+
 # Known BBS software patterns (case-insensitive match against banner text)
 BBS_SOFTWARE_PATTERNS = [
     (re.compile(r'Synchronet', re.IGNORECASE), 'Synchronet'),
@@ -935,6 +950,7 @@ def generate_bbs_detail(server, logs_dir=None, force=False,
                     if logs_dir else None)
         if not _needs_rebuild(
                 detail_path, json_path, log_path, __file__):
+            _ensure_banner(server)
             return False
 
     host = server['host']
