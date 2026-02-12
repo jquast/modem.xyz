@@ -814,6 +814,7 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
                   f"/_static/banners/{banner_fname}")
             print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
             print(f"   :class: ansi-banner")
+            print(f"   :loading: lazy")
             print()
     elif banner:
         print("*Banner not shown (legacy encoding"
@@ -1120,6 +1121,7 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
                 print(f"     :alt: "
                       f"{_rst_escape(_banner_alt_text(banner))}")
                 print(f"     :class: ansi-banner")
+                print(f"     :loading: lazy")
                 print()
 
 
