@@ -52,7 +52,7 @@
 210.59.236.38 7000 big5
 210.59.236.38 7788 big5
 212.227.230.119 4000
-216.136.9.21 1085
+216.136.9.21 1085 gbk
 216.136.9.8 4919
 216.226.128.180 4443
 216.226.128.180 4444
@@ -940,7 +940,9 @@ www.midianmud.com 3456
 www.mudbar.cn 3333 gbk
 www.sjcqmud.xyz 5555 gbk
 xaosmud.org 5000
+xiyouji.org 6666 gbk
 xyj-cn.imandysoft.net 5555 gbk
+xyj.org.cn 6666 gbk
 xyj.thu.cn 6666 gbk
 yay.tim.org 5440
 yhmud.themuds.org 5566

@@ -32,6 +32,9 @@
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
@@ -260,6 +263,9 @@
     "24.209.50.108:2332|69.195.132.4:23|98.45.212.129:23|bbs.wz5bbs.com:23|crackintimebbs.ddns.net:2323|intranet.fites.net:23": {
       "action": "skip"
     },
+    "24.209.50.108:2332|98.45.212.129:23|bbs.wz5bbs.com:23|crackintimebbs.ddns.net:2323|intranet.fites.net:23": {
+      "action": "skip"
+    },
     "24.245.105.161:6502|westwoodbbs.net:64738": {
       "action": "skip"
     },
@@ -424,6 +430,9 @@
     "amstrad.simulant.uk:464|bbs.furryrefuge.com:23|bbs.zerotwo.tech:23|freeway.vkradio.com:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
+    "amstrad.simulant.uk:464|bbs.furryrefuge.com:23|freeway.vkradio.com:23|guardian.synchro.net:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
+      "action": "skip"
+    },
     "ansiblemoo.org:6000|ansiblemoo.org:8888|foomoo.org:4500": {
       "action": "remove",
       "remove": [
@@ -500,6 +509,9 @@
       "action": "skip"
     },
     "bbs.interlinked.us:23|krion.io:1337": {
+      "action": "skip"
+    },
+    "bbs.jacobcat.app:513|rns.risenshinebbs.com:513|tiabbs.synchro.net:513": {
       "action": "skip"
     },
     "bbs.jacobcat.app:513|rns.risenshinebbs.com:513|tiabbs.synchro.net:513|vert.synchro.net:513": {
@@ -946,6 +958,9 @@
     "rupert.twyst.org:6666|rupert.twyst.org:7777|rupert.twyst.org:9040|twyst.org:3333|twyst.org:6666": {
       "action": "skip"
     },
+    "sanctumbbs.com:6502|telnet.sanctumbbs.com:23": {
+      "action": "skip"
+    },
     "seabreeze.servegame.com:2002|seabreeze.servegame.com:23|seabreeze.servegame.com:32": {
       "action": "remove",
       "remove": [
@@ -1002,6 +1017,12 @@
       "action": "remove",
       "remove": [
         "unitopia.de:4444"
+      ]
+    },
+    "vert.synchro.net:23|vert.synchro.net:513": {
+      "action": "remove",
+      "remove": [
+        "vert.synchro.net:513"
       ]
     },
     "wl.mud.de:4711|wunderland.mud.de:4711": {

@@ -11,6 +11,7 @@ Modes (run all by default, or select one):
   --only-cross      Only find entries present in both MUD and BBS lists
   --only-encodings  Only discover and suggest encoding fixes
   --only-columns    Only discover and suggest column width overrides
+  --only-empty      Only find servers with fingerprint data but empty banners
 
 Scope (moderate both by default, or select one):
   --mud           Only moderate the MUD list
@@ -52,7 +53,7 @@ DEFAULT_LOGS = _HERE / "logs"
 DEFAULT_DECISIONS = _HERE / "moderation_decisions.json"
 
 
-# ── Utility helpers ──────────────────────────────────────────────────────
+# Utility helpers
 
 def _strip_ansi(text):
     """Remove all terminal escape sequences (CSI, OSC, DCS, etc.)."""
@@ -130,7 +131,7 @@ def _prompt(message, choices="ynq"):
     return answer
 
 
-# ── DNS helpers ────────────────────────────────────────────────────────
+# DNS helpers
 
 def _is_ip_address(host):
     """Check whether *host* is a literal IP address (v4 or v6).
@@ -177,7 +178,7 @@ def _resolve_hostnames(hostnames, workers=8):
     return results
 
 
-# ── Decision cache ─────────────────────────────────────────────────────
+# Decision cache
 
 def load_decisions(path):
     """Load cached moderation decisions from a JSON file.
@@ -219,7 +220,7 @@ def _group_cache_key(members):
     return "|".join(parts)
 
 
-# ── Encoding discovery ─────────────────────────────────────────────────────
+# Encoding discovery
 
 def _find_best_encoding(text):
     """Find the encoding that produces the cleanest decode of text.
@@ -383,7 +384,7 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
                 applied_count += 1
 
 
-# ── Column width discovery ────────────────────────────────────────────────
+# Column width discovery
 
 def _measure_banner_columns(text):
     """Measure visible line widths in banner text.
@@ -579,7 +580,153 @@ def review_column_width_issues(mud_issues, bbs_issues,
                 applied_count += 1
 
 
-# ── Server list I/O ─────────────────────────────────────────────────────
+# Empty banner discovery
+
+def discover_empty_banners(data_dir, list_path, logs_dir):
+    """Find servers with fingerprint data but empty banners.
+
+    These are servers that connected and completed telnet negotiation
+    but returned no banner text.  They may need to be re-scanned from
+    another IP, or marked as failed.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param list_path: path to server list file
+    :param logs_dir: path to logs directory
+    :returns: list of dicts with host, port, data_path, reason
+    """
+    issues = []
+    seen = set()
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed = {(h, p) for h, p, _ in list_entries if h and p}
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            probe = data.get('server-probe', {})
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+            if isinstance(banner_before, dict):
+                banner_before = banner_before.get('text', '')
+            if isinstance(banner_after, dict):
+                banner_after = banner_after.get('text', '')
+            combined = (banner_before or '') + (banner_after or '')
+
+            if combined.strip():
+                continue
+
+            for session in data.get('sessions', []):
+                host = session.get('host', '')
+                port = session.get('port', 0)
+                if not host or not port:
+                    continue
+                if (host, port) not in allowed:
+                    continue
+                if (host, port) in seen:
+                    continue
+                seen.add((host, port))
+
+                reason = detect_failure_reason(host, str(port), logs_dir)
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'data_path': fpath,
+                    'reason': reason,
+                    'has_session_data': bool(session_data),
+                    'has_fingerprint': bool(probe.get('fingerprint', '')),
+                })
+    return issues
+
+
+def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
+                         logs_dir, report_only=False, dry_run=False):
+    """Interactively review servers with empty banners.
+
+    For each server, the user can:
+    - ``x`` to expunge the log file for rescan
+    - ``y`` to remove the entry from the server list
+    - ``n`` to skip
+    - ``q`` to quit
+
+    :param mud_issues: list of empty-banner issues from MUD data
+    :param bbs_issues: list of empty-banner issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    """
+    all_issues = [('mud', mud_issues, mud_list),
+                  ('bbs', bbs_issues, bbs_list)]
+
+    for mode, issues, list_path in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n--- {mode.upper()} servers with empty banners: "
+              f"{len(issues)} ---")
+        removals = set()
+        rescans = 0
+
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            reason = issue['reason']
+            fp = 'yes' if issue['has_fingerprint'] else 'no'
+            sd = 'yes' if issue['has_session_data'] else 'no'
+            print(f"\n  {host}:{port}")
+            print(f"    fingerprint: {fp}, session_data: {sd}")
+            print(f"    log: {reason}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(
+                "    [x]expunge log for rescan / "
+                "[y]remove from list / [n]skip / [q]uit? ",
+                "xynq")
+            if choice == 'q':
+                break
+            if choice == 'x':
+                log_file = Path(logs_dir) / f"{host}:{port}.log"
+                if log_file.is_file() and not dry_run:
+                    log_file.unlink()
+                    print(f"    deleted {log_file}")
+                elif log_file.is_file():
+                    print(f"    [dry-run] would delete {log_file}")
+                else:
+                    print(f"    no log file to delete")
+                rescans += 1
+            elif choice == 'y':
+                removals.add((host, port))
+
+        if removals:
+            entries = load_server_list(list_path)
+            write_filtered_list(list_path, entries, removals,
+                                dry_run=dry_run)
+        if rescans:
+            print(f"  {rescans} server(s) queued for rescan")
+        if removals:
+            print(f"  {len(removals)} server(s) removed from {list_path}")
+
+
+# Server list I/O
 
 def load_server_list(path):
     """Load a server list, preserving original lines.
@@ -654,7 +801,7 @@ def write_filtered_list(path, entries, removals, dry_run=False):
     return removed
 
 
-# ── Fingerprint data loading ────────────────────────────────────────────
+# Fingerprint data loading
 
 def load_server_records(data_dir):
     """Load all server JSON files, return list of record dicts.
@@ -783,7 +930,7 @@ def detect_failure_reason(host, port, logs_dir):
     return "no fingerprint data"
 
 
-# ── Duplicate grouping ──────────────────────────────────────────────────
+# Duplicate grouping
 
 def _find_fp_ip_groups(records):
     """Group by (fingerprint, ip) -- strongest duplicate signal."""
@@ -827,7 +974,7 @@ def _subtract_covered(groups, covered):
     return result
 
 
-# ── Interactive display ─────────────────────────────────────────────────
+# Interactive display
 
 def _print_group_member(idx, rec, removals, source_label=None):
     """Print one member of a duplicate group."""
@@ -994,7 +1141,7 @@ def _prune_data_files(records, removals):
             print(f"  error deleting {p}: {err}", file=sys.stderr)
 
 
-# ── Prune dead servers ──────────────────────────────────────────────────
+# Prune dead servers
 
 def prune_dead(list_path, data_dir, logs_dir, report_only=False,
                dry_run=False):
@@ -1064,7 +1211,7 @@ def prune_dead(list_path, data_dir, logs_dir, report_only=False,
     return removals
 
 
-# ── Within-list duplicates ──────────────────────────────────────────────
+# Within-list duplicates
 
 def find_duplicates(list_path, data_dir, report_only=False,
                     prune_data=False, dry_run=False, decisions=None,
@@ -1173,7 +1320,7 @@ def find_duplicates(list_path, data_dir, report_only=False,
     return removals
 
 
-# ── Cross-list conflicts ────────────────────────────────────────────────
+# Cross-list conflicts
 
 def find_cross_list_conflicts(mud_list, bbs_list, mud_data_dir,
                               bbs_data_dir, report_only=False,
@@ -1315,7 +1462,7 @@ def find_cross_list_conflicts(mud_list, bbs_list, mud_data_dir,
     return mud_removals, bbs_removals
 
 
-# ── DNS deduplication ──────────────────────────────────────────────────
+# DNS deduplication
 
 def find_dns_duplicates(mud_list, bbs_list, report_only=False,
                         dry_run=False):
@@ -1412,7 +1559,7 @@ def find_dns_duplicates(mud_list, bbs_list, report_only=False,
     return mud_removals, bbs_removals
 
 
-# ── CLI ─────────────────────────────────────────────────────────────────
+# CLI
 
 def _get_argument_parser():
     """Build argument parser."""
@@ -1458,6 +1605,10 @@ def _get_argument_parser():
     mode_mx.add_argument(
         "--only-columns", action="store_true",
         help="only discover and suggest column width overrides",
+    )
+    mode_mx.add_argument(
+        "--only-empty", action="store_true",
+        help="only find servers with fingerprint data but empty banners",
     )
 
     parser.add_argument(
@@ -1520,7 +1671,8 @@ def main():
     do_bbs = not args.mud
     only_flags = (args.only_prune, args.only_dupes,
                   args.only_cross, args.only_dns,
-                  args.only_encodings, args.only_columns)
+                  args.only_encodings, args.only_columns,
+                  args.only_empty)
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
@@ -1528,6 +1680,7 @@ def main():
     do_dns = (args.only_dns or not any_only) and not args.skip_dns
     do_encodings = args.only_encodings
     do_columns = args.only_columns
+    do_empty = args.only_empty
 
     # Cross-list and DNS modes require both lists
     if do_cross and (args.mud or args.bbs):
@@ -1620,6 +1773,26 @@ def main():
                 dry_run=args.dry_run)
         else:
             print("No column width issues detected.")
+
+    # Empty banner discovery
+    if do_empty:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_empty_banners(
+                args.mud_data, args.mud_list, args.logs)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_empty_banners(
+                args.bbs_data, args.bbs_list, args.logs)
+
+        if mud_issues or bbs_issues:
+            review_empty_banners(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No empty banner issues detected.")
 
     # Save decisions cache
     if decisions is not None:

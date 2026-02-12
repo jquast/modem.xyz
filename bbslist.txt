@@ -1030,7 +1030,6 @@ valley64.com 6400 petscii
 verify-nebula.kicks-ass.net 23
 vern.cc 23
 vert.synchro.net 23
-vert.synchro.net 513
 vintage.thcbbs.com 23
 vintagepi.asuscomm.com 23
 violetyggdrasil.live 1144
@@ -1078,7 +1077,6 @@ x-bit.org 23230
 x.a-net.online 2323
 x22.ddns.net 9000
 xibalba.l33t.codes 44510 utf8
-xiyouji.org 6666 gbk
 yso.blue 23
 zahrl.ddns.net 2023
 zen.kawasu.wtf 23

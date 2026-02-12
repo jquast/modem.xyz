@@ -407,6 +407,13 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
 
     text = text.replace('\r\n', '\n').replace('\n\r', '\n')
     text = _strip_mxp_sgml(text)
+    # EXPERIMENTAL, not sure whether we should keep this or remove it,
+    # depends on how much y-position cursor banners we find, we'll have
+    # make this some kind of optional ..
+    # Replace clear screen sequences with newlines so content remains visible
+    text = re.sub(r'\x1bc', '\n', text)           # RIS (full reset)
+    text = re.sub(r'\x1b\[[23]?J', '\n', text)    # ED (erase display: 0J, 2J, 3J)
+    text = re.sub(r'\x1b\[H', '\n', text)         # cursor home (no args)
     # Strip terminal report/query sequences (DSR, DA, window ops)
     text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
 
