@@ -1690,7 +1690,7 @@ def run(args):
     """
     data_dir = os.path.abspath(
         args.data_dir
-        or os.path.join(_PROJECT_ROOT, 'data-muds'))
+        or os.path.join(_PROJECT_ROOT))
     logs_dir = os.path.abspath(
         args.logs_dir
         or os.path.join(_PROJECT_ROOT, 'logs'))
