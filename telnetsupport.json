@@ -1047,7 +1047,7 @@
     "port": 7777,
     "ssl": 0,
     "up": 1,
-    "options": "[\"ECHO\"]"
+    "options": "[\"NEW-ENVIRON\"]"
   },
   {
     "host": "aldebaran-mud.de",

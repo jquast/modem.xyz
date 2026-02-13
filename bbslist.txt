@@ -184,7 +184,7 @@
 98.152.200.190 6000
 98.45.212.129 23
 98.5.235.199 2020
-99.106.75.128 95
+99.106.75.128 95 topaz
 99.53.196.18 23
 99.85.80.17 23
 a-net.online 23
@@ -199,7 +199,7 @@ aeug.asuscomm.com 8888 big5
 agency.bbs.nz 23
 alamobbs.mywire.org 6400
 alcatrazbbs.ddns.net 9000
-alco.bbs.io 23
+alco.bbs.io 23 topaz
 alephbbs.com 2626
 altairiv.ddns.net 2323
 altarofwaresbbs.hopto.org 6464
@@ -268,7 +268,7 @@ bbs.bearfather.net 23
 bbs.bigjim.ventures 6969
 bbs.birdenuf.com 2003
 bbs.bnbbbs.net 2023
-bbs.bottomlessabyss.net 2023
+bbs.bottomlessabyss.net 2023 topaz
 bbs.buema.ch 2300 cp437
 bbs.byr.cn 23 gbk
 bbs.bytebarn.de 2300
@@ -393,7 +393,7 @@ bbs.pixelgrounds.net 8888
 bbs.powerbbs.com 23
 bbs.qzwx.com 23
 bbs.ramifications.ca 5128
-bbs.retro32.com 1337 petscii
+bbs.retro32.com 1337 topaz
 bbs.retroacademy.it 23 petscii
 bbs.retroarchive.org 23
 bbs.retroboardbbs.com 2323
@@ -901,7 +901,7 @@ sestar.synchro.net 513
 sf.a-net.online 2323
 sgprobbs.com 1337
 shadowbbs.com 23
-shadowscope.noip.us 23
+shadowscope.noip.us 23 topaz
 shell.roughneckbbs.com 23
 shibboleths.org 800
 shinelp.hopto.org 3030

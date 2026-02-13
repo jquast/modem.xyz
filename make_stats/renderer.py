@@ -357,8 +357,8 @@ def _apply_crt_effects(path, group_name, columns):
 
     The image is 2x upscaled (nearest-neighbor) before effects are
     applied for higher-quality output.  Bloom is applied via
-    pixelgreat.  Scanlines are 1px dark lines every 4th row of the
-    upscaled image (equivalent to every 2nd row of the original).
+    pixelgreat.  Scanlines are 2px dark bands every 4th row of the
+    upscaled image for visible effect at 2x scale.
 
     :param path: path to the PNG file (modified in place)
     :param group_name: font group key from ``_FONT_GROUPS``
@@ -382,7 +382,7 @@ def _apply_crt_effects(path, group_name, columns):
             image=img,
             pixel_size=10,
             output_scale=1,
-            bloom_strength=0.8,
+            bloom_strength=0.67,
             bloom_size=0.5,
             scanline_strength=0,
             grid_strength=0,
@@ -393,11 +393,12 @@ def _apply_crt_effects(path, group_name, columns):
         )
 
     # --- Scanlines ---
-    # 1px dark line every 2 rows (1:1 ratio, authentic CRT).
+    # 2px dark line every 4 rows for visible effect at 2x scale.
     overlay = Image.new('RGBA', result.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
-    for y in range(1, result.height, 2):
+    for y in range(2, result.height, 4):
         draw.line([(0, y), (result.width - 1, y)], fill=(0, 0, 0, 60))
+        draw.line([(0, y + 1), (result.width - 1, y + 1)], fill=(0, 0, 0, 60))
     result = Image.alpha_composite(result.convert('RGBA'), overlay)
     result = result.convert('RGB')
 

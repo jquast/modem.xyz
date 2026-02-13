@@ -21,6 +21,7 @@ from make_stats.common import (
     _rst_heading, print_datatable,
     _group_shared_ip, _most_common_hostname,
     _clean_dir, _remove_stale_rst, _needs_rebuild,
+    _rst_references_missing_images,
     deduplicate_servers,
     _setup_plot_style, _create_pie_chart,
     create_telnet_options_plot,
@@ -1011,7 +1012,9 @@ def generate_bbs_detail(server, logs_dir=None, force=False,
             f"{server['host']}:{server['port']}.log")
                     if logs_dir else None)
         if not _needs_rebuild(
-                detail_path, json_path, log_path, __file__):
+                detail_path, json_path, log_path, __file__) \
+                and not _rst_references_missing_images(
+                    detail_path, DOCS_PATH):
             _ensure_banner(server)
             return False
 
@@ -1138,7 +1141,9 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
             for s in fp_servers
         ]
         if not _needs_rebuild(detail_path, *source_paths,
-                              __file__):
+                              __file__) \
+                and not _rst_references_missing_images(
+                    detail_path, DOCS_PATH):
             return False
 
     with open(detail_path, 'w') as fout, \

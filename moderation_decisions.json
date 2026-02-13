@@ -469,6 +469,9 @@
         "penisys.online:5200"
       ]
     },
+    "area52.tk:5200|penisys.online:6502": {
+      "action": "skip"
+    },
     "ataribbs.ddns.net:6502|nitelite.ddns.net:9000": {
       "action": "skip"
     },

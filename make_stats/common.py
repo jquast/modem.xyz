@@ -621,6 +621,28 @@ def _needs_rebuild(output_path, *source_paths):
     return False
 
 
+_IMAGE_RE = re.compile(r'^\.\. image:: /(_static/banners/\S+)', re.MULTILINE)
+
+
+def _rst_references_missing_images(rst_path, docs_dir):
+    """Check if an RST file references banner images that do not exist.
+
+    :param rst_path: path to the RST file
+    :param docs_dir: root docs directory (e.g. ``docs-bbs/``)
+    :returns: True if any referenced banner image is missing on disk
+    """
+    try:
+        with open(rst_path, 'r') as f:
+            content = f.read()
+    except OSError:
+        return False
+    for m in _IMAGE_RE.finditer(content):
+        img_path = os.path.join(docs_dir, m.group(1))
+        if not os.path.isfile(img_path):
+            return True
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Plot helpers
 # ---------------------------------------------------------------------------
