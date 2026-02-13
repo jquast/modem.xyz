@@ -7,14 +7,14 @@
 112.124.8.59 6666 gbk
 1.13.190.230 8000 gbk
 114.32.122.32 4002 big5
-114.34.189.30 7000 big5
+114.34.189.30 7000 big5 90
 118.195.237.158 6666 gbk
-125.228.186.144 8000 big5
+125.228.186.144 8000 big5 90
 130.61.212.175 4000
 130.61.212.175 4000
 130.61.212.175 4000
 130.61.212.175 4000
-130.61.249.129 4000
+130.61.249.129 4000 utf-8 100
 130.95.13.14 4242
 13.251.165.162 9999
 136.38.83.106 8008
@@ -23,27 +23,27 @@
 15.157.195.64 4000
 15.204.237.15 5555
 155.138.231.112 4000
-155.254.17.154 4201
+155.254.17.154 4201 utf-8 110
 158.69.222.152 4000
 162.250.189.123 4000
 164.138.29.223 4222
 165.227.179.255 4242
 170.187.150.187 1111
 173.230.135.147 4000
-176.122.177.178 9000
+176.122.177.178 9000 utf-8 90
 176.9.151.147 1111
 178.79.173.99 7500
-180.153.120.36 5555 gbk
+180.153.120.36 5555 gbk 40
 185.25.151.230 4000
 185.26.59.68 6047
 188.128.39.239 4000
 191.252.194.206 4000
 192.175.22.156 1874
 1984.ws 23
-202.90.240.159 23
+202.90.240.159 23 utf-8
 202.103.21.247 8888 gbk
 20.223.238.107 7878
-204.15.193.211 1862
+204.15.193.211 1862 utf-8 90
 207.244.227.111 3000
 210.59.236.38 3000 big5
 210.59.236.38 3001 big5
@@ -68,7 +68,7 @@
 35.88.139.46 4000
 37.59.41.114 3001
 37.59.41.114 4000
-38.210.209.169 4000 latin-1
+38.210.209.169 4000 latin-1 90
 39.152.42.32 7777 gbk
 3k.org 3000
 3m.vineyard.haus 3000
@@ -83,11 +83,10 @@
 4dimensions.org 6000
 50.16.123.54 6969
 51.15.222.121 4000
-51.38.48.187 4000
 5.182.18.140 4000
 52.90.102.82 4000
 54.238.179.235 5555 big5
-61.160.23.27 66 gbk
+61.160.23.27 66 gbk 90
 63.142.253.253 4001
 64.182.46.8 4445
 67.205.140.34 2020
@@ -104,7 +103,7 @@
 7dof.org.uk 6715
 7thplane.net 8888
 82.65.252.78 6666
-82.68.167.68 4242
+82.68.167.68 4242 utf-8 80
 8bit.fansi.org 4201
 91.205.173.162 4455
 91.205.173.162 9000
@@ -123,7 +122,7 @@ achaea.com 23
 acropolis.techforward.it 5500
 addictmud.org 4000
 admud.com 1999
-adults.mushpark.com 6969
+adults.mushpark.com 6969 utf-8 120
 adventmud.vineyard.haus 8310
 aelandris.org 4000
 aelfhame.net 1999
@@ -143,8 +142,8 @@ ancient.anguish.org 2222
 ancientempires.net 5011
 angalon.net 3011
 animemuck.org 2035
-animeplanet.co 3334
-animud.net 6667
+animeplanet.co 3334 utf-8 100
+animud.net 6667 utf-8
 anothermux.org 2860
 ansalon.net 8662
 ansiblemoo.org 6000
@@ -163,35 +162,35 @@ arcanetides.net 3000
 argent.jiffyscript.com 6715
 arkadia.rpg.pl 23
 arkadiamud.com.br 2442
-ascensionsojourns.com 7423
+ascensionsojourns.com 7423 utf-8 90
 asgard.aardmud.org 5454
 ashendust.com 2569
 astariamud.com 5000
 astro.astromud.net 2447
 atbmud.dune.net 4000
-ateraan.com 4002
+ateraan.com 4002 utf-8 90
 atlantis.mushpark.com 7777
-atp.pedia.szote.u-szeged.hu 3000
-atp.pedia.szote.u-szeged.hu 3500
+atp.pedia.szote.u-szeged.hu 3000 utf-8 90
+atp.pedia.szote.u-szeged.hu 3500 utf-8 90
 ats.trekmush.org 1700
 ats.trekmush.org 1701
 avalon.mud.de 7777
 avatar.outland.org 3000
 avendar.net 9999
 avpmud.com 5000
-awakemud.com 4000
+awakemud.com 4000 utf-8 90
 azereth.vineyard.haus 8000
 azmodan.net 4000
 badtripmud.com 7778
 balderdash.su 9000
-bardo.aresmush.com 4201
-barren.barrenrealmsmud.com 8000
+bardo.aresmush.com 4201 utf-8 100
+barren.barrenrealmsmud.com 8000 utf-8 90
 bastard.mud.hu 2222
 batmud.bat.org 23
 baymoo.org 8888
 bc.kelotz.net 2018
 bigdamn.com 7777
-biyg.org 1801
+biyg.org 1801 utf-8 90
 bl.mud.at 5678 utf-8
 bl.mud.at 5679 latin-1
 blackfire.online 4000
@@ -201,7 +200,7 @@ brazilmux.tinymux.org 2860
 breakworld.themuds.org 4000 cp437
 brigandine.org 9390
 british-legends.com 27750
-brokenwindows.aresmush.com 4201
+brokenwindows.aresmush.com 4201 utf-8 100
 brutalia2.avantek.hu 4444
 brutusmud.net 4444
 btmux.com 3065
@@ -221,18 +220,18 @@ cavemush.com 6116
 championsmush.com 6363
 chaos.caile.org 4201
 chaos.caile.org 4444
-chaos.caile.org 5555
+chaos.caile.org 5555 utf-8 90
 charis.servegame.com 4240
 charis.servegame.com 4242
 charis.servegame.com 5864
 chatmud.com 7777
-cheeseworld.wtf 3000
+cheeseworld.wtf 3000 utf-8 110
 cheesymud.com 4001
 cityofhope.genesismuds.com 8888
 ckmud.com 8500
 cleftofdimension.com 9000
 cleftofdimensions.net 4354
-clok.contrarium.net 4000
+clok.contrarium.net 4000 utf-8 100
 coderedmud.servegame.com 2323
 coffeemud.net 23
 coffeemud.net 2324
@@ -246,23 +245,22 @@ connect.vikingmud.org 2001
 continentsmud.com 5050
 cosmicrage.nathantech.net 7777
 cotn.subnigra.com 6969
-cowboybebop.vineyard.haus 4020
+cowboybebop.vineyard.haus 4020 utf-8 100
 cptalker.com 9900
-crusify.kharkov.org 5000
+crusify.kharkov.org 5000 utf-8 90
 cryosphere.net 6666
 crystalmush.kydance.net 6886
-cs.netsville.com 7777
+cs.netsville.com 7777 utf-8 100
 csillagkod.themuds.org 7777
 cthulhumud.com 8889
 cubanbar.hochstenbach.net 1234
 culturalwasteland.tv 4000
-cyberassault.org 11111
-cyberlife.es 7777 latin-1
+cyberassault.org 11111 utf-8 100
+cyberlife.es 7777 latin-1 120
 dalazonen.com 9009
-dangunland.iptime.org 5002 euc-kr
 darcness.net 4201
 dark-legacy.com 9898
-darkeningsun.com 5678
+darkeningsun.com 5678 utf-8 40
 darkerrealms.org 2000
 darkgift.mushpark.com 6251
 darklord.no 5000
@@ -278,11 +276,11 @@ dbzfe.com 4000
 dcastle.org 23
 dden.discordia.org 2222
 dead-souls.net 6666
-deadofnight.org 5000
+deadofnight.org 5000 utf-8 100
 deathrisingmud.com 7500
 debomud.org 4000 latin-1
 deepertrouble.org 4242
-delphi.aresmush.com 4201
+delphi.aresmush.com 4201 utf-8 100
 delusionsmuck.com 4999
 demonsgate.org 3011
 desolation.org 7878
@@ -290,7 +288,7 @@ dforces.servegame.com 5000
 dhmud.org 8989
 dibrovamud.com 9000
 dino.surly.org 6250
-discworld.starturtle.net 4242
+discworld.starturtle.net 4242 utf-8 80
 dolba.net 4000 euc-kr
 dolba.net 5200 euc-kr
 doom.twmuds.com 4000 big5
@@ -298,21 +296,21 @@ down.moo.midgard.org 8888
 dragonage.pocketmud.com 5555
 dragonballrevolt.genesismuds.com 6969
 dragonfiremud.com 1999
-dragonflydreams.aresmush.com 4201
+dragonflydreams.aresmush.com 4201 utf-8 100
 dragons-domain.org 8888
 dragonswordsmud.com 1234
-drakkos.co.uk 6789
+drakkos.co.uk 6789 utf-8 80
 dreamchasers.space 4767
 dreamland.rocks 9000
 dreamscapes.dyn.dhs.org 4500
-drygulch.aresmush.com 4201
+drygulch.aresmush.com 4201 utf-8 100
 ds.enyc.org.uk 8688
 dsl-mud.org 4000
-dsmush.com 4000 utf-8
+dsmush.com 4000 utf-8 140
 dum.acc.umu.se 2001
 dunemud.net 6788
 dunemud.net 6789
-dungeon.name 20022
+dungeon.name 20022 utf-8 80
 dw.kicks-ass.org 1111
 dynamix.fansi.org 4200
 eden-test.rpgframework.de 4000 utf-8
@@ -326,25 +324,25 @@ elysium-rpg.com 7777
 emperia.org 5002
 empiremud.net 4000
 empiremush.org 4000
-emptynight.aresmush.com 4201
+emptynight.aresmush.com 4201 utf-8 100
 enertopia.bast.net 4000
 eotl.org 2010
 eotmud.com 4000
-epitaphonline.co.uk 6789
+epitaphonline.co.uk 6789 utf-8 80
 equestria.kaitain.org 2700
 erionmud.com 1234
 es.clovers.tw 8000 big5
 escape.wolfpaw.net 2020
 eternaldarkness.net 9700
-eternalfantasy.org 3333
+eternalfantasy.org 3333 utf-8 90
 eternalfantasy.org 3334
 eternitymud.com 23
 euphoria.mudinfo.net 8888 cp437
 euts.org 2000
 everdark.org 3000
-everwarmud.net 4545
+everwarmud.net 4545 utf-8 90
 evil.xibo.com 4201
-excelsior.troll20.com 4201
+excelsior.troll20.com 4201 utf-8 100
 exilemud.com 4000
 faibanx.lavadomefive.com 8888
 feathermuck.avians.net 8888
@@ -366,7 +364,7 @@ fta.darcness.net 2860
 fulcrum.mu 2601
 furrymuck.com 8888
 furscape.servegame.com 2001
-fy4.vmud.com 30004 gbk
+fy4.vmud.com 30004 gbk 100
 galaxy.silvren.com 1959
 galaxy.silvren.com 1976
 galaxy.silvren.com 1984
@@ -375,7 +373,7 @@ galaxy.silvren.com 1993
 galaxy.silvren.com 2005
 galaxy.silvren.com 2020
 galaxy.silvren.com 2024
-galaxy.silvren.com 2112
+galaxy.silvren.com 2112 utf-8 120
 galaxy.silvren.com 2215
 galaxy.silvren.com 2222
 galaxy.silvren.com 2451
@@ -396,13 +394,13 @@ galaxy.silvren.com 7801
 galaxy.silvren.com 8888
 galaxy.silvren.com 9718
 galaxy.silvren.com 9999
-game.eternalcitygame.com 6730
+game.eternalcitygame.com 6730 utf-8 80
 game.guncho.com 4108
-game.labmud.com 4000
+game.labmud.com 4000 utf-8 90
 game.liberationmush.site 2020
 game.mortalrealms.com 4321
 game.multirev.net 443
-game.petriamud.com 6600
+game.petriamud.com 6600 utf-8 120
 game.phxrising.org 1701
 game.roninmud.org 5000
 game.starwarsrebirth.com 9999
@@ -420,22 +418,22 @@ geno.org 2222
 ginkosoft.com 8898
 gizmomud.com 6969
 gnsmud.org 8989
-godwars.net 1111
-godwars.net 2000
-godwars.net 3000
+godwars.net 1111 utf-8 110
+godwars.net 2000 utf-8 90
+godwars.net 3000 utf-8 120
 godwars.net 4000
-godwars.net 4200
+godwars.net 4200 utf-8 90
 godwars.net 4888
 godwars.net 5353
 godwars.net 6100
 godwars.net 6660
-godwars.net 6767
+godwars.net 6767 utf-8 90
 godwars.net 7701
 godwars.net 7777
-godwars.net 8000
+godwars.net 8000 utf-8 90
 godwars.net 8290
 godwars.net 9000
-godwars.net 9999
+godwars.net 9999 utf-8 120
 godwars2.org 3000
 gra.cygnusreborn.pl 1111
 grimne.org 4000
@@ -444,10 +442,10 @@ gt.gamingmuseum.com 23
 hades-talker.org 6660
 haelrahv.com 3001
 halcyon.bluecows.com 4201
-hatedreality.homeunix.net 23
+hatedreality.homeunix.net 23 cp437 100
 haven.havenmud.com 4000
 havenrpg.net 3000
-hayseed.net 7777
+hayseed.net 7777 utf-8 120
 hercules.mthelicon.com 8888
 heroesassemble.mushhaven.com 3000
 hiddenworldsmud.com 4040
@@ -479,20 +477,20 @@ jedimud.net 4000
 jointhesaga.com 1790
 jorm.kurowski.xyz 4001
 jupiter.iamyourgod.org 3169
-jy.mud.com.tw 6666 big5
+jy.mud.com.tw 6666 big5 90
 kallindor.com 5800
 kallistimud.com 4000
 kbs-cloud.com 4000
 kerovnia.com 1984
-keys.aresmush.com 4201
-killer-mud.pl 3003 iso-8859-2
+keys.aresmush.com 4201 utf-8 100
+killer-mud.pl 3003 iso-8859-2 90
 kingdoms.bithir.co.uk 1812
 kitsumuck.com 8888
 kludgemush.com 10321
 kobramud.org 1138
 kombatmud.com 6969
 kore.pw 6000
-kotl.org 2221
+kotl.org 2221 utf-8 100
 krynn.d20mud.com 4300
 labmush.mushpark.com 3939
 lac.pl 4000
@@ -506,11 +504,10 @@ lions.cs.ndsu.nodak.edu 7777
 leu.mclink.it 6000
 lit.klfree.cz 7680
 live.darkemud.com 5559
-lnl.aresmush.com 4201
+lnl.aresmush.com 4201 utf-8 100
 lofe.org 8000
 login.ibiblio.org 2895
-lolamud.net 6969
-lost.wishes.net 5555
+lost.wishes.net 5555 utf-8 90
 lostsouls.org 23
 lotn.kodakcomputers.com 5400
 lpcdb.themuds.org 4000
@@ -529,7 +526,7 @@ mg.mud.de 23
 midgardmud.de 4711
 midnight.horse 7777
 midnightsun2.org 3000
-mildew.org 4201
+mildew.org 4201 utf-8 90
 minstrelhall.com 221
 mirkwoodmud.org 4000
 mirrorsmud.net 2222
@@ -537,7 +534,7 @@ mnm.glassdragon.xyz 4444
 mo.mushpark.com 2012
 moo.demetro.nl 8888
 moo.di.uminho.pt 7777
-moo.harpers-tale.com 7007
+moo.harpers-tale.com 7007 utf-8 100
 moo.hellyeah.com 7777
 moo.medievalmoo.nl 1111
 moo.metro.cx 7777
@@ -546,7 +543,7 @@ moo.neon-moo.space 7777
 moo.opal.org 7878
 moo.samsara-moo.com 7999
 moo.sindome.org 5555
-moo.squidsoft.net 4444
+moo.squidsoft.net 4444 utf-8 100
 moo.squidsoft.net 7777
 moo.squidsoft.net 7888
 moo.srtmoo.net 8492
@@ -577,21 +574,21 @@ mud.arctic.org 2700
 mud.austinmud.dk 4000
 mud.balzhur.org 5400
 mud.barsawia.pl 23
-mud.bundiland.hu 1222
+mud.bundiland.hu 1222 utf-8 90
 mud.burning-eye.net 4000
-mud.c7i.ru 4000
+mud.c7i.ru 4000 utf-8 90
 mud.chalacyn.com 1000
 mud.clessidra.it 4000
 mud.crimson2.com 4000
 mud.csie.org 3838 big5
 mud.darkrisings.org 1313
-mud.df2.ru 4000
+mud.df2.ru 4000 utf-8 90
 mud.divineblood.org 4000
 mud.dizzymud.com 4000
 mud.dominiamud.net 3333
 mud.drastical.net 9099 utf-8
 mud.dreamverse.org 9600
-mud.durismud.com 7777 cp437
+mud.durismud.com 7777 cp437 80
 mud.dusk.org 7000
 mud.elveszettvilag.hu 6666
 mud.emeraldvalley.net 4000
@@ -607,9 +604,9 @@ mud.infinityforgotten.com 5555
 mud.kallindor.org 5800
 mud.kharkov.org 3000 koi8-r
 mud.kharkov.org 4000 koi8-r
-mud.kharkov.org 7000 koi8-r
+mud.kharkov.org 7000 koi8-r 90
 mud.landsofstone.org 4801
-mud.legendmud.org 9999
+mud.legendmud.org 9999 utf-8 80
 mud.lysator.liu.se 2000
 mud.merentha.com 10000
 mud.mystic-adventure.org 4000
@@ -635,7 +632,7 @@ mud.swmud.org 6666
 mud.tamedhon.de 4711
 mud.tamedhon.de 4712
 mud.temporasanguinis.it 4000
-mud.tempusmud.com 2020
+mud.tempusmud.com 2020 utf-8 100
 mud.tgchan.org 5555
 mud.tgchan.org 5585
 mud.theforestsedge.com 3999
@@ -659,24 +656,24 @@ muds.maldorne.org 5002 utf-8
 muds.toccobrator.com 4201
 muds.toccobrator.com 9901
 mudz.org 6969
-muffinmush.club 2469
+muffinmush.club 2469 utf-8 80
 multimud.net 4242
 multiversemush.com 5001
 mume.org 4242
 muq.org 9999
 murimcraft.ddns.net 9999 euc-kr
 mush.disloops.com 4201
-mush.elendor.net 1892
+mush.elendor.net 1892 utf-8 80
 mush.pennmush.org 4201
 mush.pokemorph.com 2222
 mush.shelteringcolorado.com 2601
-mush.wordsmyth.org 7206
+mush.wordsmyth.org 7206 utf-8 100
 mushhell.com 8250
 mushpark.com 1972
 mushpark.com 6000
 mw.muddywaters.org 3000
 mysticalmud.org 5000
-mysticism-mud.themuds.org 2023
+mysticism-mud.themuds.org 2023 utf-8 100
 mysticmud.com 3000
 nanvaent.org 23 gbk
 nanvaent.org 3000
@@ -688,25 +685,25 @@ neighvadanights.com 8888
 new.vampire-wars.com 6666
 newage.genesismuds.com 9010
 newmoonmud.org 7680
-nightfall.org 4242
+nightfall.org 4242 utf-8 90
 nilgiri.net 8888
 nirvana.beanos.com 3500
 nodeka.com 23
-nomoreheroes.org 4201
+nomoreheroes.org 4201 utf-8 100
 noreality.org 4000
-nuclearwarmud.com 4080
-obsidianreverie.com 4201
+nuclearwarmud.com 4080 utf-8 100
+obsidianreverie.com 4201 utf-8 130
 oim.wolfpaw.net 1960
 oit.ndsu.edu 8888
 omen.genesismuds.com 1100
 onjin.net 4000
-otherspace.aresmush.com 2650
+otherspace.aresmush.com 2650 utf-8 100
 outerinn.pocketmud.com 5555
 outlandsmud.com 4000
 overdrive.overdrivemud.net 5195
 paradise.muxnexus.com 5555
-parallelrpi.com 4500
-passion.mushpark.com 1313
+parallelrpi.com 4500 utf-8 40
+passion.mushpark.com 1313 utf-8 90
 paxrepublica.net 9999
 pbox.mine.nu 4004
 pdragon.org 5555
@@ -728,7 +725,7 @@ play.arxmush.org 3000
 play.brmud.com.br 4001
 play.cosrintwo.com 31000
 play.exodusmud.com 9000
-play.federation2.com 30003
+play.federation2.com 30003 utf-8 100
 play.legendsofkrynn.net 6100
 play.legendsofterris.com 31000
 play.ropmud.com 4443
@@ -736,7 +733,7 @@ play.theforsakenlands.com 1848
 playlom.com 4000
 playmajormud.com 23
 pokemonfusion.servegame.org 4321
-pokemorphparadise.aresmush.com 4201
+pokemorphparadise.aresmush.com 4201 utf-8 100
 portent.genesismuds.com 4910
 potp-mud.com 6400
 prahy.mmh.cz 3333
@@ -747,7 +744,7 @@ prs.muxnexus.com 5555
 psmud.ddns.net 6789 big5
 puggy.mushpark.com 9033
 q.geek.nz 8888
-rabioli.ca 4201
+rabioli.ca 4201 utf-8 100
 radiantheartmush.com 7777
 ranmamuck.dyndns.org 1212
 ravenmud.com 6060
@@ -765,7 +762,7 @@ rhostdev.mushpark.com 4201
 rhostshyl.mushpark.com 4096
 riftmud.com 8001
 riva.silvren.com 7777
-rlmud.org 5001
+rlmud.org 5001 utf-8 140
 rom.genesismuds.com 4422
 rormud.org 3000
 rotjmud.com 9400
@@ -786,34 +783,33 @@ sdmud.com 7000
 secretoflife.pocketmud.com 5555
 seifenblase.mud.de 3333
 selva.grogue.org 8888
-server.mudbest.com 1212 gbk
+server.mudbest.com 1212 gbk 100
 sh.mudalumni.com 7000
 shadowmud.com 1030
 shadowmudii.genesismuds.com 1030
 shangrilamux.com 9999
 shattered.org 23
-shatteredmu.com 4201
+shatteredmu.com 4201 utf-8 100
 shryp.ashendust.com 2000
 shye.org 1701
 silvren.com 6006
-sixth-estate.aresmush.com 4201
+sixth-estate.aresmush.com 4201 utf-8 110
 sky.winds.org 4208
 slack.nosuchluck.net 7979
-slothmud.org 6101
+slothmud.org 6101 utf-8 100
 sluggy.surly.org 2025
 smaug.org 2289
 smile.ath.cx 6715
 snowplains.org 3456
 solareclipse.genesismuds.com 4321
 songofavaria.com 4000
-sotmud.slackhalla.org 4321
 soulruins.com 5000
 sovdawn.kicks-ass.net 4000
 sowmud.ru 5555
 sppr.kr 5050 euc-kr
 starmourn.com 3000
 startrekkin.net 1701
-starwars.d20mud.com 5500
+starwars.d20mud.com 5500 utf-8 100
 starwarsmush.com 4402
 stellaraeon.com 4000
 stickmud.com 6680
@@ -826,7 +822,7 @@ summerlands.undo.it 4000
 sunderingshadows.com 8080
 surfers.fysh.org 4242
 swaoa-mush.com 5500
-swrestorationmush.com 4201
+swrestorationmush.com 4201 utf-8 100
 t2tmud.org 9999
 tapestries.fur.com 2069
 taurosmud.com 5005
@@ -845,7 +841,7 @@ terrafirma.terra.mud.org 2222
 tgmud.net 9010
 tharel.net 5005
 tharsis-gate.org 8765
-the-night.com 2007
+the-night.com 2007 utf-8 130
 thechattingzone.uk 8342
 theden.angel-hare.com 8888
 theland.notroot.com 5000
@@ -882,7 +878,7 @@ truefriends.org.uk 3000
 tsosmud.org 7070
 tsunami.thebigwave.net 23
 tubmud.de 7680
-turf.org 4000
+turf.org 4000 utf-8 90
 twyst.org 3333
 twyst.org 6666
 tx.sjever.net 6666 gbk
@@ -909,7 +905,7 @@ waterpoint.moo.mud.org 8301
 weehours.net 2000
 wildeadventures.net 1221
 wildsau.holy-mission.org 6666
-wildsofpern.aresmush.com 2021
+wildsofpern.aresmush.com 2021 utf-8 100
 windmud.web-games.net 4040 gbk
 windows93.net 8082
 winds.org 4000
@@ -934,22 +930,18 @@ www.daedal-macabre.org 9000
 www.darkrisings.org 1313
 www.derpymud.com 23
 www.fengyunmud.top 6000 gbk
-www.holyquest.org 7373
 www.kinslayermud.org 2222
 www.midianmud.com 3456
 www.mudbar.cn 3333 gbk
 www.sjcqmud.xyz 5555 gbk
 xaosmud.org 5000
 xiyouji.org 6666 gbk
-xyj-cn.imandysoft.net 5555 gbk
-xyj.org.cn 6666 gbk
 xyj.thu.cn 6666 gbk
 yay.tim.org 5440
-yhmud.themuds.org 5566
 yibmoo.dyndns.org 7777
 yormush.com 9988
 yuriba.com 4201
-zebedee-mud.org 7000
+zebedee-mud.org 7000 utf-8 90
 zhyx.xguo.top 8888 gbk
 zmc-place.enyc.org.uk 8682
 zombiemud.net 2150

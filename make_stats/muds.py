@@ -29,9 +29,11 @@ from make_stats.common import (
     display_fingerprint_summary as _display_fingerprint_summary,
     _write_fingerprint_options_section,
     display_encoding_groups as _display_encoding_groups,
+    display_location_groups as _display_location_groups,
     generate_banner_gallery as _generate_banner_gallery,
     generate_fingerprint_details as _generate_fingerprint_details,
 )
+from make_stats.geoip import lookup_countries, _country_flag
 
 DOCS_PATH = os.path.join(_PROJECT_ROOT, "docs-muds")
 PLOTS_PATH = os.path.join(DOCS_PATH, "_static", "plots")
@@ -329,13 +331,16 @@ def load_server_data(data_dir, encoding_overrides=None,
 
             # Clean surrogate escapes from JSON by re-decoding with the
             # detected encoding. These surrogates represent bytes that were
-            # not valid UTF-8 in the original telnet session.
-            if banner_before:
-                banner_before = _redecode_banner(
-                    banner_before, detected_encoding, 'utf-8')
-            if banner_after:
-                banner_after = _redecode_banner(
-                    banner_after, detected_encoding, 'utf-8')
+            # not valid UTF-8 in the original telnet session.  Only do this
+            # for UTF-8/ASCII servers — non-UTF-8 encodings (GBK, Big5, etc.)
+            # were already correctly decoded by the scanner.
+            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
+                if banner_before:
+                    banner_before = _redecode_banner(
+                        banner_before, detected_encoding, 'utf-8')
+                if banner_after:
+                    banner_after = _redecode_banner(
+                        banner_after, detected_encoding, 'utf-8')
 
             record = {
                 'host': session.get('host',
@@ -779,7 +784,9 @@ def display_server_table(servers):
     for s in servers:
         name = s['name'] or s['host']
         mud_file = s['_mud_file']
-        name_cell = (f":doc:`{_rst_escape(name)}"
+        flag = _country_flag(s.get('_country_code', ''))
+        flag_prefix = f"{flag} " if flag else ''
+        name_cell = (f"{flag_prefix}:doc:`{_rst_escape(name)}"
                      f" <mud_detail/{mud_file}>`")
         host = s['host']
         sport = s['port']
@@ -846,6 +853,19 @@ def display_encoding_groups(servers):
         tls_fn=lambda s: s.get('tls_port'))
 
 
+def display_location_groups(servers):
+    """Print MUDs by Location page."""
+    _display_location_groups(
+        servers,
+        detail_subdir='mud_detail',
+        file_key='_mud_file',
+        server_label_fn=lambda s: (
+            s['name'] or f"{s['host']}:{s['port']}"),
+        server_sort_key=lambda s: (
+            s['name'] or s['host']).lower(),
+        tls_fn=lambda s: s.get('tls_port'))
+
+
 # ---------------------------------------------------------------------------
 # RST generation
 # ---------------------------------------------------------------------------
@@ -902,6 +922,15 @@ def generate_encoding_rst(servers):
     with open(rst_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
         display_encoding_groups(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
+def generate_locations_rst(servers):
+    """Generate the locations.rst file."""
+    rst_path = os.path.join(DOCS_PATH, "locations.rst")
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        display_location_groups(servers)
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
@@ -1343,8 +1372,10 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
         'ascii', 'utf-8', 'unknown')
     banner_garbled = banner and _is_garbled(banner)
 
+    has_geoip = (server.get('_country_code', '')
+                 and server.get('_country_name', '') != 'Unknown')
     has_info = (server['has_mssp'] or is_legacy_encoding
-                or banner_garbled)
+                or banner_garbled or has_geoip)
     if has_info:
         _rst_heading("Server Info", sec_char)
         if server['codebase']:
@@ -1387,9 +1418,19 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
             print(f"- **Discord**:"
                   f" `{_rst_escape(server['discord'])}"
                   f" <{discord_url}>`_")
-        if server['location']:
-            print(f"- **Location**:"
-                  f" {_rst_escape(server['location'])}")
+        mssp_loc = server['location']
+        geoip_loc = server.get('_country_name', '')
+        geoip_flag = _country_flag(server.get('_country_code', ''))
+        if mssp_loc:
+            loc_display = f"{_rst_escape(mssp_loc)}"
+            if geoip_flag:
+                loc_display = f"{geoip_flag} {loc_display}"
+            print(f"- **Server Location**: {loc_display} (MSSP)")
+        elif geoip_loc and geoip_loc != 'Unknown':
+            loc_display = f"{_rst_escape(geoip_loc)}"
+            if geoip_flag:
+                loc_display = f"{geoip_flag} {loc_display}"
+            print(f"- **Server Location**: {loc_display} (GeoIP)")
         if server['language']:
             print(f"- **Language**:"
                   f" {_rst_escape(server['language'])}")
@@ -1764,6 +1805,8 @@ def run(args):
               f" ({n_combined} servers combined)",
               file=sys.stderr)
 
+    lookup_countries(servers)
+
     stats = compute_statistics(servers)
 
     print("Generating plots ...", file=sys.stderr)
@@ -1771,13 +1814,14 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
-    init_renderer()
+    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False))
     try:
         print("Generating RST ...", file=sys.stderr)
         generate_summary_rst(stats)
         generate_server_list_rst(servers)
         generate_fingerprints_rst(servers)
         generate_encoding_rst(servers)
+        generate_locations_rst(servers)
         generate_mud_details(servers, logs_dir=logs_dir,
                              data_dir=data_dir,
                              ip_groups=ip_groups)

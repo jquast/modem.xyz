@@ -21,8 +21,9 @@ import subprocess
 import sys
 import tempfile
 import time
+import warnings
 
-_HELPER_SCRIPT = os.path.join(os.path.dirname(__file__), 'terminal_helper.sh')
+_HELPER_SCRIPT = os.path.join(os.path.dirname(__file__), 'terminal_helper.py')
 
 # CGA/VGA 16-color palette matching ansilove defaults.
 _PALETTE = {
@@ -36,6 +37,7 @@ _PALETTE = {
 _FONT_GROUPS = {
     'ibm_vga': {
         'font_family': 'Px IBM VGA8',
+        'cell_ratio': 2.0,  # 8x16 native bitmap
         'encodings': frozenset({
             'cp437', 'cp437_art', 'cp437-art',
             'cp737', 'cp775', 'cp850', 'cp852', 'cp855',
@@ -44,23 +46,27 @@ _FONT_GROUPS = {
         }),
     },
     'topaz': {
-        'font_family': 'Amiga Topaz',
+        'font_family': 'Topaz a600a1200a400',
+        'cell_ratio': 2.0,  # 8x16 native bitmap
         'encodings': frozenset({'amiga', 'topaz'}),
     },
     'petscii': {
         'font_family': 'Bescii Mono',
+        'cell_ratio': 1.0,  # 8x8 native bitmap
         'encodings': frozenset({'petscii'}),
         'aspect_ratio': 1.2,  # C64 320x200 on 4:3 CRT (6:5)
         'columns': 40,
     },
     'atascii': {
         'font_family': 'EightBit Atari',
+        'cell_ratio': 1.0,  # 8x8 native bitmap
         'encodings': frozenset({'atarist', 'atascii'}),
         'aspect_ratio': 1.25,  # Atari 320x192 on 4:3 CRT (5:4)
         'columns': 40,
     },
     'hack': {
         'font_family': 'Hack',
+        'cell_ratio': 2.0,  # approximate for Hack at terminal defaults
         'encodings': frozenset({
             'ascii', 'latin_1', 'iso_8859_1', 'iso_8859_1:1987',
             'iso_8859_2', 'utf_8', 'big5', 'gbk', 'shift_jis', 'euc_kr',
@@ -285,13 +291,8 @@ class TerminalInstance(abc.ABC):
                   f"signal: {ready!r}", file=sys.stderr)
             return False
 
-        # Raise window to front before capture
-        subprocess.run(
-            ['xdotool', 'windowactivate', '--sync', self._window_id],
-            capture_output=True, timeout=5,
-        )
-
-        # Capture screenshot
+        # Capture screenshot (import -window reads directly by window ID,
+        # no need to raise/activate the window).
         try:
             result = subprocess.run(
                 ['import', '-window', self._window_id, output_path],
@@ -337,6 +338,62 @@ class TerminalInstance(abc.ABC):
         return True
 
 
+def _apply_crt_effects(path, group_name, columns):
+    """Apply CRT phosphor bloom and scanline effects to a banner PNG.
+
+    The image is 2x upscaled (nearest-neighbor) before effects are
+    applied for higher-quality output.  Bloom is applied via
+    pixelgreat.  Scanlines are 1px dark lines every 4th row of the
+    upscaled image (equivalent to every 2nd row of the original).
+
+    :param path: path to the PNG file (modified in place)
+    :param group_name: font group key from ``_FONT_GROUPS``
+    :param columns: number of terminal columns used for this capture
+    """
+    from PIL import Image, ImageDraw
+    import pixelgreat as pg
+
+    img = Image.open(path)
+    orig_mode = img.mode
+    if orig_mode not in ('RGB', 'RGBA'):
+        img = img.convert('RGB')
+
+    # --- 2x upscale (nearest-neighbor to keep sharp pixels) ---
+    img = img.resize((img.width * 2, img.height * 2), Image.NEAREST)
+
+    # --- Bloom ---
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        result = pg.pixelgreat(
+            image=img,
+            pixel_size=10,
+            output_scale=1,
+            bloom_strength=0.8,
+            bloom_size=0.5,
+            scanline_strength=0,
+            grid_strength=0,
+            blur=0,
+            washout=0,
+            pixelate=False,
+            rounding=0,
+        )
+
+    # --- Scanlines ---
+    # 1px dark line every 2 rows (1:1 ratio, authentic CRT).
+    overlay = Image.new('RGBA', result.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    for y in range(1, result.height, 2):
+        draw.line([(0, y), (result.width - 1, y)], fill=(0, 0, 0, 60))
+    result = Image.alpha_composite(result.convert('RGBA'), overlay)
+    result = result.convert('RGB')
+
+    if orig_mode == 'L':
+        result = result.convert('L')
+    elif orig_mode == 'LA':
+        result = result.convert('LA')
+    result.save(path)
+
+
 class RendererPool:
     """Pool of terminal instances, one per font group and column width.
 
@@ -347,13 +404,16 @@ class RendererPool:
     :param columns: default terminal width in columns
     :param rows: terminal height in rows
     :param font_size: font size for all instances
+    :param crt_effects: apply CRT bloom and scanlines to output PNGs
     """
 
-    def __init__(self, backend='auto', columns=80, rows=60, font_size=12):
+    def __init__(self, backend='auto', columns=80, rows=60, font_size=12,
+                 crt_effects=True):
         self._backend = self._resolve_backend(backend)
         self._columns = columns
         self._rows = rows
         self._font_size = font_size
+        self._crt_effects = crt_effects
         self._instances = {}
 
     @staticmethod
@@ -361,7 +421,7 @@ class RendererPool:
         """Resolve ``'auto'`` to a concrete backend name.
 
         Checks ``MODEM_RENDERER`` env var first, then probes for
-        available terminals in order: kitty, wezterm.
+        available terminals in order: wezterm, kitty.
 
         :param backend: ``'kitty'``, ``'wezterm'``, or ``'auto'``
         :returns: ``'kitty'`` or ``'wezterm'``
@@ -372,10 +432,10 @@ class RendererPool:
         env = os.environ.get('MODEM_RENDERER', '').lower()
         if env in ('kitty', 'wezterm'):
             return env
-        if shutil.which('kitty'):
-            return 'kitty'
         if shutil.which('wezterm'):
             return 'wezterm'
+        if shutil.which('kitty'):
+            return 'kitty'
         raise RuntimeError("No terminal renderer backend found "
                            "(need kitty or wezterm)")
 
@@ -483,6 +543,12 @@ class RendererPool:
                  output_path],
                 capture_output=True, timeout=10,
             )
+
+        if self._crt_effects and os.path.isfile(output_path):
+            effective_cols = columns if columns is not None else (
+                group_info.get('columns', self._columns))
+            _apply_crt_effects(output_path, group_name, effective_cols)
+
         return True
 
     @staticmethod

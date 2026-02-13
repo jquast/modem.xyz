@@ -1,5 +1,7 @@
 """Kitty terminal backend for the banner renderer."""
 
+import sys
+
 from make_stats.renderer import TerminalInstance, _HELPER_SCRIPT, _PALETTE
 
 
@@ -34,7 +36,7 @@ class KittyInstance(TerminalInstance):
         ]
         for idx, color in _PALETTE.items():
             cmd.append(f'--override=color{idx}={color}')
-        cmd.extend(['--', _HELPER_SCRIPT,
+        cmd.extend(['--', sys.executable, _HELPER_SCRIPT,
                      self._data_fifo, self._ready_fifo,
                      self._window_title])
         return cmd

@@ -2,6 +2,7 @@
 
 import contextlib
 import hashlib
+import html
 import os
 import re
 import sys
@@ -244,12 +245,11 @@ def _strip_mxp_sgml(text):
     :param text: banner text possibly containing MXP/SGML
     :returns: cleaned text
     """
-    import html as html_mod
     text = re.sub(r'\x1b\[\d+z', '', text)
     text = re.sub(r'<!--.*?-->', '', text)
     text = re.sub(r'<!(EL(EMENT)?|ATTLIST|EN(TITY)?)\b.*', '', text,
                   flags=re.DOTALL | re.IGNORECASE)
-    text = html_mod.unescape(text)
+    text = html.unescape(text)
     return text.rstrip()
 
 
@@ -403,22 +403,20 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
 
     output_path = os.path.join(banners_dir, fname)
     if os.path.isfile(output_path):
+        if os.path.getsize(output_path) == 0:
+            return None  # cached failure
         return fname
 
+    text = text.replace('\x00', '')
     text = text.replace('\r\n', '\n').replace('\n\r', '\n')
     text = _strip_mxp_sgml(text)
-    # EXPERIMENTAL, not sure whether we should keep this or remove it,
-    # depends on how much y-position cursor banners we find, we'll have
-    # make this some kind of optional ..
-    # Replace clear screen sequences with newlines so content remains visible
-    text = re.sub(r'\x1bc', '\n', text)           # RIS (full reset)
-    text = re.sub(r'\x1b\[[23]?J', '\n', text)    # ED (erase display: 0J, 2J, 3J)
-    text = re.sub(r'\x1b\[H', '\n', text)         # cursor home (no args)
     # Strip terminal report/query sequences (DSR, DA, window ops)
     text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
 
     if _renderer_pool.capture(text, output_path, encoding, columns=columns):
         return fname
+    # Cache failure as 0-byte file to avoid retrying on next run.
+    open(output_path, 'a').close()
     return None
 
 
@@ -989,6 +987,54 @@ def display_encoding_groups(servers, detail_subdir, file_key,
         print()
 
 
+def display_location_groups(servers, detail_subdir, file_key,
+                            server_label_fn, server_sort_key, tls_fn):
+    """Print servers-by-location page.
+
+    :param servers: list of server records (must have ``_country_code``
+        and ``_country_name`` keys)
+    :param detail_subdir: subdirectory for detail links (e.g. ``'bbs_detail'``)
+    :param file_key: record key for the detail filename (e.g. ``'_bbs_file'``)
+    :param server_label_fn: callable(server) -> display label string
+    :param server_sort_key: callable(server) -> sort key
+    :param tls_fn: callable(server) -> truthy if TLS supported
+    """
+    from .geoip import _country_flag
+
+    _rst_heading("Server Locations", '=')
+    print("Servers grouped by the geographic location of"
+          " their IP address.")
+
+    by_country = {}
+    for s in servers:
+        code = s.get('_country_code', '')
+        name = s.get('_country_name', 'Unknown')
+        key = code or 'XX'
+        by_country.setdefault(key, (name, []))[1].append(s)
+
+    for key, (name, members) in sorted(
+            by_country.items(), key=lambda x: (-len(x[1][1]), x[1][0])):
+        flag = _country_flag(key) + ' ' if key != 'XX' else ''
+        print()
+        print(f"- `{flag}{_rst_escape(name)}`_: {len(members)}")
+    print()
+
+    for key, (name, members) in sorted(
+            by_country.items(), key=lambda x: (-len(x[1][1]), x[1][0])):
+        flag = _country_flag(key) + ' ' if key != 'XX' else ''
+        heading = f'{flag}{name}'
+        print()
+        print(f'.. _{name}:')
+        print()
+        _rst_heading(heading, '-')
+        for s in sorted(members, key=server_sort_key):
+            detail_file = s[file_key]
+            label = server_label_fn(s)
+            tls = (' :tls-lock:`\U0001f512`'
+                   if tls_fn(s) else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <{detail_subdir}/{detail_file}>`{tls}")
+        print()
 
 
 def _page_initial_range(page_groups, server_name_fn):
@@ -1030,7 +1076,7 @@ def _display_banner_page(page_groups, page_num, total_pages,
     :param server_name_fn: callable(server) -> display name
     :param tls_fn: callable(server) -> truthy if TLS supported
     """
-    title = f"Page {page_num} of {total_pages} {page_label}"
+    title = f"Page {page_num} of {total_pages} {_rst_escape(page_label)}"
     _rst_heading(title, '=')
 
     for group in page_groups:
@@ -1041,9 +1087,9 @@ def _display_banner_page(page_groups, page_num, total_pages,
 
         name = server_name_fn(rep)
         if count > 1:
-            heading = f"{name} (+{count - 1} more)"
+            heading = f"{_rst_escape(name)} (+{count - 1} more)"
         else:
-            heading = name
+            heading = _rst_escape(name)
         _rst_heading(heading, '-')
 
         banner_fname = rep.get('_banner_png')
@@ -1057,10 +1103,16 @@ def _display_banner_page(page_groups, page_num, total_pages,
 
         for s in members:
             label = server_name_fn(s)
+            host = s['host']
+            port = s['port']
             tls = (' :tls-lock:`\U0001f512`'
                    if tls_fn(s) else '')
+            encoding = s.get('display_encoding', 'utf-8')
             print(f"- :doc:`{_rst_escape(label)}"
-                  f" <{detail_subdir}/{s[file_key]}>`{tls}")
+                  f" <{detail_subdir}/{s[file_key]}>`"
+                  f"{tls}"
+                  f" :copy-btn:`{_rst_escape(host)} {port}`")
+            print(f"  | Encoding: {_rst_escape(encoding)}")
         print()
 
 

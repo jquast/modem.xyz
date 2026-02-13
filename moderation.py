@@ -12,6 +12,7 @@ Modes (run all by default, or select one):
   --only-encodings  Only discover and suggest encoding fixes
   --only-columns    Only discover and suggest column width overrides
   --only-empty      Only find servers with fingerprint data but empty banners
+  --only-renders-empty  Only find banners that render to an empty screen
 
 Scope (moderate both by default, or select one):
   --mud           Only moderate the MUD list
@@ -549,11 +550,21 @@ def review_column_width_issues(mud_issues, bbs_issues,
                 continue
 
             choice = _prompt(
-                f"    Apply {suggested} columns? (Y/n/q) ", "ynq")
+                f"    Apply {suggested} columns? (Y/n/q/NUMBER) ",
+                "ynq")
             if choice == 'q':
                 return applied_count
             if choice == 'n':
                 continue
+
+            # Allow entering a custom column width as a number
+            columns = suggested
+            if choice and choice not in 'ynq':
+                try:
+                    columns = int(choice)
+                except ValueError:
+                    print(f"    Invalid number: {choice!r}, skipping")
+                    continue
 
             entries = load_server_list(list_path)
             updated = False
@@ -562,11 +573,11 @@ def review_column_width_issues(mud_issues, bbs_issues,
                 if h == host and p == port:
                     parts = line.split()
                     if len(parts) >= 4:
-                        parts[3] = str(suggested)
+                        parts[3] = str(columns)
                     elif len(parts) >= 3:
-                        parts.append(str(suggested))
+                        parts.append(str(columns))
                     elif len(parts) >= 2:
-                        parts.extend(['utf-8', str(suggested)])
+                        parts.extend(['utf-8', str(columns)])
                     new_entries.append((h, p, ' '.join(parts)))
                     updated = True
                 else:
@@ -576,7 +587,7 @@ def review_column_width_issues(mud_issues, bbs_issues,
                 with open(list_path, 'w', encoding='utf-8') as f:
                     for _, _, line in new_entries:
                         f.write(line + '\n')
-                print(f"    ✓ Updated {list_path}")
+                print(f"    ✓ Updated {list_path} ({columns} columns)")
                 applied_count += 1
 
 
@@ -693,6 +704,154 @@ def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
             print(f"\n  {host}:{port}")
             print(f"    fingerprint: {fp}, session_data: {sd}")
             print(f"    log: {reason}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(
+                "    [x]expunge log for rescan / "
+                "[y]remove from list / [n]skip / [q]uit? ",
+                "xynq")
+            if choice == 'q':
+                break
+            if choice == 'x':
+                log_file = Path(logs_dir) / f"{host}:{port}.log"
+                if log_file.is_file() and not dry_run:
+                    log_file.unlink()
+                    print(f"    deleted {log_file}")
+                elif log_file.is_file():
+                    print(f"    [dry-run] would delete {log_file}")
+                else:
+                    print(f"    no log file to delete")
+                rescans += 1
+            elif choice == 'y':
+                removals.add((host, port))
+
+        if removals:
+            entries = load_server_list(list_path)
+            write_filtered_list(list_path, entries, removals,
+                                dry_run=dry_run)
+        if rescans:
+            print(f"  {rescans} server(s) queued for rescan")
+        if removals:
+            print(f"  {len(removals)} server(s) removed from {list_path}")
+
+
+# Visually empty banner discovery
+
+def discover_renders_empty(data_dir, list_path):
+    """Find servers whose banners contain only escape sequences or whitespace.
+
+    These servers have raw banner data but nothing visible after stripping
+    ANSI sequences — they would render to a blank screenshot.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param list_path: path to server list file
+    :returns: list of dicts with host, port, data_path, raw_banner
+    """
+    issues = []
+    seen = set()
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed = {(h, p) for h, p, _ in list_entries if h and p}
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            probe = data.get('server-probe', {})
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+            if isinstance(banner_before, dict):
+                banner_before = banner_before.get('text', '')
+            if isinstance(banner_after, dict):
+                banner_after = banner_after.get('text', '')
+            combined = (banner_before or '') + (banner_after or '')
+
+            if not combined.strip():
+                continue
+
+            visible = _strip_ansi(combined)
+            if visible.strip():
+                continue
+
+            for session in data.get('sessions', []):
+                host = session.get('host', '')
+                port = session.get('port', 0)
+                if not host or not port:
+                    continue
+                if (host, port) not in allowed:
+                    continue
+                if (host, port) in seen:
+                    continue
+                seen.add((host, port))
+
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'data_path': fpath,
+                    'raw_banner': combined,
+                })
+    return issues
+
+
+def review_renders_empty(mud_issues, bbs_issues, mud_list, bbs_list,
+                         logs_dir, report_only=False, dry_run=False):
+    """Interactively review servers whose banners render to empty screens.
+
+    For each server, shows ``repr()`` of the raw banner so the moderator
+    can inspect the escape sequences.  Options:
+
+    - ``x`` to expunge the log file for rescan
+    - ``y`` to remove the entry from the server list
+    - ``n`` to skip
+    - ``q`` to quit
+
+    :param mud_issues: list of renders-empty issues from MUD data
+    :param bbs_issues: list of renders-empty issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    """
+    all_issues = [('mud', mud_issues, mud_list),
+                  ('bbs', bbs_issues, bbs_list)]
+
+    for mode, issues, list_path in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n--- {mode.upper()} banners that render to empty screen: "
+              f"{len(issues)} ---")
+        removals = set()
+        rescans = 0
+
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            raw = issue['raw_banner']
+            print(f"\n  {host}:{port}")
+            print(f"    Raw banner ({len(raw)} chars):")
+            raw_repr = repr(raw)
+            if len(raw_repr) > 500:
+                raw_repr = raw_repr[:500] + '...'
+            print(f"    {raw_repr}")
 
             if report_only:
                 continue
@@ -1610,6 +1769,10 @@ def _get_argument_parser():
         "--only-empty", action="store_true",
         help="only find servers with fingerprint data but empty banners",
     )
+    mode_mx.add_argument(
+        "--only-renders-empty", action="store_true",
+        help="only find banners that render to an empty screen",
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -1672,7 +1835,7 @@ def main():
     only_flags = (args.only_prune, args.only_dupes,
                   args.only_cross, args.only_dns,
                   args.only_encodings, args.only_columns,
-                  args.only_empty)
+                  args.only_empty, args.only_renders_empty)
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
@@ -1681,6 +1844,7 @@ def main():
     do_encodings = args.only_encodings
     do_columns = args.only_columns
     do_empty = args.only_empty
+    do_renders_empty = args.only_renders_empty
 
     # Cross-list and DNS modes require both lists
     if do_cross and (args.mud or args.bbs):
@@ -1793,6 +1957,26 @@ def main():
                 dry_run=args.dry_run)
         else:
             print("No empty banner issues detected.")
+
+    # Renders-empty banner discovery
+    if do_renders_empty:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_renders_empty(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_renders_empty(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            review_renders_empty(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No banners that render to empty screen.")
 
     # Save decisions cache
     if decisions is not None:

@@ -29,6 +29,9 @@
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|a1bbs.ddns.net:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|mistressoffire.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|thunder.synchro.net:23|tmzbbs01.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
@@ -180,6 +183,9 @@
       "action": "skip"
     },
     "202.61.251.17:23|darkgame.buanzo.org:23": {
+      "action": "skip"
+    },
+    "202.61.251.17:23|darkgame.buanzo.org:23|oldtimebbs.com:23": {
       "action": "skip"
     },
     "203.96.209.7:23|swatsbbs.ddns.net:2323": {
@@ -509,6 +515,9 @@
       "action": "skip"
     },
     "bbs.interlinked.us:23|krion.io:1337": {
+      "action": "skip"
+    },
+    "bbs.jacobcat.app:513|rns.risenshinebbs.com:513|thunder.synchro.net:513|tiabbs.synchro.net:513": {
       "action": "skip"
     },
     "bbs.jacobcat.app:513|rns.risenshinebbs.com:513|tiabbs.synchro.net:513": {
@@ -988,6 +997,9 @@
       "remove": [
         "tfcbbs.com:6464"
       ]
+    },
+    "tgmud.net:9010|tirradyn.com:9010": {
+      "action": "skip"
     },
     "tiabbs.synchro.net:513|vert.synchro.net:513": {
       "action": "skip"

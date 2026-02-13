@@ -623,6 +623,13 @@
     "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "20forbeers.com",
+    "port": 1337,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\",\"NEW-ENVIRON\"]"
+  },
+  {
     "host": "ats.trekmush.org",
     "port": 1700,
     "ssl": 1,
@@ -702,13 +709,6 @@
   {
     "host": "bbs.throwbackbbs.com",
     "port": 23,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"
-  },
-  {
-    "host": "20forbeers.com",
-    "port": 1337,
     "ssl": 0,
     "up": 1,
     "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"

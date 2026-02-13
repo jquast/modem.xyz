@@ -5,5 +5,6 @@ MUD Indices
    :maxdepth: 2
 
    server_list
+   locations
    encodings
    fingerprints

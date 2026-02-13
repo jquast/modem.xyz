@@ -16,6 +16,43 @@ first MUD was created in 1978 by `Roy Trubshaw and Richard Bartle
 today, many maintained by volunteer communities large and small that have kept them running for
 decades.
 
+.. youtube:: JqC66POqhY4
+
+
+What is Telnet?
+---------------
+
+`Telnet <https://en.wikipedia.org/wiki/Telnet>`_ is one of the earliest network protocols still in
+use today. Developed for `ARPANET <https://en.wikipedia.org/wiki/ARPANET>`_ in 1969 and described in
+`RFC 97 <https://datatracker.ietf.org/doc/html/rfc97>`_), it allowed systems to establish a two-way
+text-only connection over the internet. Despite its age, Telnet remains widely deployed and used all
+over the world and for embedded/IoT systems.
+
+Although the Telnet protocol has **option negotiation**, a complex procedure of negotiating extended
+options, a majority of the MUD servers surveyed do not perform any Telnet option negotiation at all.
+They simply send and receive raw ASCII text, which is fully compliant with the original standard.
+
+See Also: BBSes
+~~~~~~~~~~~~~~~
+
+MUDs are related to **BBSes** (Bulletin Board Systems) -- both use Telnet, but MUDs typically
+operate in **line mode** with ASCII or UTF-8, while BBSes use **character-at-a-time** with legacy
+encodings like CP437 for ANSI art. A companion BBS census is at `bbs.modem.xyz
+<https://bbs.modem.xyz/>`_.
+
+Playing MUDs today
+------------------
+
+You may "just telnet" to many MUD servers to try them out. However, for serious playing you will
+likely want a better client that provides line editing, history control, and command completion not
+typically ofered by MUD servers. There are also MUD extensions for all kinds of purposes like
+character stats or even audio.
+
+Two popular open source actively developed clients,
+
+- Mudlet https://www.mudlet.org/ - mouse-based interface
+- tintin++ https://tintin.mudhalla.net/ - CLI interface
+
 Types of Servers
 ----------------
 
@@ -57,53 +94,28 @@ widely in purpose:
      content (via MSSP ``ADULT MATERIAL`` or ``MINIMUM AGE`` >= 18) are tagged with ``Adult`` in the
      genre column of the :doc:`server_list`.
 
-- **Talker**
-
-  Someone quickly figured out they could just remove the dungeon from a MUD codebase and have a
-  basic "chat server", A text-based chat system with rooms but minimal or no game mechanics.
-
-What is Telnet?
----------------
-
-**Telnet** is a network protocol from 1969 (`RFC 854
-<https://datatracker.ietf.org/doc/html/rfc854>`_) that establishes a two-way text connection over
-the internet. Despite its age, Telnet remains widely deployed and used all over the world for
-embedded systems. Its longevity comes from its simplicity: it is portable, accessible, and easy to
-develop for, which is why MUD communities have adopted it for so long.
-
-When you connect to a MUD, your client opens a TCP connection to the server's address and port,
-this is the most basic networking connection, the server sends text and for you to read,
-and you type commands that are sent back.
-
-Although the Telnet protocol has **option negotiation**, a complex procedure of negotiating extended
-options, a majority of the MUD servers surveyed do not perform any Telnet option negotiation at all.
-They simply send and receive raw ASCII text, which is fully compliant with the original standard.
-
-One special note, is that many MUD codebases predate general Unicode support and may emit non-ASCII
-data for art or language accents, usually in UTF-8 though some older code bases may still use legacy
-encodings like CP437 or latin1.
-
-See Also: BBSes
-----------------
-
-MUDs are related to **BBSes** (Bulletin Board Systems) -- both use Telnet, but MUDs typically
-operate in **line mode** with ASCII or UTF-8, while BBSes use **character-at-a-time** with legacy
-encodings like CP437 for ANSI art. A companion BBS census is at `bbs.modem.xyz
-<https://bbs.modem.xyz/>`_.
-
 About This Site
 ---------------
 
-This site acts as a discovery of international MUDs.
+This site is a *census* of Telnet-accessible MUDs.
 
-This directory is unique in that **fingerprinting** of the telnet options negotiated are captured,
-and serves are cataloged by this fingerprint.  It was created by the author of the Python
-`telnetlib3 <https://github.com/jquast/telnetlib3>`_ library, and, uses the
-``telnetlib3-fingerprint`` client to gather the results shown here.
+It provides a fast web interface to
 
-The list of MUDs scanned is from the github-managed file, `mudlist.txt
-<https://github.com/jquast/modem.xyz/blob/master/mudlist.txt>`_, you are welcome to add
-anything by pull request, or to make any other changes or recommendations to this website.
+- Browse MUDs,
+- Preview login banners,
+- and examine their Telnet protocol details
+
+It was created by the author of the Python `telnetlib3 <https://telnetlib3.readthedocs.io/>`_ library, and uses the `telnetlib3-fingerprint
+<https://telnetlib3.readthedocs.io/en/latest/guidebook.html#fingerprinting-client>`_ CLI to gather
+the results shown here.
+
+This list of MUDs was primarily sourced from the `lociterm.com <https://www.lociterm.com/>`_ and
+`mudstats.com <https://mudstats.com/>`_
+
+The file is hosted on Github and all scanning and documentation is automatic. Suggest a change to
+`bbslist.txt <https://github.com/jquast/modem.xyz/blob/master/mudlist.txt>`_ to
+add or remove or fix an encoding as a pull request.  Feel free to suggest any other changes
+or fixes.
 
 Better Sites
 ------------

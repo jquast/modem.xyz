@@ -539,7 +539,7 @@ convolution.us 23
 corsysystem.org 2300
 cosmicrage.earth 7777
 cottonwoodbbs.dyndns.org 6502
-cpbbs.de 2323 cp437
+cpbbs.de 2323 cp437 90
 cpugod.synchro.net 23
 cqbbs.ddns.net 6800
 crackintimebbs.ddns.net 2323

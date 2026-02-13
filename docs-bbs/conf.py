@@ -58,6 +58,24 @@ def _tls_lock_role(name, rawtext, text, lineno, inliner, options={}, content=[])
     return [node], []
 
 
+def _copy_btn_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    """RST role that renders a clipboard copy button for ``host port``."""
+    import html as html_mod
+    from docutils import nodes
+    parts = text.rsplit(' ', 1)
+    host = html_mod.escape(parts[0])
+    port = html_mod.escape(parts[1]) if len(parts) > 1 else '23'
+    markup = (
+        f'<button class="copy-btn"'
+        f' data-host="{host}" data-port="{port}"'
+        f' title="Copy host and port"'
+        f' aria-label="Copy {host} port {port} to clipboard">'
+        f'<span class="copy-icon" aria-hidden="true">&#x1F4CB;</span>'
+        f'</button>')
+    node = nodes.raw('', markup, format='html')
+    return [node], []
+
+
 def setup(app):
     from docutils.parsers.rst import roles
     roles.register_local_role('proto-yes', _make_class_role('proto-yes'))
@@ -65,6 +83,7 @@ def setup(app):
     roles.register_local_role('proto-negotiated',
                               _make_class_role('proto-negotiated'))
     roles.register_local_role('tls-lock', _tls_lock_role)
+    roles.register_local_role('copy-btn', _copy_btn_role)
 
     app.add_css_file("dos-theme.css")
     app.add_js_file("custom_table_sort.js")

@@ -144,6 +144,12 @@ code, pre, .rst-content code, .rst-content pre,
 }
 
 /* ── ANSI banner rendering ───────────────────────────────────────────── */
+img.ansi-banner {
+  max-width: 800px;
+  width: 100%;
+  height: auto;
+}
+
 pre.ansi-banner {
   font-family: 'Perfect DOS VGA 437 Win', 'Courier New', monospace !important;
   background: #1a1a1a;

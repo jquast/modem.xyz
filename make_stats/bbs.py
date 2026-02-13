@@ -28,9 +28,11 @@ from make_stats.common import (
     display_fingerprint_summary as _display_fingerprint_summary,
     _write_fingerprint_options_section,
     display_encoding_groups as _display_encoding_groups,
+    display_location_groups as _display_location_groups,
     generate_banner_gallery as _generate_banner_gallery,
     generate_fingerprint_details as _generate_fingerprint_details,
 )
+from make_stats.geoip import lookup_countries, _country_flag
 
 DOCS_PATH = os.path.join(_PROJECT_ROOT, "docs-bbs")
 PLOTS_PATH = os.path.join(DOCS_PATH, "_static", "plots")
@@ -202,13 +204,16 @@ def load_server_data(data_dir, encoding_overrides=None,
 
             # Clean surrogate escapes from JSON by re-decoding with the
             # detected encoding. These surrogates represent bytes that were
-            # not valid UTF-8 in the original telnet session.
-            if banner_before:
-                banner_before = _redecode_banner(
-                    banner_before, detected_encoding, 'utf-8')
-            if banner_after:
-                banner_after = _redecode_banner(
-                    banner_after, detected_encoding, 'utf-8')
+            # not valid UTF-8 in the original telnet session.  Only do this
+            # for UTF-8/ASCII servers — non-UTF-8 encodings (GBK, Big5, etc.)
+            # were already correctly decoded by the scanner.
+            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
+                if banner_before:
+                    banner_before = _redecode_banner(
+                        banner_before, detected_encoding, 'utf-8')
+                if banner_after:
+                    banner_after = _redecode_banner(
+                        banner_after, detected_encoding, 'utf-8')
 
             record = {
                 'host': host,
@@ -508,7 +513,9 @@ def display_server_table(servers):
     for s in servers:
         bbs_file = s['_bbs_file']
         host_display = f"{s['host']}:{s['port']}"
-        host_cell = (f":doc:`{_rst_escape(host_display)}"
+        flag = _country_flag(s.get('_country_code', ''))
+        flag_prefix = f"{flag} " if flag else ''
+        host_cell = (f"{flag_prefix}:doc:`{_rst_escape(host_display)}"
                      f" <bbs_detail/{bbs_file}>`")
         if s['website']:
             href = s['website']
@@ -597,6 +604,17 @@ def display_bbs_software_groups(servers):
 def display_encoding_groups(servers):
     """Print BBS by Encoding page."""
     _display_encoding_groups(
+        servers,
+        detail_subdir='bbs_detail',
+        file_key='_bbs_file',
+        server_label_fn=lambda s: f"{s['host']}:{s['port']}",
+        server_sort_key=lambda s: s['host'].lower(),
+        tls_fn=lambda s: s['tls_support'])
+
+
+def display_location_groups(servers):
+    """Print BBS by Location page."""
+    _display_location_groups(
         servers,
         detail_subdir='bbs_detail',
         file_key='_bbs_file',
@@ -718,6 +736,15 @@ def generate_encoding_rst(servers):
     print(f"  wrote {rst_path}", file=sys.stderr)
 
 
+def generate_locations_rst(servers):
+    """Generate the locations.rst file."""
+    rst_path = os.path.join(DOCS_PATH, "locations.rst")
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        display_location_groups(servers)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+
+
 def generate_banner_gallery_rst(servers):
     """Generate paginated banner_gallery*.rst files."""
     _generate_banner_gallery(
@@ -804,7 +831,7 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
           f' to clipboard">')
     print(f'   <span class="copy-icon"'
           f' aria-hidden="true">'
-          f'&#x2398;</span>')
+          f'&#x1F4CB;</span>')
     print(f'   </button>')
     if server['tls_support']:
         print(f'   <span class="tls-lock"'
@@ -844,6 +871,15 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     elif banner:
         print("*Banner not shown (legacy encoding"
               " not supported).*")
+        print()
+
+    geoip_loc = server.get('_country_name', '')
+    geoip_flag = _country_flag(server.get('_country_code', ''))
+    if geoip_loc and geoip_loc != 'Unknown':
+        loc_display = f"{_rst_escape(geoip_loc)}"
+        if geoip_flag:
+            loc_display = f"{geoip_flag} {loc_display}"
+        print(f"**Server Location**: {loc_display} (GeoIP)")
         print()
 
     if server['bbs_software']:
@@ -1227,6 +1263,8 @@ def run(args):
               f" ({n_combined} servers combined)",
               file=sys.stderr)
 
+    lookup_countries(servers)
+
     stats = compute_statistics(servers)
 
     print("Generating plots ...", file=sys.stderr)
@@ -1234,7 +1272,7 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
-    init_renderer()
+    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False))
     try:
         print("Generating RST ...", file=sys.stderr)
         generate_summary_rst(stats)
@@ -1242,6 +1280,7 @@ def run(args):
         generate_fingerprints_rst(servers)
         generate_bbs_software_rst(servers)
         generate_encoding_rst(servers)
+        generate_locations_rst(servers)
         generate_fidonet_rst(servers)
         generate_bbs_details(servers, logs_dir=logs_dir,
                               force=force, data_dir=data_dir,

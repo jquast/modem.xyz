@@ -1,8 +1,12 @@
 """Wezterm terminal backend for the banner renderer."""
 
 import os
+import sys
 
 from make_stats.renderer import TerminalInstance, _HELPER_SCRIPT, _PALETTE
+
+
+_CJK_FALLBACK_FONT = 'Noto Sans Mono CJK SC'
 
 
 def _generate_wezterm_config(path, font_family, font_size, columns, rows,
@@ -24,14 +28,21 @@ def _generate_wezterm_config(path, font_family, font_size, columns, rows,
 
     east_asian_str = 'true' if east_asian_wide else 'false'
 
+    if east_asian_wide:
+        font_lua = (f'wezterm.font_with_fallback{{"{font_family}", '
+                    f'"{_CJK_FALLBACK_FONT}"}}')
+    else:
+        font_lua = f'wezterm.font("{font_family}")'
+
     lua = f"""\
 local wezterm = require 'wezterm'
 local config = {{}}
-config.font = wezterm.font("{font_family}")
+config.font = {font_lua}
 config.font_size = {font_size}
 config.initial_cols = {columns}
 config.initial_rows = {rows}
 config.window_decorations = "NONE"
+config.enable_tab_bar = false
 config.scrollback_lines = 0
 config.bold_brightens_ansi_colors = "BrightOnly"
 config.treat_east_asian_ambiguous_width_as_wide = {east_asian_str}
@@ -78,7 +89,7 @@ class WeztermInstance(TerminalInstance):
             'wezterm',
             f'--config-file={self._config_path}',
             'start', '--no-auto-connect',
-            '--', _HELPER_SCRIPT,
+            '--', sys.executable, _HELPER_SCRIPT,
             self._data_fifo, self._ready_fifo,
             self._window_title,
         ]
