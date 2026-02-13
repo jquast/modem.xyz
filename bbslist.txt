@@ -1,5 +1,5 @@
 # format,
-# ip address [port number [encoding]]
+# ip address [port number [encoding [columns]]]
 104.142.112.149 9000
 104.174.3.6 23
 104.57.170.70 6840
@@ -829,6 +829,7 @@ partybowlbbs.ddns.net 2323
 pathunknown.net 23
 pcpl.hopto.org 6400 petscii
 pebkac.lol 23
+penisys.online 6502 ascii
 perlbbs.tw 23 big5
 phantasm.bbs.io 4489 topaz
 phoenix.bnbbbs.net 23

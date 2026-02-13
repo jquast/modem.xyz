@@ -1,5 +1,5 @@
 # format,
-# ip address [port number [encoding]]
+# ip address [port number [encoding [columns]]]
 104.154.76.197 4333
 107.172.21.36 4000
 108.252.255.105 3333
@@ -33,7 +33,7 @@
 176.122.177.178 9000 utf-8 90
 176.9.151.147 1111
 178.79.173.99 7500
-180.153.120.36 5555 gbk 40
+180.153.120.36 5555 gbk
 185.25.151.230 4000
 185.26.59.68 6047
 188.128.39.239 4000
@@ -260,7 +260,7 @@ cyberlife.es 7777 latin-1 120
 dalazonen.com 9009
 darcness.net 4201
 dark-legacy.com 9898
-darkeningsun.com 5678 utf-8 40
+darkeningsun.com 5678 utf-8
 darkerrealms.org 2000
 darkgift.mushpark.com 6251
 darklord.no 5000
@@ -702,7 +702,7 @@ outerinn.pocketmud.com 5555
 outlandsmud.com 4000
 overdrive.overdrivemud.net 5195
 paradise.muxnexus.com 5555
-parallelrpi.com 4500 utf-8 40
+parallelrpi.com 4500 utf-8
 passion.mushpark.com 1313 utf-8 90
 paxrepublica.net 9999
 pbox.mine.nu 4004

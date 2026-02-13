@@ -127,13 +127,14 @@ class TerminalInstance(abc.ABC):
     """
 
     def __init__(self, font_family, group_name, columns=80, rows=70,
-                 font_size=12, east_asian_wide=False):
+                 font_size=12, east_asian_wide=False, display_env=None):
         self._font_family = font_family
         self._group_name = group_name
         self._columns = columns
         self._rows = rows
         self._font_size = font_size
         self._east_asian_wide = east_asian_wide
+        self._display_env = display_env
         self._window_title = f'render-{os.getpid()}-{group_name}'
         self._proc = None
         self._window_id = None
@@ -154,6 +155,14 @@ class TerminalInstance(abc.ABC):
 
         :returns: string like ``'kitty'`` or ``'wezterm'``
         """
+
+    def _subprocess_env(self):
+        """Return environment dict with DISPLAY override if set."""
+        if self._display_env is None:
+            return None
+        env = os.environ.copy()
+        env['DISPLAY'] = self._display_env
+        return env
 
     def start(self):
         """Launch the terminal process and find its X11 window ID.
@@ -180,6 +189,7 @@ class TerminalInstance(abc.ABC):
             stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
+            env=self._subprocess_env(),
         )
 
         try:
@@ -187,6 +197,7 @@ class TerminalInstance(abc.ABC):
                 ['xdotool', 'search', '--sync',
                  '--name', self._window_title],
                 capture_output=True, text=True, timeout=10,
+                env=self._subprocess_env(),
             )
         except subprocess.TimeoutExpired as exc:
             self.stop()
@@ -291,12 +302,15 @@ class TerminalInstance(abc.ABC):
                   f"signal: {ready!r}", file=sys.stderr)
             return False
 
-        # Capture screenshot (import -window reads directly by window ID,
-        # no need to raise/activate the window).
+        # Brief pause to let the terminal finish rendering the banner.
+        time.sleep(0.1)
+
+        # Capture screenshot (import -window reads directly by window ID).
         try:
             result = subprocess.run(
                 ['import', '-window', self._window_id, output_path],
                 capture_output=True, timeout=10,
+                env=self._subprocess_env(),
             )
             if result.returncode != 0:
                 print(f"  import failed for {output_path}: "
@@ -398,7 +412,9 @@ class RendererPool:
     """Pool of terminal instances, one per font group and column width.
 
     Instances are created lazily on first use for each font group.
-    Acts as a context manager: on exit, shuts down all instances.
+    Acts as a context manager: on enter, launches a virtual X11 display
+    via Xvfb so terminal windows are invisible; on exit, shuts down all
+    instances and the virtual display.
 
     :param backend: ``'kitty'``, ``'wezterm'``, or ``'auto'``
     :param columns: default terminal width in columns
@@ -415,6 +431,8 @@ class RendererPool:
         self._font_size = font_size
         self._crt_effects = crt_effects
         self._instances = {}
+        self._xvfb_proc = None
+        self._display_env = None
 
     @staticmethod
     def _resolve_backend(backend):
@@ -439,7 +457,38 @@ class RendererPool:
         raise RuntimeError("No terminal renderer backend found "
                            "(need kitty or wezterm)")
 
+    def _start_xvfb(self):
+        """Launch a virtual X11 display via Xvfb.
+
+        Finds a free display number starting at :99 and launches Xvfb
+        with a screen large enough for terminal rendering.
+        """
+        if shutil.which('Xvfb') is None:
+            print("  Xvfb not found, rendering on real display",
+                  file=sys.stderr)
+            return
+        for display_num in range(99, 200):
+            display = f':{display_num}'
+            lock_path = f'/tmp/.X{display_num}-lock'
+            if os.path.exists(lock_path):
+                continue
+            self._xvfb_proc = subprocess.Popen(
+                ['Xvfb', display, '-screen', '0', '3200x2400x24'],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            time.sleep(0.3)
+            if self._xvfb_proc.poll() is not None:
+                self._xvfb_proc = None
+                continue
+            self._display_env = display
+            print(f"  Xvfb started on {display}", file=sys.stderr)
+            return
+        print("  Could not find free display for Xvfb, "
+              "rendering on real display", file=sys.stderr)
+
     def __enter__(self):
+        self._start_xvfb()
         return self
 
     def __exit__(self, *exc):
@@ -450,6 +499,15 @@ class RendererPool:
                 print(f"  Warning: failed to stop renderer "
                       f"[{name}]: {e}", file=sys.stderr)
         self._instances.clear()
+        if self._xvfb_proc is not None:
+            self._xvfb_proc.terminate()
+            try:
+                self._xvfb_proc.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                self._xvfb_proc.kill()
+                self._xvfb_proc.wait()
+            self._xvfb_proc = None
+            print("  Xvfb stopped", file=sys.stderr)
 
     def _determine_columns(self, group_name):
         return _FONT_GROUPS.get(group_name, {}).get('columns', self._columns)
@@ -472,6 +530,7 @@ class RendererPool:
             rows=self._rows,
             font_size=self._font_size,
             east_asian_wide=east_asian,
+            display_env=self._display_env,
         )
         if self._backend == 'kitty':
             from make_stats.renderer_kitty import KittyInstance
@@ -555,10 +614,12 @@ class RendererPool:
     def available():
         """Check if terminal screenshot rendering is possible.
 
-        :returns: True if DISPLAY is set and at least one backend
-            plus xdotool and import are found in PATH
+        :returns: True if DISPLAY is set or Xvfb is available, and at
+            least one backend plus xdotool and import are found in PATH
         """
-        if not os.environ.get('DISPLAY'):
+        has_display = (os.environ.get('DISPLAY')
+                       or shutil.which('Xvfb') is not None)
+        if not has_display:
             return False
         for tool in ('xdotool', 'import'):
             if shutil.which(tool) is None:
