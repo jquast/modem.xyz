@@ -35,6 +35,9 @@
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
@@ -254,6 +257,9 @@
     "210.59.236.38:7000|210.59.236.38:7788|fs.twkang.net:5555": {
       "action": "skip"
     },
+    "210.59.236.38:7000|fs.twkang.net:5555": {
+      "action": "skip"
+    },
     "210.59.236.38:7788|fs.twkang.net:5555": {
       "action": "skip"
     },
@@ -404,6 +410,9 @@
         "82.68.167.68:4242"
       ]
     },
+    "8bit.hoyvision.com:6400|8bit.hoyvision.com:6502": {
+      "action": "skip"
+    },
     "91.205.173.162:4455|91.205.173.162:9000|aranylaz.mud.hu:4321|bastard.mud.hu:2222|csillagkod.themuds.org:7777": {
       "action": "skip"
     },
@@ -535,6 +544,9 @@
     "bbs.f4fbbs.com:2323|netasylum.com:2323": {
       "action": "skip"
     },
+    "bbs.f4fbbs.com:2323|netasylum.com:2323|silentnode.ddns.net:6400|thedigitalpost.freeddns.org:23": {
+      "action": "skip"
+    },
     "bbs.furryrefuge.com:23|freeway.vkradio.com:23|kneesurgery.moe:23|mysticalrealmbbs.com:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
@@ -592,6 +604,9 @@
     "bcrgames.com:31337|wizardsrainbow.com:23": {
       "action": "skip"
     },
+    "blackflag.acid.org:23|blackflag.acid.org:26|blackflag.acid.org:27": {
+      "action": "skip"
+    },
     "bookworm.synchro.net:2323|predikhe.synchro.net:2323": {
       "action": "remove",
       "remove": [
@@ -647,6 +662,16 @@
       "action": "skip"
     },
     "cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6402|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
+      "action": "skip"
+    },
+    "cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6404|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6428|cib.dyndns.org:6491": {
+      "action": "remove",
+      "remove": [
+        "cib.dyndns.org:6404",
+        "cib.dyndns.org:6428"
+      ]
+    },
+    "cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
       "action": "skip"
     },
     "cib.dyndns.org:6404|cib.dyndns.org:6428": {

@@ -1050,6 +1050,13 @@
     "options": "[\"MSSP\"]"
   },
   {
+    "host": "moo.squidsoft.net",
+    "port": 7777,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\"]"
+  },
+  {
     "host": "aldebaran-mud.de",
     "port": 2000,
     "ssl": 1,

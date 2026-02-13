@@ -322,11 +322,46 @@ def _detect_utf8_as_cp437(banner, stored_encoding):
     return 'utf-8'
 
 
-def discover_encoding_issues(data_dir, list_path):
+def _detect_utf8_native(banner, stored_encoding, list_encoding,
+                        default_encoding):
+    """Detect UTF-8 banners that need an explicit encoding override.
+
+    When the scanner records UTF-8 but the server list has no encoding
+    override, the build's default encoding (e.g. ``cp437`` for BBS) would
+    re-decode the banner via :func:`_combine_banners`, corrupting genuine
+    Unicode box-drawing and block-element characters.
+
+    :param banner: banner text as stored
+    :param stored_encoding: encoding recorded by the scanner
+    :param list_encoding: encoding override from the list file, or ``None``
+    :param default_encoding: build default encoding (e.g. ``'cp437'``),
+        or ``None`` when no re-decoding would occur
+    :returns: ``'utf-8'`` if an explicit override is needed, else ``None``
+    """
+    if not banner or stored_encoding != 'utf-8':
+        return None
+    if list_encoding:
+        return None
+    if not default_encoding or default_encoding == 'utf-8':
+        return None
+
+    visible = _strip_ansi(banner)
+    box_count = sum(1 for c in visible if '\u2500' <= c <= '\u259f')
+    if box_count < 3:
+        return None
+
+    return 'utf-8'
+
+
+def discover_encoding_issues(data_dir='.', list_path=None,
+                             default_encoding=None):
     """Scan JSON fingerprint data to find servers with encoding issues.
 
-    :param data_dir: path to server data directory
+    :param data_dir: path to server data directory (default ``'.'``)
     :param list_path: path to server list file (mud/bbs list)
+    :param default_encoding: build default encoding (e.g. ``'cp437'`` for
+        BBS); used to detect UTF-8 banners that would be corrupted by
+        re-decoding
     :returns: list of dicts with host, port, suggested_encoding
     """
     issues = []
@@ -380,7 +415,12 @@ def discover_encoding_issues(data_dir, list_path):
             list_enc = list_encodings.get((host, port))
             banner_before = session_data.get('banner_before_return', '')
             banner_after = session_data.get('banner_after_return', '')
-            banner = banner_before or banner_after
+            after_stripped = _strip_ansi(banner_after).strip()
+            if (banner_before and after_stripped
+                    and after_stripped not in _strip_ansi(banner_before)):
+                banner = banner_before.rstrip() + '\r\n' + banner_after.lstrip()
+            else:
+                banner = banner_before or banner_after
 
             max_width, _ = _measure_banner_columns(banner)
 
@@ -397,6 +437,24 @@ def discover_encoding_issues(data_dir, list_path):
                     'replacement_count': mojibake_count,
                     'reason': 'utf8_mojibake',
                     'list_already_correct': list_enc == utf8_suggest,
+                })
+                continue
+
+            # Check for genuine UTF-8 banners that need an explicit
+            # override to prevent re-decoding to the build default.
+            utf8_native = _detect_utf8_native(
+                banner, stored_enc, list_enc, default_encoding)
+            if utf8_native:
+                visible = _strip_ansi(banner)
+                box_count = sum(
+                    1 for c in visible if '\u2500' <= c <= '\u259f')
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'suggested_encoding': utf8_native,
+                    'replacement_count': box_count,
+                    'reason': 'utf8_native',
+                    'list_already_correct': False,
                 })
                 continue
 
@@ -672,7 +730,9 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
             continue
 
         mojibake = [i for i in issues if i.get('reason') == 'utf8_mojibake']
-        other = [i for i in issues if i.get('reason') != 'utf8_mojibake']
+        utf8_native = [i for i in issues if i.get('reason') == 'utf8_native']
+        other = [i for i in issues
+                 if i.get('reason') not in ('utf8_mojibake', 'utf8_native')]
 
         print(f"\n{mode.upper()} encoding issues found: {len(issues)}")
 
@@ -684,6 +744,30 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
             if result == -1:  # quit
                 return applied_count
             applied_count += max(result, 0)
+
+        # UTF-8 native: scanner data is valid, just add list override.
+        # No expunge needed — the data is already correctly encoded.
+        if utf8_native:
+            print(f"\n  UTF-8 native banners needing list override:"
+                  f" {len(utf8_native)}")
+            for issue in utf8_native:
+                host = issue['host']
+                port = issue['port']
+                count = issue['replacement_count']
+                print(f"    {host}:{port}"
+                      f"  ({count} box-drawing chars)")
+            if not report_only:
+                choice = _prompt(
+                    f"    Add utf-8 override for all {len(utf8_native)}"
+                    f" servers? (y/n/q) ", "ynq")
+                if choice == 'q':
+                    return applied_count
+                if choice == 'y':
+                    fixes = {(i['host'], i['port']): 'utf-8'
+                             for i in utf8_native}
+                    result = _apply_encoding_fixes_bulk(
+                        list_path, fixes, dry_run=dry_run)
+                    applied_count += result
 
         # Individual review for other encoding issues
         for issue in other:
@@ -2721,7 +2805,8 @@ def main():
         if do_mud and os.path.isfile(args.mud_list):
             mud_issues = discover_encoding_issues(args.mud_data, args.mud_list)
         if do_bbs and os.path.isfile(args.bbs_list):
-            bbs_issues = discover_encoding_issues(args.bbs_data, args.bbs_list)
+            bbs_issues = discover_encoding_issues(
+                args.bbs_data, args.bbs_list, default_encoding='cp437')
 
         if mud_issues or bbs_issues:
             review_encoding_issues(

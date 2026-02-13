@@ -17,6 +17,7 @@ import abc
 import os
 import shutil
 import signal
+import struct
 import subprocess
 import sys
 import tempfile
@@ -100,6 +101,23 @@ def _is_east_asian_encoding(group_name):
     """
     group_info = _FONT_GROUPS.get(group_name, {})
     return bool(group_info.get('encodings', frozenset()) & _EAST_ASIAN_ENCODINGS)
+
+
+def _png_dimensions(path):
+    """Read pixel dimensions from a PNG file header.
+
+    :param path: path to a PNG file
+    :returns: ``(width, height)`` tuple, or ``(0, 0)`` on failure
+    """
+    try:
+        with open(path, 'rb') as fh:
+            header = fh.read(24)
+        if len(header) >= 24 and header[:8] == b'\x89PNG\r\n\x1a\n':
+            w, h = struct.unpack('>II', header[16:24])
+            return w, h
+    except OSError:
+        pass
+    return 0, 0
 
 
 class _FifoTimeout(Exception):
@@ -382,6 +400,12 @@ class TerminalInstance(abc.ABC):
         except (subprocess.TimeoutExpired, ValueError, IndexError):
             pass  # cropping is optional, keep original image
 
+        w, h = _png_dimensions(output_path)
+        if 0 < w < 20 and 0 < h < 20:
+            print(f"  render too small ({w}x{h}px), likely poison escape: "
+                  f"{output_path}", file=sys.stderr)
+            return False
+
         if (not os.path.isfile(output_path)
                 or os.path.getsize(output_path) == 0):
             print(f"  {tool} produced empty output: {output_path}",
@@ -552,24 +576,26 @@ class RendererPool:
     def _determine_columns(self, group_name):
         return _FONT_GROUPS.get(group_name, {}).get('columns', self._columns)
 
-    def _make_instance(self, group_name, effective_cols):
+    def _make_instance(self, group_name, effective_cols, east_asian_wide=False):
         """Create the right TerminalInstance subclass.
 
         :param group_name: font group key from ``_FONT_GROUPS``
         :param effective_cols: resolved column width
+        :param east_asian_wide: treat ambiguous-width chars as 2 cells
         :returns: a TerminalInstance subclass instance
         """
         group_info = _FONT_GROUPS[group_name]
-        east_asian = _is_east_asian_encoding(group_name)
         display = (f"{group_name}-{effective_cols}"
                    if effective_cols != 80 else group_name)
+        if east_asian_wide:
+            display += '-cjk'
         kwargs = dict(
             font_family=group_info['font_family'],
             group_name=display,
             columns=effective_cols,
             rows=self._rows,
             font_size=self._font_size,
-            east_asian_wide=east_asian,
+            east_asian_wide=east_asian_wide,
             display_env=self._display_env,
         )
         if self._backend == 'kitty':
@@ -578,16 +604,17 @@ class RendererPool:
         from make_stats.renderer_wezterm import WeztermInstance
         return WeztermInstance(**kwargs)
 
-    def _get_instance(self, group_name, columns=None):
+    def _get_instance(self, group_name, columns=None, east_asian_wide=False):
         """Get or lazily create an instance for the given group.
 
         :param group_name: font group key from ``_FONT_GROUPS``
         :param columns: optional column width override
+        :param east_asian_wide: treat ambiguous-width chars as 2 cells
         :returns: TerminalInstance or None on failure
         """
         effective_cols = (columns if columns is not None
                           else self._determine_columns(group_name))
-        instance_key = (group_name, effective_cols)
+        instance_key = (group_name, effective_cols, east_asian_wide)
 
         if instance_key in self._instances:
             inst = self._instances[instance_key]
@@ -604,7 +631,7 @@ class RendererPool:
         if group_info is None:
             return None
 
-        inst = self._make_instance(group_name, effective_cols)
+        inst = self._make_instance(group_name, effective_cols, east_asian_wide)
         try:
             inst.start()
         except RuntimeError as exc:
@@ -625,11 +652,27 @@ class RendererPool:
         :returns: instance display name on success, None on failure
         """
         group_name = _encoding_to_font_group(encoding)
-        instance = self._get_instance(group_name, columns=columns)
+        east_asian = encoding.lower().replace('-', '_') in _EAST_ASIAN_ENCODINGS
+        instance = self._get_instance(
+            group_name, columns=columns, east_asian_wide=east_asian)
         if instance is None:
             return None
         if not instance.capture(text, output_path):
-            return None
+            # Poison escape may have corrupted terminal state.
+            # Relaunch instance and retry once.
+            if instance.alive:
+                print(f"  renderer [{group_name}] capture failed, "
+                      f"relaunching for retry...", file=sys.stderr)
+                try:
+                    instance.stop()
+                except Exception:
+                    pass
+                instance = self._get_instance(
+                    group_name, columns=columns, east_asian_wide=east_asian)
+                if instance is None or not instance.capture(text, output_path):
+                    return None
+            else:
+                return None
 
         # Correct for non-square pixel aspect ratio (CRT platforms).
         group_info = _FONT_GROUPS.get(group_name, {})

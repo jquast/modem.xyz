@@ -18,7 +18,7 @@
 134.209.40.1 31337 utf-8
 136.144.155.250 2000
 136.144.155.250 8888
-13leader.net 8023
+13leader.net 8023 utf-8
 13th.hoyvision.com 6400
 140.114.87.5 443
 142.11.212.221 23
@@ -39,7 +39,7 @@
 173.14.206.213 23
 173.14.208.154 9911
 173.199.127.12 2002
-173.217.78.103 2323
+173.217.78.103 2323 utf-8
 173.255.220.187 443
 173.61.230.102 23
 174.1.49.147 2323
@@ -51,6 +51,7 @@
 192.243.111.121 2323
 192.82.254.205 8888
 198.71.48.13 7777
+1984.ws 23 utf8
 1stchoicecore.co.nz 1028 big5
 1stchoicecore.co.nz 1030
 20.245.25.86 23
@@ -67,7 +68,7 @@
 213.166.5.201 23
 216.136.9.5 1809
 216.136.9.8 23
-217.154.107.144 23
+217.154.107.144 23 utf-8
 217.198.137.127 23
 23.151.152.245 23
 23.95.146.28 8282 utf-8
@@ -95,6 +96,7 @@
 45.79.37.227 23 utf-8
 45.79.37.227 513 utf-8
 45.79.66.72 23
+45.79.69.172 513
 47.223.173.180 23
 47.25.173.251 23
 47.38.20.227 23
@@ -137,7 +139,7 @@
 72.11.35.79 23
 72.12.252.162 31810
 73.183.161.134 8887
-73.242.209.94 23
+73.242.209.94 23 utf-8
 73.25.26.80 23
 73.42.12.93 23 utf-8
 74.65.39.90 6809 utf-8
@@ -204,7 +206,6 @@ amnesiabbs.duckdns.org 23 utf-8
 amstrad.simulant.uk 464
 andcycle.idv.tw 23 big5
 andr01d.zapto.org 9999
-angstridden.net 1337
 anotherbbs.dynu.net 1337
 antidote.triad.se 64128
 anybox.freedyndns.de 23 utf-8
@@ -241,7 +242,7 @@ bbs.acehoss.net 23 utf-8
 bbs.aghy.net 23 utf-8
 bbs.alcatrash.org 23 utf-8
 bbs.alecoexp.cz 23
-bbs.alsgeeklab.com 2323
+bbs.alsgeeklab.com 2323 utf-8
 bbs.anduin.net 23
 bbs.archaicbinary.net 23
 bbs.arcticzonebbs.net 23
@@ -285,7 +286,7 @@ bbs.deek.se 23
 bbs.deepskies.com 6400
 bbs.demigoth.com 23 utf-8
 bbs.dicksonlabs.net 2325
-bbs.digicombbs.com 2323
+bbs.digicombbs.com 2323 utf-8
 bbs.digital-warfare.net 1337
 bbs.digitalrainbow.info 23 utf-8
 bbs.disconnected-by-peer.at 23 latin-1
@@ -383,7 +384,7 @@ bbs.retroarchive.org 23 utf-8
 bbs.retroboardbbs.com 2323
 bbs.retrocampus.com 23
 bbs.retrocampus.com 6510 petscii
-bbs.retrohack.se 23
+bbs.retrohack.se 23 utf-8
 bbs.retrohack.se 64128
 bbs.riddells.net 10023
 bbs.rockvilletavern.com 23
@@ -398,7 +399,7 @@ bbs.sinnershaven.com 23
 bbs.skynetbbs.com 20023
 bbs.soc4ever.com 23
 bbs.softsolutions.net.br 2023 utf-8
-bbs.starbase11.de 2323
+bbs.starbase11.de 2323 utf-8
 bbs.starbase21.net 23
 bbs.stardoc134.com 2323
 bbs.stardoc134.com 513
@@ -464,10 +465,10 @@ bloodbbs.ddns.net 2323
 board.classicbbs.net 9339
 bookworm.synchro.net 2323
 borderlinebbs.dyndns.org 6400
-box.imzadi.de 23
+box.imzadi.de 23 utf-8
 brazi.net 23 utf-8
 bunnybbs.tw 23 big5
-bwrbbs.ddns.net 23
+bwrbbs.ddns.net 23 utf-8
 byob.hopto.org 64128
 c3bbs.retronetworking.org 23 utf-8
 c3bbs.retronetworking.org 513 utf-8
@@ -497,10 +498,8 @@ ciaamigabbs.dynu.net 6400 topaz
 cib.dyndns.org 6400 petscii
 cib.dyndns.org 6401 petscii
 cib.dyndns.org 6402 petscii
-cib.dyndns.org 6404
 cib.dyndns.org 6405 petscii
 cib.dyndns.org 6407 petscii
-cib.dyndns.org 6428 petscii
 cib.dyndns.org 6491 petscii
 citadel.dc540.org 23230
 citadel64.thejlab.com 6400
@@ -523,7 +522,7 @@ cqbbs.ddns.net 6800
 crackintimebbs.ddns.net 2323
 crazyworldbbs.com 2323 utf-8
 crisisbbs.net 23 utf-8
-csbbs.dyndns.org 23
+csbbs.dyndns.org 23 utf-8
 cvic.org 23 big5
 cyberspacebbs.net 23 utf-8
 cyberspacebbs.net 2323
@@ -592,7 +591,7 @@ fido.fidobbs.it 2301
 firesidebbs.com 23231 utf-8
 fix.no 24
 flailingbbs.synchronetbbs.org 23
-flashbackbbs.sytes.net 6502
+flashbackbbs.sytes.net 6502 utf-8
 fmrl.throwbackbbs.com 2324
 foremxebbs.ddns.net 9999
 foremxebbs.ddns.net 9999 atascii
@@ -706,14 +705,14 @@ mapscii.me 23
 maxbbs.ddns.net 24023
 mba.dnsalias.com 2002
 mba.dnsalias.com 23
-mbpeikert.ddns.net 23
+mbpeikert.ddns.net 23 utf-8
 mbse.gzrbbs.net 2320
 megadodo.online 4242
 microblaster.net 2002
 microtownbbs.com 6400
 midbbs.kinet.ne.jp 3123 shift-jis
 milek7.pl 23
-mimac.bizzi.org 2323
+mimac.bizzi.org 2323 utf-8
 modem.serial-port.com 1333
 modematider.selstam.nu 50023
 mojo.synchro.net 23 utf-8
@@ -744,7 +743,7 @@ nebbs.servehttp.com 9223
 nerdragebbs.ddns.net 23
 netasylum.com 2323
 nethack.alt.org 23
-nethack4.org 23
+nethack4.org 23 utf-8
 netpoint.webhop.me 23 utf-8
 netpoint.webhop.me 513
 nettwerked.synchronetbbs.org 23 utf-8
@@ -863,7 +862,7 @@ skatgame.net 5000
 slipstreambbs.net 23 utf-8
 solarflow.dynu.net 23
 sos-bbs.net 23
-sotanomsxbbs.org 23
+sotanomsxbbs.org 23 utf-8
 southcentral.se 1023 topaz
 southernamis.ddns.net 23
 spaghettihut.amigaretro.net 6800
@@ -925,9 +924,9 @@ thecell.ar 1040
 thecrypt.synchronetbbs.org 513
 thedigitalpost.freeddns.org 23
 thegateb.synchro.net 2424
-themegabbs.com 6400
+themegabbs.com 6400 utf-8
 thenervoushospital.com 1996
-thenineworlds.dnshome.de 923
+thenineworlds.dnshome.de 923 utf-8
 thenorthernpalace.com 2020 topaz
 theoldnet.com 6400 petscii
 theparityerror.com 23
@@ -994,7 +993,7 @@ wd1cks.org 23 utf-8
 westwoodbbs.net 64738
 wfido.ru 1234
 wh2bbs.us 2321 utf-8
-whodareswinsbbs.uk 23
+whodareswinsbbs.uk 23 utf-8
 wilco.ydns.eu 2300 utf-8
 willowcreekbbs.dynu.net 6400 petscii
 winnow.1q1.me 23 utf-8
