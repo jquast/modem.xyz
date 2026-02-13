@@ -1,5 +1,6 @@
 """BBS-specific statistics generation."""
 
+import codecs
 import contextlib
 import json
 import os
@@ -24,7 +25,7 @@ from make_stats.common import (
     _rst_references_missing_images,
     deduplicate_servers,
     _setup_plot_style, _create_pie_chart,
-    create_telnet_options_plot,
+    create_telnet_options_plot, create_location_plot,
     _assign_filenames,
     display_fingerprint_summary as _display_fingerprint_summary,
     _write_fingerprint_options_section,
@@ -57,11 +58,13 @@ def _ensure_banner(server):
     if banner and not _is_garbled(banner):
         effective_enc = (
             server.get('encoding_override') or DEFAULT_ENCODING)
-        banner_fname = _banner_to_png(
+        banner_fname, display_w = _banner_to_png(
             banner, BANNERS_PATH, effective_enc,
             columns=server.get('column_override'))
         if banner_fname:
             server['_banner_png'] = banner_fname
+            if display_w:
+                server['_banner_display_width'] = display_w
 
 # Known BBS software patterns (case-insensitive match against banner text)
 BBS_SOFTWARE_PATTERNS = [
@@ -309,8 +312,18 @@ def compute_statistics(servers):
 
     encoding_counts = Counter()
     for s in servers:
-        encoding_counts[s['display_encoding']] += 1
+        enc = s['display_encoding']
+        try:
+            enc = codecs.lookup(enc).name
+        except LookupError:
+            pass
+        encoding_counts[enc] += 1
     stats['encoding_counts'] = dict(encoding_counts)
+
+    country_counts = Counter()
+    for s in servers:
+        country_counts[s.get('_country_name', 'Unknown')] += 1
+    stats['country_counts'] = dict(country_counts)
 
     stats['emsi_count'] = sum(1 for s in servers if s['has_emsi'])
 
@@ -366,6 +379,8 @@ def create_all_plots(stats):
         stats, os.path.join(PLOTS_PATH, 'encoding_distribution.png'))
     create_telnet_options_plot(
         stats, os.path.join(PLOTS_PATH, 'telnet_options.png'))
+    create_location_plot(
+        stats, os.path.join(PLOTS_PATH, 'server_locations.png'))
 
 
 # ---------------------------------------------------------------------------
@@ -473,6 +488,18 @@ def display_plots():
     print()
     print("   Telnet options offered vs requested by servers"
           " during negotiation.")
+    print()
+
+    print("Server Locations")
+    print("-----------------")
+    print()
+    print(".. figure:: _static/plots/server_locations.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the geographic distribution"
+          " of servers by country.")
+    print()
+    print("   Server locations by country.")
     print()
 
 
@@ -856,17 +883,21 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
         effective_enc = (
             server.get('encoding_override')
             or DEFAULT_ENCODING)
-        banner_fname = _banner_to_png(
+        banner_fname, display_w = _banner_to_png(
             banner, BANNERS_PATH, effective_enc,
             columns=server.get('column_override'))
         if banner_fname:
             server['_banner_png'] = banner_fname
+            if display_w:
+                server['_banner_display_width'] = display_w
             print("**Connection Banner:**")
             print()
             print(f".. image:: "
                   f"/_static/banners/{banner_fname}")
             print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
             print(f"   :class: ansi-banner")
+            if display_w:
+                print(f"   :width: {display_w}px")
             print(f"   :loading: lazy")
             print()
     elif banner:
@@ -953,10 +984,18 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
             with open(json_file, encoding='utf-8', errors='surrogateescape') as jf:
                 raw_json = jf.read().rstrip()
             if raw_json:
+                print(".. raw:: html")
+                print()
+                print("   <details><summary>Show JSON</summary>")
+                print()
                 print(".. code-block:: json")
                 print()
                 for line in raw_json.split('\n'):
                     print(f"   {line}")
+                print()
+                print(".. raw:: html")
+                print()
+                print("   </details>")
                 print()
 
     if logs_dir:
@@ -973,6 +1012,10 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
                       " exchange")
                 print("between client and server.")
                 print()
+                print(".. raw:: html")
+                print()
+                print("   <details><summary>Show Logfile</summary>")
+                print()
                 print(".. code-block:: text")
                 print()
                 for line in log_text.split('\n'):
@@ -987,6 +1030,10 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
                 print()
                 print(f"   telnetlib3-fingerprint "
                       f"--loglevel=debug {host} {port}")
+                print()
+                print(".. raw:: html")
+                print()
+                print("   </details>")
                 print()
 
 
@@ -1187,6 +1234,9 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
                 print(f"     :alt: "
                       f"{_rst_escape(_banner_alt_text(banner))}")
                 print(f"     :class: ansi-banner")
+                bdw = s.get('_banner_display_width')
+                if bdw:
+                    print(f"     :width: {bdw}px")
                 print(f"     :loading: lazy")
                 print()
 

@@ -13,10 +13,16 @@ Modes (run all by default, or select one):
   --only-columns    Only discover and suggest column width overrides
   --only-empty      Only find servers with fingerprint data but empty banners
   --only-renders-empty  Only find banners that render to an empty screen
+  --only-renders-small  Only find banners whose rendered PNGs are tiny (<1KB)
 
 Scope (moderate both by default, or select one):
   --mud           Only moderate the MUD list
   --bbs           Only moderate the BBS list
+
+Bulk encoding operations:
+  --show-all=ENC     Display raw banners for all servers with encoding ENC
+  --expunge-all=ENC  Delete log files for all servers with encoding ENC
+                     Use 'all' to match every encoding.
 
 Other options:
   --report-only   Print report without interactive prompts
@@ -26,12 +32,14 @@ Other options:
 
 import collections
 import hashlib
+import html
 import ipaddress
 import json
 import os
 import re
 import shutil
 import socket
+import struct
 import subprocess
 import sys
 import argparse
@@ -250,6 +258,70 @@ def _find_best_encoding(text):
     return best_encoding, best_score
 
 
+# Quick-filter regex for UTF-8 mojibake in CP437-decoded text.  When
+# UTF-8 multi-byte sequences are decoded as CP437, the leading bytes
+# 0xE2 and 0xEF produce Γ and ∩ respectively.  This pattern matches
+# the most common trigrams (box-drawing and block elements) plus the
+# UTF-8 BOM.  Used as a fast pre-filter before the full re-encoding
+# validation in _detect_utf8_as_cp437().
+_UTF8_AS_CP437_RE = re.compile(
+    r'Γ[ûòöêîé][äÇêÆæ║ëÉ£¼ñ¬ôúîÉÆòùáíóú░▒▓│┤║╗╝╜┐└┴┬├─╚╔╩╦╠═╬┘┌█▄▌▐▀ªºÖÜ\w]'
+    r'|∩╗┐'
+)
+
+
+def _detect_utf8_as_cp437(banner, stored_encoding):
+    """Detect banners where UTF-8 content was decoded as CP437.
+
+    When the scanner uses ``--encoding=cp437`` but the server actually
+    transmits UTF-8 (common with Synchronet/ENiGMA auto-sensing), the
+    multi-byte UTF-8 sequences are split into individual CP437 code
+    points, producing characteristic mojibake like ``Γûä`` for ``▄``.
+
+    Returns ``'utf-8'`` if re-encoding as CP437 and decoding as UTF-8
+    produces cleaner output, ``None`` otherwise.
+
+    :param banner: banner text as stored (decoded with wrong encoding)
+    :param stored_encoding: the encoding used by the scanner
+    :returns: ``'utf-8'`` if UTF-8 mojibake detected, else ``None``
+    """
+    if not banner or stored_encoding not in ('cp437', None):
+        return None
+
+    # Quick check: does the banner contain known mojibake patterns?
+    mojibake_hits = len(_UTF8_AS_CP437_RE.findall(banner))
+    if mojibake_hits < 3:
+        return None
+
+    # Try the reverse: re-encode as cp437, decode as UTF-8.
+    visible = _strip_ansi(banner)
+    try:
+        raw = visible.encode('cp437', errors='replace')
+        redecoded = raw.decode('utf-8', errors='replace')
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        return None
+
+    # Count how much damage each interpretation has.
+    original_replacements = visible.count('\ufffd')
+    redecoded_replacements = redecoded.count('\ufffd')
+
+    # The re-decoded version must be strictly better: fewer replacement
+    # chars than mojibake hits in the original.
+    if redecoded_replacements >= mojibake_hits:
+        return None
+
+    # Sanity check: the re-decoded text should contain real Unicode
+    # box-drawing or block-element characters, confirming it was UTF-8.
+    box_drawing = sum(
+        1 for c in redecoded
+        if '\u2500' <= c <= '\u259f' or '\u2580' <= c <= '\u259f'
+    )
+    if box_drawing < 3:
+        return None
+
+    return 'utf-8'
+
+
 def discover_encoding_issues(data_dir, list_path):
     """Scan JSON fingerprint data to find servers with encoding issues.
 
@@ -299,6 +371,23 @@ def discover_encoding_issues(data_dir, list_path):
             banner = banner_before or banner_after
 
             max_width, _ = _measure_banner_columns(banner)
+
+            # Check for UTF-8 content mis-decoded as CP437 first, since
+            # mojibake inflates apparent width ~3x (each UTF-8 char
+            # becomes 3 cp437 chars), which would fail the width filter.
+            stored_enc = session_data.get('encoding')
+            utf8_suggest = _detect_utf8_as_cp437(banner, stored_enc)
+            if utf8_suggest:
+                mojibake_count = len(_UTF8_AS_CP437_RE.findall(banner))
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'suggested_encoding': utf8_suggest,
+                    'replacement_count': mojibake_count,
+                    'reason': 'utf8_mojibake',
+                })
+                continue
+
             if max_width < 80 or max_width >= 200:
                 continue
 
@@ -314,9 +403,141 @@ def discover_encoding_issues(data_dir, list_path):
     return issues
 
 
+def _apply_encoding_fix(list_path, host, port, encoding, dry_run=False):
+    """Update a single server's encoding in the list file.
+
+    :param list_path: path to server list file
+    :param host: server hostname
+    :param port: server port
+    :param encoding: new encoding value
+    :param dry_run: if True, don't write
+    :returns: True if the entry was found and updated
+    """
+    entries = load_server_list(list_path)
+    updated = False
+    new_entries = []
+    for h, p, line in entries:
+        if h == host and p == port:
+            parts = line.split()
+            if len(parts) >= 4:
+                parts[2] = encoding
+            elif len(parts) >= 2:
+                parts[2:] = [encoding]
+            new_entries.append((h, p, ' '.join(parts)))
+            updated = True
+        else:
+            new_entries.append((h, p, line))
+    if updated and not dry_run:
+        with open(list_path, 'w', encoding='utf-8') as f:
+            for _, _, line in new_entries:
+                f.write(line + '\n')
+    return updated
+
+
+def _apply_encoding_fixes_bulk(list_path, fixes, dry_run=False):
+    """Update encodings for multiple servers in one write.
+
+    :param list_path: path to server list file
+    :param fixes: dict mapping (host, port) to new encoding
+    :param dry_run: if True, don't write
+    :returns: number of entries updated
+    """
+    entries = load_server_list(list_path)
+    updated = 0
+    new_entries = []
+    for h, p, line in entries:
+        if (h, p) in fixes:
+            parts = line.split()
+            enc = fixes[(h, p)]
+            if len(parts) >= 4:
+                parts[2] = enc
+            elif len(parts) >= 2:
+                parts[2:] = [enc]
+            new_entries.append((h, p, ' '.join(parts)))
+            updated += 1
+        else:
+            new_entries.append((h, p, line))
+    if updated and not dry_run:
+        with open(list_path, 'w', encoding='utf-8') as f:
+            for _, _, line in new_entries:
+                f.write(line + '\n')
+    return updated
+
+
+def _expunge_logs(logs_dir, servers):
+    """Delete log files for a list of (host, port) pairs.
+
+    :param logs_dir: path to logs directory
+    :param servers: iterable of (host, port) tuples
+    :returns: number of log files deleted
+    """
+    deleted = 0
+    for host, port in servers:
+        log_file = os.path.join(logs_dir, f"{host}:{port}.log")
+        if os.path.isfile(log_file):
+            os.remove(log_file)
+            deleted += 1
+    return deleted
+
+
+def _review_mojibake_group(issues, list_path, logs_dir, mode,
+                           report_only=False, dry_run=False):
+    """Review a group of UTF-8 mojibake issues as a batch.
+
+    :param issues: list of mojibake issue dicts
+    :param list_path: path to server list file
+    :param logs_dir: path to logs directory
+    :param mode: 'mud' or 'bbs'
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    :returns: number of entries fixed
+    """
+    print(f"\n  {len(issues)} servers transmitting UTF-8"
+          f" but recorded as cp437:")
+    for issue in issues:
+        host = issue['host']
+        port = issue['port']
+        count = issue['replacement_count']
+        print(f"    {host}:{port}  ({count} mojibake patterns)")
+
+    if report_only:
+        return 0
+
+    print(f"\n  y = set encoding to utf-8 in {os.path.basename(list_path)}")
+    print(f"  x = set encoding to utf-8 AND expunge logs"
+          f" (forces re-scan)")
+    print(f"  n = skip (default)")
+    choice = _prompt(
+        f"\n  Apply utf-8 to all {len(issues)}? [y/x/n] ", "yxnq")
+    if choice in (None, 'n', 'q'):
+        if choice == 'q':
+            return -1  # signal quit
+        return 0
+
+    fixes = {(i['host'], i['port']): 'utf-8' for i in issues}
+    updated = _apply_encoding_fixes_bulk(list_path, fixes, dry_run=dry_run)
+    if dry_run:
+        print(f"  (dry-run) would update {updated} entries")
+    else:
+        print(f"  Updated {updated} entries in"
+              f" {os.path.basename(list_path)}")
+
+    if choice == 'x' and not dry_run:
+        servers = [(i['host'], i['port']) for i in issues]
+        deleted = _expunge_logs(logs_dir, servers)
+        print(f"  Expunged {deleted} log files"
+              f" (will re-scan with utf-8)")
+
+    return updated
+
+
 def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
                            logs_dir, report_only=False, dry_run=False):
     """Interactively review and apply encoding fixes.
+
+    UTF-8 mojibake issues (auto-sensing servers) are grouped and
+    presented as an all-or-nothing batch.  Other encoding issues
+    are reviewed individually.
 
     :param mud_issues: list of encoding issues from MUD data
     :param bbs_issues: list of encoding issues from BBS data
@@ -333,14 +554,29 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
         if not issues or not os.path.isfile(list_path):
             continue
 
+        mojibake = [i for i in issues if i.get('reason') == 'utf8_mojibake']
+        other = [i for i in issues if i.get('reason') != 'utf8_mojibake']
+
         print(f"\n{mode.upper()} encoding issues found: {len(issues)}")
-        for issue in issues:
+
+        # Batch review for UTF-8 mojibake group
+        if mojibake:
+            result = _review_mojibake_group(
+                mojibake, list_path, logs_dir, mode,
+                report_only=report_only, dry_run=dry_run)
+            if result == -1:  # quit
+                return applied_count
+            applied_count += max(result, 0)
+
+        # Individual review for other encoding issues
+        for issue in other:
             host = issue['host']
             port = issue['port']
             suggested = issue['suggested_encoding']
             print(f"\n  {host}:{port}")
             print(f"    Suggested encoding: {suggested}")
-            print(f"    Replacement chars in banner: {issue['replacement_count']}")
+            print(f"    Replacement chars in banner:"
+                  f" {issue['replacement_count']}")
 
             if report_only:
                 continue
@@ -351,38 +587,134 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
             if choice != 'y':
                 continue
 
-            # Load list and update
-            entries = load_server_list(list_path)
-
-            # Find and update the entry
-            updated = False
-            new_entries = []
-            for h, p, line in entries:
-                if h == host and p == port:
-                    # Update encoding, preserving columns if present
-                    parts = line.split()
-                    if len(parts) >= 4:
-                        parts[2] = suggested
-                    elif len(parts) >= 2:
-                        parts[2:] = [suggested]
-                    new_entries.append((h, p, ' '.join(parts)))
-                    updated = True
-                else:
-                    new_entries.append((h, p, line))
-
-            if updated and not dry_run:
-                with open(list_path, 'w', encoding='utf-8') as f:
-                    for _, _, line in new_entries:
-                        f.write(line + '\n')
-                print(f"    ✓ Updated {list_path}")
-
-                # Delete old log file so next scan uses new encoding
-                log_file = os.path.join(logs_dir, f"{host}:{port}.log")
-                if os.path.isfile(log_file):
-                    os.remove(log_file)
-                    print(f"    ✓ Deleted {log_file}")
-
+            if _apply_encoding_fix(list_path, host, port, suggested,
+                                   dry_run=dry_run):
+                if not dry_run:
+                    print(f"    Updated {os.path.basename(list_path)}")
+                    log_file = os.path.join(logs_dir, f"{host}:{port}.log")
+                    if os.path.isfile(log_file):
+                        os.remove(log_file)
+                        print(f"    Deleted {log_file}")
                 applied_count += 1
+
+
+# Bulk encoding operations
+
+def _entries_by_encoding(list_path, encoding):
+    """Collect list entries matching a given encoding.
+
+    :param list_path: path to server list file
+    :param encoding: encoding name to match, or ``'all'`` for all entries
+    :returns: list of (host, port, entry_encoding) tuples
+    """
+    result = []
+    for host, port, line in load_server_list(list_path):
+        if host is None:
+            continue
+        parts = line.split()
+        entry_enc = parts[2] if len(parts) >= 3 else None
+        # Skip entries whose third field is a number (column override, no encoding)
+        if entry_enc is not None:
+            try:
+                int(entry_enc)
+                entry_enc = None
+            except ValueError:
+                pass
+        if encoding == 'all' or entry_enc == encoding:
+            result.append((host, port, entry_enc))
+    return result
+
+
+def _load_banner_for(host, port, data_dir):
+    """Load the raw banner for a specific host:port from server JSON data.
+
+    :param host: server hostname or IP
+    :param port: server port number
+    :param data_dir: path to data directory (containing ``server/``)
+    :returns: combined banner string, or empty string if not found
+    """
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return ''
+    for fp_dir in os.listdir(server_dir):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in os.listdir(fp_path):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+            for session in data.get('sessions', []):
+                if session.get('host') == host and session.get('port') == port:
+                    sd = data.get('server-probe', {}).get('session_data', {})
+                    before = sd.get('banner_before_return', '')
+                    after = sd.get('banner_after_return', '')
+                    return (before or '') + (after or '')
+    return ''
+
+
+def show_all_banners(list_path, data_dir, encoding):
+    """Display raw banners for all servers matching an encoding.
+
+    Prints each banner to stdout with an ANSI reset and a header between them.
+
+    :param list_path: path to server list file
+    :param data_dir: path to data directory (containing ``server/``)
+    :param encoding: encoding name to match, or ``'all'``
+    """
+    entries = _entries_by_encoding(list_path, encoding)
+    if not entries:
+        print(f"No entries with encoding {encoding!r} in {list_path}")
+        return
+
+    print(f"{len(entries)} entries with encoding {encoding!r}")
+    shown = 0
+    for host, port, entry_enc in entries:
+        banner = _load_banner_for(host, port, data_dir)
+        if not banner:
+            continue
+        shown += 1
+        enc_label = f" [{entry_enc}]" if entry_enc else ""
+        sys.stdout.write(f"\x1b[0m\n{'─' * 60}\n")
+        sys.stdout.write(f"  {host}:{port}{enc_label}\n")
+        sys.stdout.write(f"{'─' * 60}\n")
+        sys.stdout.write(banner)
+        sys.stdout.write('\x1b[0m\n')
+    print(f"\x1b[0m\n{shown}/{len(entries)} banners displayed")
+
+
+def expunge_all_logs(list_path, logs_dir, encoding):
+    """Delete log files for all servers matching an encoding.
+
+    :param list_path: path to server list file
+    :param logs_dir: path to logs directory
+    :param encoding: encoding name to match, or ``'all'``
+    """
+    entries = _entries_by_encoding(list_path, encoding)
+    if not entries:
+        print(f"No entries with encoding {encoding!r} in {list_path}")
+        return
+
+    logs_path = Path(logs_dir)
+    deleted = 0
+    missing = 0
+    for host, port, _ in entries:
+        logfile = logs_path / f"{host}:{port}.log"
+        if logfile.is_file():
+            logfile.unlink()
+            deleted += 1
+            print(f"  deleted {logfile.name}")
+        else:
+            missing += 1
+
+    print(f"\n{deleted} log(s) deleted, {missing} not found "
+          f"(of {len(entries)} {encoding!r} entries)")
 
 
 # Column width discovery
@@ -863,6 +1195,311 @@ def review_renders_empty(mud_issues, bbs_issues, mud_list, bbs_list,
             if choice == 'q':
                 break
             if choice == 'x':
+                log_file = Path(logs_dir) / f"{host}:{port}.log"
+                if log_file.is_file() and not dry_run:
+                    log_file.unlink()
+                    print(f"    deleted {log_file}")
+                elif log_file.is_file():
+                    print(f"    [dry-run] would delete {log_file}")
+                else:
+                    print(f"    no log file to delete")
+                rescans += 1
+            elif choice == 'y':
+                removals.add((host, port))
+
+        if removals:
+            entries = load_server_list(list_path)
+            write_filtered_list(list_path, entries, removals,
+                                dry_run=dry_run)
+        if rescans:
+            print(f"  {rescans} server(s) queued for rescan")
+        if removals:
+            print(f"  {len(removals)} server(s) removed from {list_path}")
+
+
+# Small render discovery
+
+def _strip_mxp_sgml(text):
+    """Remove MXP/SGML protocol artifacts from banner text.
+
+    Duplicates the logic from :func:`make_stats.common._strip_mxp_sgml`
+    so the moderation tool can compute banner hashes independently.
+
+    :param text: banner text possibly containing MXP/SGML
+    :returns: cleaned text
+    """
+    text = re.sub(r'\x1b\[\d+z', '', text)
+    text = re.sub(r'<!--.*?-->', '', text)
+    text = re.sub(r'<!(EL(EMENT)?|ATTLIST|EN(TITY)?)\b.*', '', text,
+                  flags=re.DOTALL | re.IGNORECASE)
+    text = html.unescape(text)
+    return text.rstrip()
+
+
+def _compute_banner_filename(text, encoding, columns=None):
+    """Compute the expected PNG filename for a banner.
+
+    Replicates the preprocessing and hashing from
+    :func:`make_stats.common._banner_to_png`.
+
+    :param text: raw banner text
+    :param encoding: encoding string (e.g. ``'cp437'``, ``'utf-8'``)
+    :param columns: optional column width override
+    :returns: filename string like ``banner_abcdef012345.png``
+    """
+    text = text.replace('\x00', '')
+    text = text.replace('\r\n', '\n').replace('\n\r', '\n')
+    text = _strip_mxp_sgml(text)
+    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
+
+    max_bytes = 512 * 1024
+    encoded = text.encode('utf-8', errors='surrogateescape')
+    if len(encoded) > max_bytes:
+        text = encoded[:max_bytes].decode('utf-8', errors='ignore').rstrip()
+
+    hash_input = text + '\x00' + encoding
+    if columns is not None:
+        hash_input += '\x00' + str(columns)
+    key = hashlib.sha1(
+        hash_input.encode('utf-8', errors='surrogateescape')).hexdigest()[:12]
+    return f"banner_{key}.png"
+
+
+def _read_png_dimensions(path):
+    """Read pixel width and height from a PNG file header.
+
+    :param path: path to a PNG file
+    :returns: ``(width, height)`` tuple, or ``(None, None)`` on failure
+    """
+    try:
+        with open(path, 'rb') as fh:
+            header = fh.read(24)
+        if len(header) >= 24 and header[:8] == b'\x89PNG\r\n\x1a\n':
+            width, height = struct.unpack('>II', header[16:24])
+            return width, height
+    except OSError:
+        pass
+    return None, None
+
+
+def discover_renders_small(data_dir, list_path, banners_dir,
+                           default_encoding=None):
+    """Find servers whose rendered banner PNGs are suspiciously small.
+
+    These are banners that have raw content but rendered to a tiny image
+    (under 1000 bytes), indicating poison escape sequences or invisible
+    content that the terminal couldn't display.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param list_path: path to server list file
+    :param banners_dir: path to the rendered banners directory
+    :param default_encoding: fallback encoding when no override is set;
+        BBS passes ``'cp437'``, MUD passes ``None`` (use scanner encoding)
+    :returns: list of dicts with host, port, data_path, raw_banner,
+        png_path, file_size, pixel_width, pixel_height
+    """
+    issues = []
+    seen = set()
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+    if not os.path.isdir(banners_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed = {(h, p) for h, p, _ in list_entries if h and p}
+
+    # Build encoding and column override lookups from the list
+    encoding_overrides = {}
+    column_overrides = {}
+    for h, p, line in list_entries:
+        if h is None:
+            continue
+        parts = line.split()
+        if len(parts) >= 3:
+            encoding_overrides[(h, p)] = parts[2]
+        if len(parts) >= 4:
+            try:
+                column_overrides[(h, p)] = int(parts[3])
+            except ValueError:
+                pass
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            probe = data.get('server-probe', {})
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+            if isinstance(banner_before, dict):
+                banner_before = banner_before.get('text', '')
+            if isinstance(banner_after, dict):
+                banner_after = banner_after.get('text', '')
+            combined = (banner_before or '') + (banner_after or '')
+
+            if not combined.strip():
+                continue
+
+            for session in data.get('sessions', []):
+                host = session.get('host', '')
+                port = session.get('port', 0)
+                if not host or not port:
+                    continue
+                if (host, port) not in allowed:
+                    continue
+                if (host, port) in seen:
+                    continue
+                seen.add((host, port))
+
+                enc_override = encoding_overrides.get((host, port))
+                if enc_override:
+                    enc = enc_override
+                elif default_encoding:
+                    enc = default_encoding
+                else:
+                    # MUD mode: use scanner-detected encoding
+                    scanner_enc = session_data.get('encoding', 'ascii')
+                    enc = (scanner_enc or 'ascii').lower()
+                cols = column_overrides.get((host, port))
+                png_name = _compute_banner_filename(combined, enc, cols)
+                png_path = os.path.join(banners_dir, png_name)
+
+                if not os.path.isfile(png_path):
+                    continue
+
+                file_size = os.path.getsize(png_path)
+                if file_size == 0:
+                    continue
+
+                pixel_w, pixel_h = _read_png_dimensions(png_path)
+
+                # Flag if file is tiny (<1KB), or the visible text
+                # is a single short line (under 40 columns wide).
+                # wcwidth.width() is sequence-aware, no ANSI stripping
+                # needed.
+                small_file = file_size < 1000
+                visible_lines = [
+                    ln for ln in combined.splitlines()
+                    if _strip_ansi(ln).strip()
+                ]
+                if len(visible_lines) <= 1:
+                    total_w = max(
+                        (wcwidth.width(ln) for ln in visible_lines),
+                        default=0)
+                    one_liner = total_w < 40
+                else:
+                    one_liner = False
+                if not small_file and not one_liner:
+                    continue
+
+                reason = 'small file' if small_file else '1-liner'
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'data_path': fpath,
+                    'raw_banner': combined,
+                    'png_path': png_path,
+                    'file_size': file_size,
+                    'pixel_width': pixel_w,
+                    'pixel_height': pixel_h,
+                    'reason': reason,
+                    'visible_lines': len(visible_lines),
+                })
+    return issues
+
+
+def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
+                         logs_dir, report_only=False, dry_run=False):
+    """Interactively review servers whose banner PNGs are suspiciously small.
+
+    For each server, shows file size, pixel dimensions, and ``repr()``
+    of the raw banner.  Options:
+
+    - ``x`` to expunge the log file for rescan
+    - ``d`` to delete the PNG and expunge the log file
+    - ``y`` to remove the entry from the server list
+    - ``n`` to skip
+    - ``q`` to quit
+
+    :param mud_issues: list of renders-small issues from MUD data
+    :param bbs_issues: list of renders-small issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    """
+    all_issues = [('mud', mud_issues, mud_list),
+                  ('bbs', bbs_issues, bbs_list)]
+
+    for mode, issues, list_path in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n--- {mode.upper()} banners with small renders: "
+              f"{len(issues)} ---")
+        removals = set()
+        rescans = 0
+
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            file_size = issue['file_size']
+            pixel_w = issue['pixel_width']
+            pixel_h = issue['pixel_height']
+            raw = issue['raw_banner']
+            png_path = issue['png_path']
+
+            reason = issue['reason']
+            n_lines = issue['visible_lines']
+            dims = (f"{pixel_w}x{pixel_h}" if pixel_w is not None
+                    else "unknown")
+            print(f"\n  {host}:{port}  [{reason}]")
+            print(f"    PNG: {file_size} bytes, {dims} pixels, "
+                  f"{n_lines} visible line(s)")
+            raw_repr = repr(raw)
+            if len(raw_repr) > 500:
+                raw_repr = raw_repr[:500] + '...'
+            print(f"    Raw banner ({len(raw)} chars): {raw_repr}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(
+                "    [x]expunge log / [d]elete PNG + expunge / "
+                "[y]remove from list / [N]skip / [q]uit? ",
+                "xdynq")
+            if choice == 'q':
+                break
+            if choice == 'x':
+                log_file = Path(logs_dir) / f"{host}:{port}.log"
+                if log_file.is_file() and not dry_run:
+                    log_file.unlink()
+                    print(f"    deleted {log_file}")
+                elif log_file.is_file():
+                    print(f"    [dry-run] would delete {log_file}")
+                else:
+                    print(f"    no log file to delete")
+                rescans += 1
+            elif choice == 'd':
+                if not dry_run:
+                    if os.path.isfile(png_path):
+                        os.unlink(png_path)
+                        print(f"    deleted {png_path}")
+                else:
+                    print(f"    [dry-run] would delete {png_path}")
                 log_file = Path(logs_dir) / f"{host}:{port}.log"
                 if log_file.is_file() and not dry_run:
                     log_file.unlink()
@@ -1773,6 +2410,10 @@ def _get_argument_parser():
         "--only-renders-empty", action="store_true",
         help="only find banners that render to an empty screen",
     )
+    mode_mx.add_argument(
+        "--only-renders-small", action="store_true",
+        help="only find banners whose rendered PNGs are tiny (<1KB)",
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -1785,6 +2426,16 @@ def _get_argument_parser():
     parser.add_argument(
         "--dry-run", action="store_true",
         help="show what would change without writing files",
+    )
+    parser.add_argument(
+        "--show-all", metavar="ENCODING",
+        help="display raw banners for all servers with the given encoding "
+             "(or 'all' for every encoding)",
+    )
+    parser.add_argument(
+        "--expunge-all", metavar="ENCODING",
+        help="delete log files for all servers with the given encoding "
+             "(or 'all' for every encoding), allowing re-scan",
     )
     parser.add_argument(
         "--skip-dns", action="store_true",
@@ -1832,10 +2483,27 @@ def main():
 
     do_mud = not args.bbs
     do_bbs = not args.mud
+
+    # Handle --show-all and --expunge-all early exits
+    if args.show_all:
+        if do_mud and os.path.isfile(args.mud_list):
+            show_all_banners(args.mud_list, args.mud_data, args.show_all)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            show_all_banners(args.bbs_list, args.bbs_data, args.show_all)
+        return
+
+    if args.expunge_all:
+        if do_mud and os.path.isfile(args.mud_list):
+            expunge_all_logs(args.mud_list, args.logs, args.expunge_all)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            expunge_all_logs(args.bbs_list, args.logs, args.expunge_all)
+        return
+
     only_flags = (args.only_prune, args.only_dupes,
                   args.only_cross, args.only_dns,
                   args.only_encodings, args.only_columns,
-                  args.only_empty, args.only_renders_empty)
+                  args.only_empty, args.only_renders_empty,
+                  args.only_renders_small)
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
@@ -1845,6 +2513,7 @@ def main():
     do_columns = args.only_columns
     do_empty = args.only_empty
     do_renders_empty = args.only_renders_empty
+    do_renders_small = args.only_renders_small
 
     # Cross-list and DNS modes require both lists
     if do_cross and (args.mud or args.bbs):
@@ -1977,6 +2646,30 @@ def main():
                 dry_run=args.dry_run)
         else:
             print("No banners that render to empty screen.")
+
+    # Renders-small banner discovery
+    if do_renders_small:
+        mud_banners = _HERE / "docs-muds" / "_static" / "banners"
+        bbs_banners = _HERE / "docs-bbs" / "_static" / "banners"
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_renders_small(
+                args.mud_data, args.mud_list, str(mud_banners),
+                default_encoding=None)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_renders_small(
+                args.bbs_data, args.bbs_list, str(bbs_banners),
+                default_encoding='cp437')
+
+        if mud_issues or bbs_issues:
+            review_renders_small(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No banners with small renders detected.")
 
     # Save decisions cache
     if decisions is not None:

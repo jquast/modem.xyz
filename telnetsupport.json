@@ -273,13 +273,6 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "midgardmud.de",
-    "port": 4711,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"UNKNOWN-46\",\"MSSP\"]"
-  },
-  {
     "host": "lost.wishes.net",
     "port": 5555,
     "ssl": 0,
@@ -420,6 +413,13 @@
     "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\"]"
   },
   {
+    "host": "midgardmud.de",
+    "port": 4711,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"UNKNOWN-46\",\"MSSP\"]"
+  },
+  {
     "host": "mud.primaldarkness.com",
     "port": 5000,
     "ssl": 0,
@@ -446,6 +446,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MCCP1\",\"MCCP2\",\"AARDWOLF MUSHCLIENT\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "isharmud.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"GMCP\"]"
   },
   {
     "host": "thewalkingdead.apocalypto.org.uk",
@@ -623,13 +630,6 @@
     "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "20forbeers.com",
-    "port": 1337,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\",\"NEW-ENVIRON\"]"
-  },
-  {
     "host": "ats.trekmush.org",
     "port": 1700,
     "ssl": 1,
@@ -709,6 +709,13 @@
   {
     "host": "bbs.throwbackbbs.com",
     "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"
+  },
+  {
+    "host": "20forbeers.com",
+    "port": 1337,
     "ssl": 0,
     "up": 1,
     "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\"]"
@@ -1041,13 +1048,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"MSSP\"]"
-  },
-  {
-    "host": "moo.squidsoft.net",
-    "port": 7777,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"NEW-ENVIRON\"]"
   },
   {
     "host": "aldebaran-mud.de",

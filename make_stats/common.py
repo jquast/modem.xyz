@@ -377,6 +377,65 @@ def _combine_banners(server, default_encoding=None):
     return banner_before or banner_after
 
 
+_last_render_md5 = {}  # instance display name → md5 of last rendered PNG
+
+
+def _check_rendered_duplicate(output_path, text_key, instance_name=None):
+    """Check if a render produced the same image as the previous one.
+
+    Only flags consecutive renders from the **same terminal instance**
+    that produce identical images — this indicates the terminal captured
+    stale content (poison escape sequence broke the terminal state).
+
+    Different banner texts rendered on different instances (or
+    non-consecutively) may legitimately produce identical images (e.g.
+    same text with different encoding parameters).
+
+    :param output_path: path to the newly rendered PNG
+    :param text_key: the text-based hash key (first 12 hex of SHA1)
+    :param instance_name: terminal instance display name for tracking
+    """
+    if instance_name is None:
+        return
+    # Skip duplicate check for tiny images — near-blank banners legitimately
+    # render to the same small image (e.g. a single punctuation character).
+    if os.path.getsize(output_path) < 1024:
+        return
+    with open(output_path, 'rb') as f:
+        image_md5 = hashlib.md5(f.read()).hexdigest()
+    prev_md5 = _last_render_md5.get(instance_name)
+    _last_render_md5[instance_name] = image_md5
+    if prev_md5 is not None and prev_md5 == image_md5:
+        os.unlink(output_path)
+        raise RuntimeError(
+            f"banner_{text_key}.png is pixel-identical to the previous "
+            f"render on [{instance_name}] — the terminal likely captured "
+            f"stale content due to a poison escape sequence."
+        )
+
+
+def _png_display_width(path):
+    """Read a PNG file's pixel width and return its HiDPI display width.
+
+    Banner PNGs are 2x upscaled before CRT effects, so the intended
+    display size is half the actual pixel width.  Falls back to None
+    if the file cannot be read.
+
+    :param path: path to a PNG file
+    :returns: display width in pixels (``pixel_width // 2``), or None
+    """
+    import struct
+    try:
+        with open(path, 'rb') as fh:
+            header = fh.read(24)
+        if len(header) >= 24 and header[:8] == b'\x89PNG\r\n\x1a\n':
+            pixel_width = struct.unpack('>I', header[16:20])[0]
+            return pixel_width // 2
+    except OSError:
+        pass
+    return None
+
+
 def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     """Render ANSI banner text to a deduplicated PNG file.
 
@@ -389,10 +448,31 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     :param banners_dir: directory for output PNG files
     :param encoding: server encoding for font group selection
     :param columns: optional terminal column width override
-    :returns: PNG filename (basename) or None on failure
+    :returns: ``(filename, display_width)`` tuple, or ``(None, None)``
+        on failure.  *display_width* is the intended CSS pixel width
+        for HiDPI rendering (half the actual PNG pixel width).
     """
     if _renderer_pool is None:
-        return None
+        return None, None
+
+    text = text.replace('\x00', '')
+    text = text.replace('\r\n', '\n').replace('\n\r', '\n')
+    text = _strip_mxp_sgml(text)
+    # Strip terminal report/query sequences (DSR, DA, window ops)
+    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
+
+    # Skip banners with no visible content — they all render to the same
+    # blank image and waste renderer cycles.
+    if not _strip_ansi(text).strip():
+        return None, None
+
+    # Cap at 512 KiB to avoid overwhelming the terminal renderer with
+    # giant pixel-art banners (e.g. 21 MB truecolor block-character art).
+    max_bytes = 512 * 1024
+    encoded = text.encode('utf-8', errors='surrogateescape')
+    if len(encoded) > max_bytes:
+        text = encoded[:max_bytes].decode('utf-8', errors='ignore').rstrip()
+
     hash_input = text + '\x00' + encoding
     if columns is not None:
         hash_input += '\x00' + str(columns)
@@ -404,20 +484,21 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     output_path = os.path.join(banners_dir, fname)
     if os.path.isfile(output_path):
         if os.path.getsize(output_path) == 0:
-            return None  # cached failure
-        return fname
+            return None, None  # cached failure
+        return fname, _png_display_width(output_path)
 
-    text = text.replace('\x00', '')
-    text = text.replace('\r\n', '\n').replace('\n\r', '\n')
-    text = _strip_mxp_sgml(text)
-    # Strip terminal report/query sequences (DSR, DA, window ops)
-    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
-
-    if _renderer_pool.capture(text, output_path, encoding, columns=columns):
-        return fname
+    instance_name = _renderer_pool.capture(
+        text, output_path, encoding, columns=columns)
+    if instance_name:
+        try:
+            _check_rendered_duplicate(output_path, key, instance_name)
+        except RuntimeError as exc:
+            print(f"  warning: {exc}", file=sys.stderr)
+            return None, None  # skip but don't cache — retry on next run
+        return fname, _png_display_width(output_path)
     # Cache failure as 0-byte file to avoid retrying on next run.
     open(output_path, 'a').close()
-    return None
+    return None, None
 
 
 def init_renderer(**kwargs):
@@ -760,6 +841,21 @@ def _create_pie_chart(sorted_items, output_path, min_count=None, top_n=None):
     plt.savefig(output_path, dpi=100, bbox_inches='tight',
                 transparent=True, metadata={'CreationDate': None})
     plt.close()
+
+
+def create_location_plot(stats, output_path, top_n=15):
+    """Create pie chart of server locations by country.
+
+    :param stats: statistics dict with ``country_counts`` key
+    :param output_path: path to write the output PNG
+    :param top_n: keep only the top N countries
+    """
+    country_counts = stats.get('country_counts', {})
+    if not country_counts:
+        return
+    sorted_items = sorted(country_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path, top_n=top_n)
 
 
 def _assign_filenames(servers, ip_groups, file_key, toc_key,
@@ -1120,6 +1216,9 @@ def _display_banner_page(page_groups, page_num, total_pages,
             print(f"   :alt:"
                   f" {_rst_escape(_banner_alt_text(banner))}")
             print(f"   :class: ansi-banner")
+            display_w = rep.get('_banner_display_width')
+            if display_w:
+                print(f"   :width: {display_w}px")
             print(f"   :loading: lazy")
             print()
 

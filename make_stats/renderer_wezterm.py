@@ -49,6 +49,7 @@ config.treat_east_asian_ambiguous_width_as_wide = {east_asian_str}
 config.window_padding = {{left = 0, right = 0, top = 0, bottom = 0}}
 config.hide_mouse_cursor_when_typing = true
 config.default_cursor_style = "SteadyBlock"
+config.front_end = "Software"
 config.colors = {{
     foreground = "#aaaaaa",
     background = "#000000",

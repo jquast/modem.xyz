@@ -80,6 +80,7 @@
 44.235.126.228 4000
 45.90.220.35 4000
 45.79.69.172 513
+45.79.96.4 4000
 4dimensions.org 6000
 50.16.123.54 6969
 51.15.222.121 4000
@@ -906,7 +907,7 @@ wildeadventures.net 1221
 wildsau.holy-mission.org 6666
 wildsofpern.aresmush.com 2021 utf-8 100
 windmud.web-games.net 4040 gbk
-windows93.net 8082
+windows93.net 8082 utf-8
 winds.org 4000
 winds.org 8000
 winter.mushpark.com 3000

@@ -88,7 +88,7 @@ Color correction
 ----------------
 
 .. figure:: /_static/ghostty-telnet.png
-   :width: 600px
+   :width: 551px
 
    80x24 CP437 ANSI art of a skull with graffiti-stylized writing, "ENiGMA½"
 
@@ -108,7 +108,7 @@ transliteration of ANSI color sequences to `24-bit Color Sequences
    telnetlib3-client manalejandro.com 23
 
 .. figure:: /_static/ghostty-telnetlib3.png
-   :width: 600px
+   :width: 551px
 
    80x24 ANSI art of a skull and graffiti, color-corrected by telnetlib3-client
 
@@ -118,7 +118,7 @@ Encoding correction
 For systems that do not support UTF-8 [#f1]_, you'll see encoding errors:
 
 .. figure:: /_static/ghostty-cp437-telnet.png
-   :width: 600px
+   :width: 672px
 
    This "Main Menu" is meant to be stylized art, but contains encoding errors, marked by '�'.
 
@@ -133,7 +133,7 @@ The BBS Software pictured above advertised itself as `MajorBBS
     telnetlib3-client --encoding=cp437 bbs.ccxbbs.net
 
 .. figure:: /_static/ghostty-cp437-telnetlib3.png
-   :width: 600px
+   :width: 672px
 
    The Main title and border are now correctly displayed as "block art".
 
@@ -143,7 +143,7 @@ topaz
 Another BBS, this time **Amiga**:
 
 .. figure:: /_static/konsole-amiga-telnet.png
-   :width: 600px
+   :width: 475px
 
    This Amiga art also contains encoding errors, marked by ``�``.
 
@@ -154,30 +154,47 @@ fixed by `telnetlib3`_::
     telnetlib3-client --encoding=latin1 absinthebbs.net 1940
 
 .. figure:: /_static/konsole-amiga-telnetlib3.png
-   :width: 600px
+   :width: 475px
 
    The same Amiga art now corrected by the *encoding* specified.
 
-.. todo
+PETSCII
+~~~~~~~
 
-    --finish telnetlib3
+With the 8-bit Commodore `PETSCII <https://github.com/damianvila/font-bescii/releases>`_
+``Bescii-Mono.ttf`` font installed, `telnetlib3`_ can perform bi-direcitonal translation of PETSCII
+:ref:`PETSCII <petscii>` encoding and their control control codes::
 
-    With the 8-bit Commodore `PETSCII <https://github.com/damianvila/font-bescii/releases>`_
-    ``Bescii-Mono.ttf`` or Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atari-fonts/>`_
-    ``EightBit Atari-Classic.ttf`` fonts installed, `telnetlib3`_ can be used to connect to an 8-bit
+        telnetlib3-client --encoding=PETSCII valley64.com 6400
 
-    atascii
-    petscii
+.. figure:: /_static/ghostty-petscii-telnetlib3.png
+   :width: 450px
 
-    Atari BBS::
+   ghostty and telnetlib3 is used to connect to a Commodore BBS.
+
+.. hint::
+
+   Most PETSCII BBSs require a window size of 40 ``COLUMNS``
+
+ATASCII
+~~~~~~~
+
+With the 8-bit Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atari-fonts/>`_ ``EightBit
+Atari-Classic.ttf`` font installed, `telnetlib3`_ can perform bi-direcitonal translation of
+:ref:`ATASCII <atascii>` encoding and their control codes::
 
         telnetlib3-client --force-binary --encoding=ATASCII area52.tk 5200
 
-    - Or an 8-bit Commodore BBS:
+.. figure:: /_static/ghostty-atascii-telnetlib3.png
+   :width: 600px
 
-        telnetlib3-client --force-binary --encoding=PETSCII valley64.com 6400
+   ghostty and telnetlib3 is used to connect to an Atari BS.
 
-Fonts
+.. hint::
+
+   Most ATASCII BBSs require a window size of 40 ``COLUMNS``
+
+fonts
 -----
 
 Though optional for IBM PC-DOS (:ref:`CP437 <cp437>`), as that artwork is faithfully reproduced,

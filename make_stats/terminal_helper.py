@@ -2,7 +2,8 @@
 """Helper script running inside a terminal instance (kitty or wezterm).
 
 Reads banner payloads from a named pipe, clears the screen, displays
-each one, then signals readiness for screenshot via a second named pipe.
+each one, uses DSR flush synchronization to confirm the terminal rendered
+it, then signals readiness for screenshot via a second named pipe.
 
 Usage::
 
@@ -13,7 +14,23 @@ import os
 import select
 import subprocess
 import sys
+import time
 import traceback
+
+# Break out of any in-progress escape sequence, then full terminal reset.
+# A poison banner can leave the parser mid-sequence (partial CSI, unterminated
+# OSC/DCS/APC/PM/SOS).  Without these prefixes, _CLEAR_SEQ gets swallowed
+# and the terminal stays stuck showing the previous banner.
+_CLEAR_SEQ = (
+    b'\x18'         # CAN — abort any in-progress escape sequence
+    b'\x1a'         # SUB — also aborts (some terminals prefer SUB over CAN)
+    b'\033\\'       # ST  — terminate any string sequence (OSC/DCS/APC/PM/SOS)
+    b'\x0f'         # SI  — restore G0 charset (undo any \x0e shift-out)
+    b'\033c'        # RIS — full terminal reset (modes, charset, screen)
+    b'\033[?25l'    # hide cursor (RIS re-enables it)
+)
+
+_DSR_QUERY = b'\033[6n'
 
 
 def _set_title(title):
@@ -22,19 +39,80 @@ def _set_title(title):
 
 
 def _drain_stdin():
-    """Drain any pending terminal report responses from stdin.
-
-    Uses select() to wait briefly for data, then reads and discards
-    all available input without changing terminal modes.
-    """
+    """Drain any pending bytes from stdin without blocking."""
     fd = sys.stdin.fileno()
-    while select.select([fd], [], [], 0.02)[0]:
+    while select.select([fd], [], [], 0)[0]:
         os.read(fd, 4096)
 
 
+def _wait_for_cpr(timeout=5.0):
+    """Wait for a Cursor Position Report after sending DSR query.
+
+    Drains any stale input, sends ``\\033[6n``, and reads stdin until
+    a full CPR response (``\\033[<digits>;<digits>R``) is seen, or
+    *timeout* seconds elapse.  The terminal must finish processing all
+    prior output before it can respond, so this acts as a
+    render-complete synchronization barrier.
+
+    :param timeout: maximum seconds to wait for the CPR response
+    :returns: True if CPR received, False on timeout
+    """
+    _drain_stdin()
+    os.write(1, _DSR_QUERY)
+
+    fd = sys.stdin.fileno()
+    buf = b''
+    deadline = _monotonic() + timeout
+    while True:
+        remaining = deadline - _monotonic()
+        if remaining <= 0:
+            return False
+        ready = select.select([fd], [], [], min(remaining, 0.1))
+        if ready[0]:
+            data = os.read(fd, 4096)
+            if not data:
+                return False
+            buf += data
+            # Scan for CPR: ESC [ <digits> ; <digits> R
+            while b'\033[' in buf:
+                idx = buf.index(b'\033[')
+                tail = buf[idx + 2:]
+                found_end = False
+                for i, byte in enumerate(tail):
+                    if byte == ord('R'):
+                        return True
+                    if byte not in b'0123456789;':
+                        buf = buf[idx + 2 + i + 1:]
+                        found_end = True
+                        break
+                if not found_end:
+                    break  # partial sequence, wait for more data
+
+
+def _monotonic():
+    """Monotonic clock wrapper for readability."""
+    return time.monotonic()
+
+
 def _log(msg):
-    """Write a debug message to stderr (visible in terminal)."""
+    """Write a debug message to stderr (redirected to helper.log)."""
     os.write(2, (msg + '\n').encode())
+
+
+def _signal_ready(ready_pipe, message):
+    """Write a status message to the ready FIFO.
+
+    :param ready_pipe: path to the ready named pipe
+    :param message: status string to send
+    :returns: True if successfully written, False on error
+    """
+    try:
+        with open(ready_pipe, 'w') as f:
+            f.write(message + '\n')
+        return True
+    except OSError as exc:
+        _log(f'ready signal failed: {exc}')
+        return False
 
 
 def main():
@@ -50,10 +128,20 @@ def main():
 
     _log(f'helper started: title={window_title}')
 
-    # Disable echo so terminal report responses don't appear on screen.
-    subprocess.call(['stty', '-echo'], stdin=sys.stdin)
+    # Disable echo and canonical buffering so DSR cursor-position reports
+    # are readable immediately from stdin.  Keep output post-processing
+    # (opost/onlcr) enabled so \n is translated to \r\n by the terminal.
+    subprocess.call(['stty', '-echo', '-icanon'], stdin=sys.stdin)
 
     _set_title(window_title)
+
+    # Probe DSR before any banners — the terminal may need a moment to
+    # initialize its PTY, so allow a generous timeout on the first try.
+    if _wait_for_cpr(timeout=5.0):
+        _log('DSR probe OK — render-flush synchronization active')
+    else:
+        _log('DSR probe failed — terminal does not respond to DSR, '
+             'screenshots may capture stale content')
 
     count = 0
     while True:
@@ -79,25 +167,43 @@ def main():
             break
 
         count += 1
-        _log(f'banner #{count}: {len(payload)} bytes')
+        nbytes = len(payload)
+        _log(f'banner #{count}: {nbytes} bytes')
 
-        # Reset attributes, clear screen, home cursor, hide cursor.
-        os.write(1, b'\033[m\033[2J\033[H\033[?25l')
+        # Thorough reset and clear.
+        os.write(1, _CLEAR_SEQ)
+
+        # DSR barrier after reset: confirm the terminal processed the
+        # clear before writing the new banner.  Without this, a slow
+        # RIS could overlap with the new banner content.
+        if not _wait_for_cpr(timeout=3.0):
+            _log(f'banner #{count}: post-reset DSR failed, continuing')
 
         # Restore title and draw banner.
         _set_title(window_title)
-        os.write(1, payload)
-
-        # Drain terminal report responses.
-        _drain_stdin()
-
-        # Signal controller: ready for screenshot.
         try:
-            with open(ready_pipe, 'w') as f:
-                f.write('ready\n')
+            os.write(1, payload)
         except OSError as exc:
-            _log(f'ready signal failed: {exc}')
-            break
+            _log(f'write failed: {exc}')
+            if not _signal_ready(ready_pipe, f'fail write_error: {exc}'):
+                break
+            continue
+
+        # DSR flush: confirm terminal processed all output before
+        # signaling the renderer to take a screenshot.  Scale timeout
+        # with payload size (base 5s + 1s per 64 KiB).
+        flush_timeout = 5.0 + nbytes / 65536
+        if _wait_for_cpr(timeout=flush_timeout):
+            # Brief pause for compositor to paint the frame after the
+            # terminal has processed all escape sequences.
+            time.sleep(0.05)
+            _log(f'banner #{count}: flush confirmed')
+            if not _signal_ready(ready_pipe, f'ok {nbytes}'):
+                break
+        else:
+            _log(f'banner #{count}: flush timeout after {flush_timeout:.1f}s')
+            if not _signal_ready(ready_pipe, f'fail flush_timeout'):
+                break
 
     _log(f'helper exiting after {count} banners')
 

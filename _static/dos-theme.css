@@ -145,8 +145,7 @@ code, pre, .rst-content code, .rst-content pre,
 
 /* ── ANSI banner rendering ───────────────────────────────────────────── */
 img.ansi-banner {
-  max-width: 800px;
-  width: 100%;
+  max-width: 100%;
   height: auto;
 }
 

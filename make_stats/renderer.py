@@ -141,6 +141,7 @@ class TerminalInstance(abc.ABC):
         self._tmpdir = None
         self._data_fifo = None
         self._ready_fifo = None
+        self._stderr_file = None
 
     @abc.abstractmethod
     def _build_command(self):
@@ -184,11 +185,14 @@ class TerminalInstance(abc.ABC):
         cmd = self._build_command()
         tool = self._required_tool()
 
+        terminal_log = os.path.join(self._tmpdir, 'terminal.log')
+        self._stderr_file = open(terminal_log, 'w')
+
         self._proc = subprocess.Popen(
             cmd,
             stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stderr=self._stderr_file,
             env=self._subprocess_env(),
         )
 
@@ -223,6 +227,13 @@ class TerminalInstance(abc.ABC):
         then waits for the process to terminate.  Falls back to SIGTERM
         and SIGKILL if needed.
         """
+        if self._stderr_file is not None:
+            try:
+                self._stderr_file.close()
+            except OSError:
+                pass
+            self._stderr_file = None
+
         if self._proc is not None and self._proc.poll() is None:
             try:
                 fd = os.open(self._data_fifo, os.O_WRONLY | os.O_NONBLOCK)
@@ -247,6 +258,22 @@ class TerminalInstance(abc.ABC):
     def alive(self):
         """Return True if the terminal process is running."""
         return self._proc is not None and self._proc.poll() is None
+
+    def _print_helper_log_tail(self, lines=10):
+        """Print last few lines of helper.log for diagnostics."""
+        if self._tmpdir is None:
+            return
+        log_path = os.path.join(self._tmpdir, 'helper.log')
+        try:
+            with open(log_path, 'r') as f:
+                all_lines = f.readlines()
+            tail = all_lines[-lines:]
+            if tail:
+                print(f"  helper.log tail:", file=sys.stderr)
+                for line in tail:
+                    print(f"    {line.rstrip()}", file=sys.stderr)
+        except OSError:
+            pass
 
     def capture(self, text, output_path):
         """Render banner text and capture a screenshot.
@@ -282,12 +309,12 @@ class TerminalInstance(abc.ABC):
         finally:
             signal.signal(signal.SIGALRM, old_handler)
 
-        # Wait for helper to signal "ready"
+        # Wait for helper to confirm render-complete (DSR flush).
         old_handler = signal.signal(signal.SIGALRM, _alarm_handler)
         try:
-            signal.alarm(10)
+            signal.alarm(30)
             with open(self._ready_fifo, 'r') as f:
-                ready = f.readline().strip()
+                status = f.readline().strip()
             signal.alarm(0)
         except (_FifoTimeout, OSError) as exc:
             signal.alarm(0)
@@ -297,13 +324,18 @@ class TerminalInstance(abc.ABC):
         finally:
             signal.signal(signal.SIGALRM, old_handler)
 
-        if ready != 'ready':
-            print(f"  {tool} [{self._group_name}] unexpected "
-                  f"signal: {ready!r}", file=sys.stderr)
+        if status.startswith('ok'):
+            pass  # proceed to screenshot
+        elif status.startswith('fail'):
+            print(f"  {tool} [{self._group_name}] helper "
+                  f"reported: {status}", file=sys.stderr)
+            self._print_helper_log_tail()
             return False
-
-        # Brief pause to let the terminal finish rendering the banner.
-        time.sleep(0.1)
+        else:
+            print(f"  {tool} [{self._group_name}] unexpected "
+                  f"status: {status!r}", file=sys.stderr)
+            self._print_helper_log_tail()
+            return False
 
         # Capture screenshot (import -window reads directly by window ID).
         try:
@@ -322,21 +354,28 @@ class TerminalInstance(abc.ABC):
                   file=sys.stderr)
             return False
 
-        # Crop to content height (full width) + 3px bottom padding.
+        # Crop to content bounds on top, right, and bottom (left untouched).
         try:
             result = subprocess.run(
                 ['convert', output_path, '-fuzz', '1%', '-trim',
-                 '-format', '%Y %h', 'info:'],
+                 '-format', '%X %Y %w %h', 'info:'],
                 capture_output=True, text=True, timeout=10,
             )
             if result.returncode == 0 and result.stdout.strip():
                 parts = result.stdout.strip().split()
-                y_offset = int(parts[0])
-                trim_h = int(parts[1])
-                crop_h = y_offset + trim_h + 3
+                x_offset = int(parts[0])
+                y_offset = int(parts[1])
+                trim_w = int(parts[2])
+                trim_h = int(parts[3])
+                pad_top = 1
+                pad_bottom = 3
+                pad_right = 3
+                crop_y = max(0, y_offset - pad_top)
+                crop_w = x_offset + trim_w + pad_right
+                crop_h = y_offset + trim_h + pad_bottom - crop_y
                 subprocess.run(
                     ['convert', output_path,
-                     '-crop', f'x{crop_h}+0+0', '+repage',
+                     '-crop', f'{crop_w}x{crop_h}+0+{crop_y}', '+repage',
                      output_path],
                     capture_output=True, timeout=10,
                 )
@@ -583,14 +622,14 @@ class RendererPool:
         :param output_path: path to write the output PNG
         :param encoding: server encoding for font group selection
         :param columns: optional column width override
-        :returns: True if PNG was successfully created
+        :returns: instance display name on success, None on failure
         """
         group_name = _encoding_to_font_group(encoding)
         instance = self._get_instance(group_name, columns=columns)
         if instance is None:
-            return False
+            return None
         if not instance.capture(text, output_path):
-            return False
+            return None
 
         # Correct for non-square pixel aspect ratio (CRT platforms).
         group_info = _FONT_GROUPS.get(group_name, {})
@@ -609,7 +648,7 @@ class RendererPool:
                 group_info.get('columns', self._columns))
             _apply_crt_effects(output_path, group_name, effective_cols)
 
-        return True
+        return instance._group_name
 
     @staticmethod
     def available():

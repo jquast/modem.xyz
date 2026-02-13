@@ -17,8 +17,14 @@ import random
 import signal
 import subprocess
 import sys
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Global state for clean shutdown on Ctrl+C.
+_shutdown = False
+_running_procs = set()
+_running_procs_lock = threading.Lock()
 
 
 def parse_server_list(path):
@@ -75,6 +81,9 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
     :param connect_timeout: seconds to wait for TCP connection
     :returns: (host, port, status_message)
     """
+    if _shutdown:
+        return (host, port, "cancelled")
+
     logfile = os.path.join(logs_dir, f"{host}:{port}.log")
 
     try:
@@ -107,11 +116,19 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
             stderr=subprocess.DEVNULL,
             start_new_session=True,
         )
-        proc.wait(timeout=connect_timeout + (banner_max_wait * 2) + 3)
-        return (host, port, "scanned")
-    except subprocess.TimeoutExpired:
-        _kill_process_group(proc)
-        return (host, port, "timeout (subprocess)")
+        with _running_procs_lock:
+            _running_procs.add(proc)
+        try:
+            proc.wait(timeout=connect_timeout + (banner_max_wait * 2) + 3)
+            if _shutdown:
+                return (host, port, "cancelled")
+            return (host, port, "scanned")
+        except subprocess.TimeoutExpired:
+            _kill_process_group(proc)
+            return (host, port, "timeout (subprocess)")
+        finally:
+            with _running_procs_lock:
+                _running_procs.discard(proc)
     except FileNotFoundError:
         return (host, port, "error: telnetlib3-fingerprint not found")
 
@@ -188,35 +205,96 @@ def main():
 
     scanned = 0
     errors = 0
+    cancelled = 0
+    # Map future → (host, port) for status reporting.
+    future_to_server = {}
 
     def _report(future):
-        nonlocal scanned, errors
+        nonlocal scanned, errors, cancelled
         host, port, status = future.result()
         if status == "scanned":
             scanned += 1
+        elif status == "cancelled":
+            cancelled += 1
         else:
             errors += 1
-        print(f"{host}:{port} -- {status}")
+        if status != "cancelled":
+            print(f"{host}:{port} -- {status}")
 
-    with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
-        futures = set()
-        for host, port, encoding in to_scan:
-            future = pool.submit(
-                scan_host, host, port, args.data_dir, args.logs_dir,
-                encoding, args.banner_max_wait,
-                args.connect_timeout)
-            futures.add(future)
-            time.sleep(args.connect_delay)
-            # drain any futures that completed while we slept
-            done = {f for f in futures if f.done()}
-            for f in done:
-                _report(f)
-            futures -= done
-        for future in as_completed(futures):
-            _report(future)
+    def _sigint_handler(signum, frame):
+        global _shutdown
+        if _shutdown:
+            # Second Ctrl+C — force exit.
+            sys.exit(1)
+        _shutdown = True
+        print("\nInterrupted — killing running scans ...", file=sys.stderr)
+        with _running_procs_lock:
+            procs = list(_running_procs)
+        for proc in procs:
+            try:
+                os.killpg(proc.pid, signal.SIGTERM)
+            except OSError:
+                pass
+
+    prev_handler = signal.signal(signal.SIGINT, _sigint_handler)
+
+    try:
+        with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
+            futures = set()
+            for host, port, encoding in to_scan:
+                if _shutdown:
+                    break
+                future = pool.submit(
+                    scan_host, host, port, args.data_dir, args.logs_dir,
+                    encoding, args.banner_max_wait,
+                    args.connect_timeout)
+                future_to_server[future] = (host, port)
+                futures.add(future)
+                time.sleep(args.connect_delay)
+                # drain any futures that completed while we slept
+                done = {f for f in futures if f.done()}
+                for f in done:
+                    _report(f)
+                futures -= done
+
+            if _shutdown:
+                for f in futures:
+                    f.cancel()
+                pool.shutdown(wait=False, cancel_futures=True)
+            else:
+                # Wait for remaining futures with periodic status updates.
+                while futures:
+                    if _shutdown:
+                        for f in futures:
+                            f.cancel()
+                        pool.shutdown(wait=False, cancel_futures=True)
+                        break
+                    newly_done = set()
+                    try:
+                        for f in as_completed(futures, timeout=10):
+                            newly_done.add(f)
+                            _report(f)
+                            if _shutdown:
+                                break
+                    except TimeoutError:
+                        remaining = futures - newly_done
+                        servers = [
+                            f"{future_to_server[f][0]}:{future_to_server[f][1]}"
+                            for f in remaining if f in future_to_server
+                        ]
+                        if servers:
+                            print(f"  ... waiting on {len(servers)}:"
+                                  f" {', '.join(servers[:8])}"
+                                  f"{'...' if len(servers) > 8 else ''}",
+                                  file=sys.stderr)
+                    futures -= newly_done
+    finally:
+        signal.signal(signal.SIGINT, prev_handler)
 
     print(f"\nDone: {scanned} scanned, {skipped} skipped,"
-          f" {errors} errors", file=sys.stderr)
+          f" {errors} errors"
+          f"{f', {cancelled} cancelled' if cancelled else ''}",
+          file=sys.stderr)
 
 
 if __name__ == '__main__':
