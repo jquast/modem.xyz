@@ -44,6 +44,9 @@
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|66.188.66.37:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "108.52.154.224:23|150.221.218.212:23|44.31.91.213:23|71.237.240.26:23|80.189.184.12:23|98.5.235.199:2020|99.53.196.18:23|bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
@@ -454,6 +457,9 @@
     "amstrad.simulant.uk:464|bbs.furryrefuge.com:23|freeway.vkradio.com:23|guardian.synchro.net:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
+    "amstrad.simulant.uk:464|freeway.vkradio.com:23|guardian.synchro.net:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
+      "action": "skip"
+    },
     "ansiblemoo.org:6000|ansiblemoo.org:8888|foomoo.org:4500": {
       "action": "remove",
       "remove": [
@@ -844,6 +850,9 @@
     "halcyon.bluecows.com:4201|holomuck.org:5757": {
       "action": "skip"
     },
+    "ianshirm.genesismuds.com:2251|terabithia.genesismuds.com:4700": {
+      "action": "skip"
+    },
     "icesus.org:23|icesus.org:4000": {
       "action": "skip"
     },
@@ -965,6 +974,9 @@
       "action": "skip"
     },
     "nanvaent.org:23|nanvaent.org:3000": {
+      "action": "skip"
+    },
+    "netasylum.com:2323|silentnode.ddns.net:6400|thedigitalpost.freeddns.org:23": {
       "action": "skip"
     },
     "nightbite.redirectme.net:2323|subhuman.ddns.net:1338": {

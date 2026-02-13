@@ -334,9 +334,19 @@ def discover_encoding_issues(data_dir, list_path):
     if not os.path.isdir(server_dir):
         return issues
 
-    # Load server list to know which servers to check
+    # Load server list to know which servers to check, and their
+    # current encoding overrides so we skip already-fixed entries.
     list_entries = load_server_list(list_path)
     allowed_servers = {(h, p) for h, p, _ in list_entries if h and p}
+    list_encodings = {}
+    for h, p, line in list_entries:
+        if h and p:
+            parts = line.split()
+            if len(parts) >= 3:
+                try:
+                    int(parts[2])
+                except ValueError:
+                    list_encodings[(h, p)] = parts[2]
 
     # Scan fingerprint data
     for fp_dir in sorted(os.listdir(server_dir)):
@@ -366,6 +376,8 @@ def discover_encoding_issues(data_dir, list_path):
                 continue
 
             session_data = probe.get('session_data', {})
+            stored_enc = session_data.get('encoding')
+            list_enc = list_encodings.get((host, port))
             banner_before = session_data.get('banner_before_return', '')
             banner_after = session_data.get('banner_after_return', '')
             banner = banner_before or banner_after
@@ -375,7 +387,6 @@ def discover_encoding_issues(data_dir, list_path):
             # Check for UTF-8 content mis-decoded as CP437 first, since
             # mojibake inflates apparent width ~3x (each UTF-8 char
             # becomes 3 cp437 chars), which would fail the width filter.
-            stored_enc = session_data.get('encoding')
             utf8_suggest = _detect_utf8_as_cp437(banner, stored_enc)
             if utf8_suggest:
                 mojibake_count = len(_UTF8_AS_CP437_RE.findall(banner))
@@ -385,7 +396,16 @@ def discover_encoding_issues(data_dir, list_path):
                     'suggested_encoding': utf8_suggest,
                     'replacement_count': mojibake_count,
                     'reason': 'utf8_mojibake',
+                    'list_already_correct': list_enc == utf8_suggest,
                 })
+                continue
+
+            # Skip servers whose list encoding already differs from
+            # what the scanner recorded — encoding override is in
+            # place and a re-scan will use it.  (Checked after the
+            # mojibake detector so stale data with mojibake is still
+            # caught even when the list is already correct.)
+            if list_enc and stored_enc and list_enc != stored_enc:
                 continue
 
             if max_width < 80 or max_width >= 200:
@@ -398,6 +418,7 @@ def discover_encoding_issues(data_dir, list_path):
                     'port': port,
                     'suggested_encoding': suggested_enc,
                     'replacement_count': replacement_count,
+                    'list_already_correct': list_enc == suggested_enc,
                 })
 
     return issues
@@ -480,59 +501,152 @@ def _expunge_logs(logs_dir, servers):
     return deleted
 
 
-def _review_mojibake_group(issues, list_path, logs_dir, mode,
+def _expunge_server_json(data_dir, servers):
+    """Delete JSON fingerprint data files for a list of (host, port) pairs.
+
+    Scans all protocol fingerprint directories under ``data_dir/server/``
+    for JSON files whose session matches any of the given servers, and
+    deletes them so that a re-scan creates fresh data.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param servers: iterable of (host, port) tuples
+    :returns: number of JSON files deleted
+    """
+    target = set(servers)
+    if not target:
+        return 0
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return 0
+
+    deleted = 0
+    empty_dirs = []
+    for fp_dir in os.listdir(server_dir):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in os.listdir(fp_path):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+            for session in data.get('sessions', []):
+                host = session.get('host', session.get('ip', ''))
+                port = session.get('port', 0)
+                if (host, port) in target:
+                    os.remove(fpath)
+                    deleted += 1
+                    break
+        # Track empty fingerprint directories for cleanup.
+        remaining = [f for f in os.listdir(fp_path) if f.endswith('.json')]
+        if not remaining:
+            empty_dirs.append(fp_path)
+
+    for d in empty_dirs:
+        try:
+            os.rmdir(d)
+        except OSError:
+            pass
+
+    return deleted
+
+
+def _review_mojibake_group(issues, list_path, logs_dir, data_dir, mode,
                            report_only=False, dry_run=False):
     """Review a group of UTF-8 mojibake issues as a batch.
 
     :param issues: list of mojibake issue dicts
     :param list_path: path to server list file
     :param logs_dir: path to logs directory
+    :param data_dir: path to data directory (containing ``server/``)
     :param mode: 'mud' or 'bbs'
     :param report_only: if True, don't prompt or modify files
     :param dry_run: if True, show changes without writing
     :returns: number of entries fixed
     """
-    print(f"\n  {len(issues)} servers transmitting UTF-8"
-          f" but recorded as cp437:")
-    for issue in issues:
-        host = issue['host']
-        port = issue['port']
-        count = issue['replacement_count']
-        print(f"    {host}:{port}  ({count} mojibake patterns)")
+    need_list_fix = [i for i in issues if not i.get('list_already_correct')]
+    already_correct = [i for i in issues if i.get('list_already_correct')]
+
+    if need_list_fix:
+        print(f"\n  {len(need_list_fix)} servers transmitting UTF-8"
+              f" but recorded as cp437:")
+        for issue in need_list_fix:
+            host = issue['host']
+            port = issue['port']
+            count = issue['replacement_count']
+            print(f"    {host}:{port}  ({count} mojibake patterns)")
+
+    if already_correct:
+        print(f"\n  {len(already_correct)} servers already listed as utf-8"
+              f" but data still has cp437 mojibake (need expunge):")
+        for issue in already_correct:
+            host = issue['host']
+            port = issue['port']
+            count = issue['replacement_count']
+            print(f"    {host}:{port}  ({count} mojibake patterns)")
 
     if report_only:
         return 0
 
-    print(f"\n  y = set encoding to utf-8 in {os.path.basename(list_path)}")
-    print(f"  x = set encoding to utf-8 AND expunge logs"
-          f" (forces re-scan)")
-    print(f"  n = skip (default)")
-    choice = _prompt(
-        f"\n  Apply utf-8 to all {len(issues)}? [y/x/n] ", "yxnq")
-    if choice in (None, 'n', 'q'):
+    list_basename = os.path.basename(list_path)
+    total = len(issues)
+    updated = 0
+
+    if need_list_fix:
+        print(f"\n  y = set encoding to utf-8 in {list_basename}")
+        print(f"  x = set encoding to utf-8 AND expunge data"
+              f" (forces fresh re-scan)")
+        print(f"  n = skip (default)")
+        choice = _prompt(
+            f"\n  Apply utf-8 to all {len(need_list_fix)}? [y/x/n] ",
+            "yxnq")
         if choice == 'q':
-            return -1  # signal quit
-        return 0
+            return -1
+        if choice in ('y', 'x'):
+            fixes = {(i['host'], i['port']): 'utf-8'
+                     for i in need_list_fix}
+            updated = _apply_encoding_fixes_bulk(
+                list_path, fixes, dry_run=dry_run)
+            if dry_run:
+                print(f"  (dry-run) would update {updated} entries")
+            else:
+                print(f"  Updated {updated} entries in {list_basename}")
+            if choice == 'x' and not dry_run:
+                servers = [(i['host'], i['port']) for i in need_list_fix]
+                deleted_logs = _expunge_logs(logs_dir, servers)
+                deleted_json = _expunge_server_json(data_dir, servers)
+                print(f"  Expunged {deleted_logs} log files,"
+                      f" {deleted_json} data files"
+                      f" (will re-scan with utf-8)")
 
-    fixes = {(i['host'], i['port']): 'utf-8' for i in issues}
-    updated = _apply_encoding_fixes_bulk(list_path, fixes, dry_run=dry_run)
-    if dry_run:
-        print(f"  (dry-run) would update {updated} entries")
-    else:
-        print(f"  Updated {updated} entries in"
-              f" {os.path.basename(list_path)}")
-
-    if choice == 'x' and not dry_run:
-        servers = [(i['host'], i['port']) for i in issues]
-        deleted = _expunge_logs(logs_dir, servers)
-        print(f"  Expunged {deleted} log files"
-              f" (will re-scan with utf-8)")
+    if already_correct:
+        print(f"\n  x = expunge stale data (forces fresh re-scan)")
+        print(f"  n = skip (default)")
+        choice = _prompt(
+            f"\n  Expunge data for {len(already_correct)}"
+            f" already-correct servers? [x/n] ", "xnq")
+        if choice == 'q':
+            return -1 if updated == 0 else updated
+        if choice == 'x' and not dry_run:
+            servers = [(i['host'], i['port']) for i in already_correct]
+            deleted_logs = _expunge_logs(logs_dir, servers)
+            deleted_json = _expunge_server_json(data_dir, servers)
+            print(f"  Expunged {deleted_logs} log files,"
+                  f" {deleted_json} data files"
+                  f" (will re-scan with utf-8)")
+            updated += len(already_correct)
 
     return updated
 
 
 def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
-                           logs_dir, report_only=False, dry_run=False):
+                           logs_dir, mud_data=None, bbs_data=None,
+                           report_only=False, dry_run=False):
     """Interactively review and apply encoding fixes.
 
     UTF-8 mojibake issues (auto-sensing servers) are grouped and
@@ -544,13 +658,16 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
     :param mud_list: path to MUD server list
     :param bbs_list: path to BBS server list
     :param logs_dir: path to logs directory
+    :param mud_data: path to MUD data directory (for JSON expunge)
+    :param bbs_data: path to BBS data directory (for JSON expunge)
     :param report_only: if True, don't prompt or modify files
     :param dry_run: if True, show changes without writing
     """
-    all_issues = [('mud', mud_issues, mud_list), ('bbs', bbs_issues, bbs_list)]
+    all_issues = [('mud', mud_issues, mud_list, mud_data),
+                  ('bbs', bbs_issues, bbs_list, bbs_data)]
     applied_count = 0
 
-    for mode, issues, list_path in all_issues:
+    for mode, issues, list_path, data_dir in all_issues:
         if not issues or not os.path.isfile(list_path):
             continue
 
@@ -562,7 +679,7 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
         # Batch review for UTF-8 mojibake group
         if mojibake:
             result = _review_mojibake_group(
-                mojibake, list_path, logs_dir, mode,
+                mojibake, list_path, logs_dir, data_dir, mode,
                 report_only=report_only, dry_run=dry_run)
             if result == -1:  # quit
                 return applied_count
@@ -595,6 +712,11 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list, bbs_list,
                     if os.path.isfile(log_file):
                         os.remove(log_file)
                         print(f"    Deleted {log_file}")
+                    if data_dir:
+                        nj = _expunge_server_json(
+                            data_dir, [(host, port)])
+                        if nj:
+                            print(f"    Deleted {nj} data file(s)")
                 applied_count += 1
 
 
@@ -689,12 +811,13 @@ def show_all_banners(list_path, data_dir, encoding):
     print(f"\x1b[0m\n{shown}/{len(entries)} banners displayed")
 
 
-def expunge_all_logs(list_path, logs_dir, encoding):
-    """Delete log files for all servers matching an encoding.
+def expunge_all_logs(list_path, logs_dir, encoding, data_dir=None):
+    """Delete log and data files for all servers matching an encoding.
 
     :param list_path: path to server list file
     :param logs_dir: path to logs directory
     :param encoding: encoding name to match, or ``'all'``
+    :param data_dir: path to data directory (for JSON expunge)
     """
     entries = _entries_by_encoding(list_path, encoding)
     if not entries:
@@ -702,19 +825,25 @@ def expunge_all_logs(list_path, logs_dir, encoding):
         return
 
     logs_path = Path(logs_dir)
-    deleted = 0
+    deleted_logs = 0
     missing = 0
     for host, port, _ in entries:
         logfile = logs_path / f"{host}:{port}.log"
         if logfile.is_file():
             logfile.unlink()
-            deleted += 1
+            deleted_logs += 1
             print(f"  deleted {logfile.name}")
         else:
             missing += 1
 
-    print(f"\n{deleted} log(s) deleted, {missing} not found "
-          f"(of {len(entries)} {encoding!r} entries)")
+    deleted_json = 0
+    if data_dir:
+        servers = [(h, p) for h, p, _ in entries]
+        deleted_json = _expunge_server_json(data_dir, servers)
+
+    print(f"\n{deleted_logs} log(s) deleted, {deleted_json} data file(s)"
+          f" deleted, {missing} log(s) not found"
+          f" (of {len(entries)} {encoding!r} entries)")
 
 
 # Column width discovery
@@ -998,11 +1127,12 @@ def discover_empty_banners(data_dir, list_path, logs_dir):
 
 
 def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
-                         logs_dir, report_only=False, dry_run=False):
+                         logs_dir, mud_data=None, bbs_data=None,
+                         report_only=False, dry_run=False):
     """Interactively review servers with empty banners.
 
     For each server, the user can:
-    - ``x`` to expunge the log file for rescan
+    - ``x`` to expunge log and data files for rescan
     - ``y`` to remove the entry from the server list
     - ``n`` to skip
     - ``q`` to quit
@@ -1012,13 +1142,15 @@ def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
     :param mud_list: path to MUD server list
     :param bbs_list: path to BBS server list
     :param logs_dir: path to logs directory
+    :param mud_data: path to MUD data directory (for JSON expunge)
+    :param bbs_data: path to BBS data directory (for JSON expunge)
     :param report_only: if True, don't prompt or modify files
     :param dry_run: if True, show changes without writing
     """
-    all_issues = [('mud', mud_issues, mud_list),
-                  ('bbs', bbs_issues, bbs_list)]
+    all_issues = [('mud', mud_issues, mud_list, mud_data),
+                  ('bbs', bbs_issues, bbs_list, bbs_data)]
 
-    for mode, issues, list_path in all_issues:
+    for mode, issues, list_path, data_dir in all_issues:
         if not issues or not os.path.isfile(list_path):
             continue
 
@@ -1026,6 +1158,7 @@ def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
               f"{len(issues)} ---")
         removals = set()
         rescans = 0
+        rescan_servers = []
 
         for issue in issues:
             host = issue['host']
@@ -1041,7 +1174,7 @@ def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
                 continue
 
             choice = _prompt(
-                "    [x]expunge log for rescan / "
+                "    [x]expunge for rescan / "
                 "[y]remove from list / [n]skip / [q]uit? ",
                 "xynq")
             if choice == 'q':
@@ -1055,7 +1188,13 @@ def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
                     print(f"    [dry-run] would delete {log_file}")
                 else:
                     print(f"    no log file to delete")
+                if data_dir and not dry_run:
+                    nj = _expunge_server_json(
+                        data_dir, [(host, port)])
+                    if nj:
+                        print(f"    deleted {nj} data file(s)")
                 rescans += 1
+                rescan_servers.append((host, port))
             elif choice == 'y':
                 removals.add((host, port))
 
@@ -1143,13 +1282,14 @@ def discover_renders_empty(data_dir, list_path):
 
 
 def review_renders_empty(mud_issues, bbs_issues, mud_list, bbs_list,
-                         logs_dir, report_only=False, dry_run=False):
+                         logs_dir, mud_data=None, bbs_data=None,
+                         report_only=False, dry_run=False):
     """Interactively review servers whose banners render to empty screens.
 
     For each server, shows ``repr()`` of the raw banner so the moderator
     can inspect the escape sequences.  Options:
 
-    - ``x`` to expunge the log file for rescan
+    - ``x`` to expunge log and data files for rescan
     - ``y`` to remove the entry from the server list
     - ``n`` to skip
     - ``q`` to quit
@@ -1159,13 +1299,15 @@ def review_renders_empty(mud_issues, bbs_issues, mud_list, bbs_list,
     :param mud_list: path to MUD server list
     :param bbs_list: path to BBS server list
     :param logs_dir: path to logs directory
+    :param mud_data: path to MUD data directory (for JSON expunge)
+    :param bbs_data: path to BBS data directory (for JSON expunge)
     :param report_only: if True, don't prompt or modify files
     :param dry_run: if True, show changes without writing
     """
-    all_issues = [('mud', mud_issues, mud_list),
-                  ('bbs', bbs_issues, bbs_list)]
+    all_issues = [('mud', mud_issues, mud_list, mud_data),
+                  ('bbs', bbs_issues, bbs_list, bbs_data)]
 
-    for mode, issues, list_path in all_issues:
+    for mode, issues, list_path, data_dir in all_issues:
         if not issues or not os.path.isfile(list_path):
             continue
 
@@ -1189,7 +1331,7 @@ def review_renders_empty(mud_issues, bbs_issues, mud_list, bbs_list,
                 continue
 
             choice = _prompt(
-                "    [x]expunge log for rescan / "
+                "    [x]expunge for rescan / "
                 "[y]remove from list / [n]skip / [q]uit? ",
                 "xynq")
             if choice == 'q':
@@ -1203,6 +1345,11 @@ def review_renders_empty(mud_issues, bbs_issues, mud_list, bbs_list,
                     print(f"    [dry-run] would delete {log_file}")
                 else:
                     print(f"    no log file to delete")
+                if data_dir and not dry_run:
+                    nj = _expunge_server_json(
+                        data_dir, [(host, port)])
+                    if nj:
+                        print(f"    deleted {nj} data file(s)")
                 rescans += 1
             elif choice == 'y':
                 removals.add((host, port))
@@ -1421,14 +1568,15 @@ def discover_renders_small(data_dir, list_path, banners_dir,
 
 
 def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
-                         logs_dir, report_only=False, dry_run=False):
+                         logs_dir, mud_data=None, bbs_data=None,
+                         report_only=False, dry_run=False):
     """Interactively review servers whose banner PNGs are suspiciously small.
 
     For each server, shows file size, pixel dimensions, and ``repr()``
     of the raw banner.  Options:
 
-    - ``x`` to expunge the log file for rescan
-    - ``d`` to delete the PNG and expunge the log file
+    - ``x`` to expunge log and data files for rescan
+    - ``d`` to delete the PNG and expunge log and data files
     - ``y`` to remove the entry from the server list
     - ``n`` to skip
     - ``q`` to quit
@@ -1438,13 +1586,15 @@ def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
     :param mud_list: path to MUD server list
     :param bbs_list: path to BBS server list
     :param logs_dir: path to logs directory
+    :param mud_data: path to MUD data directory (for JSON expunge)
+    :param bbs_data: path to BBS data directory (for JSON expunge)
     :param report_only: if True, don't prompt or modify files
     :param dry_run: if True, show changes without writing
     """
-    all_issues = [('mud', mud_issues, mud_list),
-                  ('bbs', bbs_issues, bbs_list)]
+    all_issues = [('mud', mud_issues, mud_list, mud_data),
+                  ('bbs', bbs_issues, bbs_list, bbs_data)]
 
-    for mode, issues, list_path in all_issues:
+    for mode, issues, list_path, data_dir in all_issues:
         if not issues or not os.path.isfile(list_path):
             continue
 
@@ -1478,12 +1628,19 @@ def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
                 continue
 
             choice = _prompt(
-                "    [x]expunge log / [d]elete PNG + expunge / "
+                "    [x]expunge / [d]elete PNG + expunge / "
                 "[y]remove from list / [N]skip / [q]uit? ",
                 "xdynq")
             if choice == 'q':
                 break
-            if choice == 'x':
+            if choice in ('x', 'd'):
+                if choice == 'd':
+                    if not dry_run:
+                        if os.path.isfile(png_path):
+                            os.unlink(png_path)
+                            print(f"    deleted {png_path}")
+                    else:
+                        print(f"    [dry-run] would delete {png_path}")
                 log_file = Path(logs_dir) / f"{host}:{port}.log"
                 if log_file.is_file() and not dry_run:
                     log_file.unlink()
@@ -1492,22 +1649,11 @@ def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
                     print(f"    [dry-run] would delete {log_file}")
                 else:
                     print(f"    no log file to delete")
-                rescans += 1
-            elif choice == 'd':
-                if not dry_run:
-                    if os.path.isfile(png_path):
-                        os.unlink(png_path)
-                        print(f"    deleted {png_path}")
-                else:
-                    print(f"    [dry-run] would delete {png_path}")
-                log_file = Path(logs_dir) / f"{host}:{port}.log"
-                if log_file.is_file() and not dry_run:
-                    log_file.unlink()
-                    print(f"    deleted {log_file}")
-                elif log_file.is_file():
-                    print(f"    [dry-run] would delete {log_file}")
-                else:
-                    print(f"    no log file to delete")
+                if data_dir and not dry_run:
+                    nj = _expunge_server_json(
+                        data_dir, [(host, port)])
+                    if nj:
+                        print(f"    deleted {nj} data file(s)")
                 rescans += 1
             elif choice == 'y':
                 removals.add((host, port))
@@ -1788,13 +1934,15 @@ def _print_group_member(idx, rec, removals, source_label=None):
     print()
 
 
-def _review_groups(groups, label, decisions=None, logs_dir=None):
+def _review_groups(groups, label, decisions=None, logs_dir=None,
+                   data_dir=None):
     """Interactive review of duplicate groups.
 
     :param groups: dict of group key -> list of record dicts
     :param label: display label for the group type
     :param decisions: mutable decisions dict for caching, or None
     :param logs_dir: path to logs directory for rescan, or None
+    :param data_dir: path to data directory (for JSON expunge)
     :returns: set of (host, port) to remove
     """
     removals = set()
@@ -1851,14 +1999,15 @@ def _review_groups(groups, label, decisions=None, logs_dir=None):
             return removals
         if choice == "*":
             if logs_dir:
-                logs_path = Path(logs_dir)
-                deleted = 0
-                for rec in members:
-                    logfile = logs_path / f"{rec['host']}:{rec['port']}.log"
-                    if logfile.is_file():
-                        logfile.unlink()
-                        deleted += 1
-                print(f"    -> {deleted}/{len(members)} log(s) deleted for rescan")
+                servers = [(r['host'], r['port']) for r in members]
+                deleted_logs = _expunge_logs(logs_dir, servers)
+                deleted_json = 0
+                if data_dir:
+                    deleted_json = _expunge_server_json(
+                        data_dir, servers)
+                print(f"    -> {deleted_logs} log(s),"
+                      f" {deleted_json} data file(s)"
+                      f" deleted for rescan")
             else:
                 print("    (no logs directory -- use --logs)")
             continue
@@ -1984,18 +2133,11 @@ def prune_dead(list_path, data_dir, logs_dir, report_only=False,
 
     answer = _prompt(f"\n  Remove {len(dead)} dead entries? [y/N/x] ", "ynx")
     if answer == "x":
-        # Expunge log files for rescan
-        logs_path = Path(logs_dir)
-        deleted = 0
-        for host, port, _ in dead:
-            logfile = logs_path / f"{host}:{port}.log"
-            if logfile.is_file():
-                try:
-                    logfile.unlink()
-                    deleted += 1
-                except OSError:
-                    pass
-        print(f"  Expunged {deleted}/{len(dead)} log file(s) for rescan")
+        servers = [(h, p) for h, p, _ in dead]
+        deleted_logs = _expunge_logs(logs_dir, servers)
+        deleted_json = _expunge_server_json(data_dir, servers)
+        print(f"  Expunged {deleted_logs} log(s),"
+              f" {deleted_json} data file(s) for rescan")
         answer = _prompt(f"  Now remove from list? [y/N] ", "yn")
 
     if answer != "y":
@@ -2081,17 +2223,17 @@ def find_duplicates(list_path, data_dir, report_only=False,
     if fp_ip_groups:
         r = _review_groups(
             fp_ip_groups, "Fingerprint + IP duplicates", decisions,
-            logs_dir=logs_dir)
+            logs_dir=logs_dir, data_dir=str(data_dir))
         removals.update(r)
     if extra_banner:
         r = _review_groups(
             extra_banner, "Banner similarity duplicates", decisions,
-            logs_dir=logs_dir)
+            logs_dir=logs_dir, data_dir=str(data_dir))
         removals.update(r)
     if extra_mssp:
         r = _review_groups(
             extra_mssp, "MSSP NAME duplicates", decisions,
-            logs_dir=logs_dir)
+            logs_dir=logs_dir, data_dir=str(data_dir))
         removals.update(r)
 
     if not removals:
@@ -2494,9 +2636,11 @@ def main():
 
     if args.expunge_all:
         if do_mud and os.path.isfile(args.mud_list):
-            expunge_all_logs(args.mud_list, args.logs, args.expunge_all)
+            expunge_all_logs(args.mud_list, args.logs, args.expunge_all,
+                            data_dir=args.mud_data)
         if do_bbs and os.path.isfile(args.bbs_list):
-            expunge_all_logs(args.bbs_list, args.logs, args.expunge_all)
+            expunge_all_logs(args.bbs_list, args.logs, args.expunge_all,
+                            data_dir=args.bbs_data)
         return
 
     only_flags = (args.only_prune, args.only_dupes,
@@ -2509,7 +2653,7 @@ def main():
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
     do_dns = (args.only_dns or not any_only) and not args.skip_dns
-    do_encodings = args.only_encodings
+    do_encodings = args.only_encodings or not any_only
     do_columns = args.only_columns
     do_empty = args.only_empty
     do_renders_empty = args.only_renders_empty
@@ -2583,6 +2727,7 @@ def main():
             review_encoding_issues(
                 mud_issues, bbs_issues,
                 args.mud_list, args.bbs_list, args.logs,
+                mud_data=args.mud_data, bbs_data=args.bbs_data,
                 report_only=args.report_only, dry_run=args.dry_run)
         else:
             print("No encoding issues detected.")
@@ -2622,6 +2767,7 @@ def main():
             review_empty_banners(
                 mud_issues, bbs_issues,
                 args.mud_list, args.bbs_list, args.logs,
+                mud_data=args.mud_data, bbs_data=args.bbs_data,
                 report_only=args.report_only,
                 dry_run=args.dry_run)
         else:
@@ -2642,6 +2788,7 @@ def main():
             review_renders_empty(
                 mud_issues, bbs_issues,
                 args.mud_list, args.bbs_list, args.logs,
+                mud_data=args.mud_data, bbs_data=args.bbs_data,
                 report_only=args.report_only,
                 dry_run=args.dry_run)
         else:
@@ -2666,6 +2813,7 @@ def main():
             review_renders_small(
                 mud_issues, bbs_issues,
                 args.mud_list, args.bbs_list, args.logs,
+                mud_data=args.mud_data, bbs_data=args.bbs_data,
                 report_only=args.report_only,
                 dry_run=args.dry_run)
         else:

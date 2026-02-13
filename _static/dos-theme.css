@@ -202,6 +202,13 @@ pre.ansi-banner {
   pointer-events: none;
 }
 
+.copy-block-btn {
+  margin-left: 10px;
+  font-size: 0.8em;
+  padding: 0px 4px;
+  vertical-align: baseline;
+}
+
 /* ── TLS/SSL padlock indicator ───────────────────────────────────────── */
 .tls-lock {
   color: #55ff55;

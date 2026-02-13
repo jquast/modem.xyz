@@ -361,6 +361,10 @@ def load_server_data(data_dir, encoding_overrides=None,
                 'banner_before': banner_before,
                 'banner_after': banner_after,
                 'timing': session_data.get('timing', {}),
+                'dsr_requests': session_data.get(
+                    'dsr_requests', 0),
+                'dsr_replies': session_data.get(
+                    'dsr_replies', 0),
                 'has_mssp': bool(mssp),
                 'mssp': mssp,
                 'name': _clean_mssp_str(
@@ -1219,7 +1223,7 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None,
         print("Telnet Fingerprint")
         print("------------------")
         print()
-        print(f":ref:`{fp[:16]}... <fp_{fp}>`")
+        print(f":ref:`{fp} <fp_{fp}>`")
         print()
         if fp_counts:
             other_count = fp_counts.get(fp, 1) - 1
@@ -1529,7 +1533,7 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
 
     fp = server['fingerprint']
     _rst_heading("Telnet Fingerprint", sec_char)
-    print(f":ref:`{fp[:16]}... <fp_{fp}>`")
+    print(f":ref:`{fp} <fp_{fp}>`")
     print()
     if fp_counts:
         other_count = fp_counts.get(fp, 1) - 1

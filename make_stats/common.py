@@ -957,7 +957,7 @@ def display_fingerprint_summary(servers, server_label_fn):
             server_labels += f', ... (+{len(fp_servers) - 3})'
 
         rows.append({
-            'Fingerprint': f':ref:`{fp[:16]}... <fp_{fp}>`',
+            'Fingerprint': f':ref:`{fp[:12]}\u2026 <fp_{fp}>`',
             'Servers': str(len(fp_servers)),
             'Offers': _rst_escape(offered[:30]),
             'Requests': _rst_escape(requested[:30]),
@@ -991,11 +991,8 @@ def _write_fingerprint_options_section(fp_hash, fp_servers):
 
     print(f".. _fp_{fp_hash}:")
     print()
-    title = f"{fp_hash[:16]}"
-    _rst_heading(title, '=')
+    _rst_heading(fp_hash, '=')
 
-    print(f"**Full hash**: ``{fp_hash}``")
-    print()
     print(f"**Servers sharing this fingerprint**:"
           f" {len(fp_servers)}")
     print()
@@ -1061,6 +1058,17 @@ def _write_fingerprint_options_section(fp_hash, fp_servers):
                       f"``{o}``"
                       for o in sorted(negotiated_requested)))
             print()
+
+    dsr_requests = sample.get('dsr_requests', 0)
+    dsr_replies = sample.get('dsr_replies', 0)
+    if dsr_requests:
+        print("Device Status Reports")
+        print("~~~~~~~~~~~~~~~~~~~~~")
+        print()
+        print(f"**DSR requests from server**: {dsr_requests}")
+        print()
+        print(f"**CPR replies sent**: {dsr_replies}")
+        print()
 
 
 def display_encoding_groups(servers, detail_subdir, file_key,

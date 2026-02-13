@@ -41,16 +41,41 @@ $(document).ready(function() {
                 .html('<span class="copy-icon" aria-hidden="true">&#x1F4CB;</span>');
             $link.after($btn);
         });
+
+        // Add copy buttons to Show JSON / Show Logfile details elements
+        $('details > summary').each(function() {
+            var $summary = $(this);
+            var label = $summary.text().trim();
+            if (label !== 'Show JSON' && label !== 'Show Logfile') return;
+            if ($summary.find('.copy-btn').length) return;
+            var $btn = $('<button>')
+                .addClass('copy-btn copy-block-btn')
+                .attr('title', 'Copy to clipboard')
+                .attr('aria-label', 'Copy ' + label.toLowerCase().replace('show ', '')
+                    + ' to clipboard')
+                .html('<span class="copy-icon" aria-hidden="true">&#x1F4CB;</span>');
+            $summary.append($btn);
+        });
     }, 200);
 
     // Copy button click handler (delegated for dynamic content)
     $(document).on('click', '.copy-btn', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        var host = $(this).data('host');
-        var port = $(this).data('port');
-        var text = host + ' ' + port;
         var $btn = $(this);
+        var text;
+
+        if ($btn.hasClass('copy-block-btn')) {
+            // Copy code block content from parent <details>
+            var $details = $btn.closest('details');
+            var $code = $details.find('pre');
+            text = $code.map(function() { return $(this).text(); }).get().join('\n');
+        } else {
+            // Copy host:port for telnet links
+            var host = $btn.data('host');
+            var port = $btn.data('port');
+            text = host + ' ' + port;
+        }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(function() {

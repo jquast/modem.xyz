@@ -148,10 +148,10 @@ def main():
         '--logs-dir', default=None,
         help='Directory for scan log files (default: ./logs)')
     parser.add_argument(
-        '--num-workers', type=int, default=16,
+        '--num-workers', type=int, default=20,
         help='Number of parallel workers (default: 16)')
     parser.add_argument(
-        '--banner-max-wait', type=int, default=20,
+        '--banner-max-wait', type=int, default=60,
         help='Seconds to wait for banner data')
     parser.add_argument(
         '--connect-timeout', type=int, default=60,

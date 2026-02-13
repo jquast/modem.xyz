@@ -242,6 +242,10 @@ def load_server_data(data_dir, encoding_overrides=None,
                 'banner_before': banner_before,
                 'banner_after': banner_after,
                 'timing': session_data.get('timing', {}),
+                'dsr_requests': session_data.get(
+                    'dsr_requests', 0),
+                'dsr_replies': session_data.get(
+                    'dsr_replies', 0),
             }
 
             banner = _combine_banners(
@@ -555,7 +559,7 @@ def display_server_table(servers):
 
         software = s['bbs_software'] or ''
         encoding = s['display_encoding']
-        fp = s['fingerprint'][:12] + '...'
+        fp = s['fingerprint'][:12] + '\u2026'
 
         banner = _combine_banners(
             s, default_encoding=DEFAULT_ENCODING)
@@ -945,7 +949,7 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
 
     fp = server['fingerprint']
     _rst_heading("Telnet Fingerprint", sec_char)
-    print(f":ref:`{fp[:16]}... <fp_{fp}>`")
+    print(f":ref:`{fp} <fp_{fp}>`")
     print()
     if fp_counts:
         other_count = fp_counts.get(fp, 1) - 1
