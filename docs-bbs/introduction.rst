@@ -186,7 +186,7 @@ Atari-Classic.ttf`` font installed, `telnetlib3`_ can perform bi-direcitonal tra
         telnetlib3-client --force-binary --encoding=ATASCII area52.tk 5200
 
 .. figure:: /_static/ghostty-atascii-telnetlib3.png
-   :width: 600px
+   :width: 408px
 
    ghostty and telnetlib3 is used to connect to an Atari BS.
 

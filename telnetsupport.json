@@ -245,6 +245,13 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
   },
   {
+    "host": "ansalon.net",
+    "port": 8679,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
+  },
+  {
     "host": "client.addemud.net",
     "port": 5000,
     "ssl": 0,
@@ -299,6 +306,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "thewalkingdead.apocalypto.org.uk",
+    "port": 8000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MXP\",\"ZMP\",\"GMCP\"]"
   },
   {
     "host": "xaosmud.org",
@@ -378,13 +392,6 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
   },
   {
-    "host": "ansalon.net",
-    "port": 8679,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
-  },
-  {
     "host": "stickmud.com",
     "port": 7670,
     "ssl": 1,
@@ -453,13 +460,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"GMCP\"]"
-  },
-  {
-    "host": "thewalkingdead.apocalypto.org.uk",
-    "port": 8000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MXP\",\"ZMP\",\"GMCP\"]"
   },
   {
     "host": "aardmud.org",

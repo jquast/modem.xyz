@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
-"""Helper script running inside a terminal instance (kitty or wezterm).
+"""Helper script running inside a terminal instance (wezterm).
 
 Reads banner payloads from a named pipe, clears the screen, displays
 each one, uses DSR flush synchronization to confirm the terminal rendered
 it, then signals readiness for screenshot via a second named pipe.
 
+In mux mode (when FONT_GROUP, COLS, ROWS are given), sets a user
+variable via OSC 1337 to trigger per-window font overrides, and
+resizes the terminal via the xterm resize escape.
+
 Usage::
 
-    terminal_helper.py DATA_FIFO READY_FIFO WINDOW_TITLE
+    terminal_helper.py DATA_FIFO READY_FIFO WINDOW_TITLE [FONT_GROUP COLS ROWS]
 """
 
+import base64
 import os
 import select
 import subprocess
@@ -115,10 +120,34 @@ def _signal_ready(ready_pipe, message):
         return False
 
 
+def _set_user_var(name, value):
+    """Set a wezterm user variable via OSC 1337 SetUserVar.
+
+    :param name: variable name
+    :param value: variable value (will be base64-encoded)
+    """
+    b64 = base64.b64encode(value.encode()).decode()
+    os.write(1, f'\033]1337;SetUserVar={name}={b64}\007'.encode())
+
+
+def _resize_terminal(cols, rows):
+    """Resize the terminal via xterm CSI 8 escape.
+
+    :param cols: number of columns
+    :param rows: number of rows
+    """
+    os.write(1, f'\033[8;{rows};{cols}t'.encode())
+
+
 def main():
     data_pipe = sys.argv[1]
     ready_pipe = sys.argv[2]
     window_title = sys.argv[3]
+
+    # Optional mux-mode arguments.
+    font_group = sys.argv[4] if len(sys.argv) > 4 else None
+    target_cols = int(sys.argv[5]) if len(sys.argv) > 5 else None
+    target_rows = int(sys.argv[6]) if len(sys.argv) > 6 else None
 
     # Redirect stderr to a log file for debugging.
     log_path = os.path.join(os.path.dirname(data_pipe), 'helper.log')
@@ -134,6 +163,14 @@ def main():
     subprocess.call(['stty', '-echo', '-icanon'], stdin=sys.stdin)
 
     _set_title(window_title)
+
+    # Mux mode: set font group user variable and resize terminal.
+    if font_group is not None:
+        _set_user_var('font_group', font_group)
+        _log(f'set user var font_group={font_group}')
+    if target_cols is not None and target_rows is not None:
+        _resize_terminal(target_cols, target_rows)
+        _log(f'resize to {target_cols}x{target_rows}')
 
     # Probe DSR before any banners — the terminal may need a moment to
     # initialize its PTY, so allow a generous timeout on the first try.
@@ -173,9 +210,13 @@ def main():
         # Thorough reset and clear.
         os.write(1, _CLEAR_SEQ)
 
+        # Restore terminal size after reset — undo any poison resize
+        # escapes from the previous banner.
+        if target_cols is not None and target_rows is not None:
+            _resize_terminal(target_cols, target_rows)
+
         # DSR barrier after reset: confirm the terminal processed the
-        # clear before writing the new banner.  Without this, a slow
-        # RIS could overlap with the new banner content.
+        # clear and resize before writing the new banner.
         if not _wait_for_cpr(timeout=3.0):
             _log(f'banner #{count}: post-reset DSR failed, continuing')
 
@@ -189,6 +230,14 @@ def main():
                 break
             continue
 
+        # Force wezterm's software renderer to repaint on Xvfb.
+        # On a virtual framebuffer there are no vsync/expose events, so
+        # inactive windows may show stale content.  Changing a user var
+        # triggers the Lua set_config_overrides handler which forces a
+        # repaint cycle.
+        if font_group is not None:
+            _set_user_var('redraw', str(count))
+
         # DSR flush: confirm terminal processed all output before
         # signaling the renderer to take a screenshot.  Scale timeout
         # with payload size (base 5s + 1s per 64 KiB).
@@ -196,7 +245,7 @@ def main():
         if _wait_for_cpr(timeout=flush_timeout):
             # Brief pause for compositor to paint the frame after the
             # terminal has processed all escape sequences.
-            time.sleep(0.05)
+            time.sleep(0.10)
             _log(f'banner #{count}: flush confirmed')
             if not _signal_ready(ready_pipe, f'ok {nbytes}'):
                 break

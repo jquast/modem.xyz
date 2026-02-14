@@ -16,8 +16,11 @@ from make_stats.common import (
     PLOT_FG, PLOT_GREEN, PLOT_CYAN,
     _listify, _first_str, _parse_int, _format_scan_time,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
+    _load_base_records, _generate_rst,
+    _render_banner_section, _render_json_section,
+    _render_log_section, _render_fingerprint_section,
     _rst_escape, _strip_ansi, _is_garbled,
-    _clean_log_line, _combine_banners, _redecode_banner, _has_encoding_issues,
+    _clean_log_line, _combine_banners, _has_encoding_issues,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer,
     _rst_heading, print_datatable,
@@ -40,8 +43,6 @@ PLOTS_PATH = os.path.join(DOCS_PATH, "_static", "plots")
 DETAIL_PATH = os.path.join(DOCS_PATH, "server_detail")
 MUD_DETAIL_PATH = os.path.join(DOCS_PATH, "mud_detail")
 BANNERS_PATH = os.path.join(DOCS_PATH, "_static", "banners")
-GITHUB_DATA_BASE = ("https://github.com/jquast/modem.xyz"
-                     "/tree/master/data-muds/server")
 
 _MSSP_URL_SKIP = frozenset(('DISCORD', 'ICON'))
 LOCITERM_URL = 'https://lociterm.com/telnetsupport.json'
@@ -288,139 +289,69 @@ def load_server_data(data_dir, encoding_overrides=None,
     :param column_overrides: dict mapping (host, port) to column width
     :returns: list of parsed server record dicts
     """
-    if encoding_overrides is None:
-        encoding_overrides = {}
-    if column_overrides is None:
-        column_overrides = {}
-
-    server_dir = os.path.join(data_dir, "server")
-    if not os.path.isdir(server_dir):
-        print(f"Error: {server_dir} is not a directory",
-              file=sys.stderr)
-        sys.exit(1)
+    base_records = _load_base_records(
+        data_dir, encoding_overrides, column_overrides)
 
     records = []
-    for fp_dir in sorted(os.listdir(server_dir)):
-        fp_path = os.path.join(server_dir, fp_dir)
-        if not os.path.isdir(fp_path):
-            continue
-        for fname in sorted(os.listdir(fp_path)):
-            if not fname.endswith('.json'):
-                continue
-            fpath = os.path.join(fp_path, fname)
-            try:
-                with open(fpath, encoding='utf-8', errors='surrogateescape') as f:
-                    data = json.load(f)
-            except (json.JSONDecodeError, OSError):
-                continue
+    for record in base_records:
+        session_data = record.pop('_session_data')
+        mssp = session_data.get('mssp', {})
 
-            probe = data.get('server-probe', {})
-            sessions = data.get('sessions', [])
-            if not sessions:
-                continue
+        record['has_mssp'] = bool(mssp)
+        record['mssp'] = mssp
+        record['name'] = _clean_mssp_str(
+            _first_str(mssp.get('NAME', '')))
+        record['codebase'] = ', '.join(
+            _listify(mssp.get('CODEBASE', '')))
+        record['family'] = ', '.join(
+            _listify(mssp.get('FAMILY', '')))
+        record['genre'] = ', '.join(
+            _listify(mssp.get('GENRE', '')))
+        record['gameplay'] = ', '.join(
+            _listify(mssp.get('GAMEPLAY', '')))
+        record['players'] = _parse_int(
+            mssp.get('PLAYERS', ''))
+        record['created'] = _first_str(
+            mssp.get('CREATED', ''))
+        record['status'] = ', '.join(
+            _listify(mssp.get('STATUS', '')))
+        record['website'] = _first_str(
+            mssp.get('WEBSITE', ''))
+        record['description'] = _first_str(
+            mssp.get('DESCRIPTION', ''))
+        record['location'] = ', '.join(
+            _listify(mssp.get('LOCATION', '')))
+        record['language'] = ', '.join(
+            _listify(mssp.get('LANGUAGE', '')))
+        record['discord'] = _first_str(
+            mssp.get('DISCORD', ''))
 
-            fp_data = probe.get('fingerprint-data', {})
-            session_data = probe.get('session_data', {})
-            mssp = session_data.get('mssp', {})
-            option_states = session_data.get('option_states', {})
-            session = sessions[-1]
+        record['display_encoding'] = (
+            record['encoding_override']
+            or record['encoding']).lower()
 
-            detected_encoding = session_data.get('encoding', 'unknown')
-            banner_before = session_data.get('banner_before_return', '')
-            banner_after = session_data.get('banner_after_return', '')
+        record['tls_port'] = _detect_tls_port(record)
+        record['uptime_days'] = _parse_uptime_days(
+            mssp.get('UPTIME', ''), record['connected'])
 
-            # Clean surrogate escapes from JSON by re-decoding with the
-            # detected encoding. These surrogates represent bytes that were
-            # not valid UTF-8 in the original telnet session.  Only do this
-            # for UTF-8/ASCII servers — non-UTF-8 encodings (GBK, Big5, etc.)
-            # were already correctly decoded by the scanner.
-            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
-                if banner_before:
-                    banner_before = _redecode_banner(
-                        banner_before, detected_encoding, 'utf-8')
-                if banner_after:
-                    banner_after = _redecode_banner(
-                        banner_after, detected_encoding, 'utf-8')
+        if not record['website']:
+            record['website'] = _find_mssp_url(mssp)
 
-            record = {
-                'host': session.get('host',
-                                    session.get('ip', 'unknown')),
-                'ip': session.get('ip', ''),
-                'port': session.get('port', 0),
-                'connected': session.get('connected', ''),
-                'fingerprint': probe.get('fingerprint', fp_dir),
-                'data_path': f"{fp_dir}/{fname}",
-                'offered': fp_data.get('offered-options', []),
-                'requested': fp_data.get('requested-options', []),
-                'refused': fp_data.get('refused-options', []),
-                'server_offered': option_states.get(
-                    'server_offered', {}),
-                'server_requested': option_states.get(
-                    'server_requested', {}),
-                'encoding': detected_encoding,
-                'banner_before': banner_before,
-                'banner_after': banner_after,
-                'timing': session_data.get('timing', {}),
-                'dsr_requests': session_data.get(
-                    'dsr_requests', 0),
-                'dsr_replies': session_data.get(
-                    'dsr_replies', 0),
-                'has_mssp': bool(mssp),
-                'mssp': mssp,
-                'name': _clean_mssp_str(
-                    _first_str(mssp.get('NAME', ''))),
-                'codebase': ', '.join(
-                    _listify(mssp.get('CODEBASE', ''))),
-                'family': ', '.join(
-                    _listify(mssp.get('FAMILY', ''))),
-                'genre': ', '.join(
-                    _listify(mssp.get('GENRE', ''))),
-                'gameplay': ', '.join(
-                    _listify(mssp.get('GAMEPLAY', ''))),
-                'players': _parse_int(mssp.get('PLAYERS', '')),
-                'created': _first_str(mssp.get('CREATED', '')),
-                'status': ', '.join(
-                    _listify(mssp.get('STATUS', ''))),
-                'website': _first_str(mssp.get('WEBSITE', '')),
-                'description': _first_str(
-                    mssp.get('DESCRIPTION', '')),
-                'location': ', '.join(
-                    _listify(mssp.get('LOCATION', ''))),
-                'language': ', '.join(
-                    _listify(mssp.get('LANGUAGE', ''))),
-                'discord': _first_str(mssp.get('DISCORD', '')),
-            }
+        if not record['website']:
+            for banner_key in ('banner_before', 'banner_after'):
+                banner_text = record[banner_key]
+                if banner_text:
+                    match = _URL_RE.search(
+                        _strip_ansi(banner_text))
+                    if match:
+                        record['website'] = match.group(0)
+                        break
 
-            record['encoding_override'] = encoding_overrides.get(
-                (record['host'], record['port']), '')
-            record['column_override'] = column_overrides.get(
-                (record['host'], record['port']))
-            record['display_encoding'] = (
-                record['encoding_override']
-                or record['encoding']).lower()
+        record['protocols'] = _detect_protocols(record)
+        record['adult'] = _is_adult(record)
+        record['pay_to_play'] = _is_pay_to_play(record)
 
-            record['tls_port'] = _detect_tls_port(record)
-            record['uptime_days'] = _parse_uptime_days(
-                mssp.get('UPTIME', ''), record['connected'])
-
-            if not record['website']:
-                record['website'] = _find_mssp_url(mssp)
-
-            if not record['website']:
-                for banner_key in ('banner_before', 'banner_after'):
-                    banner_text = record[banner_key]
-                    if banner_text:
-                        match = _URL_RE.search(
-                            _strip_ansi(banner_text))
-                        if match:
-                            record['website'] = match.group(0)
-                            break
-
-            record['protocols'] = _detect_protocols(record)
-            record['adult'] = _is_adult(record)
-            record['pay_to_play'] = _is_pay_to_play(record)
-
-            records.append(record)
+        records.append(record)
 
     return records
 
@@ -897,22 +828,23 @@ def display_location_groups(servers):
 
 def generate_summary_rst(stats):
     """Generate the statistics.rst file with stats and plots."""
-    rst_path = os.path.join(DOCS_PATH, "statistics.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
+
+    def _display(stats):
         footnotes = display_summary_stats(stats)
         display_plots()
         for fn in footnotes:
             print(fn)
             print()
-    print(f"  wrote {rst_path}", file=sys.stderr)
+
+    _generate_rst(
+        os.path.join(DOCS_PATH, "statistics.rst"),
+        _display, stats)
 
 
 def generate_server_list_rst(servers):
     """Generate the server_list.rst file with detail page toctree."""
-    rst_path = os.path.join(DOCS_PATH, "server_list.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
+
+    def _display(servers):
         display_server_table(servers)
         print()
         print(".. toctree::")
@@ -929,34 +861,31 @@ def generate_server_list_rst(servers):
                           s['name'] or s['host'])
             print(f"   {label} <mud_detail/{mud_file}>")
         print()
-    print(f"  wrote {rst_path}", file=sys.stderr)
+
+    _generate_rst(
+        os.path.join(DOCS_PATH, "server_list.rst"),
+        _display, servers)
 
 
 def generate_fingerprints_rst(servers):
     """Generate the fingerprints.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "fingerprints.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_fingerprint_summary(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "fingerprints.rst"),
+        display_fingerprint_summary, servers)
 
 
 def generate_encoding_rst(servers):
     """Generate the encodings.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "encodings.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_encoding_groups(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "encodings.rst"),
+        display_encoding_groups, servers)
 
 
 def generate_locations_rst(servers):
     """Generate the locations.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "locations.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_location_groups(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "locations.rst"),
+        display_location_groups, servers)
 
 
 def generate_banner_gallery_rst(servers):
@@ -977,9 +906,8 @@ def generate_banner_gallery_rst(servers):
 
 def generate_details_rst(servers):
     """Generate the servers.rst index page with toctree."""
-    rst_path = os.path.join(DOCS_PATH, "servers.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
+
+    def _display(servers):
         print("Servers")
         print("=======")
         print()
@@ -1010,7 +938,10 @@ def generate_details_rst(servers):
                           s['name'] or s['host'])
             print(f"   {label} <mud_detail/{mud_file}>")
         print()
-    print(f"  wrote {rst_path}", file=sys.stderr)
+
+    _generate_rst(
+        os.path.join(DOCS_PATH, "servers.rst"),
+        _display, servers)
 
 
 # ---------------------------------------------------------------------------
@@ -1029,321 +960,26 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None,
     mud_file = server['_mud_file']
     detail_path = os.path.join(MUD_DETAIL_PATH, f"{mud_file}.rst")
     name = _strip_ansi(server['name'] or server['host'])
-    footnotes = []
 
     with open(detail_path, 'w') as fout, \
             contextlib.redirect_stdout(fout):
-        escaped_name = _rst_escape(name)
-        _rst_heading(escaped_name, '=')
-
-        host = server['host']
-        port = server['port']
-        url = _telnet_url(host, port)
-
-        print("Server URLs")
-        print("-----------")
-        print()
-        print(f".. raw:: html")
-        print()
-        print(f'   <ul class="mud-connect">')
-        print(f'   <li><strong>Telnet</strong>: '
-              f'<a href="{url}" class="telnet-link">'
-              f'{url}</a>')
-        print(f'   <button class="copy-btn"'
-              f' data-host="{host}"'
-              f' data-port="{port}"'
-              f' title="Copy host and port"'
-              f' aria-label="Copy {host} port {port}'
-              f' to clipboard">')
-        print(f'   <span class="copy-icon"'
-              f' aria-hidden="true">'
-              f'&#x1F4CB;</span>')
-        print(f'   </button></li>')
-        if server.get('_loci_supported'):
-            loci_url = _lociterm_url(
-                host, port, server['tls_port'],
-                server.get('_loci_ssl'))
-            print(f'   <li><strong>Play in Browser'
-                  f'</strong>: <a href="{loci_url}">'
-                  f'LociTerm</a></li>')
-        if server['website']:
-            href = server['website']
-            if not href.startswith(('http://', 'https://')):
-                href = f'http://{href}'
-            print(f'   <li><strong>Website</strong>: '
-                  f'<a href="{href}">'
-                  f'{_rst_escape(server["website"])}'
-                  f'</a></li>')
-        if server['tls_port']:
-            tls_port = server['tls_port']
-            if tls_port == '1' or tls_port == str(port):
-                tls_url = f"telnets://{host}:{port}"
-            else:
-                tls_url = f"telnets://{host}:{tls_port}"
-            print(f'   <li><strong>TLS/SSL</strong>: '
-                  f'<a href="{tls_url}">{tls_url}</a>'
-                  f'</li>')
-        print(f'   </ul>')
-        print()
-
-        if server['has_mssp'] and server['description']:
-            print(f"*{_rst_escape(server['description'][:300])}*")
-            print()
-
-        banner = _combine_banners(server)
-        effective_enc = server['display_encoding']
-        if banner and not _is_garbled(banner):
-            banner_fname, display_w = _banner_to_png(
-                banner, BANNERS_PATH, effective_enc,
-                columns=server.get('column_override'))
-            if banner_fname:
-                server['_banner_png'] = banner_fname
-                if display_w:
-                    server['_banner_display_width'] = display_w
-                print("**Connection Banner:**")
-                print()
-                print(f".. image:: "
-                      f"/_static/banners/{banner_fname}")
-                print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
-                print(f"   :class: ansi-banner")
-                if display_w:
-                    print(f"   :width: {display_w}px")
-                print(f"   :loading: lazy")
-                print()
-        elif banner:
-            print("*Banner not shown -- this server likely"
-                  " uses a legacy encoding such as CP437.*")
-            print()
-
-        is_legacy_encoding = effective_enc not in (
-            'ascii', 'utf-8', 'unknown')
-        banner_garbled = banner and _is_garbled(banner)
-
-        has_info = (server['has_mssp'] or is_legacy_encoding
-                    or banner_garbled)
-        if has_info:
-            print("Server Info")
-            print("-----------")
-            print()
-            if server['codebase']:
-                print(f"- **Codebase**:"
-                      f" {_rst_escape(server['codebase'])}")
-            if server['family']:
-                print(f"- **Family**:"
-                      f" {_rst_escape(server['family'])}")
-            if server['genre']:
-                print(f"- **Genre**:"
-                      f" {_rst_escape(server['genre'])}")
-            if server['gameplay']:
-                print(f"- **Gameplay**:"
-                      f" {_rst_escape(server['gameplay'])}")
-            if server['players'] is not None:
-                scan_time = _format_scan_time(server['connected'])
-                if scan_time:
-                    print(f"- **Players online**:"
-                          f" {server['players']} [#scan]_")
-                    footnotes.append(
-                        f".. [#scan] measured {scan_time}")
-                else:
-                    print(f"- **Players online**:"
-                          f" {server['players']}")
-            if server['uptime_days'] is not None:
-                print(f"- **Uptime**:"
-                      f" {server['uptime_days']} days")
-            if server['created']:
-                print(f"- **Created**: {server['created']}")
-            if server['status']:
-                print(f"- **Status**:"
-                      f" {_rst_escape(server['status'])}")
-            if server['discord']:
-                discord_url = server['discord']
-                if not discord_url.startswith(
-                        ('http://', 'https://')):
-                    discord_url = f'https://{discord_url}'
-                print(f"- **Discord**:"
-                      f" `{_rst_escape(server['discord'])}"
-                      f" <{discord_url}>`_")
-            if server['location']:
-                print(f"- **Location**:"
-                      f" {_rst_escape(server['location'])}")
-            if server['language']:
-                print(f"- **Language**:"
-                      f" {_rst_escape(server['language'])}")
-            if is_legacy_encoding or banner_garbled:
-                enc_label = (effective_enc
-                             if is_legacy_encoding else 'cp437')
-                print(f"- **Encoding**: {enc_label}")
-                print()
-                print(f"  This server uses a legacy encoding:")
-                print()
-                print(f"  ``telnetlib3-client --encoding"
-                      f" {enc_label} --force-binary"
-                      f" {host} {port}``")
-                print()
-            if server['pay_to_play']:
-                pay_play = _first_str(
-                    server['mssp'].get('PAY TO PLAY', ''))
-                pay_perks = _first_str(
-                    server['mssp'].get('PAY FOR PERKS', ''))
-                if (pay_play
-                        and pay_play not in
-                        ('0', 'no', 'No', 'NO', '')):
-                    print("- **Pay to Play**: :pay-icon:`$` Yes")
-                if (pay_perks
-                        and pay_perks not in
-                        ('0', 'no', 'No', 'NO', '')):
-                    print("- **Pay for Perks**: :pay-icon:`$` Yes")
-            print()
-
-        proto_flags = [
-            p for p in MUD_PROTOCOLS
-            if server['protocols'].get(p, 'no') != 'no'
-        ]
-        if proto_flags:
-            print("Protocol Support")
-            print("----------------")
-            print()
-            print("MUD-specific protocols detected via MSSP"
-                  " flags or")
-            print("Telnet negotiation.")
-            print()
-            for proto in MUD_PROTOCOLS:
-                status = server['protocols'].get(proto, 'no')
-                if status == 'mssp':
-                    print(f"- **{proto}**:"
-                          f" :proto-yes:`Yes` (MSSP)")
-                elif status == 'negotiated':
-                    print(f"- **{proto}**:"
-                          f" :proto-negotiated:`Negotiated`")
-                else:
-                    print(f"- **{proto}**: :proto-no:`No`")
-            print()
-
-        fp = server['fingerprint']
-        print("Telnet Fingerprint")
-        print("------------------")
-        print()
-        print(f":ref:`{fp} <fp_{fp}>`")
-        print()
-        if fp_counts:
-            other_count = fp_counts.get(fp, 1) - 1
-            if other_count > 0:
-                print(f"*This fingerprint is shared by"
-                      f" {other_count} other "
-                      f"{'server' if other_count == 1 else 'servers'}.*")
-            else:
-                print("*This fingerprint is unique to"
-                      " this server.*")
-            print()
-        if server['offered']:
-            print("**Options offered by server**: "
-                  + ', '.join(f"``{o}``"
-                              for o in sorted(server['offered'])))
-            print()
-        if server['requested']:
-            print("**Options requested from client**: "
-                  + ', '.join(
-                      f"``{o}``"
-                      for o in sorted(server['requested'])))
-            print()
-
-        data_path = server.get('data_path', '')
-        if data_path and data_dir:
-            json_file = os.path.join(
-                data_dir, "server", data_path)
-            github_url = f"{GITHUB_DATA_BASE}/{data_path}"
-            print(f"**Data source**: `{data_path}"
-                  f" <{github_url}>`_")
-            print()
-            print("The complete JSON record collected during"
-                  " the scan,")
-            print("including Telnet negotiation results and any")
-            print("MSSP metadata.")
-            print()
-            if os.path.isfile(json_file):
-                with open(json_file, encoding='utf-8', errors='surrogateescape') as jf:
-                    raw_json = jf.read().rstrip()
-                if raw_json:
-                    print(".. raw:: html")
-                    print()
-                    print("   <details><summary>Show JSON</summary>")
-                    print()
-                    print(".. code-block:: json")
-                    print()
-                    for line in raw_json.split('\n'):
-                        print(f"   {line}")
-                    print()
-                    print(".. raw:: html")
-                    print()
-                    print("   </details>")
-                    print()
-
-        if logs_dir:
-            log_path = os.path.join(
-                logs_dir,
-                f"{server['host']}:{server['port']}.log")
-            if os.path.isfile(log_path):
-                with open(log_path, encoding='utf-8', errors='surrogateescape') as lf:
-                    log_text = lf.read().rstrip()
-                if log_text:
-                    print("Connection Log")
-                    print("--------------")
-                    print()
-                    print("Debug-level log of the Telnet"
-                          " negotiation session,")
-                    print("showing each IAC (Interpret As"
-                          " Command) exchange")
-                    print("between client and server.")
-                    print()
-                    print(".. raw:: html")
-                    print()
-                    print("   <details><summary>Show Logfile"
-                          "</summary>")
-                    print()
-                    print(".. code-block:: text")
-                    print()
-                    for line in log_text.split('\n'):
-                        for wrapped in _clean_log_line(line):
-                            print(f"   {wrapped}")
-                    print()
-                    print(f"*Generated by* "
-                          f"`telnetlib3-fingerprint "
-                          f"<https://github.com/jquast/"
-                          f"telnetlib3>`_")
-                    print()
-                    print(".. code-block:: shell")
-                    print()
-                    print(f"   telnetlib3-fingerprint "
-                          f"--loglevel=debug {host} {port}")
-                    print()
-                    print(".. raw:: html")
-                    print()
-                    print("   </details>")
-                    print()
-
+        _rst_heading(_rst_escape(name), '=')
+        footnotes = _write_mud_port_section(
+            server, '-', logs_dir=logs_dir,
+            data_dir=data_dir, fp_counts=fp_counts)
         for fn in footnotes:
             print(fn)
             print()
 
 
-def _write_mud_port_section(server, sec_char, logs_dir=None,
-                            data_dir=None, fp_counts=None,
-                            fn_suffix=''):
-    """Write detail content sections for one server port.
+def _write_mud_server_urls(server, sec_char):
+    """Write server URLs section for a MUD server.
 
     :param server: server record dict
-    :param sec_char: RST underline character for section headings
-    :param logs_dir: path to log directory
-    :param data_dir: path to data directory
-    :param fp_counts: dict mapping fingerprint to server count
-    :param fn_suffix: suffix for footnote labels to avoid clashes
-    :returns: list of footnote strings to print at page end
+    :param sec_char: RST underline character
     """
-    footnotes = []
-    name = _strip_ansi(server['name'] or server['host'])
     host = server['host']
     port = server['port']
-
     url = _telnet_url(host, port)
     _rst_heading("Server URLs", sec_char)
     print(f".. raw:: html")
@@ -1389,236 +1025,184 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
     print(f'   </ul>')
     print()
 
-    if server['has_mssp'] and server['description']:
-        print(f"*{_rst_escape(server['description'][:300])}*")
-        print()
 
-    banner = _combine_banners(server)
+def _write_mud_server_info(server, sec_char, fn_suffix=''):
+    """Write MUD server info section (MSSP fields, encoding, etc.).
+
+    :param server: server record dict
+    :param sec_char: RST underline character
+    :param fn_suffix: suffix for footnote labels to avoid clashes
+    :returns: list of footnote strings
+    """
+    footnotes = []
+    host = server['host']
+    port = server['port']
     effective_enc = server['display_encoding']
-    if banner and not _is_garbled(banner):
-        banner_fname, display_w = _banner_to_png(
-            banner, BANNERS_PATH, effective_enc,
-            columns=server.get('column_override'))
-        if banner_fname:
-            server['_banner_png'] = banner_fname
-            if display_w:
-                server['_banner_display_width'] = display_w
-            print("**Connection Banner:**")
-            print()
-            print(f".. image:: "
-                  f"/_static/banners/{banner_fname}")
-            print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
-            print(f"   :class: ansi-banner")
-            if display_w:
-                print(f"   :width: {display_w}px")
-            print(f"   :loading: lazy")
-            print()
-    elif banner:
-        print("*Banner not shown -- this server likely"
-              " uses a legacy encoding such as CP437.*")
-        print()
-
+    banner = _combine_banners(server)
     is_legacy_encoding = effective_enc not in (
         'ascii', 'utf-8', 'unknown')
     banner_garbled = banner and _is_garbled(banner)
-
     has_geoip = (server.get('_country_code', '')
                  and server.get('_country_name', '') != 'Unknown')
     has_info = (server['has_mssp'] or is_legacy_encoding
                 or banner_garbled or has_geoip)
-    if has_info:
-        _rst_heading("Server Info", sec_char)
-        if server['codebase']:
-            print(f"- **Codebase**:"
-                  f" {_rst_escape(server['codebase'])}")
-        if server['family']:
-            print(f"- **Family**:"
-                  f" {_rst_escape(server['family'])}")
-        if server['genre']:
-            print(f"- **Genre**:"
-                  f" {_rst_escape(server['genre'])}")
-        if server['gameplay']:
-            print(f"- **Gameplay**:"
-                  f" {_rst_escape(server['gameplay'])}")
-        if server['players'] is not None:
-            scan_time = _format_scan_time(server['connected'])
-            fn_label = f"scan{fn_suffix}"
-            if scan_time:
-                print(f"- **Players online**:"
-                      f" {server['players']}"
-                      f" [#{fn_label}]_")
-                footnotes.append(
-                    f".. [#{fn_label}] measured {scan_time}")
-            else:
-                print(f"- **Players online**:"
-                      f" {server['players']}")
-        if server['uptime_days'] is not None:
-            print(f"- **Uptime**:"
-                  f" {server['uptime_days']} days")
-        if server['created']:
-            print(f"- **Created**: {server['created']}")
-        if server['status']:
-            print(f"- **Status**:"
-                  f" {_rst_escape(server['status'])}")
-        if server['discord']:
-            discord_url = server['discord']
-            if not discord_url.startswith(
-                    ('http://', 'https://')):
-                discord_url = f'https://{discord_url}'
-            print(f"- **Discord**:"
-                  f" `{_rst_escape(server['discord'])}"
-                  f" <{discord_url}>`_")
-        mssp_loc = server['location']
-        geoip_loc = server.get('_country_name', '')
-        geoip_flag = _country_flag(server.get('_country_code', ''))
-        if mssp_loc:
-            loc_display = f"{_rst_escape(mssp_loc)}"
-            if geoip_flag:
-                loc_display = f"{geoip_flag} {loc_display}"
-            print(f"- **Server Location**: {loc_display} (MSSP)")
-        elif geoip_loc and geoip_loc != 'Unknown':
-            loc_display = f"{_rst_escape(geoip_loc)}"
-            if geoip_flag:
-                loc_display = f"{geoip_flag} {loc_display}"
-            print(f"- **Server Location**: {loc_display} (GeoIP)")
-        if server['language']:
-            print(f"- **Language**:"
-                  f" {_rst_escape(server['language'])}")
-        if is_legacy_encoding or banner_garbled:
-            enc_label = (effective_enc
-                         if is_legacy_encoding else 'cp437')
-            print(f"- **Encoding**: {enc_label}")
-            print()
-            print(f"  This server uses a legacy encoding:")
-            print()
-            print(f"  ``telnetlib3-client --encoding"
-                  f" {enc_label} --force-binary"
-                  f" {host} {port}``")
-            print()
-        if server['pay_to_play']:
-            pay_play = _first_str(
-                server['mssp'].get('PAY TO PLAY', ''))
-            pay_perks = _first_str(
-                server['mssp'].get('PAY FOR PERKS', ''))
-            if (pay_play
-                    and pay_play not in
-                    ('0', 'no', 'No', 'NO', '')):
-                print("- **Pay to Play**: :pay-icon:`$` Yes")
-            if (pay_perks
-                    and pay_perks not in
-                    ('0', 'no', 'No', 'NO', '')):
-                print("- **Pay for Perks**: :pay-icon:`$` Yes")
-        print()
+    if not has_info:
+        return footnotes
 
+    _rst_heading("Server Info", sec_char)
+    if server['codebase']:
+        print(f"- **Codebase**:"
+              f" {_rst_escape(server['codebase'])}")
+    if server['family']:
+        print(f"- **Family**:"
+              f" {_rst_escape(server['family'])}")
+    if server['genre']:
+        print(f"- **Genre**:"
+              f" {_rst_escape(server['genre'])}")
+    if server['gameplay']:
+        print(f"- **Gameplay**:"
+              f" {_rst_escape(server['gameplay'])}")
+    if server['players'] is not None:
+        scan_time = _format_scan_time(server['connected'])
+        fn_label = f"scan{fn_suffix}"
+        if scan_time:
+            print(f"- **Players online**:"
+                  f" {server['players']}"
+                  f" [#{fn_label}]_")
+            footnotes.append(
+                f".. [#{fn_label}] measured {scan_time}")
+        else:
+            print(f"- **Players online**:"
+                  f" {server['players']}")
+    if server['uptime_days'] is not None:
+        print(f"- **Uptime**:"
+              f" {server['uptime_days']} days")
+    if server['created']:
+        print(f"- **Created**: {server['created']}")
+    if server['status']:
+        print(f"- **Status**:"
+              f" {_rst_escape(server['status'])}")
+    if server['discord']:
+        discord_url = server['discord']
+        if not discord_url.startswith(
+                ('http://', 'https://')):
+            discord_url = f'https://{discord_url}'
+        print(f"- **Discord**:"
+              f" `{_rst_escape(server['discord'])}"
+              f" <{discord_url}>`_")
+    mssp_loc = server['location']
+    geoip_loc = server.get('_country_name', '')
+    geoip_flag = _country_flag(
+        server.get('_country_code', ''))
+    if mssp_loc:
+        loc_display = f"{_rst_escape(mssp_loc)}"
+        if geoip_flag:
+            loc_display = f"{geoip_flag} {loc_display}"
+        print(f"- **Server Location**: {loc_display} (MSSP)")
+    elif geoip_loc and geoip_loc != 'Unknown':
+        loc_display = f"{_rst_escape(geoip_loc)}"
+        if geoip_flag:
+            loc_display = f"{geoip_flag} {loc_display}"
+        print(f"- **Server Location**: {loc_display} (GeoIP)")
+    if server['language']:
+        print(f"- **Language**:"
+              f" {_rst_escape(server['language'])}")
+    if is_legacy_encoding or banner_garbled:
+        enc_label = (effective_enc
+                     if is_legacy_encoding else 'cp437')
+        print(f"- **Encoding**: {enc_label}")
+        print()
+        print(f"  This server uses a legacy encoding:")
+        print()
+        print(f"  ``telnetlib3-client --encoding"
+              f" {enc_label} --force-binary"
+              f" {host} {port}``")
+        print()
+    if server['pay_to_play']:
+        pay_play = _first_str(
+            server['mssp'].get('PAY TO PLAY', ''))
+        pay_perks = _first_str(
+            server['mssp'].get('PAY FOR PERKS', ''))
+        if (pay_play
+                and pay_play not in
+                ('0', 'no', 'No', 'NO', '')):
+            print("- **Pay to Play**: :pay-icon:`$` Yes")
+        if (pay_perks
+                and pay_perks not in
+                ('0', 'no', 'No', 'NO', '')):
+            print("- **Pay for Perks**: :pay-icon:`$` Yes")
+    print()
+    return footnotes
+
+
+def _write_mud_protocol_support(server, sec_char):
+    """Write MUD protocol support section.
+
+    :param server: server record dict
+    :param sec_char: RST underline character
+    """
     proto_flags = [
         p for p in MUD_PROTOCOLS
         if server['protocols'].get(p, 'no') != 'no'
     ]
-    if proto_flags:
-        _rst_heading("Protocol Support", sec_char)
-        print("MUD-specific protocols detected via MSSP flags or")
-        print("Telnet negotiation.")
-        print()
-        for proto in MUD_PROTOCOLS:
-            status = server['protocols'].get(proto, 'no')
-            if status == 'mssp':
-                print(f"- **{proto}**:"
-                      f" :proto-yes:`Yes` (MSSP)")
-            elif status == 'negotiated':
-                print(f"- **{proto}**:"
-                      f" :proto-negotiated:`Negotiated`")
-            else:
-                print(f"- **{proto}**: :proto-no:`No`")
-        print()
-
-    fp = server['fingerprint']
-    _rst_heading("Telnet Fingerprint", sec_char)
-    print(f":ref:`{fp} <fp_{fp}>`")
+    if not proto_flags:
+        return
+    _rst_heading("Protocol Support", sec_char)
+    print("MUD-specific protocols detected via MSSP flags or")
+    print("Telnet negotiation.")
     print()
-    if fp_counts:
-        other_count = fp_counts.get(fp, 1) - 1
-        if other_count > 0:
-            print(f"*This fingerprint is shared by"
-                  f" {other_count} other "
-                  f"{'server' if other_count == 1 else 'servers'}.*")
+    for proto in MUD_PROTOCOLS:
+        status = server['protocols'].get(proto, 'no')
+        if status == 'mssp':
+            print(f"- **{proto}**:"
+                  f" :proto-yes:`Yes` (MSSP)")
+        elif status == 'negotiated':
+            print(f"- **{proto}**:"
+                  f" :proto-negotiated:`Negotiated`")
         else:
-            print("*This fingerprint is unique to this server.*")
-        print()
-    if server['offered']:
-        print("**Options offered by server**: "
-              + ', '.join(f"``{o}``"
-                          for o in sorted(server['offered'])))
-        print()
-    if server['requested']:
-        print("**Options requested from client**: "
-              + ', '.join(f"``{o}``"
-                          for o in sorted(server['requested'])))
+            print(f"- **{proto}**: :proto-no:`No`")
+    print()
+
+
+def _write_mud_port_section(server, sec_char, logs_dir=None,
+                            data_dir=None, fp_counts=None,
+                            fn_suffix=''):
+    """Write detail content sections for one MUD server port.
+
+    :param server: server record dict
+    :param sec_char: RST underline character for section headings
+    :param logs_dir: path to log directory
+    :param data_dir: path to data directory
+    :param fp_counts: dict mapping fingerprint to server count
+    :param fn_suffix: suffix for footnote labels to avoid clashes
+    :returns: list of footnote strings to print at page end
+    """
+    _write_mud_server_urls(server, sec_char)
+
+    if server['has_mssp'] and server['description']:
+        print(f"*{_rst_escape(server['description'][:300])}*")
         print()
 
-    data_path = server.get('data_path', '')
-    if data_path and data_dir:
-        json_file = os.path.join(data_dir, "server", data_path)
-        github_url = f"{GITHUB_DATA_BASE}/{data_path}"
-        print(f"**Data source**: `{data_path} <{github_url}>`_")
-        print()
-        print("The complete JSON record collected during the scan,")
-        print("including Telnet negotiation results and any")
-        print("MSSP metadata.")
-        print()
-        if os.path.isfile(json_file):
-            with open(json_file, encoding='utf-8', errors='surrogateescape') as jf:
-                raw_json = jf.read().rstrip()
-            if raw_json:
-                print(".. raw:: html")
-                print()
-                print("   <details><summary>Show JSON</summary>")
-                print()
-                print(".. code-block:: json")
-                print()
-                for line in raw_json.split('\n'):
-                    print(f"   {line}")
-                print()
-                print(".. raw:: html")
-                print()
-                print("   </details>")
-                print()
+    banner_rst = _render_banner_section(server, BANNERS_PATH)
+    if banner_rst:
+        print(banner_rst)
 
-    if logs_dir:
-        log_path = os.path.join(logs_dir, f"{host}:{port}.log")
-        if os.path.isfile(log_path):
-            with open(log_path, encoding='utf-8', errors='surrogateescape') as lf:
-                log_text = lf.read().rstrip()
-            if log_text:
-                _rst_heading("Connection Log", sec_char)
-                print("Debug-level log of the Telnet negotiation"
-                      " session,")
-                print("showing each IAC (Interpret As Command)"
-                      " exchange")
-                print("between client and server.")
-                print()
-                print(".. raw:: html")
-                print()
-                print("   <details><summary>Show Logfile</summary>")
-                print()
-                print(".. code-block:: text")
-                print()
-                for line in log_text.split('\n'):
-                    for wrapped in _clean_log_line(line):
-                        print(f"   {wrapped}")
-                print()
-                print(f"*Generated by* "
-                      f"`telnetlib3-fingerprint "
-                      f"<https://github.com/jquast/telnetlib3>`_")
-                print()
-                print(".. code-block:: shell")
-                print()
-                print(f"   telnetlib3-fingerprint "
-                      f"--loglevel=debug {host} {port}")
-                print()
-                print(".. raw:: html")
-                print()
-                print("   </details>")
-                print()
+    footnotes = _write_mud_server_info(
+        server, sec_char, fn_suffix=fn_suffix)
+    _write_mud_protocol_support(server, sec_char)
+
+    fp_rst = _render_fingerprint_section(
+        server, sec_char, fp_counts)
+    print(fp_rst)
+
+    json_rst = _render_json_section(
+        server, data_dir, 'mud')
+    if json_rst:
+        print(json_rst)
+
+    log_rst = _render_log_section(server, logs_dir, sec_char)
+    if log_rst:
+        print(log_rst)
 
     return footnotes
 
@@ -1883,7 +1467,8 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
-    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False))
+    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False),
+                  check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)
         generate_summary_rst(stats)

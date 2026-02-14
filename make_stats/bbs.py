@@ -2,7 +2,6 @@
 
 import codecs
 import contextlib
-import json
 import os
 import re
 import sys
@@ -14,8 +13,11 @@ import tabulate as tabulate_mod
 from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
+    _load_base_records, _generate_rst,
+    _render_banner_section, _render_json_section,
+    _render_log_section, _render_fingerprint_section,
     _rst_escape, _strip_ansi, _is_garbled,
-    _clean_log_line, _combine_banners, _redecode_banner,
+    _clean_log_line, _combine_banners,
     _has_encoding_issues, _truncate,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer,
@@ -41,8 +43,6 @@ PLOTS_PATH = os.path.join(DOCS_PATH, "_static", "plots")
 DETAIL_PATH = os.path.join(DOCS_PATH, "server_detail")
 BBS_DETAIL_PATH = os.path.join(DOCS_PATH, "bbs_detail")
 BANNERS_PATH = os.path.join(DOCS_PATH, "_static", "banners")
-GITHUB_DATA_BASE = ("https://github.com/jquast/modem.xyz"
-                     "/tree/master/data-bbs/server")
 
 # Default encoding assumed for all BBSes unless overridden
 DEFAULT_ENCODING = 'cp437'
@@ -163,124 +163,47 @@ def load_server_data(data_dir, encoding_overrides=None,
     :param column_overrides: dict mapping (host, port) to column width
     :returns: list of parsed server record dicts
     """
-    if encoding_overrides is None:
-        encoding_overrides = {}
-    if column_overrides is None:
-        column_overrides = {}
-
-    server_dir = os.path.join(data_dir, "server")
-    if not os.path.isdir(server_dir):
-        print(f"Error: {server_dir} is not a directory",
-              file=sys.stderr)
-        sys.exit(1)
+    base_records = _load_base_records(
+        data_dir, encoding_overrides, column_overrides)
 
     records = []
-    for fp_dir in sorted(os.listdir(server_dir)):
-        fp_path = os.path.join(server_dir, fp_dir)
-        if not os.path.isdir(fp_path):
-            continue
-        for fname in sorted(os.listdir(fp_path)):
-            if not fname.endswith('.json'):
-                continue
-            fpath = os.path.join(fp_path, fname)
-            try:
-                with open(fpath, encoding='utf-8', errors='surrogateescape') as f:
-                    data = json.load(f)
-            except (json.JSONDecodeError, OSError):
-                continue
+    for record in base_records:
+        record.pop('_session_data', None)
 
-            probe = data.get('server-probe', {})
-            sessions = data.get('sessions', [])
-            if not sessions:
-                continue
+        banner = _combine_banners(
+            record, default_encoding=DEFAULT_ENCODING)
+        record['bbs_software'] = detect_bbs_software(banner)
 
-            fp_data = probe.get('fingerprint-data', {})
-            session_data = probe.get('session_data', {})
-            option_states = session_data.get('option_states', {})
-            session = sessions[-1]
-            host = session.get('host',
-                               session.get('ip', 'unknown'))
-            port = session.get('port', 0)
+        stripped = _strip_ansi(banner) if banner else ''
+        has_replacement = (
+            '\ufffd' in (record['banner_before'] or '')
+            or '\ufffd' in (record['banner_after'] or ''))
+        record['display_encoding'] = (
+            record['encoding_override']
+            or ('ascii' if stripped and stripped.isascii()
+                and not has_replacement
+                else DEFAULT_ENCODING))
 
-            detected_encoding = session_data.get('encoding', 'unknown')
-            banner_before = session_data.get('banner_before_return', '')
-            banner_after = session_data.get('banner_after_return', '')
+        fidonet = detect_fidonet(
+            record['banner_before'], record['banner_after'])
+        record.update(fidonet)
 
-            # Clean surrogate escapes from JSON by re-decoding with the
-            # detected encoding. These surrogates represent bytes that were
-            # not valid UTF-8 in the original telnet session.  Only do this
-            # for UTF-8/ASCII servers — non-UTF-8 encodings (GBK, Big5, etc.)
-            # were already correctly decoded by the scanner.
-            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
-                if banner_before:
-                    banner_before = _redecode_banner(
-                        banner_before, detected_encoding, 'utf-8')
-                if banner_after:
-                    banner_after = _redecode_banner(
-                        banner_after, detected_encoding, 'utf-8')
+        record['website'] = ''
+        for banner_key in ('banner_before', 'banner_after'):
+            banner_text = record[banner_key]
+            if banner_text:
+                match = _URL_RE.search(
+                    _strip_ansi(banner_text))
+                if match:
+                    record['website'] = match.group(0)
+                    break
 
-            record = {
-                'host': host,
-                'ip': session.get('ip', ''),
-                'port': port,
-                'connected': session.get('connected', ''),
-                'fingerprint': probe.get('fingerprint', fp_dir),
-                'data_path': f"{fp_dir}/{fname}",
-                'offered': fp_data.get('offered-options', []),
-                'requested': fp_data.get(
-                    'requested-options', []),
-                'refused': fp_data.get('refused-options', []),
-                'server_offered': option_states.get(
-                    'server_offered', {}),
-                'server_requested': option_states.get(
-                    'server_requested', {}),
-                'encoding': detected_encoding,
-                'encoding_override': encoding_overrides.get(
-                    (host, port), ''),
-                'column_override': column_overrides.get(
-                    (host, port)),
-                'banner_before': banner_before,
-                'banner_after': banner_after,
-                'timing': session_data.get('timing', {}),
-                'dsr_requests': session_data.get(
-                    'dsr_requests', 0),
-                'dsr_replies': session_data.get(
-                    'dsr_replies', 0),
-            }
+        offered = set(record['offered'])
+        requested = set(record['requested'])
+        record['tls_support'] = (
+            'TLS' in offered or 'TLS' in requested)
 
-            banner = _combine_banners(
-                record, default_encoding=DEFAULT_ENCODING)
-            record['bbs_software'] = detect_bbs_software(banner)
-
-            stripped = _strip_ansi(banner) if banner else ''
-            has_replacement = ('\ufffd' in (record['banner_before'] or '')
-                               or '\ufffd' in (record['banner_after'] or ''))
-            record['display_encoding'] = (
-                record['encoding_override']
-                or ('ascii' if stripped and stripped.isascii()
-                    and not has_replacement
-                    else DEFAULT_ENCODING))
-
-            fidonet = detect_fidonet(
-                record['banner_before'], record['banner_after'])
-            record.update(fidonet)
-
-            record['website'] = ''
-            for banner_key in ('banner_before', 'banner_after'):
-                banner_text = record[banner_key]
-                if banner_text:
-                    match = _URL_RE.search(
-                        _strip_ansi(banner_text))
-                    if match:
-                        record['website'] = match.group(0)
-                        break
-
-            offered = set(record['offered'])
-            requested = set(record['requested'])
-            record['tls_support'] = (
-                'TLS' in offered or 'TLS' in requested)
-
-            records.append(record)
+        records.append(record)
 
     return records
 
@@ -700,19 +623,20 @@ def display_fidonet_servers(servers):
 
 def generate_summary_rst(stats):
     """Generate the statistics.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "statistics.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
+
+    def _display(stats):
         display_summary_stats(stats)
         display_plots()
-    print(f"  wrote {rst_path}", file=sys.stderr)
+
+    _generate_rst(
+        os.path.join(DOCS_PATH, "statistics.rst"),
+        _display, stats)
 
 
 def generate_server_list_rst(servers):
     """Generate the server_list.rst file with detail page toctree."""
-    rst_path = os.path.join(DOCS_PATH, "server_list.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
+
+    def _display(servers):
         display_server_table(servers)
         print()
         print(".. toctree::")
@@ -729,52 +653,45 @@ def generate_server_list_rst(servers):
                           f"{s['host']}:{s['port']}")
             print(f"   {label} <bbs_detail/{bbs_file}>")
         print()
-    print(f"  wrote {rst_path}", file=sys.stderr)
+
+    _generate_rst(
+        os.path.join(DOCS_PATH, "server_list.rst"),
+        _display, servers)
 
 
 def generate_fingerprints_rst(servers):
     """Generate the fingerprints.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "fingerprints.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_fingerprint_summary(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "fingerprints.rst"),
+        display_fingerprint_summary, servers)
 
 
 def generate_fidonet_rst(servers):
     """Generate the fidonet.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "fidonet.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_fidonet_servers(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "fidonet.rst"),
+        display_fidonet_servers, servers)
 
 
 def generate_bbs_software_rst(servers):
     """Generate the bbs_software.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "bbs_software.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_bbs_software_groups(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "bbs_software.rst"),
+        display_bbs_software_groups, servers)
 
 
 def generate_encoding_rst(servers):
     """Generate the encodings.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "encodings.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_encoding_groups(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "encodings.rst"),
+        display_encoding_groups, servers)
 
 
 def generate_locations_rst(servers):
     """Generate the locations.rst file."""
-    rst_path = os.path.join(DOCS_PATH, "locations.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        display_location_groups(servers)
-    print(f"  wrote {rst_path}", file=sys.stderr)
+    _generate_rst(
+        os.path.join(DOCS_PATH, "locations.rst"),
+        display_location_groups, servers)
 
 
 def generate_banner_gallery_rst(servers):
@@ -794,9 +711,8 @@ def generate_banner_gallery_rst(servers):
 
 def generate_details_rst(servers):
     """Generate the servers.rst index page with toctree."""
-    rst_path = os.path.join(DOCS_PATH, "servers.rst")
-    with open(rst_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
+
+    def _display(servers):
         print("Servers")
         print("=======")
         print()
@@ -827,27 +743,24 @@ def generate_details_rst(servers):
                           f"{s['host']}:{s['port']}")
             print(f"   {label} <bbs_detail/{bbs_file}>")
         print()
-    print(f"  wrote {rst_path}", file=sys.stderr)
+
+    _generate_rst(
+        os.path.join(DOCS_PATH, "servers.rst"),
+        _display, servers)
 
 
 # ---------------------------------------------------------------------------
 # Detail pages
 # ---------------------------------------------------------------------------
 
-def _write_bbs_port_section(server, sec_char, logs_dir=None,
-                             data_dir=None, fp_counts=None):
-    """Write detail content sections for one BBS port.
+def _write_bbs_server_urls(server, sec_char):
+    """Write server URLs section for a BBS server.
 
     :param server: server record dict
-    :param sec_char: RST underline character for section headings
-    :param logs_dir: path to log directory
-    :param data_dir: path to data directory
-    :param fp_counts: dict mapping fingerprint to server count
+    :param sec_char: RST underline character
     """
     host = server['host']
     port = server['port']
-    title = f"{host}:{port}"
-
     url = _telnet_url(host, port)
     _rst_heading("Server URLs", sec_char)
     print(f".. raw:: html")
@@ -881,36 +794,16 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     print(f'   </ul>')
     print()
 
-    banner = _combine_banners(
-        server, default_encoding=DEFAULT_ENCODING)
-    if banner and not _is_garbled(banner):
-        effective_enc = (
-            server.get('encoding_override')
-            or DEFAULT_ENCODING)
-        banner_fname, display_w = _banner_to_png(
-            banner, BANNERS_PATH, effective_enc,
-            columns=server.get('column_override'))
-        if banner_fname:
-            server['_banner_png'] = banner_fname
-            if display_w:
-                server['_banner_display_width'] = display_w
-            print("**Connection Banner:**")
-            print()
-            print(f".. image:: "
-                  f"/_static/banners/{banner_fname}")
-            print(f"   :alt: {_rst_escape(_banner_alt_text(banner))}")
-            print(f"   :class: ansi-banner")
-            if display_w:
-                print(f"   :width: {display_w}px")
-            print(f"   :loading: lazy")
-            print()
-    elif banner:
-        print("*Banner not shown (legacy encoding"
-              " not supported).*")
-        print()
 
+def _write_bbs_server_info(server, sec_char):
+    """Write BBS-specific server info sections.
+
+    :param server: server record dict
+    :param sec_char: RST underline character
+    """
     geoip_loc = server.get('_country_name', '')
-    geoip_flag = _country_flag(server.get('_country_code', ''))
+    geoip_flag = _country_flag(
+        server.get('_country_code', ''))
     if geoip_loc and geoip_loc != 'Unknown':
         loc_display = f"{_rst_escape(geoip_loc)}"
         if geoip_flag:
@@ -931,10 +824,12 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
         print()
         if server['fidonet_addresses']:
             print("- **Address**: "
-                  + ', '.join(f"``{a}``"
-                              for a in server['fidonet_addresses']))
+                  + ', '.join(
+                      f"``{a}``"
+                      for a in server['fidonet_addresses']))
         if server['emsi_mailer']:
-            print(f"- **Mailer**: {_rst_escape(server['emsi_mailer'])}")
+            print(f"- **Mailer**:"
+                  f" {_rst_escape(server['emsi_mailer'])}")
         print()
 
     display_enc = server['display_encoding']
@@ -947,98 +842,39 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     print(f"- **Scanner detected**: {scanner_enc}")
     print()
 
-    fp = server['fingerprint']
-    _rst_heading("Telnet Fingerprint", sec_char)
-    print(f":ref:`{fp} <fp_{fp}>`")
-    print()
-    if fp_counts:
-        other_count = fp_counts.get(fp, 1) - 1
-        if other_count > 0:
-            print(f"*This fingerprint is shared by"
-                  f" {other_count} other "
-                  f"{'server' if other_count == 1 else 'servers'}.*")
-        else:
-            print("*This fingerprint is unique to this server.*")
-        print()
-    if server['offered']:
-        print("**Options offered by server**: "
-              + ', '.join(
-                  f"``{o}``"
-                  for o in sorted(server['offered'])))
-        print()
-    if server['requested']:
-        print("**Options requested from client**: "
-              + ', '.join(
-                  f"``{o}``"
-                  for o in sorted(server['requested'])))
-        print()
 
-    data_path = server.get('data_path', '')
-    if data_path and data_dir:
-        json_file = os.path.join(data_dir, "server", data_path)
-        github_url = f"{GITHUB_DATA_BASE}/{data_path}"
-        print(f"**Data source**: `{data_path} <{github_url}>`_")
-        print()
-        print("The complete JSON record collected during the"
-              " scan,")
-        print("including Telnet negotiation results and"
-              " banner data.")
-        print()
-        if os.path.isfile(json_file):
-            with open(json_file, encoding='utf-8', errors='surrogateescape') as jf:
-                raw_json = jf.read().rstrip()
-            if raw_json:
-                print(".. raw:: html")
-                print()
-                print("   <details><summary>Show JSON</summary>")
-                print()
-                print(".. code-block:: json")
-                print()
-                for line in raw_json.split('\n'):
-                    print(f"   {line}")
-                print()
-                print(".. raw:: html")
-                print()
-                print("   </details>")
-                print()
+def _write_bbs_port_section(server, sec_char, logs_dir=None,
+                             data_dir=None, fp_counts=None):
+    """Write detail content sections for one BBS port.
 
-    if logs_dir:
-        log_path = os.path.join(
-            logs_dir, f"{host}:{port}.log")
-        if os.path.isfile(log_path):
-            with open(log_path, encoding='utf-8', errors='surrogateescape') as lf:
-                log_text = lf.read().rstrip()
-            if log_text:
-                _rst_heading("Connection Log", sec_char)
-                print("Debug-level log of the Telnet negotiation"
-                      " session,")
-                print("showing each IAC (Interpret As Command)"
-                      " exchange")
-                print("between client and server.")
-                print()
-                print(".. raw:: html")
-                print()
-                print("   <details><summary>Show Logfile</summary>")
-                print()
-                print(".. code-block:: text")
-                print()
-                for line in log_text.split('\n'):
-                    for wrapped in _clean_log_line(line):
-                        print(f"   {wrapped}")
-                print()
-                print(f"*Generated by* "
-                      f"`telnetlib3-fingerprint "
-                      f"<https://github.com/jquast/telnetlib3>`_")
-                print()
-                print(".. code-block:: shell")
-                print()
-                print(f"   telnetlib3-fingerprint "
-                      f"--loglevel=debug {host} {port}")
-                print()
-                print(".. raw:: html")
-                print()
-                print("   </details>")
-                print()
+    :param server: server record dict
+    :param sec_char: RST underline character for section headings
+    :param logs_dir: path to log directory
+    :param data_dir: path to data directory
+    :param fp_counts: dict mapping fingerprint to server count
+    """
+    _write_bbs_server_urls(server, sec_char)
+
+    banner_rst = _render_banner_section(
+        server, BANNERS_PATH,
+        default_encoding=DEFAULT_ENCODING)
+    if banner_rst:
+        print(banner_rst)
+
+    _write_bbs_server_info(server, sec_char)
+
+    fp_rst = _render_fingerprint_section(
+        server, sec_char, fp_counts)
+    print(fp_rst)
+
+    json_rst = _render_json_section(
+        server, data_dir, 'bbs')
+    if json_rst:
+        print(json_rst)
+
+    log_rst = _render_log_section(server, logs_dir, sec_char)
+    if log_rst:
+        print(log_rst)
 
 
 def generate_bbs_detail(server, logs_dir=None, force=False,
@@ -1331,7 +1167,8 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
-    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False))
+    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False),
+                  check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)
         generate_summary_rst(stats)

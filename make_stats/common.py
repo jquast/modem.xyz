@@ -3,12 +3,14 @@
 import contextlib
 import hashlib
 import html
+import json
 import os
 import re
 import sys
 import textwrap
 from collections import Counter
 from datetime import datetime
+from functools import lru_cache
 
 import matplotlib
 matplotlib.use('Agg')
@@ -164,6 +166,112 @@ def _load_column_overrides(path):
                     continue
                 overrides[(host, port)] = columns
     return overrides
+
+
+def _load_base_records(data_dir, encoding_overrides=None,
+                       column_overrides=None):
+    """Load base server records from fingerprint JSON files.
+
+    Parses session data, fingerprint data, encoding overrides, and
+    surrogate escape handling common to both MUD and BBS pipelines.
+    Returns records with shared fields; callers enrich with
+    mode-specific data.
+
+    :param data_dir: path to telnetlib3 data directory
+    :param encoding_overrides: dict mapping (host, port) to encoding
+    :param column_overrides: dict mapping (host, port) to column width
+    :returns: list of dicts, each containing base record fields plus
+        ``_session_data`` and ``_session`` for caller enrichment
+    """
+    if encoding_overrides is None:
+        encoding_overrides = {}
+    if column_overrides is None:
+        column_overrides = {}
+
+    server_dir = os.path.join(data_dir, "server")
+    if not os.path.isdir(server_dir):
+        print(f"Error: {server_dir} is not a directory",
+              file=sys.stderr)
+        sys.exit(1)
+
+    records = []
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                continue
+
+            probe = data.get('server-probe', {})
+            sessions = data.get('sessions', [])
+            if not sessions:
+                continue
+
+            fp_data = probe.get('fingerprint-data', {})
+            session_data = probe.get('session_data', {})
+            option_states = session_data.get('option_states', {})
+            session = sessions[-1]
+
+            detected_encoding = session_data.get(
+                'encoding', 'unknown')
+            banner_before = session_data.get(
+                'banner_before_return', '')
+            banner_after = session_data.get(
+                'banner_after_return', '')
+
+            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
+                if banner_before:
+                    banner_before = _redecode_banner(
+                        banner_before, detected_encoding, 'utf-8')
+                if banner_after:
+                    banner_after = _redecode_banner(
+                        banner_after, detected_encoding, 'utf-8')
+
+            host = session.get('host',
+                               session.get('ip', 'unknown'))
+            port = session.get('port', 0)
+
+            record = {
+                'host': host,
+                'ip': session.get('ip', ''),
+                'port': port,
+                'connected': session.get('connected', ''),
+                'fingerprint': probe.get('fingerprint', fp_dir),
+                'data_path': f"{fp_dir}/{fname}",
+                'offered': fp_data.get('offered-options', []),
+                'requested': fp_data.get(
+                    'requested-options', []),
+                'refused': fp_data.get('refused-options', []),
+                'server_offered': option_states.get(
+                    'server_offered', {}),
+                'server_requested': option_states.get(
+                    'server_requested', {}),
+                'encoding': detected_encoding,
+                'encoding_override': encoding_overrides.get(
+                    (host, port), ''),
+                'column_override': column_overrides.get(
+                    (host, port)),
+                'banner_before': banner_before,
+                'banner_after': banner_after,
+                'timing': session_data.get('timing', {}),
+                'dsr_requests': session_data.get(
+                    'dsr_requests', 0),
+                'dsr_replies': session_data.get(
+                    'dsr_replies', 0),
+                '_session_data': session_data,
+            }
+
+            records.append(record)
+
+    return records
 
 
 # ---------------------------------------------------------------------------
@@ -377,42 +485,6 @@ def _combine_banners(server, default_encoding=None):
     return banner_before or banner_after
 
 
-_last_render_md5 = {}  # instance display name → md5 of last rendered PNG
-
-
-def _check_rendered_duplicate(output_path, text_key, instance_name=None):
-    """Check if a render produced the same image as the previous one.
-
-    Only flags consecutive renders from the **same terminal instance**
-    that produce identical images — this indicates the terminal captured
-    stale content (poison escape sequence broke the terminal state).
-
-    Different banner texts rendered on different instances (or
-    non-consecutively) may legitimately produce identical images (e.g.
-    same text with different encoding parameters).
-
-    :param output_path: path to the newly rendered PNG
-    :param text_key: the text-based hash key (first 12 hex of SHA1)
-    :param instance_name: terminal instance display name for tracking
-    """
-    if instance_name is None:
-        return
-    # Skip duplicate check for tiny images — near-blank banners legitimately
-    # render to the same small image (e.g. a single punctuation character).
-    if os.path.getsize(output_path) < 1024:
-        return
-    with open(output_path, 'rb') as f:
-        image_md5 = hashlib.md5(f.read()).hexdigest()
-    prev_md5 = _last_render_md5.get(instance_name)
-    _last_render_md5[instance_name] = image_md5
-    if prev_md5 is not None and prev_md5 == image_md5:
-        os.unlink(output_path)
-        raise RuntimeError(
-            f"banner_{text_key}.png is pixel-identical to the previous "
-            f"render on [{instance_name}] — the terminal likely captured "
-            f"stale content due to a poison escape sequence."
-        )
-
 
 def _png_display_width(path):
     """Read a PNG file's pixel width and return its HiDPI display width.
@@ -490,34 +562,31 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     instance_name = _renderer_pool.capture(
         text, output_path, encoding, columns=columns)
     if instance_name:
-        try:
-            _check_rendered_duplicate(output_path, key, instance_name)
-        except RuntimeError as exc:
-            print(f"  warning: {exc}", file=sys.stderr)
-            return None, None  # skip but don't cache — retry on next run
         return fname, _png_display_width(output_path)
     # Cache failure as 0-byte file to avoid retrying on next run.
-    open(output_path, 'a').close()
+    open(output_path, 'w').close()
     return None, None
 
 
-def init_renderer(**kwargs):
+def init_renderer(check_dupes=False, **kwargs):
     """Initialize the terminal rendering pool.
 
     Call at the beginning of a rendering session.  If no terminal
     backend is available, the pool remains ``None`` and
     :func:`_banner_to_png` will return None for all calls.
 
+    :param check_dupes: enable duplicate-image detection between
+        consecutive renders on the same terminal instance
     :param kwargs: forwarded to :class:`~make_stats.renderer.RendererPool`
     """
     global _renderer_pool
     from make_stats.renderer import RendererPool
     if not RendererPool.available():
-        print("renderer not available (need DISPLAY + kitty or wezterm"
+        print("renderer not available (need DISPLAY + wezterm"
               " + xdotool/import), banners will be skipped",
               file=sys.stderr)
         return
-    _renderer_pool = RendererPool(**kwargs)
+    _renderer_pool = RendererPool(check_dupes=check_dupes, **kwargs)
     _renderer_pool.__enter__()
 
 
@@ -531,6 +600,44 @@ def close_renderer():
     if _renderer_pool is not None:
         _renderer_pool.__exit__(None, None, None)
         _renderer_pool = None
+
+
+# ---------------------------------------------------------------------------
+# Jinja2 template environment
+# ---------------------------------------------------------------------------
+
+@lru_cache(maxsize=1)
+def _jinja_env():
+    """Return the shared Jinja2 environment for RST templates.
+
+    :returns: configured ``jinja2.Environment``
+    """
+    import jinja2
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(
+            os.path.join(os.path.dirname(__file__), 'templates')),
+        lstrip_blocks=True,
+        trim_blocks=True,
+        keep_trailing_newline=True,
+        undefined=jinja2.StrictUndefined,
+    )
+    env.filters['rst_escape'] = _rst_escape
+    env.filters['banner_alt_text'] = _banner_alt_text
+    env.filters['telnet_url'] = lambda h, p: _telnet_url(h, p)
+    env.filters['clean_log_line'] = _clean_log_line
+    return env
+
+
+def _render_template(template_name, **context):
+    """Render a Jinja2 template and return the resulting string.
+
+    :param template_name: template filename relative to templates/
+    :param context: template variables
+    :returns: rendered string
+    """
+    env = _jinja_env()
+    template = env.get_template(template_name)
+    return template.render(**context)
 
 
 # ---------------------------------------------------------------------------
@@ -657,6 +764,22 @@ def deduplicate_servers(records, sort_key=None):
 # File management
 # ---------------------------------------------------------------------------
 
+def _generate_rst(rst_path, display_fn, *args, **kwargs):
+    """Generate an RST file by calling *display_fn* under redirect_stdout.
+
+    :param rst_path: path to the output RST file
+    :param display_fn: callable that prints RST to stdout
+    :param args: positional arguments forwarded to *display_fn*
+    :param kwargs: keyword arguments forwarded to *display_fn*
+    :returns: return value of *display_fn*
+    """
+    with open(rst_path, 'w') as fout, \
+            contextlib.redirect_stdout(fout):
+        result = display_fn(*args, **kwargs)
+    print(f"  wrote {rst_path}", file=sys.stderr)
+    return result
+
+
 def _clean_dir(dirpath):
     """Remove all .rst files from a directory."""
     if os.path.isdir(dirpath):
@@ -694,6 +817,8 @@ def _needs_rebuild(output_path, *source_paths):
     :returns: True if output is missing or older than any source
     """
     if not os.path.isfile(output_path):
+        return True
+    if os.path.getsize(output_path) == 0:
         return True
     out_mtime = os.path.getmtime(output_path)
     for src in source_paths:
@@ -900,44 +1025,8 @@ def display_fingerprint_summary(servers, server_label_fn):
     :param servers: list of server records
     :param server_label_fn: callable(server) -> display label string
     """
-    print("Fingerprints")
-    print("============")
-    print()
-    print("A fingerprint is a hash of a server's Telnet option"
-          " negotiation")
-    print("behavior -- which options it offers to the client,"
-          " which it requests")
-    print("from the client, and which it refuses. Servers running"
-          " the same software")
-    print("version typically produce identical fingerprints."
-          " A majority of servers")
-    print("perform no negotiation at all and share the same"
-          " empty fingerprint.")
-    print()
-    print("Click a fingerprint link to see the full negotiation"
-          " details and all")
-    print("servers in that group.")
-    print()
-    print(".. list-table:: Column Descriptions")
-    print("   :widths: 20 80")
-    print("   :class: field-descriptions")
-    print()
-    print("   * - **Fingerprint**")
-    print("     - Truncated hash identifying the negotiation"
-          " pattern."
-          " Click to see the full detail page.")
-    print("   * - **Servers**")
-    print("     - Number of servers sharing this exact"
-          " negotiation behavior.")
-    print("   * - **Offers**")
-    print("     - Telnet options the server offers"
-          " (WILL) to the client during negotiation.")
-    print("   * - **Requests**")
-    print("     - Telnet options the server requests (DO)"
-          " from the client.")
-    print("   * - **Examples**")
-    print("     - Sample server names sharing this fingerprint.")
-    print()
+    print(_render_template('fingerprint_summary.rst.j2'),
+          end='')
 
     by_fp = {}
     for s in servers:
@@ -989,35 +1078,8 @@ def _write_fingerprint_options_section(fp_hash, fp_servers):
     """
     sample = fp_servers[0]
 
-    print(f".. _fp_{fp_hash}:")
-    print()
-    _rst_heading(fp_hash, '=')
-
-    print(f"**Servers sharing this fingerprint**:"
-          f" {len(fp_servers)}")
-    print()
-
-    print("Telnet Options")
-    print("--------------")
-    print()
-
-    if sample['offered']:
-        print("**Offered by server**: "
-              + ', '.join(
-                  f"``{o}``"
-                  for o in sorted(sample['offered'])))
-    else:
-        print("**Offered by server**: none")
-    print()
-
-    if sample['requested']:
-        print("**Requested from client**: "
-              + ', '.join(
-                  f"``{o}``"
-                  for o in sorted(sample['requested'])))
-    else:
-        print("**Requested from client**: none")
-    print()
+    def _fmt_opts(opts):
+        return ', '.join(f"``{o}``" for o in sorted(opts))
 
     refused_display = [
         o for o in sorted(sample['refused'])
@@ -1025,50 +1087,31 @@ def _write_fingerprint_options_section(fp_hash, fp_servers):
     ]
     other_refused = (len(sample['refused'])
                      - len(refused_display))
-    if refused_display:
-        print("**Refused (notable)**: "
-              + ', '.join(
-                  f"``{o}``" for o in refused_display))
-        if other_refused > 0:
-            print(f"  *(and {other_refused} other"
-                  f" standard options)*")
-    print()
+    negotiated_offered = sorted(
+        k for k, v in sample['server_offered'].items() if v)
+    negotiated_requested = sorted(
+        k for k, v in sample['server_requested'].items()
+        if v)
 
-    negotiated_offered = {
-        k: v for k, v in sample['server_offered'].items()
-        if v
-    }
-    negotiated_requested = {
-        k: v for k, v in sample['server_requested'].items()
-        if v
-    }
-    if negotiated_offered or negotiated_requested:
-        print("Negotiation Results")
-        print("~~~~~~~~~~~~~~~~~~~")
-        print()
-        if negotiated_offered:
-            print("**Server offered (accepted)**: "
-                  + ', '.join(
-                      f"``{o}``"
-                      for o in sorted(negotiated_offered)))
-            print()
-        if negotiated_requested:
-            print("**Server requested (accepted)**: "
-                  + ', '.join(
-                      f"``{o}``"
-                      for o in sorted(negotiated_requested)))
-            print()
-
-    dsr_requests = sample.get('dsr_requests', 0)
-    dsr_replies = sample.get('dsr_replies', 0)
-    if dsr_requests:
-        print("Device Status Reports")
-        print("~~~~~~~~~~~~~~~~~~~~~")
-        print()
-        print(f"**DSR requests from server**: {dsr_requests}")
-        print()
-        print(f"**CPR replies sent**: {dsr_replies}")
-        print()
+    print(_render_template(
+        'fingerprint_options.rst.j2',
+        fp_hash=fp_hash,
+        server_count=len(fp_servers),
+        offered=(_fmt_opts(sample['offered'])
+                 if sample['offered'] else None),
+        requested=(_fmt_opts(sample['requested'])
+                   if sample['requested'] else None),
+        refused_display=(_fmt_opts(refused_display)
+                         if refused_display else None),
+        other_refused=other_refused,
+        negotiated_offered=(_fmt_opts(negotiated_offered)
+                            if negotiated_offered else None),
+        negotiated_requested=(
+            _fmt_opts(negotiated_requested)
+            if negotiated_requested else None),
+        dsr_requests=sample.get('dsr_requests', 0),
+        dsr_replies=sample.get('dsr_replies', 0),
+    ))
 
 
 def display_encoding_groups(servers, detail_subdir, file_key,
@@ -1082,35 +1125,30 @@ def display_encoding_groups(servers, detail_subdir, file_key,
     :param server_sort_key: callable(server) -> sort key
     :param tls_fn: callable(server) -> truthy if TLS supported
     """
-    _rst_heading("Encodings", '=')
-    print("Servers grouped by their detected or configured"
-          " character encoding.")
-
     by_encoding = {}
     for s in servers:
         key = s['display_encoding']
         by_encoding.setdefault(key, []).append(s)
 
+    groups = []
     for name, members in sorted(
-            by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
-        print()
-        print(f"- `{_rst_escape(name)}`_: {len(members)}")
-    print()
-
-    for name, members in sorted(
-            by_encoding.items(), key=lambda x: (-len(x[1]), x[0])):
-        print()
-        print(f'.. _{name}:')
-        print()
-        _rst_heading(name, '-')
+            by_encoding.items(),
+            key=lambda x: (-len(x[1]), x[0])):
+        sorted_members = []
         for s in sorted(members, key=server_sort_key):
-            detail_file = s[file_key]
-            label = server_label_fn(s)
-            tls = (' :tls-lock:`\U0001f512`'
-                   if tls_fn(s) else '')
-            print(f"- :doc:`{_rst_escape(label)}"
-                  f" <{detail_subdir}/{detail_file}>`{tls}")
-        print()
+            sorted_members.append({
+                '_label': server_label_fn(s),
+                '_detail_file': s[file_key],
+                '_tls': (' :tls-lock:`\U0001f512`'
+                         if tls_fn(s) else ''),
+            })
+        groups.append((name, sorted_members))
+
+    print(_render_template(
+        'encoding_groups.rst.j2',
+        groups=groups,
+        detail_subdir=detail_subdir,
+    ))
 
 
 def display_location_groups(servers, detail_subdir, file_key,
@@ -1127,10 +1165,6 @@ def display_location_groups(servers, detail_subdir, file_key,
     """
     from .geoip import _country_flag
 
-    _rst_heading("Server Locations", '=')
-    print("Servers grouped by the geographic location of"
-          " their IP address.")
-
     by_country = {}
     for s in servers:
         code = s.get('_country_code', '')
@@ -1138,29 +1172,27 @@ def display_location_groups(servers, detail_subdir, file_key,
         key = code or 'XX'
         by_country.setdefault(key, (name, []))[1].append(s)
 
+    groups = []
     for key, (name, members) in sorted(
-            by_country.items(), key=lambda x: (-len(x[1][1]), x[1][0])):
-        flag = _country_flag(key) + ' ' if key != 'XX' else ''
-        print()
-        print(f"- `{flag}{_rst_escape(name)}`_: {len(members)}")
-    print()
-
-    for key, (name, members) in sorted(
-            by_country.items(), key=lambda x: (-len(x[1][1]), x[1][0])):
-        flag = _country_flag(key) + ' ' if key != 'XX' else ''
-        heading = f'{flag}{name}'
-        print()
-        print(f'.. _{name}:')
-        print()
-        _rst_heading(heading, '-')
+            by_country.items(),
+            key=lambda x: (-len(x[1][1]), x[1][0])):
+        flag = (_country_flag(key) + ' '
+                if key != 'XX' else '')
+        sorted_members = []
         for s in sorted(members, key=server_sort_key):
-            detail_file = s[file_key]
-            label = server_label_fn(s)
-            tls = (' :tls-lock:`\U0001f512`'
-                   if tls_fn(s) else '')
-            print(f"- :doc:`{_rst_escape(label)}"
-                  f" <{detail_subdir}/{detail_file}>`{tls}")
-        print()
+            sorted_members.append({
+                '_label': server_label_fn(s),
+                '_detail_file': s[file_key],
+                '_tls': (' :tls-lock:`\U0001f512`'
+                         if tls_fn(s) else ''),
+            })
+        groups.append((key, flag, name, sorted_members))
+
+    print(_render_template(
+        'location_groups.rst.j2',
+        groups=groups,
+        detail_subdir=detail_subdir,
+    ))
 
 
 def _page_initial_range(page_groups, server_name_fn):
@@ -1186,64 +1218,30 @@ def _page_initial_range(page_groups, server_name_fn):
     return f'[{ordered[0]}-{ordered[-1]}]'
 
 
-def _display_banner_page(page_groups, page_num, total_pages,
-                         page_label,
-                         file_key, banners_path,
-                         detail_subdir, server_name_fn, tls_fn):
-    """Write one page of the banner gallery to stdout.
+def _prepare_banner_page_groups(page_groups, file_key,
+                                 server_name_fn, tls_fn):
+    """Enrich banner groups with template-ready attributes.
 
-    :param page_groups: list of banner group dicts for this page
-    :param page_num: current page number (1-based)
-    :param total_pages: total number of pages
-    :param page_label: letter-range label (e.g. ``'[A-F]'``)
-    :param file_key: record key for the detail filename
-    :param banners_path: path to banner PNG directory
-    :param detail_subdir: subdirectory for detail links
+    :param page_groups: list of banner group dicts
+    :param file_key: record key for detail filename
     :param server_name_fn: callable(server) -> display name
     :param tls_fn: callable(server) -> truthy if TLS supported
+    :returns: list of enriched group dicts
     """
-    title = f"Page {page_num} of {total_pages} {_rst_escape(page_label)}"
-    _rst_heading(title, '=')
-
+    enriched = []
     for group in page_groups:
-        members = group['servers']
-        count = len(members)
-        rep = members[0]
-        banner = group['banner']
-
-        name = server_name_fn(rep)
-        if count > 1:
-            heading = f"{_rst_escape(name)} (+{count - 1} more)"
-        else:
-            heading = _rst_escape(name)
-        _rst_heading(heading, '-')
-
-        banner_fname = rep.get('_banner_png')
-        if banner_fname:
-            print(f".. image:: /_static/banners/{banner_fname}")
-            print(f"   :alt:"
-                  f" {_rst_escape(_banner_alt_text(banner))}")
-            print(f"   :class: ansi-banner")
-            display_w = rep.get('_banner_display_width')
-            if display_w:
-                print(f"   :width: {display_w}px")
-            print(f"   :loading: lazy")
-            print()
-
-        for s in members:
-            label = server_name_fn(s)
-            host = s['host']
-            port = s['port']
-            tls = (' :tls-lock:`\U0001f512`'
-                   if tls_fn(s) else '')
-            encoding = s.get('display_encoding', 'utf-8')
-            print(f"- :doc:`{_rst_escape(label)}"
-                  f" <{detail_subdir}/{s[file_key]}>`"
-                  f"{tls}"
-                  f" :copy-btn:`{_rst_escape(host)} {port}`")
-            print(f"  | Encoding: {_rst_escape(encoding)}")
-        print()
-
+        g = dict(group)
+        enriched_servers = []
+        for s in group['servers']:
+            sd = dict(s)
+            sd['_name'] = server_name_fn(s)
+            sd['_detail_file'] = s[file_key]
+            sd['_tls'] = (' :tls-lock:`\U0001f512`'
+                          if tls_fn(s) else '')
+            enriched_servers.append(sd)
+        g['servers'] = enriched_servers
+        enriched.append(g)
+    return enriched
 
 
 def generate_banner_gallery(servers, docs_path, page_size=100,
@@ -1296,36 +1294,22 @@ def generate_banner_gallery(servers, docs_path, page_size=100,
         pages.append(sorted_groups[i:i + page_size])
     total_pages = len(pages)
 
+    # Compute labels for all pages
+    page_labels = [
+        (p + 1, _page_initial_range(pg, server_name_fn))
+        for p, pg in enumerate(pages)
+    ]
+
     # Write landing page: banner_gallery.rst
     landing_path = os.path.join(docs_path, "banner_gallery.rst")
-    with open(landing_path, 'w') as fout, \
-            contextlib.redirect_stdout(fout):
-        _rst_heading("Banner Gallery", '=')
-        print("A gallery of ANSI connection banners collected"
-              " from responding")
-        print(f"{entity_name}. Servers that display identical"
-              " visible banner text are")
-        print("grouped together. Each group shows the shared"
-              " banner image")
-        print("and a list of all servers in that group.")
-        print()
-        print(f"{total_groups} unique banners across"
-              f" {total_servers} servers.")
-        print()
-        # Compute labels for all pages before writing toctree
-        page_labels = []
-        for p_groups in pages:
-            page_labels.append(
-                _page_initial_range(p_groups, server_name_fn))
-
-        print(".. toctree::")
-        print("   :maxdepth: 1")
-        print()
-        for p in range(1, total_pages + 1):
-            label = page_labels[p - 1]
-            print(f"   Page {p} {label}"
-                  f" <banner_gallery_{p}>")
-        print()
+    with open(landing_path, 'w') as fout:
+        fout.write(_render_template(
+            'banner_gallery_landing.rst.j2',
+            entity_name=entity_name,
+            total_groups=total_groups,
+            total_servers=total_servers,
+            page_labels=page_labels,
+        ))
     print(f"  wrote {landing_path}", file=sys.stderr)
 
     # Write content pages: banner_gallery_1.rst .. _N.rst
@@ -1334,16 +1318,17 @@ def generate_banner_gallery(servers, docs_path, page_size=100,
             page_groups, server_name_fn)
         rst_path = os.path.join(
             docs_path, f"banner_gallery_{page_num}.rst")
-        with open(rst_path, 'w') as fout, \
-                contextlib.redirect_stdout(fout):
-            _display_banner_page(
-                page_groups, page_num, total_pages,
+        enriched = _prepare_banner_page_groups(
+            page_groups, file_key, server_name_fn, tls_fn)
+        with open(rst_path, 'w') as fout:
+            fout.write(_render_template(
+                'banner_gallery_page.rst.j2',
+                page_groups=enriched,
+                page_num=page_num,
+                total_pages=total_pages,
                 page_label=page_label,
-                file_key=file_key,
-                banners_path=banners_path,
                 detail_subdir=detail_subdir,
-                server_name_fn=server_name_fn,
-                tls_fn=tls_fn)
+            ))
         print(f"  wrote {rst_path}", file=sys.stderr)
 
     # Remove stale banner_gallery_*.rst from previous runs
@@ -1442,3 +1427,150 @@ def create_telnet_options_plot(stats, output_path):
     plt.savefig(output_path, dpi=100, bbox_inches='tight',
                 transparent=True, metadata={'CreationDate': None})
     plt.close()
+
+
+# ---------------------------------------------------------------------------
+# Unified detail page helpers
+# ---------------------------------------------------------------------------
+
+def _render_banner_section(server, banners_path, default_encoding=None):
+    """Render banner and return RST text.
+
+    Also sets ``server['_banner_png']`` and
+    ``server['_banner_display_width']`` as side effects.
+
+    :param server: server record dict
+    :param banners_path: directory for banner PNGs
+    :param default_encoding: default encoding for banner combining
+    :returns: RST string (may be empty)
+    """
+    banner = _combine_banners(
+        server, default_encoding=default_encoding)
+    effective_enc = server.get('encoding_override') or (
+        default_encoding or server['display_encoding'])
+    if banner and not _is_garbled(banner):
+        banner_fname, display_w = _banner_to_png(
+            banner, banners_path, effective_enc,
+            columns=server.get('column_override'))
+        if banner_fname:
+            server['_banner_png'] = banner_fname
+            if display_w:
+                server['_banner_display_width'] = display_w
+            return _render_template(
+                'banner_image.rst.j2',
+                banner_fname=banner_fname,
+                alt_text=_rst_escape(_banner_alt_text(banner)),
+                display_w=display_w) + '\n'
+    elif banner:
+        if default_encoding:
+            return ("*Banner not shown (legacy encoding"
+                    " not supported).*\n\n")
+        return ("*Banner not shown -- this server likely"
+                " uses a legacy encoding such as CP437.*\n\n")
+    return ''
+
+
+def _render_json_section(server, data_dir, mode):
+    """Render collapsible JSON section.
+
+    :param server: server record dict
+    :param data_dir: path to data directory
+    :param mode: ``'mud'`` or ``'bbs'``
+    :returns: RST string (may be empty)
+    """
+    data_path = server.get('data_path', '')
+    if not data_path or not data_dir:
+        return ''
+    json_file = os.path.join(data_dir, "server", data_path)
+    if mode == 'mud':
+        desc = ("The complete JSON record collected during"
+                " the scan,\nincluding Telnet negotiation"
+                " results and any\nMSSP metadata.")
+    else:
+        desc = ("The complete JSON record collected during"
+                " the scan,\nincluding Telnet negotiation"
+                " results and\nbanner data.")
+
+    raw_json = ''
+    if os.path.isfile(json_file):
+        with open(json_file, encoding='utf-8',
+                  errors='surrogateescape') as jf:
+            raw_json = jf.read().rstrip()
+    if not raw_json:
+        return ''
+    return _render_template(
+        'collapsible_json.rst.j2',
+        description=desc,
+        json_lines=raw_json.split('\n')) + '\n'
+
+
+def _render_log_section(server, logs_dir, sec_char):
+    """Render collapsible connection log section.
+
+    :param server: server record dict
+    :param logs_dir: path to log directory
+    :param sec_char: RST underline character
+    :returns: RST string (may be empty)
+    """
+    if not logs_dir:
+        return ''
+    host = server['host']
+    port = server['port']
+    log_path = os.path.join(logs_dir, f"{host}:{port}.log")
+    if not os.path.isfile(log_path):
+        return ''
+    with open(log_path, encoding='utf-8',
+              errors='surrogateescape') as lf:
+        log_text = lf.read().rstrip()
+    if not log_text:
+        return ''
+    log_lines = []
+    for line in log_text.split('\n'):
+        log_lines.extend(_clean_log_line(line))
+    heading = f"Connection Log\n{sec_char * 14}\n\n"
+    return heading + _render_template(
+        'collapsible_log.rst.j2',
+        log_lines=log_lines,
+        host=host,
+        port=port) + '\n'
+
+
+def _render_fingerprint_section(server, sec_char, fp_counts=None):
+    """Render telnet fingerprint section.
+
+    :param server: server record dict
+    :param sec_char: RST underline character
+    :param fp_counts: dict mapping fingerprint to count
+    :returns: RST string
+    """
+    fp = server['fingerprint']
+    lines = []
+    title = "Telnet Fingerprint"
+    lines.append(title)
+    lines.append(sec_char * len(title))
+    lines.append('')
+    lines.append(f":ref:`{fp} <fp_{fp}>`")
+    lines.append('')
+    if fp_counts:
+        other_count = fp_counts.get(fp, 1) - 1
+        if other_count > 0:
+            word = 'server' if other_count == 1 else 'servers'
+            lines.append(f"*This fingerprint is shared by"
+                         f" {other_count} other {word}.*")
+        else:
+            lines.append("*This fingerprint is unique"
+                         " to this server.*")
+        lines.append('')
+    if server['offered']:
+        lines.append(
+            "**Options offered by server**: "
+            + ', '.join(f"``{o}``"
+                        for o in sorted(server['offered'])))
+        lines.append('')
+    if server['requested']:
+        lines.append(
+            "**Options requested from client**: "
+            + ', '.join(f"``{o}``"
+                        for o in sorted(server['requested'])))
+        lines.append('')
+    return '\n'.join(lines) + '\n'

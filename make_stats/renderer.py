@@ -6,14 +6,11 @@ uses named pipes (FIFOs) with bidirectional signaling: a data pipe
 sends banner text to the helper script, and a ready pipe signals back
 when painting is complete.
 
-Supports kitty and wezterm backends, selected automatically or via
-the ``MODEM_RENDERER`` environment variable.
-
-Requires: kitty or wezterm, xdotool, ImageMagick (import + convert),
-X11 DISPLAY.
+Requires: wezterm, xdotool, xwd, ImageMagick (convert), X11 DISPLAY.
 """
 
 import abc
+import hashlib
 import os
 import shutil
 import signal
@@ -39,6 +36,7 @@ _FONT_GROUPS = {
     'ibm_vga': {
         'font_family': 'Px IBM VGA8',
         'cell_ratio': 2.0,  # 8x16 native bitmap
+        'native_height': 16,
         'encodings': frozenset({
             'cp437', 'cp437_art', 'cp437-art',
             'cp737', 'cp775', 'cp850', 'cp852', 'cp855',
@@ -49,11 +47,13 @@ _FONT_GROUPS = {
     'topaz': {
         'font_family': 'Topaz a600a1200a400',
         'cell_ratio': 2.0,  # 8x16 native bitmap
+        'native_height': 16,
         'encodings': frozenset({'amiga', 'topaz'}),
     },
     'petscii': {
         'font_family': 'Bescii Mono',
         'cell_ratio': 1.0,  # 8x8 native bitmap
+        'native_height': 8,
         'encodings': frozenset({'petscii'}),
         'aspect_ratio': 1.2,  # C64 320x200 on 4:3 CRT (6:5)
         'columns': 40,
@@ -61,6 +61,7 @@ _FONT_GROUPS = {
     'atascii': {
         'font_family': 'EightBit Atari',
         'cell_ratio': 1.0,  # 8x8 native bitmap
+        'native_height': 8,
         'encodings': frozenset({'atarist', 'atascii'}),
         'aspect_ratio': 1.25,  # Atari 320x192 on 4:3 CRT (5:4)
         'columns': 40,
@@ -68,6 +69,7 @@ _FONT_GROUPS = {
     'hack': {
         'font_family': 'Hack',
         'cell_ratio': 2.0,  # approximate for Hack at terminal defaults
+        'native_height': 24,
         'encodings': frozenset({
             'ascii', 'latin_1', 'iso_8859_1', 'iso_8859_1:1987',
             'iso_8859_2', 'utf_8', 'big5', 'gbk', 'shift_jis', 'euc_kr',
@@ -120,6 +122,19 @@ def _png_dimensions(path):
     return 0, 0
 
 
+def _file_md5(path):
+    """Compute MD5 hex digest of a file's contents.
+
+    :param path: path to a file
+    :returns: hex digest string
+    """
+    h = hashlib.md5()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(65536), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 class _FifoTimeout(Exception):
     """Raised when a FIFO operation exceeds its timeout."""
 
@@ -145,7 +160,8 @@ class TerminalInstance(abc.ABC):
     """
 
     def __init__(self, font_family, group_name, columns=80, rows=70,
-                 font_size=12, east_asian_wide=False, display_env=None):
+                 font_size=12, east_asian_wide=False, display_env=None,
+                 check_dupes=False):
         self._font_family = font_family
         self._group_name = group_name
         self._columns = columns
@@ -153,6 +169,7 @@ class TerminalInstance(abc.ABC):
         self._font_size = font_size
         self._east_asian_wide = east_asian_wide
         self._display_env = display_env
+        self._check_dupes = check_dupes
         self._window_title = f'render-{os.getpid()}-{group_name}'
         self._proc = None
         self._window_id = None
@@ -160,6 +177,8 @@ class TerminalInstance(abc.ABC):
         self._data_fifo = None
         self._ready_fifo = None
         self._stderr_file = None
+        self._last_capture_md5 = None
+        self._last_capture_content_blank = False
 
     @abc.abstractmethod
     def _build_command(self):
@@ -217,7 +236,7 @@ class TerminalInstance(abc.ABC):
         try:
             result = subprocess.run(
                 ['xdotool', 'search', '--sync',
-                 '--name', self._window_title],
+                 '--name', f'^{self._window_title}$'],
                 capture_output=True, text=True, timeout=10,
                 env=self._subprocess_env(),
             )
@@ -233,6 +252,20 @@ class TerminalInstance(abc.ABC):
             raise RuntimeError(
                 f"Could not find {tool} window ({self._window_title})")
         self._window_id = window_ids[0]
+
+        if self._check_dupes:
+            # Capture a baseline screenshot of the blank terminal so the
+            # first real render can detect staleness via MD5 comparison.
+            time.sleep(0.2)
+            baseline_path = os.path.join(self._tmpdir, 'baseline.png')
+            self._xwd_capture(baseline_path)
+            if (os.path.isfile(baseline_path)
+                    and os.path.getsize(baseline_path) > 0):
+                self._last_capture_md5 = _file_md5(baseline_path)
+            try:
+                os.unlink(baseline_path)
+            except OSError:
+                pass
 
         print(f"  {tool} [{self._group_name}] started: "
               f"window {self._window_id}, font '{self._font_family}'",
@@ -292,6 +325,117 @@ class TerminalInstance(abc.ABC):
                     print(f"    {line.rstrip()}", file=sys.stderr)
         except OSError:
             pass
+
+    def _xwd_capture(self, output_path):
+        """Capture a screenshot using ``xwd`` + ``convert``.
+
+        Uses plain ``XGetImage`` (no SHM), avoiding the ``EAGAIN``
+        failures that ``import``'s ``XShmGetImage`` triggers.
+
+        :param output_path: path to write the output PNG
+        :returns: True if the PNG was created successfully
+        """
+        xwd_path = output_path + '.xwd'
+        try:
+            result = subprocess.run(
+                ['xwd', '-id', self._window_id, '-silent', '-out', xwd_path],
+                capture_output=True, timeout=10,
+                env=self._subprocess_env(),
+            )
+            if result.returncode != 0:
+                print(f"  xwd failed for {output_path}: "
+                      f"{result.stderr.decode(errors='replace').strip()}",
+                      file=sys.stderr)
+                return False
+        except subprocess.TimeoutExpired:
+            print(f"  xwd timed out for {output_path}", file=sys.stderr)
+            return False
+
+        try:
+            result = subprocess.run(
+                ['convert', xwd_path, output_path],
+                capture_output=True, timeout=10,
+            )
+            if result.returncode != 0:
+                print(f"  convert xwd→png failed for {output_path}: "
+                      f"{result.stderr.decode(errors='replace').strip()}",
+                      file=sys.stderr)
+                return False
+        except subprocess.TimeoutExpired:
+            print(f"  convert xwd→png timed out for {output_path}",
+                  file=sys.stderr)
+            return False
+        finally:
+            try:
+                os.unlink(xwd_path)
+            except OSError:
+                pass
+
+        return True
+
+    def _activate(self):
+        """Raise the terminal window to the top of the X11 stacking order.
+
+        On Xvfb without a window manager, ``XGetImage`` reads from the
+        screen framebuffer so obscured windows return wrong pixels.
+        ``XRaiseWindow`` via ``xdotool windowraise`` brings the target
+        window to the top before each screenshot.
+
+        Overridden by mux-based subclasses to also activate the pane.
+        """
+        if self._window_id is not None:
+            try:
+                subprocess.run(
+                    ['xdotool', 'windowraise', self._window_id],
+                    capture_output=True, timeout=5,
+                    env=self._subprocess_env(),
+                )
+            except (subprocess.TimeoutExpired, OSError):
+                pass
+
+    def _screenshot_and_crop(self, output_path):
+        """Take a screenshot and crop to content bounds.
+
+        :param output_path: path to write the output PNG
+        :returns: ``(success, raw_width, raw_height, raw_md5)`` — raw
+            dimensions and MD5 are from the uncropped screenshot, or
+            ``(0, 0, None)`` on failure
+        """
+        if not self._xwd_capture(output_path):
+            return False, 0, 0, None
+
+        raw_w, raw_h = _png_dimensions(output_path)
+        raw_md5 = _file_md5(output_path) if self._check_dupes else None
+
+        # Crop to content bounds on top, right, and bottom (left untouched).
+        try:
+            result = subprocess.run(
+                ['convert', output_path, '-fuzz', '1%', '-trim',
+                 '-format', '%X %Y %w %h', 'info:'],
+                capture_output=True, text=True, timeout=10,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                parts = result.stdout.strip().split()
+                x_offset = int(parts[0])
+                y_offset = int(parts[1])
+                trim_w = int(parts[2])
+                trim_h = int(parts[3])
+                pad_top = 1
+                pad_bottom = 3
+                pad_right = 3
+                crop_y = max(0, y_offset - pad_top)
+                crop_w = x_offset + trim_w + pad_right
+                crop_h = y_offset + trim_h + pad_bottom - crop_y
+                subprocess.run(
+                    ['convert', output_path,
+                     '-crop', f'{crop_w}x{crop_h}+0+{crop_y}', '+repage',
+                     output_path],
+                    capture_output=True, timeout=10,
+                )
+        except (subprocess.TimeoutExpired, ValueError, IndexError):
+            pass  # cropping is optional, keep original image
+
+        return True, raw_w, raw_h, raw_md5
 
     def capture(self, text, output_path):
         """Render banner text and capture a screenshot.
@@ -355,53 +499,46 @@ class TerminalInstance(abc.ABC):
             self._print_helper_log_tail()
             return False
 
-        # Capture screenshot (import -window reads directly by window ID).
-        try:
-            result = subprocess.run(
-                ['import', '-window', self._window_id, output_path],
-                capture_output=True, timeout=10,
-                env=self._subprocess_env(),
-            )
-            if result.returncode != 0:
-                print(f"  import failed for {output_path}: "
-                      f"{result.stderr.decode(errors='replace').strip()}",
-                      file=sys.stderr)
-                return False
-        except subprocess.TimeoutExpired:
-            print(f"  import timed out for {output_path}",
-                  file=sys.stderr)
+        self._activate()
+        time.sleep(0.20)
+
+        self._last_capture_content_blank = False
+        ok, raw_w, raw_h, raw_md5 = self._screenshot_and_crop(output_path)
+        if not ok:
             return False
 
-        # Crop to content bounds on top, right, and bottom (left untouched).
-        try:
-            result = subprocess.run(
-                ['convert', output_path, '-fuzz', '1%', '-trim',
-                 '-format', '%X %Y %w %h', 'info:'],
-                capture_output=True, text=True, timeout=10,
-            )
-            if result.returncode == 0 and result.stdout.strip():
-                parts = result.stdout.strip().split()
-                x_offset = int(parts[0])
-                y_offset = int(parts[1])
-                trim_w = int(parts[2])
-                trim_h = int(parts[3])
-                pad_top = 1
-                pad_bottom = 3
-                pad_right = 3
-                crop_y = max(0, y_offset - pad_top)
-                crop_w = x_offset + trim_w + pad_right
-                crop_h = y_offset + trim_h + pad_bottom - crop_y
-                subprocess.run(
-                    ['convert', output_path,
-                     '-crop', f'{crop_w}x{crop_h}+0+{crop_y}', '+repage',
-                     output_path],
-                    capture_output=True, timeout=10,
-                )
-        except (subprocess.TimeoutExpired, ValueError, IndexError):
-            pass  # cropping is optional, keep original image
+        # Retry if the RAW screenshot is pixel-identical to the last
+        # capture on this instance.  We compare the uncropped image
+        # because the fuzz-based crop can produce slightly different
+        # boundaries on identical content, defeating MD5 comparison.
+        if self._check_dupes:
+            if self._last_capture_md5 is not None and raw_md5 is not None:
+                if raw_md5 == self._last_capture_md5:
+                    retry_delays = (0.15, 0.30, 0.50, 0.75, 1.00)
+                    for delay in retry_delays:
+                        time.sleep(delay)
+                        self._activate()
+                        ok, _, _, raw_md5 = self._screenshot_and_crop(
+                            output_path)
+                        if not ok:
+                            return False
+                        if raw_md5 != self._last_capture_md5:
+                            break
+                    else:
+                        # All retries exhausted — terminal is stuck.
+                        return False
 
         w, h = _png_dimensions(output_path)
         if 0 < w < 20 and 0 < h < 20:
+            if raw_w >= 100 and raw_h >= 100:
+                # Terminal captured fine, content was just too sparse to
+                # produce a meaningful banner after crop.  Not poison.
+                self._last_capture_content_blank = True
+                try:
+                    os.unlink(output_path)
+                except OSError:
+                    pass
+                return False
             print(f"  render too small ({w}x{h}px), likely poison escape: "
                   f"{output_path}", file=sys.stderr)
             return False
@@ -412,20 +549,29 @@ class TerminalInstance(abc.ABC):
                   file=sys.stderr)
             return False
 
+        if self._check_dupes:
+            self._last_capture_md5 = raw_md5
+
         return True
 
 
-def _apply_crt_effects(path, group_name, columns):
-    """Apply CRT phosphor bloom and scanline effects to a banner PNG.
+def _apply_crt_effects(path, group_name, columns, font_size):
+    """Apply supersampled CRT phosphor bloom and scanline effects.
 
-    The image is 2x upscaled (nearest-neighbor) before effects are
-    applied for higher-quality output.  Bloom is applied via
-    pixelgreat.  Scanlines are 2px dark bands every 4th row of the
-    upscaled image for visible effect at 2x scale.
+    The input image (already 2x from ``font_size=24``) is upscaled a
+    further 2x to 4x total, where bloom and scanlines are applied at
+    high resolution.  A LANCZOS downscale back to 2x produces smooth
+    analog-looking gradients that far exceed the fidelity of effects
+    rendered at the final resolution.
+
+    Scanline frequency is derived from the font's native pixel height
+    so that each bitmap row gets one scanline, matching the physical
+    CRT raster.
 
     :param path: path to the PNG file (modified in place)
     :param group_name: font group key from ``_FONT_GROUPS``
     :param columns: number of terminal columns used for this capture
+    :param font_size: font point size used for rendering (determines scale)
     """
     from PIL import Image, ImageDraw
     import pixelgreat as pg
@@ -435,15 +581,16 @@ def _apply_crt_effects(path, group_name, columns):
     if orig_mode not in ('RGB', 'RGBA'):
         img = img.convert('RGB')
 
-    # --- 2x upscale (nearest-neighbor to keep sharp pixels) ---
+    # --- 2x upscale to 4x total (nearest-neighbor to keep sharp pixels) ---
+    target_w, target_h = img.width, img.height
     img = img.resize((img.width * 2, img.height * 2), Image.NEAREST)
 
-    # --- Bloom ---
+    # --- Bloom at 4x ---
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
         result = pg.pixelgreat(
             image=img,
-            pixel_size=10,
+            pixel_size=20,
             output_scale=1,
             bloom_strength=0.67,
             bloom_size=0.5,
@@ -455,14 +602,42 @@ def _apply_crt_effects(path, group_name, columns):
             rounding=0,
         )
 
-    # --- Scanlines ---
-    # 2px dark line every 4 rows for visible effect at 2x scale.
+    # --- Scanlines at 4x ---
+    # Period is computed from font metrics, not image dimensions (the
+    # image is cropped to content so height/rows would be wrong).
+    # At 96 DPI, font_size pt = font_size*96/72 px cell height at 1x.
+    # The 2x input is upscaled 2x more → 4x total, so each native
+    # pixel row occupies font_size*8/(3*native_height) 4x-pixels.
+    group_info = _FONT_GROUPS.get(group_name, {})
+    native_height = group_info.get('native_height', 16)
+    period = font_size * 8.0 / (3.0 * native_height)
+
     overlay = Image.new('RGBA', result.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
-    for y in range(2, result.height, 4):
-        draw.line([(0, y), (result.width - 1, y)], fill=(0, 0, 0, 60))
-        draw.line([(0, y + 1), (result.width - 1, y + 1)], fill=(0, 0, 0, 60))
+    w = result.width - 1
+    total_scanlines = int(result.height / period) + 1
+    # Flat center band at full alpha with soft edges — for small periods
+    # (≈4px) this gives 2 rows at alpha 100 plus 1-row edges; for larger
+    # periods (≈8px) the gradient widens proportionally.
+    flat_half = max(1, round(period * 0.2))
+    edge = max(1, round(period * 0.15))
+    for i in range(total_scanlines):
+        cy = round(i * period)
+        for offset in range(-flat_half - edge, flat_half + edge + 1):
+            y = cy + offset
+            if 0 <= y < result.height:
+                d = abs(offset)
+                if d <= flat_half:
+                    alpha = 100
+                else:
+                    t = (d - flat_half) / (edge + 1)
+                    alpha = int(100 * (1.0 - t))
+                if alpha > 0:
+                    draw.line([(0, y), (w, y)], fill=(0, 0, 0, alpha))
     result = Image.alpha_composite(result.convert('RGBA'), overlay)
+
+    # --- LANCZOS downscale from 4x to 2x ---
+    result = result.resize((target_w, target_h), Image.LANCZOS)
     result = result.convert('RGB')
 
     if orig_mode == 'L':
@@ -480,46 +655,24 @@ class RendererPool:
     via Xvfb so terminal windows are invisible; on exit, shuts down all
     instances and the virtual display.
 
-    :param backend: ``'kitty'``, ``'wezterm'``, or ``'auto'``
     :param columns: default terminal width in columns
     :param rows: terminal height in rows
     :param font_size: font size for all instances
     :param crt_effects: apply CRT bloom and scanlines to output PNGs
     """
 
-    def __init__(self, backend='auto', columns=80, rows=60, font_size=12,
-                 crt_effects=True):
-        self._backend = self._resolve_backend(backend)
+    def __init__(self, columns=80, rows=60, font_size=24,
+                 crt_effects=True, check_dupes=False):
         self._columns = columns
         self._rows = rows
         self._font_size = font_size
         self._crt_effects = crt_effects
+        self._check_dupes = check_dupes
         self._instances = {}
         self._xvfb_proc = None
         self._display_env = None
-
-    @staticmethod
-    def _resolve_backend(backend):
-        """Resolve ``'auto'`` to a concrete backend name.
-
-        Checks ``MODEM_RENDERER`` env var first, then probes for
-        available terminals in order: wezterm, kitty.
-
-        :param backend: ``'kitty'``, ``'wezterm'``, or ``'auto'``
-        :returns: ``'kitty'`` or ``'wezterm'``
-        :raises RuntimeError: if no backend is available
-        """
-        if backend != 'auto':
-            return backend
-        env = os.environ.get('MODEM_RENDERER', '').lower()
-        if env in ('kitty', 'wezterm'):
-            return env
-        if shutil.which('wezterm'):
-            return 'wezterm'
-        if shutil.which('kitty'):
-            return 'kitty'
-        raise RuntimeError("No terminal renderer backend found "
-                           "(need kitty or wezterm)")
+        self._mux_server = None
+        self._next_window_x = 0
 
     def _start_xvfb(self):
         """Launch a virtual X11 display via Xvfb.
@@ -528,16 +681,14 @@ class RendererPool:
         with a screen large enough for terminal rendering.
         """
         if shutil.which('Xvfb') is None:
-            print("  Xvfb not found, rendering on real display",
-                  file=sys.stderr)
-            return
+            raise RuntimeError("Xvfb not found; install xvfb to render banners")
         for display_num in range(99, 200):
             display = f':{display_num}'
             lock_path = f'/tmp/.X{display_num}-lock'
             if os.path.exists(lock_path):
                 continue
             self._xvfb_proc = subprocess.Popen(
-                ['Xvfb', display, '-screen', '0', '3200x2400x24'],
+                ['Xvfb', display, '-screen', '0', '32000x16384x24'],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
@@ -548,12 +699,29 @@ class RendererPool:
             self._display_env = display
             print(f"  Xvfb started on {display}", file=sys.stderr)
             return
-        print("  Could not find free display for Xvfb, "
-              "rendering on real display", file=sys.stderr)
+        raise RuntimeError(
+            "Could not find free display for Xvfb (tried :99 through :199); "
+            "check for stale /tmp/.X*-lock files"
+        )
 
     def __enter__(self):
         self._start_xvfb()
+        self._start_mux_server()
         return self
+
+    def _start_mux_server(self):
+        """Launch the shared wezterm mux server."""
+        from make_stats.renderer_wezterm import WeztermMuxServer
+        self._mux_server = WeztermMuxServer(
+            font_size=self._font_size,
+            rows=self._rows,
+            display_env=self._display_env,
+        )
+        try:
+            self._mux_server.start()
+        except RuntimeError as exc:
+            print(f"  mux server failed to start: {exc}", file=sys.stderr)
+            self._mux_server = None
 
     def __exit__(self, *exc):
         for name, instance in self._instances.items():
@@ -563,6 +731,9 @@ class RendererPool:
                 print(f"  Warning: failed to stop renderer "
                       f"[{name}]: {e}", file=sys.stderr)
         self._instances.clear()
+        if self._mux_server is not None:
+            self._mux_server.stop()
+            self._mux_server = None
         if self._xvfb_proc is not None:
             self._xvfb_proc.terminate()
             try:
@@ -577,19 +748,26 @@ class RendererPool:
         return _FONT_GROUPS.get(group_name, {}).get('columns', self._columns)
 
     def _make_instance(self, group_name, effective_cols, east_asian_wide=False):
-        """Create the right TerminalInstance subclass.
+        """Create a WeztermMuxInstance for the given font group.
 
         :param group_name: font group key from ``_FONT_GROUPS``
         :param effective_cols: resolved column width
         :param east_asian_wide: treat ambiguous-width chars as 2 cells
-        :returns: a TerminalInstance subclass instance
+        :returns: a WeztermMuxInstance, or None if mux server is unavailable
         """
+        if self._mux_server is None:
+            return None
+        from make_stats.renderer_wezterm import WeztermMuxInstance
         group_info = _FONT_GROUPS[group_name]
         display = (f"{group_name}-{effective_cols}"
                    if effective_cols != 80 else group_name)
+        font_group_key = group_name
         if east_asian_wide:
             display += '-cjk'
-        kwargs = dict(
+            font_group_key += '-cjk'
+        return WeztermMuxInstance(
+            server=self._mux_server,
+            font_group_key=font_group_key,
             font_family=group_info['font_family'],
             group_name=display,
             columns=effective_cols,
@@ -597,12 +775,8 @@ class RendererPool:
             font_size=self._font_size,
             east_asian_wide=east_asian_wide,
             display_env=self._display_env,
+            check_dupes=self._check_dupes,
         )
-        if self._backend == 'kitty':
-            from make_stats.renderer_kitty import KittyInstance
-            return KittyInstance(**kwargs)
-        from make_stats.renderer_wezterm import WeztermInstance
-        return WeztermInstance(**kwargs)
 
     def _get_instance(self, group_name, columns=None, east_asian_wide=False):
         """Get or lazily create an instance for the given group.
@@ -639,8 +813,42 @@ class RendererPool:
                   file=sys.stderr)
             return None
 
+        # Position window at a unique x-offset so windows never overlap
+        # on Xvfb.  XGetImage reads from the framebuffer, so obscured
+        # windows return wrong pixels.
+        if inst._window_id is not None:
+            try:
+                subprocess.run(
+                    ['xdotool', 'windowmove', inst._window_id,
+                     str(self._next_window_x), '0'],
+                    capture_output=True, timeout=5,
+                    env=inst._subprocess_env(),
+                )
+                self._next_window_x += 2000
+            except (subprocess.TimeoutExpired, OSError):
+                pass
+
         self._instances[instance_key] = inst
         return inst
+
+    def _restart_mux_server(self):
+        """Restart the entire mux server and all instances.
+
+        Used as a last resort when individual instance relaunches fail,
+        recovering from corrupted wezterm or X11 state.
+        """
+        for name, instance in self._instances.items():
+            try:
+                instance.stop()
+            except Exception:
+                pass
+        self._instances.clear()
+        self._next_window_x = 0
+        if self._mux_server is not None:
+            self._mux_server.stop()
+            self._mux_server = None
+        time.sleep(0.5)
+        self._start_mux_server()
 
     def capture(self, text, output_path, encoding='cp437', columns=None):
         """Route a banner to the appropriate terminal instance.
@@ -658,6 +866,10 @@ class RendererPool:
         if instance is None:
             return None
         if not instance.capture(text, output_path):
+            # If content was just blank/sparse (not a terminal failure),
+            # skip the expensive relaunch — the terminal is fine.
+            if getattr(instance, '_last_capture_content_blank', False):
+                return None
             # Poison escape may have corrupted terminal state.
             # Relaunch instance and retry once.
             if instance.alive:
@@ -667,10 +879,22 @@ class RendererPool:
                     instance.stop()
                 except Exception:
                     pass
+                time.sleep(0.3)  # let X11 clean up old window
                 instance = self._get_instance(
                     group_name, columns=columns, east_asian_wide=east_asian)
                 if instance is None or not instance.capture(text, output_path):
-                    return None
+                    # Nuclear option: restart entire mux server.
+                    print(f"  renderer [{group_name}] retry also failed, "
+                          f"restarting mux server...", file=sys.stderr)
+                    self._restart_mux_server()
+                    instance = self._get_instance(
+                        group_name, columns=columns,
+                        east_asian_wide=east_asian)
+                    if instance is not None:
+                        if not instance.capture(text, output_path):
+                            return None
+                    else:
+                        return None
             else:
                 return None
 
@@ -689,7 +913,8 @@ class RendererPool:
         if self._crt_effects and os.path.isfile(output_path):
             effective_cols = columns if columns is not None else (
                 group_info.get('columns', self._columns))
-            _apply_crt_effects(output_path, group_name, effective_cols)
+            _apply_crt_effects(output_path, group_name, effective_cols,
+                               self._font_size)
 
         return instance._group_name
 
@@ -697,15 +922,14 @@ class RendererPool:
     def available():
         """Check if terminal screenshot rendering is possible.
 
-        :returns: True if DISPLAY is set or Xvfb is available, and at
-            least one backend plus xdotool and import are found in PATH
+        :returns: True if DISPLAY is set or Xvfb is available, and
+            wezterm plus xdotool and xwd are found in PATH
         """
         has_display = (os.environ.get('DISPLAY')
                        or shutil.which('Xvfb') is not None)
         if not has_display:
             return False
-        for tool in ('xdotool', 'import'):
+        for tool in ('xdotool', 'xwd'):
             if shutil.which(tool) is None:
                 return False
-        return (shutil.which('kitty') is not None
-                or shutil.which('wezterm') is not None)
+        return shutil.which('wezterm') is not None
