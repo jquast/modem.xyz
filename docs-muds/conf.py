@@ -32,7 +32,7 @@ html_baseurl = "https://muds.modem.xyz/"
 
 html_theme_options = {
     "style_nav_header_background": "#1a1a2e",
-    "navigation_depth": 3,
+    "navigation_depth": 2,
 }
 
 html_show_sphinx = False

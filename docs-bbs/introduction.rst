@@ -194,7 +194,7 @@ Atari-Classic.ttf`` font installed, `telnetlib3`_ can perform bi-direcitonal tra
 
    Most ATASCII BBSs require a window size of 40 ``COLUMNS``
 
-fonts
+Fonts
 -----
 
 Though optional for IBM PC-DOS (:ref:`CP437 <cp437>`), as that artwork is faithfully reproduced,

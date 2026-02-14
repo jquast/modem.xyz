@@ -37,10 +37,18 @@ receive raw ASCII text, which is fully compliant with the original standard.
 See Also: BBSes
 ~~~~~~~~~~~~~~~
 
-MUDs are related to **BBSes** (Bulletin Board Systems) -- both use Telnet, but MUDs typically
-operate in **line mode** with ASCII or UTF-8, while BBSes use **character-at-a-time** with legacy
-encodings like CP437 for ANSI art. A companion BBS census is at `bbs.modem.xyz
-<https://bbs.modem.xyz/>`_.
+- A companion website of BBS Telnet servers is at `bbs.modem.xyz <https://bbs.modem.xyz/>`_.
+
+`Bulletin Board Servers <https://en.wikipedia.org/wiki/Bulletin_board_system>`_ are closely related
+to MUDs: both primarily use telnet, and are used to play games and chat, BBSs chiefly operate in
+**character-at-a-time** mode, while MUDs use **line mode**.  Their preferred clients and servers are
+sometimes incompatible with each other.
+
+Popular `BBS door <https://en.wikipedia.org/wiki/BBS_door>`_ games, like `Legend of the Red Dragon
+<https://en.wikipedia.org/wiki/Legend_of_the_Red_Dragon>`_, `Usurper <https://www.usurper.info/>`_,
+`Trade Wars <https://en.wikipedia.org/wiki/Trade_Wars>`_, `Barren Realms Elite
+<https://www.johndaileysoftware.com/products/bbsdoors/barrenrealmselite>`_ have similar gameplay,
+but game design differs due to time limitations to free the telephone line free for other "Callers".
 
 Playing MUDs today
 ------------------

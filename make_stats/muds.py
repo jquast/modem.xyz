@@ -1353,15 +1353,15 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
     :param fn_suffix: suffix for footnote labels to avoid clashes
     :returns: list of footnote strings to print at page end
     """
+    banner_rst = _render_banner_section(server, BANNERS_PATH)
+    if banner_rst:
+        print(banner_rst)
+
     _write_mud_server_urls(server, sec_char)
 
     if server['has_mssp'] and server['description']:
         print(f"*{_rst_escape(server['description'][:300])}*")
         print()
-
-    banner_rst = _render_banner_section(server, BANNERS_PATH)
-    if banner_rst:
-        print(banner_rst)
 
     footnotes = _write_mud_server_info(
         server, sec_char, fn_suffix=fn_suffix)

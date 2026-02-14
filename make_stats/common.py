@@ -734,6 +734,8 @@ def _jinja_env():
     env.filters['telnet_url'] = lambda h, p: _telnet_url(h, p)
     env.filters['clean_log_line'] = _clean_log_line
     env.filters['rst_width'] = lambda t: wcwidth.width(t, control_codes='ignore')
+    from .geoip import _country_flag
+    env.filters['country_flag'] = _country_flag
     return env
 
 
@@ -1334,6 +1336,7 @@ def _prepare_banner_page_groups(page_groups, file_key,
     :param tls_fn: callable(server) -> truthy if TLS supported
     :returns: list of enriched group dicts
     """
+    from .geoip import _country_flag
     enriched = []
     for group in page_groups:
         g = dict(group)
@@ -1344,6 +1347,7 @@ def _prepare_banner_page_groups(page_groups, file_key,
             sd['_detail_file'] = s[file_key]
             sd['_tls'] = (' :tls-lock:`\U0001f512`'
                           if tls_fn(s) else '')
+            sd['_flag'] = _country_flag(s.get('_country_code', ''))
             enriched_servers.append(sd)
         g['servers'] = enriched_servers
         enriched.append(g)

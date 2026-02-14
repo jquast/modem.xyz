@@ -4,6 +4,7 @@ import pytest
 
 from make_stats.common import (
     _jinja_env,
+    _prepare_banner_page_groups,
     _render_template,
 )
 
@@ -52,3 +53,65 @@ class TestBannerGalleryPageTemplate:
             detail_subdir='detail',
         )
         assert 'Page 1 of 3' in result
+
+    def test_shared_banner_message(self):
+        groups = [{
+            'banner': 'Welcome',
+            'servers': [
+                {'_name': 'a.com:23', '_detail_file': 'a', '_tls': '',
+                 '_flag': '\U0001f1fa\U0001f1f8', '_banner_png': 'b.png',
+                 'host': 'a.com', 'port': 23},
+                {'_name': 'b.com:23', '_detail_file': 'b', '_tls': '',
+                 '_flag': '\U0001f1e9\U0001f1ea', 'host': 'b.com', 'port': 23},
+            ],
+        }]
+        result = _render_template(
+            'banner_gallery_page.rst.j2',
+            page_groups=groups,
+            page_num=1, total_pages=1,
+            page_label='[A]', detail_subdir='detail',
+        )
+        assert 'shared by the following 2 servers' in result
+        assert '\U0001f1fa\U0001f1f8' in result
+        assert '\U0001f1e9\U0001f1ea' in result
+
+    def test_single_server_no_shared_message(self):
+        groups = [{
+            'banner': 'Welcome',
+            'servers': [
+                {'_name': 'a.com:23', '_detail_file': 'a', '_tls': '',
+                 '_flag': '', 'host': 'a.com', 'port': 23},
+            ],
+        }]
+        result = _render_template(
+            'banner_gallery_page.rst.j2',
+            page_groups=groups,
+            page_num=1, total_pages=1,
+            page_label='[A]', detail_subdir='detail',
+        )
+        assert 'shared by' not in result
+
+
+class TestPrepareBannerPageGroups:
+
+    def test_flag_enrichment(self):
+        groups = [{'banner': 'hi', 'servers': [
+            {'host': 'a.com', 'port': 23, '_file': 'a',
+             '_country_code': 'US'},
+            {'host': 'b.com', 'port': 23, '_file': 'b',
+             '_country_code': 'DE'},
+        ]}]
+        result = _prepare_banner_page_groups(
+            groups, '_file', lambda s: f"{s['host']}:{s['port']}",
+            lambda s: False)
+        assert result[0]['servers'][0]['_flag'] == '\U0001f1fa\U0001f1f8'
+        assert result[0]['servers'][1]['_flag'] == '\U0001f1e9\U0001f1ea'
+
+    def test_missing_country_code(self):
+        groups = [{'banner': 'hi', 'servers': [
+            {'host': 'a.com', 'port': 23, '_file': 'a'},
+        ]}]
+        result = _prepare_banner_page_groups(
+            groups, '_file', lambda s: f"{s['host']}:{s['port']}",
+            lambda s: False)
+        assert result[0]['servers'][0]['_flag'] == ''

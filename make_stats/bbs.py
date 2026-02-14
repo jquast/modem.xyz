@@ -870,13 +870,13 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
     """
-    _write_bbs_server_urls(server, sec_char)
-
     banner_rst = _render_banner_section(
         server, BANNERS_PATH,
         default_encoding=DEFAULT_ENCODING)
     if banner_rst:
         print(banner_rst)
+
+    _write_bbs_server_urls(server, sec_char)
 
     _write_bbs_server_info(server, sec_char)
 
