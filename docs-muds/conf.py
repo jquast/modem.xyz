@@ -9,7 +9,8 @@ if datetime.datetime.now().year != 2026:
 else:
     copyright = f"2026 Jeff Quast"
 author = "Jeff Quast"
-release = "0.1.0"
+now = datetime.datetime.now()
+release = f"{now.year}.{now.month:02}.{now.day:02}"
 
 extensions = [
     "sphinxcontrib.jquery",
