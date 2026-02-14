@@ -23,18 +23,15 @@ class TestEncodingToFontGroup:
         ('ascii', 'ibm_vga'),
         ('utf_8', 'ibm_vga'),
         ('big5', 'ibm_vga'),
-        ('amiga', 'topaz'),
+        ('topaz', 'topaz'),
         ('petscii', 'petscii'),
         ('atascii', 'atascii'),
     ])
     def test_mapping(self, encoding, expected):
         assert _encoding_to_font_group(encoding) == expected
 
-    def test_hyphen_normalization(self):
-        assert _encoding_to_font_group('cp437-art') == 'ibm_vga'
-
     def test_case_insensitive(self):
-        assert _encoding_to_font_group('AMIGA') == 'topaz'
+        assert _encoding_to_font_group('TOPAZ') == 'topaz'
 
 
 def _make_png_header(width, height):

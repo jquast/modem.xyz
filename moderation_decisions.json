@@ -789,6 +789,12 @@
     "64vintageremixbbs.dyndns.org:6400|willowcreekbbs.dynu.net:6400": {
       "action": "skip"
     },
+    "65.35.103.40:6404|cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6402|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
+      "action": "remove",
+      "remove": [
+        "65.35.103.40:6404"
+      ]
+    },
     "65.35.103.40:6404|cib.dyndns.org:6400|cib.dyndns.org:6402|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
       "action": "skip"
     },
@@ -1063,6 +1069,9 @@
       "action": "skip"
     },
     "amstrad.simulant.uk:464|bbs.furryrefuge.com:23|bbs.zerotwo.tech:23|freeway.vkradio.com:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
+      "action": "skip"
+    },
+    "amstrad.simulant.uk:464|bbs.furryrefuge.com:23|dungeon.synchro.net:23|freeway.vkradio.com:23|guardian.synchro.net:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
     "amstrad.simulant.uk:464|bbs.furryrefuge.com:23|freeway.vkradio.com:23|guardian.synchro.net:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
@@ -4713,6 +4722,7 @@
       "65.29.77.135:2323": "dead",
       "65.29.91.30:4000": "dead",
       "65.32.142.239:2002": "dns",
+      "65.35.103.40:6404": "duplicate",
       "65.38.97.60:23": "dns",
       "65.51.108.152:23": "dead",
       "65.51.108.170:23": "dead",
