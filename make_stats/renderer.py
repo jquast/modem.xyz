@@ -40,7 +40,7 @@ _FONT_GROUPS = {
         'cell_ratio': 2.0,  # 8x16 native bitmap
         'native_height': 16,
         'encodings': frozenset({
-            'cp437', 'cp437_art', 'cp437-art',
+            'cp437',
             'cp737', 'cp775', 'cp850', 'cp852', 'cp855',
             'cp857', 'cp860', 'cp861', 'cp862', 'cp863',
             'cp865', 'cp866', 'cp869', 'koi8_r', 'unknown',
@@ -52,7 +52,7 @@ _FONT_GROUPS = {
         'font_family': 'Topaz a600a1200a400',
         'cell_ratio': 2.0,  # 8x16 native bitmap
         'native_height': 16,
-        'encodings': frozenset({'amiga', 'topaz'}),
+        'encodings': frozenset({'topaz'}),
     },
     'petscii': {
         'font_family': 'Bescii Mono',
