@@ -120,9 +120,10 @@ code. Suggest a change to `mudlist.txt
 <https://github.com/jquast/modem.xyz/blob/master/mudlist.txt>`_ to add or remove or fix an encoding
 as a pull request.  Feel free to suggest any other changes or fixes.
 
-Telnet banners are rendered using IBM VGA 8x16 fonts and `Hack <https://sourcefoundry.org/hack/>`_ as
-fallback for other codepoints, especially east-asian (CJK).  `WezTerm
-<https://wezterm.org/index.html>`_ with artificial scanlines and bloom effect applied.
+Telnet banners are rendered using IBM VGA 8x16 fonts and `Hack <https://sourcefoundry.org/hack/>`_
+as fallback for other codepoints, especially east-asian (CJK).  Banner data is sent to `WezTerm
+<https://wezterm.org/index.html>`_ for a screenshot, and artificial scanlines and bloom effect are
+applied.
 
 Better Sites
 ------------

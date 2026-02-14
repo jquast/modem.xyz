@@ -58,7 +58,7 @@
 178.232.208.156 23 topaz
 184.58.204.114 7777
 185.114.193.46 3340
-188.128.39.239 110
+188.128.39.239 110 utf-8
 188.166.9.190 23
 188.81.201.94 2323
 192.0.135.41 23
@@ -226,7 +226,7 @@ amiganer.amms-bbs.de 23 topaz
 amigaunderground.com 1985 topaz
 amigaunderground.com 2002 topaz
 amigaunderground.com 2300 topaz
-amis86.ddns.net 9000 atascii 80 tall
+amis86.ddns.net 9000 atascii 40 tall
 amnesiabbs.duckdns.org 23 utf-8
 amstrad.simulant.uk 464
 ancientmists.vineyard.haus 1538
@@ -343,14 +343,14 @@ bbs.fozztexx.com 23
 bbs.ftelnet.ca 23 utf-8
 bbs.furryrefuge.com 23 utf-8
 bbs.g00r00.com 23
-bbs.game-master.com 23 latin-1
+bbs.game-master.com 23 cp437 80 tall
 bbs.gamer.com.tw 23 big5
 bbs.gglab.cloud 2323
 bbs.gigabite.se 23
 bbs.greektimes.ca 23
 bbs.greenhead.ca 23 utf-8
-bbs.hackerforce.de 2323 utf-8
-bbs.hackishack.online 6401
+bbs.hackerforce.de 2323 cp437
+bbs.hackishack.online 6401 petscii
 bbs.hispamsx.org 23
 bbs.horizonbbs.org 23 utf-8
 bbs.hyena.network 23 utf-8
@@ -490,9 +490,9 @@ beta.sb-discovery.com 23
 bfbbs.no-ip.com 8888
 bigtimebbs.net 2323
 bitwoods.duckdns.org 23
-blackflag.acid.org 23
-blackflag.acid.org 26
-blackflag.acid.org 27
+blackflag.acid.org 23 cp437
+blackflag.acid.org 26 cp437
+blackflag.acid.org 27 cp437
 blackice.bbsindex.de 23 latin-1
 blackstar-bbs.servegame.com 23
 bloodbbs.ddns.net 2323 utf-8
@@ -504,7 +504,7 @@ bpc.jayscafe.net 6402 petscii
 brazi.net 23 utf-8
 bunnybbs.tw 23 big5
 bwrbbs.ddns.net 23 utf-8
-bylins.su 4000
+bylins.su 4000 utf-8
 byob.hopto.org 64128
 c3bbs.retronetworking.org 23 utf-8
 c3bbs.retronetworking.org 513 utf-8
@@ -611,7 +611,7 @@ dura-bbs.net 6359
 dydo.erb.pw 1337 utf-8
 dynamite.bbsing.com 23 utf-8
 dynamite.synchronetbbs.org 513 utf-8
-dzbbs.hopto.org 64128
+dzbbs.hopto.org 64128 petscii
 echochamber.zapto.org 3640
 echoes.120v.ac 23
 elveszettvilag.hu 6666

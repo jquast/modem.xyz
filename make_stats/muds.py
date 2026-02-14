@@ -53,6 +53,58 @@ MUD_PROTOCOLS = [
     'MXP', 'MSP', 'MCP', 'ZMP',
 ]
 
+# Canonical family names — maps lowercased variants to display name.
+_FAMILY_CANONICAL = {
+    'dikumud': 'DikuMUD',
+    'dikumud/rom': 'DikuMUD',
+    'dikumud/merc': 'DikuMUD',
+    'diku': 'DikuMUD',
+    'diku/merc': 'DikuMUD',
+    'lpmud': 'LPMud',
+    'ldmud': 'LPMud',
+    'fluffos': 'LPMud',
+    'tinymud': 'TinyMUD',
+    'muck': 'TinyMUD',
+    'coffeemud': 'CoffeeMUD',
+    'moo': 'MOO',
+    'tbamud': 'DikuMUD',
+    'circlemud': 'DikuMUD',
+    'rom': 'DikuMUD',
+    'mordor': 'DikuMUD',
+    'musicmud': 'MusicMUD',
+}
+
+
+def _normalize_family(raw):
+    """Normalize a FAMILY string to a canonical display name.
+
+    :param raw: raw MSSP FAMILY value
+    :returns: canonical family name
+    """
+    key = raw.strip().lower()
+    return _FAMILY_CANONICAL.get(key, raw.strip())
+
+
+def _strip_codebase_version(codebase):
+    """Strip version number from a codebase string.
+
+    :param codebase: raw MSSP CODEBASE value
+    :returns: engine name without version
+    """
+    codebase = codebase.strip()
+    if not codebase:
+        return codebase
+    parts = codebase.split()
+    result = []
+    for part in parts:
+        if part and (part[0].isdigit()
+                     or (part[0] in 'vV'
+                         and len(part) > 1
+                         and part[1:2].isdigit())):
+            break
+        result.append(part)
+    return ' '.join(result) if result else codebase
+
 
 # ---------------------------------------------------------------------------
 # LociTerm support
@@ -398,20 +450,35 @@ def compute_statistics(servers):
     stats['protocol_counts'] = dict(proto_counts)
 
     family_counts = Counter()
+    family_players = Counter()
     for s in servers:
         if s['family']:
             for fam in _listify(s['mssp'].get('FAMILY', '')):
                 if fam:
-                    family_counts[fam] += 1
+                    norm = _normalize_family(fam)
+                    family_counts[norm] += 1
+                    if s['players'] is not None and s['players'] > 0:
+                        family_players[norm] += s['players']
     stats['family_counts'] = dict(family_counts)
+    stats['family_players'] = dict(family_players)
 
     codebase_counts = Counter()
+    engine_counts = Counter()
+    engine_players = Counter()
     for s in servers:
         if s['codebase']:
             for cb in _listify(s['mssp'].get('CODEBASE', '')):
                 if cb:
                     codebase_counts[cb] += 1
+                    engine = _strip_codebase_version(cb)
+                    if engine:
+                        engine_counts[engine] += 1
+                        if (s['players'] is not None
+                                and s['players'] > 0):
+                            engine_players[engine] += s['players']
     stats['codebase_counts'] = dict(codebase_counts)
+    stats['engine_counts'] = dict(engine_counts)
+    stats['engine_players'] = dict(engine_players)
 
     year_counts = Counter()
     for s in servers:
@@ -529,6 +596,77 @@ def create_creation_years_plot(stats, output_path):
     plt.close()
 
 
+def create_players_by_family_plot(stats, output_path):
+    """Create horizontal bar chart of total players by codebase family."""
+    family_players = stats.get('family_players', {})
+    if not family_players:
+        return
+
+    sorted_items = sorted(family_players.items(),
+                          key=lambda x: x[1])
+    families = [item[0] for item in sorted_items]
+    counts = [item[1] for item in sorted_items]
+    total = sum(counts)
+
+    fig, ax = plt.subplots(
+        figsize=(16, max(8, len(families) * 0.8)))
+    bars = ax.barh(families, counts, color=PLOT_GREEN,
+                   edgecolor=PLOT_CYAN, linewidth=0.5, alpha=0.85)
+
+    for bar, count in zip(bars, counts):
+        pct = count / total * 100 if total else 0
+        ax.text(bar.get_width() + 0.5,
+                bar.get_y() + bar.get_height() / 2,
+                f' {count} ({pct:.0f}%)',
+                va='center', color=PLOT_FG, fontsize=24)
+
+    ax.set_xlabel('Players Online', fontsize=28)
+    ax.tick_params(axis='both', labelsize=22)
+    ax.set_xlim(0, max(counts) * 1.3 if counts else 10)
+    ax.grid(True, axis='x')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100, bbox_inches='tight',
+                transparent=True, metadata={'CreationDate': None})
+    plt.close()
+
+
+def create_players_by_engine_plot(stats, output_path, top_n=15):
+    """Create horizontal bar chart of top engines by player count."""
+    engine_players = stats.get('engine_players', {})
+    if not engine_players:
+        return
+
+    sorted_items = sorted(engine_players.items(),
+                          key=lambda x: x[1], reverse=True)[:top_n]
+    sorted_items.reverse()
+    engines = [item[0] for item in sorted_items]
+    counts = [item[1] for item in sorted_items]
+    total = sum(engine_players.values())
+
+    fig, ax = plt.subplots(
+        figsize=(16, max(8, len(engines) * 0.8)))
+    bars = ax.barh(engines, counts, color=PLOT_GREEN,
+                   edgecolor=PLOT_CYAN, linewidth=0.5, alpha=0.85)
+
+    for bar, count in zip(bars, counts):
+        pct = count / total * 100 if total else 0
+        ax.text(bar.get_width() + 0.5,
+                bar.get_y() + bar.get_height() / 2,
+                f' {count} ({pct:.0f}%)',
+                va='center', color=PLOT_FG, fontsize=24)
+
+    ax.set_xlabel('Players Online', fontsize=28)
+    ax.tick_params(axis='both', labelsize=22)
+    ax.set_xlim(0, max(counts) * 1.3 if counts else 10)
+    ax.grid(True, axis='x')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100, bbox_inches='tight',
+                transparent=True, metadata={'CreationDate': None})
+    plt.close()
+
+
 def create_all_plots(stats):
     """Generate all matplotlib plots."""
     os.makedirs(PLOTS_PATH, exist_ok=True)
@@ -542,6 +680,10 @@ def create_all_plots(stats):
         stats, os.path.join(PLOTS_PATH, 'codebases.png'))
     create_creation_years_plot(
         stats, os.path.join(PLOTS_PATH, 'creation_years.png'))
+    create_players_by_family_plot(
+        stats, os.path.join(PLOTS_PATH, 'players_by_family.png'))
+    create_players_by_engine_plot(
+        stats, os.path.join(PLOTS_PATH, 'players_by_engine.png'))
     create_telnet_options_plot(
         stats, os.path.join(PLOTS_PATH, 'telnet_options.png'))
     create_location_plot(
@@ -646,6 +788,32 @@ def display_plots():
           " MSSP data.")
     print()
     print("   Most common specific codebase versions.")
+    print()
+
+    print("Players Online by Codebase Family")
+    print("-----------------------------------")
+    print()
+    print(".. figure:: _static/plots/players_by_family.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Horizontal bar chart showing total players"
+          " online by codebase family.")
+    print()
+    print("   Total players online at scan time, grouped by"
+          " codebase family.")
+    print()
+
+    print("Players Online by Engine")
+    print("-------------------------")
+    print()
+    print(".. figure:: _static/plots/players_by_engine.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Horizontal bar chart showing top engines"
+          " by total players online.")
+    print()
+    print("   Top engines by total players online at scan time"
+          " (version numbers stripped).")
     print()
 
     print("Creation Years")

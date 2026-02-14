@@ -102,10 +102,10 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
         "--logfile", logfile,
         "--logfmt", "%(levelname)s %(filename)s:%(lineno)d %(message)s",
     ]
-    # Rendering-only hints (font selection for ansilove) are not valid
-    # Python codecs and must not be passed to telnetlib3-fingerprint.
-    _RENDER_ONLY_ENCODINGS = {'petscii', 'topaz', 'amiga', 'atarist',
-                              'cp437_art', 'cp437-art'}
+    # Rendering-only hints (font selection) are not valid Python codecs
+    # and must not be passed to telnetlib3-fingerprint.  Note: petscii,
+    # atascii, and atarist *are* real codecs provided by telnetlib3.
+    _RENDER_ONLY_ENCODINGS = {'topaz', 'amiga', 'cp437_art', 'cp437-art'}
     if encoding and encoding not in _RENDER_ONLY_ENCODINGS:
         cmd.extend(["--encoding", encoding])
 
