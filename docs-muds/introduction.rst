@@ -77,8 +77,8 @@ widely in purpose:
 
 - **MUX** (Multi-User eXperience)
 
-  Similar to MUSHes, based on the TinyMUX codebase. Often used for freeform roleplay games set in
-  licensed universes (superhero comics, TV shows, etc.).
+  Similar to MUSHes, based on the `TinyMUX <https://www.tinymux.org/>`_ codebase. Often used for
+  freeform roleplay games set in licensed universes (books, TV shows, etc.).
 
 - **MOO** (MUD, Object-Oriented)
 
