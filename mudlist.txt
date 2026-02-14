@@ -1,22 +1,19 @@
 # format,
 # ip address [port number [encoding [columns [tall]]]]
+1.13.190.230 8000 gbk
 104.154.76.197 4333
 107.172.21.36 4000
 108.252.255.105 3333
 112.124.31.157 5555 gbk
 112.124.8.59 6666 gbk
-1.13.190.230 8000 gbk
 114.32.122.32 4002 big5
 114.34.189.30 7000 big5 90
 118.195.237.158 6666 gbk
 125.228.186.144 8000 big5 90
-130.61.212.175 4000
-130.61.212.175 4000
-130.61.212.175 4000
+13.251.165.162 9999
 130.61.212.175 4000
 130.61.249.129 4000 utf-8 100
 130.95.13.14 4242
-13.251.165.162 9999
 136.38.83.106 8008
 138.68.247.72 5555
 146.168.137.126 6767
@@ -39,11 +36,12 @@
 188.128.39.239 4000
 191.252.194.206 4000
 192.175.22.156 1874
-202.90.240.159 23 utf-8
-202.103.21.247 8888 gbk
 20.223.238.107 7878
+202.103.21.247 8888 gbk
+202.90.240.159 23 utf-8
 204.15.193.211 1862 utf-8 90
 207.244.227.111 3000
+20forbeers.com 1337
 210.59.236.38 3000 big5
 210.59.236.38 3001 big5
 210.59.236.38 3002 big5
@@ -61,8 +59,8 @@
 221.226.96.186 5555 gbk
 23.254.128.113 4000
 23.95.67.109 4000
-31.220.94.14 6000
 3.211.118.17 6001
+31.220.94.14 6000
 35.85.221.31 4000
 35.88.139.46 4000
 37.59.41.114 3001
@@ -71,18 +69,16 @@
 39.152.42.32 7777 gbk
 3k.org 3000
 3m.vineyard.haus 3000
-40.115.76.212 4040
 4.222.184.103 4000
-44.204.35.120 4400
-44.204.35.120 4400
+40.115.76.212 4040
 44.204.35.120 4400
 44.235.126.228 4000
-45.90.220.35 4000
 45.79.96.4 4000
+45.90.220.35 4000
 4dimensions.org 6000
+5.182.18.140 4000
 50.16.123.54 6969
 51.15.222.121 4000
-5.182.18.140 4000
 52.90.102.82 4000
 54.238.179.235 5555 big5
 61.160.23.27 66 gbk 90
@@ -94,9 +90,6 @@
 73.185.130.92 4000
 74.208.126.44 3100
 77.169.172.37 4000
-77.169.172.37 4000
-77.169.172.37 4000
-77.169.172.37 4000
 77.33.29.130 4000
 78.131.8.20 4444
 7dof.org.uk 6715
@@ -106,11 +99,10 @@
 91.205.173.162 4455
 91.205.173.162 9000
 95.179.176.16 4000
-95.179.176.16 4000
-95.179.176.16 4000
 97.107.133.86 8000
 99.89.65.2 23
 aarchonmud.com 7000
+aardmud.org 23
 aardwolf.org 23
 abandoned.org 4444
 abandonedcodex.net 4000
@@ -186,6 +178,9 @@ barren.barrenrealmsmud.com 8000 utf-8 90
 bastard.mud.hu 2222
 batmud.bat.org 23
 baymoo.org 8888
+bbs.c64.pub 23
+bbs.erb.pw 23
+bbs.throwbackbbs.com 23
 bc.kelotz.net 2018
 bigdamn.com 7777
 biyg.org 1801 utf-8 90
@@ -229,6 +224,7 @@ cityofhope.genesismuds.com 8888
 ckmud.com 8500
 cleftofdimension.com 9000
 cleftofdimensions.net 4354
+client.addemud.net 5000
 clok.contrarium.net 4000 utf-8 100
 coderedmud.servegame.com 2323
 coffeemud.net 23
@@ -245,8 +241,10 @@ cosmicrage.nathantech.net 7777
 cotn.subnigra.com 6969
 cowboybebop.vineyard.haus 4020 utf-8 100
 cptalker.com 9900
+crimsonstainedlands.net 4001
 crusify.kharkov.org 5000 utf-8 90
 cryosphere.net 6666
+cryosphere.uk 6666
 crystalmush.kydance.net 6886
 cs.netsville.com 7777 utf-8 100
 csillagkod.themuds.org 7777
@@ -470,6 +468,7 @@ infinitymud.com 4242
 infiniumgame.com 6060
 insomnia-mud.com 4000
 insymnia.com 6600
+isharmud.com 23
 islandsofmyth.org 3000
 jedimud.net 4000
 jointhesaga.com 1790
@@ -498,8 +497,8 @@ last-outpost.com 4000
 latitude.muck.ca 23
 legacyofthesith.com 3000
 legendsofthejedi.com 5656
-lions.cs.ndsu.nodak.edu 7777
 leu.mclink.it 6000
+lions.cs.ndsu.nodak.edu 7777
 lit.klfree.cz 7680
 live.darkemud.com 5559
 lnl.aresmush.com 4201 utf-8 100
@@ -513,6 +512,7 @@ luminarimud.com 4100
 lusternia.com 5000
 lustymud.net 2000
 madrom.net 1536
+mapscii.me 23
 mare.hoardersheaven.net 4201
 materiamagica.com 23
 mdhavian.net 7500
@@ -670,6 +670,7 @@ mushhell.com 8250
 mushpark.com 1972
 mushpark.com 6000
 mw.muddywaters.org 3000
+mystavaria.com 4000
 mysticalmud.org 5000
 mysticism-mud.themuds.org 2023 utf-8 100
 mysticmud.com 3000
@@ -680,6 +681,8 @@ ncmud.net 9000
 nebbie.nebbie.it 4000
 necromium.com 4000
 neighvadanights.com 8888
+nethack.alt.org 23
+new-leu.leu.it 6000
 new.vampire-wars.com 6666
 newage.genesismuds.com 9010
 newmoonmud.org 7680
@@ -711,7 +714,9 @@ penultimatemush.com 9500
 penultimatemush.com 9501
 pepzi.se 23
 perilousrealms.com 23
+pern.gaslightswitch.com 4201
 phaze.ca 9999
+phoenixmud.net 4000
 pinksugarheartattack.net 2873
 pit.enyc.org.uk 7422
 pixiemud.com 6789
@@ -720,6 +725,7 @@ pkwar.org 2222
 play.aelisus.com 1848
 play.aocmud.com 4000
 play.arxmush.org 3000
+play.awakemud.com 4000
 play.brmud.com.br 4001
 play.cosrintwo.com 31000
 play.exodusmud.com 9000
@@ -777,6 +783,7 @@ savsoul.com 6666
 scalesmuck.com 8887
 scannerhead.pocketmud.com 4444
 scrozzle.noderunner.net 6700
+sdf.org 23
 sdmud.com 7000
 secretoflife.pocketmud.com 5555
 seifenblase.mud.de 3333
@@ -790,6 +797,7 @@ shattered.org 23
 shatteredmu.com 4201 utf-8 100
 shryp.ashendust.com 2000
 shye.org 1701
+silentheaven.org 4000
 silvren.com 6006
 sixth-estate.aresmush.com 4201 utf-8 110
 sky.winds.org 4208
@@ -820,6 +828,7 @@ summerlands.undo.it 4000
 sunderingshadows.com 8080
 surfers.fysh.org 4242
 swaoa-mush.com 5500
+swmud.org 6666
 swrestorationmush.com 4201 utf-8 100
 t2tmud.org 9999
 tapestries.fur.com 2069
@@ -830,6 +839,7 @@ tdod.org 3000
 tdod.org 4000
 tdome.nukefire.org 4000
 teenymush.dynu.net 4096
+telehack.com 23
 telnet.riseofpraxis.net 6666
 tempusmud.com 2023
 tenebraemush.net 4001
@@ -869,6 +879,7 @@ toox.co.kr 6255 euc-kr
 toox.co.kr 8050 euc-kr
 torilmud.org 9999
 totg.genesismuds.com 6969
+towers.t2tmud.org 9999
 trekmud.com 1701
 triadcity.smartmonsters.com 9094
 trollattack.com 4000
@@ -929,9 +940,11 @@ www.darkrisings.org 1313
 www.derpymud.com 23
 www.fengyunmud.top 6000 gbk
 www.kinslayermud.org 2222
+www.last-outpost.com 4000
 www.midianmud.com 3456
 www.mudbar.cn 3333 gbk
 www.sjcqmud.xyz 5555 gbk
+www.swaoa-mush.com 5500
 xaosmud.org 5000
 xiyouji.org 6666 gbk
 xyj.thu.cn 6666 gbk
@@ -944,6 +957,3 @@ zhyx.xguo.top 8888 gbk
 zmc-place.enyc.org.uk 8682
 zombiemud.net 2150
 zombiemud.org 3000
-
-
-

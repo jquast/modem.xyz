@@ -49,18 +49,18 @@
     "options": "[\"BINARY\",\"ECHO\",\"STATUS\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"NEW-ENVIRON\",\"MCCP1\",\"MCCP2\"]"
   },
   {
+    "host": "vitaliamud.com.br",
+    "port": 8242,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MCCP3\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
     "host": "cryosphere.uk",
     "port": 6666,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP1\",\"MCCP2\",\"MCCPX\",\"UNKNOWN-96\",\"UNKNOWN-112\",\"GMCP\"]"
-  },
-  {
-    "host": "vitaliamud.com.br",
-    "port": 8242,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MCCP3\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
   },
   {
     "host": "materiamagica.com",
