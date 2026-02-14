@@ -39,14 +39,27 @@ def _generate_mux_config(path, font_size, rows):
     group_entries = []
     for name, info in _FONT_GROUPS.items():
         family = info['font_family']
-        group_entries.append(
-            f'    ["{name}"] = {{font = wezterm.font("{family}"), '
-            f'size = {font_size}}},')
-        # CJK variant with fallback font.
-        group_entries.append(
-            f'    ["{name}-cjk"] = {{font = wezterm.font_with_fallback'
-            f'{{"{family}", "{_CJK_FALLBACK_FONT}"}}, '
-            f'size = {font_size}, cjk = true}},')
+        cell_ratio = info.get('cell_ratio', 2.0)
+        if name == 'ibm_vga':
+            # IBM VGA primary with Hack fallback for Unicode coverage.
+            group_entries.append(
+                f'    ["{name}"] = {{font = wezterm.font_with_fallback'
+                f'{{"{family}", "Hack"}}, '
+                f'size = {font_size}, cell_ratio = {cell_ratio}}},')
+            # CJK variant adds Noto CJK after Hack.
+            group_entries.append(
+                f'    ["{name}-cjk"] = {{font = wezterm.font_with_fallback'
+                f'{{"{family}", "Hack", "{_CJK_FALLBACK_FONT}"}}, '
+                f'size = {font_size}, cell_ratio = {cell_ratio}, cjk = true}},')
+        else:
+            group_entries.append(
+                f'    ["{name}"] = {{font = wezterm.font("{family}"), '
+                f'size = {font_size}, cell_ratio = {cell_ratio}}},')
+            # CJK variant with fallback font.
+            group_entries.append(
+                f'    ["{name}-cjk"] = {{font = wezterm.font_with_fallback'
+                f'{{"{family}", "{_CJK_FALLBACK_FONT}"}}, '
+                f'size = {font_size}, cell_ratio = {cell_ratio}, cjk = true}},')
     groups_lua = '\n'.join(group_entries)
 
     lua = f"""\
@@ -55,7 +68,7 @@ local config = {{}}
 
 config.font = wezterm.font("Hack")
 config.font_size = {font_size}
-config.initial_cols = 80
+config.initial_cols = 120
 config.initial_rows = {rows}
 config.window_decorations = "NONE"
 config.enable_tab_bar = false
@@ -79,13 +92,31 @@ local font_groups = {{
 
 wezterm.on('user-var-changed', function(window, pane, name, value)
     if name == 'font_group' then
-        local group = font_groups[value]
+        -- Value format: "group_name" or "group_name:cols;rows"
+        local group_key, cols, rows = value:match('^([^:]+):(%d+);(%d+)$')
+        if not group_key then
+            group_key = value
+        end
+        local group = font_groups[group_key]
         if group then
             local overrides = window:get_config_overrides() or {{}}
             overrides.font = group.font
             overrides.font_size = group.size
             overrides.treat_east_asian_ambiguous_width_as_wide = group.cjk or false
             window:set_config_overrides(overrides)
+            -- Resize window to target dimensions if specified.
+            -- Must compute pixel size from the NEW font metrics since
+            -- set_config_overrides changes cell dimensions.
+            if cols and rows then
+                cols = tonumber(cols)
+                rows = tonumber(rows)
+                -- At 96 DPI: cell_h = font_size * 96 / 72 (pt→px).
+                -- cell_ratio is height/width (2.0 for 8x16, 1.0 for 8x8).
+                local cell_h = math.ceil(group.size * 96.0 / 72.0)
+                local ratio = group.cell_ratio or 2.0
+                local cell_w = math.ceil(cell_h / ratio)
+                window:set_inner_size(cols * cell_w, rows * cell_h)
+            end
         end
     elseif name == 'redraw' then
         -- Force a repaint cycle.  On Xvfb the software renderer has

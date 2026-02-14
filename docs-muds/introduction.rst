@@ -54,7 +54,7 @@ Two popular open source actively developed clients,
 - tintin++ https://tintin.mudhalla.net/ - CLI interface
 
 Types of Servers
-----------------
+~~~~~~~~~~~~~~~~
 
 The term "MUD" is used loosely to describe many kinds of text-based multiplayer servers. They vary
 widely in purpose:
@@ -111,11 +111,10 @@ It was created by the author of the Python `telnetlib3 <https://telnetlib3.readt
 <https://telnetlib3.readthedocs.io/en/latest/guidebook.html#fingerprinting-client>`_ CLI to gather
 the results shown here.
 
-This list of MUDs was primarily sourced from the `lociterm.com <https://www.lociterm.com/>`_ and
-`mudstats.com <https://mudstats.com/>`_
+This list of MUDs was primarily sourced from `lociterm.com <https://www.lociterm.com/>`_.
 
 The file is hosted on Github and all scanning and documentation is automatic. Suggest a change to
-`bbslist.txt <https://github.com/jquast/modem.xyz/blob/master/mudlist.txt>`_ to
+`mudlist.txt <https://github.com/jquast/modem.xyz/blob/master/mudlist.txt>`_ to
 add or remove or fix an encoding as a pull request.  Feel free to suggest any other changes
 or fixes.
 
@@ -138,11 +137,10 @@ Exercises for the reader!
 
 - How do MUDs differ from text adventure games and `BBSs <https://bbs.modem.xyz/>`_?
 - Why is ASCII so common? Why are colors optional?
-- Why do MUDs often suggest using special clients?
-- How do MUD clients differ from BBS clients?
-- What kind of systems did MUDs run on and why is linemode preferred?
+- What kind of systems do MUDs run on and why is linemode preferred?
 - Why are MUDs popular with the visually impaired?
 - MUD clients offer scripting, what kind of tasks could you automate?
 - What popular games started with MUD codebases? Any famous game developers?
 - Sometimes games require customized clients, why?
 - Why are so few MUDs on the IANA_designated port 23?
+- How do MUD clients differ from BBS clients?

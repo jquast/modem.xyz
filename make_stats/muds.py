@@ -22,7 +22,7 @@ from make_stats.common import (
     _rst_escape, _strip_ansi, _is_garbled,
     _clean_log_line, _combine_banners, _has_encoding_issues,
     _banner_to_png, _banner_alt_text, _telnet_url,
-    init_renderer, close_renderer,
+    init_renderer, close_renderer, purge_failed_banners,
     _rst_heading, print_datatable,
     _group_shared_ip, _most_common_hostname,
     _clean_dir, deduplicate_servers,
@@ -1472,6 +1472,7 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
+    purge_failed_banners(BANNERS_PATH)
     init_renderer(columns=120, rows=100,
                   crt_effects=not getattr(args, 'no_crt_effects', False),
                   check_dupes=getattr(args, 'check_dupes', False))

@@ -130,14 +130,6 @@ def _set_user_var(name, value):
     os.write(1, f'\033]1337;SetUserVar={name}={b64}\007'.encode())
 
 
-def _resize_terminal(cols, rows):
-    """Resize the terminal via xterm CSI 8 escape.
-
-    :param cols: number of columns
-    :param rows: number of rows
-    """
-    os.write(1, f'\033[8;{rows};{cols}t'.encode())
-
 
 def main():
     data_pipe = sys.argv[1]
@@ -164,13 +156,16 @@ def main():
 
     _set_title(window_title)
 
-    # Mux mode: set font group user variable and resize terminal.
+    # Mux mode: set font group user variable (with optional resize).
     if font_group is not None:
-        _set_user_var('font_group', font_group)
-        _log(f'set user var font_group={font_group}')
-    if target_cols is not None and target_rows is not None:
-        _resize_terminal(target_cols, target_rows)
-        _log(f'resize to {target_cols}x{target_rows}')
+        if target_cols is not None and target_rows is not None:
+            _set_user_var('font_group',
+                          f'{font_group}:{target_cols};{target_rows}')
+            _log(f'set user var font_group={font_group} '
+                 f'resize={target_cols}x{target_rows}')
+        else:
+            _set_user_var('font_group', font_group)
+            _log(f'set user var font_group={font_group}')
 
     # Probe DSR before any banners — the terminal may need a moment to
     # initialize its PTY, so allow a generous timeout on the first try.
@@ -210,13 +205,8 @@ def main():
         # Thorough reset and clear.
         os.write(1, _CLEAR_SEQ)
 
-        # Restore terminal size after reset — undo any poison resize
-        # escapes from the previous banner.
-        if target_cols is not None and target_rows is not None:
-            _resize_terminal(target_cols, target_rows)
-
         # DSR barrier after reset: confirm the terminal processed the
-        # clear and resize before writing the new banner.
+        # clear before writing the new banner.
         if not _wait_for_cpr(timeout=3.0):
             _log(f'banner #{count}: post-reset DSR failed, continuing')
 

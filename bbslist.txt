@@ -2620,7 +2620,6 @@
 49.187.140.45 6502
 4dimensions.org 6000
 4fgs.com 23
-4tmu.aresmush.com 1930
 5.12.64.41 2323
 5.135.154.209 4000
 5.135.173.218 3041
@@ -2887,7 +2886,6 @@
 54.85.174.122 7575
 54.88.224.206 6767
 54.89.68.13 2002
-56kmajormud.servegame.com 23
 57.134.14.42 23
 58.6.27.130 1024
 58.7.137.41 2023
@@ -3216,7 +3214,6 @@
 69.9.139.14 23
 69.92.116.218 23
 69.95.180.108 23
-6Dragons.themuds.org 4100
 6d.quest 4100
 6ixremains.thecryingbeard.com 4201
 7.tcp.eu.ngrok.io 19468
@@ -4209,163 +4206,31 @@
 99.89.65.1 2002
 99.89.65.2 23
 99.98.69.67 23
-ANOTHERMUX.ORG 2860
-Actofwarmud.com 4000
-AlzamonsWorkplace.themuds.org 6666
-AmethystKingdom.themuds.org 7777
-ApocMud.org 4000
-AsYetUntitled.themuds.org 6666
-Ascendants.aresmush.com 4201
-AutreMonde.themuds.org 5555
-AwesomeTestMudV35234.themuds.org 6666
 BeOS.Retro-OS.live 23
-BigDamnMush.com 1777
-BlackDawn.themuds.org 1701
-BloodFallsMUSH.com 1984
-BlueberryGickContinuum.themuds.org 5555
-Boesia.themuds.org 5555
-BreakWorld.themuds.org 4000
-BugRunnerMud.themuds.org 8080
 CPMDEN.DDNS.NET 23
-ChaosReigns.themuds.org 6666
-ChaoticRealms.themuds.org 5555
-Cityofshadowsmux.com 2860
-CloudNine.themuds.org 5555
-Confluence.themuds.org 5555
-Consolation.themuds.org 6666
 Core.evilmog.io 4000
-CozySouls.themuds.org 5150
-CsillagKod.themuds.org 7777
-CyberSec.themuds.org 5555
-DarkePAIN.themuds.org 5959
-DeadSoulsBeldin.themuds.org 6666
-DeadSoulsBratwurst.themuds.org 6666
-DeadSoulsClmadmin.themuds.org 7777
-DeadSoulsCmattoon.themuds.org 6666
-DeadSoulsEndor.themuds.org 6666
-DeadSoulsFizban.themuds.org 6666
-DeadSoulsFlorian.themuds.org 6666
-DeadSoulsJade.themuds.org 6666
-DeadSoulsMourningstar.themuds.org 6666
-DeadSoulsPfez.themuds.org 3000
-DeadSoulsPyra.themuds.org 4000
-DeadSoulsSediket.themuds.org 6666
-DeadSoulsTetsuo.themuds.org 6666
-DeadSoulsTommy.themuds.org 6666
-DeadSoulsVonkeebler.themuds.org 6666
-DeadSoulsXixi.themuds.org 6666
-DeadSoulsZantor.themuds.org 6666
 DelusionsMUCK.com 4999
-DerbyMUD.themuds.org 4000
-DiskWorld.themuds.org 4400
-DrillingMUD.themuds.org 3333
 EmpireDirectory.net 3458
 Error1202bbs.DDns.net 1202
-Exandria.themuds.org 3000
-FalloutMUD.org 2222
-FantasticMud.themuds.org 6666
-FantasySpace.themuds.org 5555
-FerretMUD.themuds.org 5555
-FluffOSEyeOfTheWorld.themuds.org 4000
-GodWars-Legends.themuds.org 4123
-GronMUD.themuds.org 5555
-Hakkard.themuds.org 6666
-HeckMUD.themuds.org 5555
-Hgsmud.themuds.org 5555
-Homebound.themuds.org 5555
 ILLUSIONS.DUNE.NET 1234
-IllusoryOfTime.themuds.org 7000
-ImaginingStuff.themuds.org 1111
-Indigo.themuds.org 5555
-Insectoid.themuds.org 6339
-Insomnia3.themuds.org 4000
-IvyLand.themuds.org 5555
-KINGMUD.THEMUDS.ORG 5555
-KITTYMUD.THEMUDS.ORG 4000
-KingdomsOfLegend.themuds.org 3333
-Kombatmud.com 6969
-Kotaka.themuds.org 50000
-Lambda.moo.mud.org 8888
-LanguidDreams.themuds.org 6670
-Limbo.themuds.org 9000
-Liminus.themuds.org 4000
-LiquidDreams.themuds.org 5555
-Lore.themuds.org 1337
-LostCity.themuds.org 5555
-LostCraftReborn.themuds.org 6666
-LuminariMUD.com 4100
 MILDEW.ORG 4201
-Mtmud.themuds.org 5555
-MudSeatonserverCom.themuds.org 6666
-Muda.themuds.org 5555
-Mudcave.themuds.org 4100
-MyTestMUD.themuds.org 6666
 Mysticbbs.dynv6.net 2025
-Mysticism-mud.themuds.org 2023
-Navigate.themuds.org 2123
-NewMud.themuds.org 5555
-NewSalemTown.themuds.org 6666
 Nightfall.org 4242
-NotIlvandia.themuds.org 6666
-Novo.themuds.org 5555
-OasisMud.themuds.org 5555
-OcculteMUD.themuds.org 8010
-OilSlick.themuds.org 4000
-Omen.genesismuds.com 3190
-ParadigmMUD.themuds.org 5555
-Pentangled.themuds.org 3000
-PersonalUse.themuds.org 5555
-PokemorphParadise.aresmush.com 4201
-PowerStruggleMUD.themuds.org 4060
-Prosperus.themuds.org 6670
 PublicAccess.Club 8888
-RadiantHeartMUSH.com 7777
-RavensTestMUD.themuds.org 6767
-RayzerMUD.themuds.org 5555
 ReseauRetro.org 23
-Resurgence.themuds.org 3000
-RoD.themuds.org 3000
-RobothamMUD.themuds.org 5555
 Satellite4.dynu.net 6400
-SenitanOnline.themuds.org 6666
-SingularisMUD.themuds.org 8111
-SombrasDoTempo.themuds.org 7777
-SunlessSeas.themuds.org 5555
-SwashbockleMUD.themuds.org 23
 TW2002CD.DDNS.NET 2002
 Tdome.NukeFire.org 4000
-TheBrassRing.themuds.org 2150
 TheDen.Angel-Hare.com 8888
-TheOpenDoor.themuds.org 5555
-TimCoffee.themuds.org 5555
-TimeSpaceDreamland.themuds.org 5500
-TomeOfTrials.themuds.org 5555
 Tp.org 9999
-TrueWorldOnline.themuds.org 6666
-Tsc.themuds.org 4000
 Turiel.kydance.net 6669
 UNItopia.DE 4444
-UberMud.themuds.org 5555
-UnnamedCoffeeMUD629906382.themuds.org 5555
-VARYN.THEMUDS.ORG 5555
-WayPoint.themuds.org 5555
-WileyMUD.themuds.org 3000
-WorldOfDestruction.themuds.org 5555
-WorldOfDestruction2.themuds.org 4646
-WorldsOfWonder.themuds.org 2500
-WowMUD.themuds.org 5555
 WyseGuyBBS.mywire.org 2300
-YOURMUDSNAMEHERE.THEMUDS.ORG 8040
-Yhmud.themuds.org 5566
-YourMUDName.themuds.org 5555
-YourMothersMUDPi.themuds.org 5555
 ZeroSum.synchro.net 23
 a-net.online 23 utf-8
 a-net.online 513 utf-8
 a1bbs.ddns.net 23
 a320.the-cake-is-a-lie.com 23
-aarchonmud.com 7000
-aardmud.org 23
 abandoned.org 4444
 abandonedcodex.net 4000
 abandonedrealms.com 9000
@@ -4375,7 +4240,6 @@ aber.ludd.ltu.se 6715
 abnormalserver.dyndns.org 8087
 absinthebbs.net 1940 topaz
 absolute.spod.org 6250
-absolution.aresmush.com 4201
 abutre.no-ip.org 2323
 ace.crc1.net 23
 acentauribbs.no-ip.org 2424 utf-8
@@ -4384,19 +4248,12 @@ acmebbs.ddns.net 7788
 acropolis.techforward.it 5500
 adaka.internet-box.ch 5555
 adambbs.servebbs.org 6400
-addictmud.org 4000
 adeptbbs.com 23
-aderonmud.genesismuds.com 3200
 adibbs.sytes.net 6800
-admud.com 1999
-adults.mushpark.com 6969
-adventmud.funcity.org 8310
 adventuresweb.com 2323
 aelandris.org 4000
 aelfhame.net 1999
-aeros.themuds.org 6666
 aethar.us.to 4000
-aether.aresmush.com 4201
 aether.cybercitizen.net 7505
 aetolia.com 23
 aeug.asuscomm.com 8888 big5
@@ -4410,15 +4267,11 @@ ageoflegacy.com 3000
 ageoflegends.com 6010
 ah-bbs.com 2333
 ahealthytheorem.com 7410
-aimux.dune.net 7277
 akanbar.com 23
-al.mud.de 31415
 aladon.sovintel.ru 9000
 alamobbs.mywire.org 6400
-alcatraz.wolfpaw.net 8000
 alcatrazbbs.ddns.net 9000
 alco.bbs.io 23 topaz
-aldebaran-mud.de 2000
 alephbbs.com 2626
 alfandria.net 8888
 alg.dune.net 4405
@@ -4464,29 +4317,22 @@ ancientmists.vineyard.haus 1538
 andcycle.idv.tw 23 big5
 andr01d.zapto.org 9999
 androidcity.retro-os.live 513
-angelic.genesismuds.com 7705
 angstridden.net 1337
 animaexmachina.sytes.net 6023
 animemuck.org 2035
 animeplanet.co 3334
-animud.net 6667
 another.tel 23
 anotherbbs.dynu.net 1337
 ansalon.net 8679
-ansiblemoo.org 6000
 ansun.synchro.net 1024
 antidote.triad.se 64128
-anw.aresmush.com 3030
 anybox.freedyndns.de 23 utf-8
-aod.genesismuds.com 23
-aoh.genesismuds.com 6969
 aoh.zitz.dk 2345
 aor.retroarchive.org 23 petscii
 apernevan.tk 23
 apocalypse6.com 6000
 ar.squeep.com 8888
 arantha.net 4000
-aranylaz.mud.hu 4321
 arcadia.silvertree.org 1338
 arcanenites.com 7000
 arcanetides.net 7000
@@ -4500,7 +4346,6 @@ argent.jiffyscript.com 6715
 argenx.kozow.com 23
 ariana.synchro.net 23
 arkadia.rpg.pl 23
-arkadiamud.com.br 2442
 arkangel.benem.it 6667
 armageddon.org 4050
 armageddonbbs.net 7777
@@ -4510,17 +4355,10 @@ asanocomp.ddns.net 2300 utf-8
 ascensionsojourns.com 7423
 ascii.dynu.net 4096
 asciiattic.com 23
-asgard.aardmud.org 5454
 ashendust.com 2569
 ashlands.com 23
-ashyriamud.com 1111
 asimov.servebbs.net 23
-asm.genesismuds.com 9999
 asphodel.world 23
-astariamud.com 5000
-asteriamud.com 1111
-astonishingtales.aresmush.com 7777
-astro.astromud.net 2447
 atari-bbs.zapto.org 8888 atascii 80 tall
 atari8.us 10001 atascii
 ataribbs.ddns.net 6502 atascii
@@ -4531,11 +4369,9 @@ athena.atcity.org 23
 atl.ddns.net 6400 petscii
 atl.ddns.net 6401
 atlantis.exventure.world 5555
-atlantis.mushpark.com 7777
 atlantisbbs.dyndns.org 2600
 atombbs.zapto.org 23
 atp.pedia.szote.u-szeged.hu 3500
-ats.trekmush.org 1701
 aturiondynasty.hopto.org 4444
 aubbs.zapto.org 2300
 aubbs.zapto.org or aubbs.dyndns.org 2300 petscii
@@ -4543,13 +4379,10 @@ auntiebodies.dyndns.org 2324
 aurorabbs.ddns.net 5000
 autodiscover.justindube.co 23
 avalon-rpg.com 23
-avalon.mud.de 7777
 avalonisle.ddns.net 6400
 avastbbs.servegame.com 23 cp437 80 tall
 avatar.outland.org 3000
 avendar.net 9999
-avpmud.com 4000
-awakemud.com 4000
 awakenedworlds.net 4000
 awesome.fredslev.net 6969
 aws1.fmerino.com.br 23 utf-8
@@ -4560,26 +4393,20 @@ backintime.ddns.net 6510
 backrooms.net 4000
 backwater.servebbs.com 6400 petscii
 badlandschronicles.com 4000
-badtripmud.com 7778
 baffa.zapto.org 2323
 bahama.site 23
 bakhara.org 4000
 balderdash.su 9000
 balloon.tel 55123
 baltimore.bbs.compuserv.org 2300
-bardo.aresmush.com 4201
-barren.barrenrealmsmud.com 8000
 basement.dangerrocket.net 42069
 basement.isurf.ca 23
 basement.synchro.net 23
 basementbbs.ddns.net 9000 atascii
-bastard.mud.hu 2222
-batmud.bat.org 23
 battlestar3.dyndns.org 2400
 battlestarbbs.dyndns.org 1024
 bawks.org 9000
 bay.jayscafe.net 6401
-baymoo.org 8888
 bayvillewireless.com 23
 bbbbs.synchronetbbs.org 23
 bbbs.net 23
@@ -4600,7 +4427,6 @@ bbs.8bitsaturdaynight.com 8888
 bbs.8yo.biz 5150
 bbs.9gamers.com 23
 bbs.Barringer.org 23
-bbs.ClassicMUD.com 2323
 bbs.a2k4.com 23
 bbs.abbadabba.tech 4242
 bbs.abon.us 513 utf-8
@@ -4945,7 +4771,6 @@ bbs.ramifications.ca 5128
 bbs.razorsdomain.com 23230
 bbs.rdpstudio.top 23
 bbs.red-green.com 23
-bbs.redmudbbs.com 23
 bbs.redneckhost.com 23
 bbs.renegade.gr 23
 bbs.retro32.com 1337 topaz
@@ -5122,12 +4947,9 @@ bdn.wrgnbr.com 6428
 bdsm.ftp.sh 23
 beaumont.software 23
 beckon.vineyard.haus 6666
-bedlam.mudportal.com 9000
 beeble-one.com 8888
 beebs.ddns.net 6502
-beforethering.aresmush.com 2026
 beggarscyn.com 23
-belameephus.mudmagic.com 1220
 bentoboxbbs.com 23
 berobbs.ddns.net 23
 beryl.h-o-soft.com 2323 shift-jis
@@ -5146,7 +4968,6 @@ binkd.rima.ie 23
 bitbrain.life 23
 bitwoods.duckdns.org 23
 biyg.org 1801
-bl.mud.at 5678
 blackboardbbs.net 23
 blackf.synchro.net 2002
 blackfire.online 4000
@@ -5156,7 +4977,6 @@ blackflag.acid.org 27
 blackhouse.synchronetbbs.org 23
 blackice.bbsindex.de 23 latin-1
 blacklodge.fsxnet.nz 4023
-blackmud.com 2000
 blackorb-bbs.ddns.net 6400 petscii
 blackorb.mynetgear.com 6400 petscii
 blackriflebbs.synchronetbbs.org 23
@@ -5180,26 +5000,19 @@ box.imzadi.de 23 utf-8
 bpc.jayscafe.net 6402 petscii
 brainsuxxinc.ddns.net 23
 braintoys.org 23
-brakebills.aresmush.com 4201
 brazi.net 23 utf-8
-brazilmux.tinymux.org 2860
 brbbs.ddns.net 2323
 bridge.vkradio.com 23
 brigandine.org 9390
 briskphone.duckdns.org 23
 british-legends.com 27750
-brokenwindows.aresmush.com 4201
 broperators.com 1025
 browncoats.avygames.net 4201
 brunowcomputing.space 23
 bruschetta.cc 1337
-brutusmud.net 4444
 bs2.io 23
 bstorm.synchro.net 23
-btmux.com 3065
 bttfbbs.com 23
-btvos.wolfpaw.net 9000
-buffy.mush-rp.com 1997
 bulletinboard.systems 23
 bumgun.club 23
 bunkerbbs.synchronetbbs.org 23
@@ -5207,7 +5020,6 @@ bunkicenter.net 7979
 bunnybbs.tw 23 big5
 burbs.org 4567
 burningchrome.net 2323
-burningmud.com 4000
 business-test.ddns.net 23
 butthead.ddns.net 23
 bwrbbs.ddns.net 23 utf-8
@@ -5244,12 +5056,10 @@ castlearcanum.com 3888
 castlehqbbs.us 6400 petscii
 catch22.zapto.org 24
 catsclawbbs.sytes.net 23 petscii
-catworld.muds.tw 23
 caughtinadream.com 23
 cave.extricate.org 4000
 cavebbs.homeip.net 23 utf-8 80 tall
 cavemuck.jameslick.com 2283
-cavemush.com 6116
 cb-sc.com 5678
 cbbs.mitsaltair.com 8800
 cbliss.synchro.net 23
@@ -5270,7 +5080,6 @@ centralontarioremote.net 23
 centralperk.us 2323
 ceph.synchronetbbs.org 23
 cfbbs.net 23
-championsmush.com 6363
 chaos.caile.org 4201
 chaos2.ddns.net 23
 chaosmuck.no-ip.com 3333
@@ -5278,9 +5087,7 @@ chaotix.ddns.net 2323
 charis.servegame.com 4242
 chat.korokorok.com 2323
 chat.mywebcommunity.net 23
-chatmud.com 7777
 cheeseworld.wtf 3000
-cheesymud.com 4001
 chimia.se 2323 utf-8
 chingon.araknet.xyz 31337
 chinwag.leenooks.net 10023
@@ -5299,18 +5106,14 @@ cib.dyndns.org 6407 petscii
 cib.dyndns.org 6491 petscii
 citadel.dc540.org 23230
 citadel64.thejlab.com 6400
-cityofglass.aresmush.com 4201
-cityofhope.genesismuds.com 8888
 cjsplace.thruhere.net 2002
 cjsplace.thruhere.net 23 utf-8
-ckmud.com 8500
 clam.ml 23
 clark-home.com 23
 claudes.lovelybits.org 23
 cleftofdimension.com 9000
 cleftofdimensions.net 4354
 clhs.csie.org 23
-client.addemud.net 5000
 clok.contrarium.net 4000
 cloud.kanskje.com 23 utf-8
 cloud.matthewlezcano.com 23
@@ -5322,8 +5125,6 @@ coa.servegame.com 23
 coalfieldsbbs.ddns.net 23
 cocosbbs.fsxnet.nz 50600
 coderedbbs.dyndns.org 2323
-coderedmud.servegame.com 2323
-coffeemud.net 23
 coffron.zapto.org 99
 cogg.contrarium.net 4001
 cogitators.net 23
@@ -5337,28 +5138,23 @@ commodore4everbbs.dynu.net 6400
 commodorereloaded.servebbs.com 23 petscii
 commodoreserver.com 1541 petscii
 commodoreworld.servebbs.net 23 petscii
-commondescentmush.com 1859
 comms.hackerheaven.org 23
 commtower.ddns.net 6400 petscii
 community.netvillage.com 23
 compufuck.xyz 23
 conchaos.synchro.net 2002
 conchaos.synchro.net 23 utf-8
-concordiamu.aresmush.com 4201
 concreteroots.servebbs.org 23
 condor.rorscha.ch 1234 utf-8
 connect.mu-gateway.net 6700
-connect.qmud.org 5000
 connect.rayzer.net 2112
 connect.serionbbs.com 23
-continentsmud.com 5050
 convoid.synchro.net 23
 convolution.us 23 utf-8
 conxtor.fsxnet.nz 23
 coolbluebbs.com 23
 coprolytebbs.duckdns.org 2323
 coralsprings.silvertree.org 1510
-coremud.org 6000
 corpexpanse.com 7117
 corsysystem.org 2300
 cosmicrage.earth 7777 cp437 80 tall
@@ -5379,15 +5175,11 @@ crazytermbbs.dyndns.org 6400 petscii
 crazyworldbbs.com 2323 utf-8
 crcwn.online 23
 crisisbbs.net 23 utf-8
-criterionmud.net 3999
 crowsnestbbs.ddns.net 6400
 crunchers-twgs.com 2002
 cryosphere.net 6666
-crystalmush.kydance.net 6886
-crystalsprings.aresmush.com 2064
 csbbs.dyndns.org 23 utf-8
 cscnet1.net 2002
-cthulhumud.com 8889
 cubanbar.hochstenbach.net 1234
 cuendillar.org 7200
 culturalwasteland.tv 4000
@@ -5427,11 +5219,9 @@ darkerwind.org 3001
 darkforce-bbs.dyndns.org 1040
 darkforcesbbs.dyndns.org 2200
 darkgame.buanzo.org 23
-darkgift.mushpark.com 6251
 darklevel.hopto.org 64128
 darklord.evils.in 9100
 darklord.no 5000
-darklordmud.duckdns.org 5000
 darkmatt.synchro.net 23
 darkmetal2039.com 2039
 darkmists.org 2222
@@ -5442,7 +5232,6 @@ darksidebbs.com 23
 darkstar.bmxjo.org 2023
 darkwind.org 3000
 darkwood.ddns.net 23
-dartmud.com 2525
 datanetbbs.net 23
 datas-lab.nl 23
 datenbahn.dd-dns.de 33
@@ -5451,19 +5240,14 @@ datotal.net 35723 utf-8
 davesbbs.com 2002
 daviddgtntshouse.tk 23
 dawn.rplay.net 8000
-dawnbe.genesismuds.com 3448
-dawnmud.com 3000
 dawnofchaos.vineyard.haus 2024
 daystrom.trekfan.org 23
 dazexy.synology.me 52323 utf-8
 db.weirdlooking.com 4000
 db4g.com 2323
-dbat.mushhaven.com 1280
 dbbs.dejacraft.uk 23
 dbinfinity.bounceme.net 4000
 dbn.servebeer.com 6400
-dbnumud.com 4321
-dbt.mudhaven.net 2500
 dbzcr.funcity.org 7000
 dbzfe.com 4000
 dcastle.org 6666
@@ -5471,14 +5255,11 @@ dcbbs.synchro.net 2323
 dd4.webredirect.org 8888
 dden.discordia.org 2222
 ddreams.synchro.net 23 utf-8
-de.themud.org 1234
 dead-souls.net 6666
 deadinternet.synchronetbbs.org 23 utf-8
 deadofnight.org 5000
 deathcult.today 7667
-deathrisingmud.com 7500
 deathrow.servebbs.org 1001
-debomud.org 4000
 decades.freeddns.org 6401
 deckersheaven.com 23
 deepertrouble.org 4242
@@ -5495,16 +5276,12 @@ denofiniquity.caltrops.com 23
 dept47.bbses.info 2323
 derelicts.org 23
 desolation.org 7878
-dev.dunemud.net 4242
-devilsdue.aresmush.com 1203
 dfbbs.zapto.org 64128 petscii
 dforces.servegame.com 5000
 dgu.strangled.net 23
 dhbbs.org 23
-dhmud.org 8989
 dhxy.info 23 gbk
 dial-up 6400 petscii
-dibrovamud.com 9000
 dibz.synchro.net 1023
 diesiraemu.com 4201
 digdist.synchro.net 23 utf-8
@@ -5523,37 +5300,23 @@ dirtyske.koumbit.net 23
 disboardia.net 2323
 discordia.nevermind.com 4201
 discworld.atuin.net 4242
-discworld.mush.website 8888
 diskhopp.synchro.net 23
-disquiet.aresmush.com 4201
 djdave.uk 8088
-dkmush.cyou 6250
 dl2.net 4000
 dnd.desolation.org 4201
-doa-sector.aresmush.com 4201
 dogebbs.org 2002
-doomsday.themuds.org 7000
 doozy.thruhere.net 23 utf-8
 dose.0wnz.at 23
 dott.synchro.net 2424
-down.moo.midgard.org 8888
 downlinkbbs.com 2323
-downmoo.sloth.org 8888
 doybbs.synchro.net 230
 dpreturns.com 6969
-dragon.abermud.net 6715
 dragon.vk3heg.net 6800 topaz
-dragonage.pocketmud.com 5555
-dragonballrevolt.genesismuds.com 6969
 dragonbyte.online 23
-dragonfiremud.com 1999
-dragonflydreams.aresmush.com 4201
 dragonrealm.info 5050
 dragonsera.servegame.com 7777
 dragonseyebbs.dyndns.org 6400 petscii
 dragonslairbbs.joyrex.net 2323
-dragonstone.mudmagic.com 2345
-dragonswordsmud.com 1234
 drakeboy.tplinkdns.com 23
 drakkos.co.uk 6789
 dreambuilders.fros.com 6800
@@ -5563,17 +5326,13 @@ dreamscapes.dyn.dhs.org 4500
 driftbbs.ddns.net 23
 drigon.com 4101
 drpepper.dns-dynamic.net 2002
-drygulch.aresmush.com 4201
 ds.enyc.org.uk 8688
 ds.vineyard.haus 2345
-dsl-mud.org 4000
-dsmush.com 4000
 dswonderland.com 6969
 dtalon.ddns.net 8088
 ducksnest.guru 23
 dum.acc.umu.se 2001
 dumuzi.lykaina.com 23 utf-8
-dunemud.net 6789
 dungeon.name 20020
 dungeon.rm-o.com 5555
 dungeon.synchro.net 23
@@ -5600,25 +5359,18 @@ eisner.decus.org 23
 eldritchclockwork.net 23
 electrodrome.duckdns.org 23
 elephant.org 23
-elessar.mudhosting.net 7778
 elitebbs.dynu.net 23 petscii
 eliteusa.ddns.net 4000
 eljaco.se 23
-elseverse.aresmush.com 4201
-elusive.genesismuds.com 8800
 elven.madarch.org 6715
 elveszettvilag.hu 6666
 elvindir.com 4000
 elysium-rpg.com 7777
 elysium.vineyard.haus 3337
 emcommny.synchro.net 23
-emeralddreammush.com 5001
 emisle.com 5000
 emperia.org 5002
-empiremud.net 4000
-empiremush.org 4000
 ems-bbs.com 2002
-en.mudmagic.com 9009
 endenskeep.com 4000
 endlesschaos.dyndns.org 6400 petscii
 endofthelinebbs.com 23 utf-8
@@ -5627,46 +5379,35 @@ enhasa.404.mn 4100
 eniacv2.net 1337
 enigma-bbs.com 23 utf-8
 enlight.hopto.org 6400
-ensimud.net 4500
 enterprisebbs.ddns.net 1701
-eoemud.com 8888
 eotl.org 2010
-eotmud.com 4000
 eow.lol 2377
 epitaphonline.co.uk 6789
 equestria.kaitain.org 2700
 equestrinet.gloomyjdsystems.com 23
 erevos.ddns.net 23
-erimand.pocketmud.com 5555
-erionmud.com 1234
 error404bbs.ddns.net 24
 error404bbs.ddns.net 404 utf-8
 error404bbs.ddns.net 513
-escape.wolfpaw.net 2020
 esh.mugames.org 7000
 et.flynsarmy.com 9000
 eternaldarkness.net 9700
 eternalfantasy.org 3333
 eternalforest.net 9000
-eternitymud.com 23
 ethernetgateway.com 23
 euklid.ddns.net 5745 utf-8
 euler.vcsu.edu 7777
-euphoria.mudinfo.net 8888
-euphoriamush.com 2020
 euts.org 1998
 everdark.org 3000
 everwar.dune.net 4000
 evil.xibo.com 4201
 evilseedsgrownaturally.com 23
-evolution.mudhosting.net 1874
 excelsior.troll20.com 4201
 excelsiorbbs.ddns.net 2000
 exchangebbs.com 38400
 exciter.ws 2002
 exeonline.synology.me 23
 exigenesis.net 4201
-exilemud.com 4000
 exoplanetbbs.net 23
 exoticabbs.com 8888
 ezra.digisurf.net 23
@@ -5676,7 +5417,6 @@ f290.bbsystem.org 23
 f500.zxy.spb.ru 23
 fabbes.se 23
 fadingblack.net 23
-faerun.d20mud.com 3100
 fafner.dyndns.org 23
 faibanx.lavadomefive.com 8888
 familybbs.ddns.net 23
@@ -5686,7 +5426,6 @@ farplane.net 23
 fatcatsbbs.com 23 utf-8
 fatebound.com 4000
 fatedtoend.com 4000
-fatemud.com 7004
 fateoftherepublic.com 1313
 fatesharvest.com 6464
 fdd.one 23
@@ -5699,7 +5438,6 @@ fenix.ne.jp 23
 fenric.muppetwhore.net 23
 feorar.org 23
 ferchobbs.ddns.net 2323 latin-1
-ff.mud.de 7600
 fgisc.org 23
 fh.aoh.se 4000
 fibs.com 4321
@@ -5709,7 +5447,6 @@ fido.beholderbbs.org 23
 fido.fidobbs.it 2301
 fido2.kofobbs.net 23
 fidobbs.mrak.at 23
-fierymud.org 4000
 fiftyfeetsmall.com 23
 filecabi.casacam.net 1025
 filegate.net 2030
@@ -5718,7 +5455,6 @@ final-zone.net 23
 firan.legendary.org 5000
 fire.hal.varese.it 23
 fireballex.com 23
-firefly-stillflyin.aresmush.com 2517
 fireflybbs.ddns.net 23
 firenetbbs.us 23
 firesidebbs.com 23231 utf-8
@@ -5728,10 +5464,8 @@ fix.no 24
 flailingbbs.synchronetbbs.org 23
 flamingotenders.com 23
 flashbackbbs.sytes.net 6502 utf-8
-fleamuds.fr.cr 4500
 flee.fsxnet.nz 2323
 flexiblesurvival.com 2000
-floodmoo.com 4000
 flower.sytes.net 31337
 fluffmuck.org 8888
 fluffy.center 23
@@ -5741,14 +5475,12 @@ fmrl.throwbackbbs.com 2324
 fodbbs.dyndns.org 6502
 fodi.bounceme.net 6400
 fodim.bounceme.net 6400 petscii
-foomoo.org 4500
 foremxebbs.ddns.net 9999 atascii
 forgottenkingdoms.org 4000
 fortbenavidez.net 23
 fortsackville.com 2005
 forum.talbot.audio 11223
 forze.opicron.eu 23
-fosmud.com 4000
 foundlingtf.com 4201
 fqbbs.synchro.net 23 utf-8
 fr.hyssing.net 4001
@@ -5767,7 +5499,6 @@ frieltek.com 2023
 frontierbbs.co.uk 23 utf-8
 frontierbbs.net 23
 frontiers.dotoran.com 9892
-frostmud.com 7777
 frugalbbs.com 513
 fruity.turbit.eu 23
 ft.furtoonia.net 9999
@@ -5785,33 +5516,21 @@ futureland.today 2323
 fw2.cnetbbs.net 6800 topaz
 g-point.tunk.org 500
 galacticexplorers.servegame.com 22002
-galaxy.silvren.com 1689
 galaxy74bbs.com 23 utf-8
 galaxybbs.net 23 utf-8
-galds.themuds.org 6666
 gallaxial.com 23
 game.a-net-online.lol 2002
 game.a-net-online.lol 2112
 game.a-net-online.lol 513 utf-8
 game.eaxia.com 347
 game.guncho.com 4108
-game.labmud.com 4000
-game.liberationmush.site 2020
 game.mortalrealms.com 4321
-game.mudhosting.net 4000
-game.mudlast.ru 2700
-game.petriamud.com 6600
 game.phxrising.org 1701
-game.roninmud.org 5000
 game.second-contract.com 6666
 game.shatteredisles.net 5900
 game.starwarsrebirth.com 9999
 game.tempestseason.com 6000
-game.theafterlifemud.com 7777
-game.thejunglemud.com 7000
-game.towersmux.net 4201
 game.tw2002.net 23
-game.wotmud.org 2224
 gameblipsbbs.tplinkdns.com 2323
 gamemastersrealm.com 2112
 gamenet.synchronetbbs.org 23 utf-8
@@ -5821,8 +5540,6 @@ games.world.co.uk 23
 gameserver.planettradewars.com 23
 gamewithzombies.com 4201
 gapbbs.rdfig.net 23
-garoumush.org 7000
-gatewaymud.org 6969
 gathering.org.uk 5000
 gatofuego.synchronetbbs.org 23
 gaulven.com 2002
@@ -5833,35 +5550,24 @@ gcomm.com 23
 geas.de 3333
 geekcafe.xyz 23
 geminibbs.dyndns.org 2700
-genericmud.com 4000
 geniv.dyndns.org 150
 geniv.dyndns.org 23 utf-8
 geno.org 2222
 geo.synchro.net 1024
 ghostbbs.hopto.org 2023
-ghostbusterslibrary.aresmush.com 4201
 ghostdansing.ddns.net 23
 ginkosoft.com 8898
 gizmo4487.dev 23
-gizmomud.com 6969
-glitchmush.com 4201
 glitchtech.top 23 utf-8
 globalchaosbbs.com 23
-glorantha.pocketmud.com 23
-gnsmud.org 8989
-godwars.net 1111
 godwars2.org 3000
-goldencrane.aresmush.com 4201
-goldenroad.mudhosting.net 4201
 goldminedoors.com 2513
 gomers.synchronetbbs.org 23
-goodevil.aresmush.com 1066
 goofsgarage.com 6464
 gopher.su 1234
 grapenut.org 4201
 graveyardbbs.com 23
 gray-harbor.com 4201
-greatermud.com 23
 greedisland.servegame.com 4000
 greywolf.synchro.net 23
 gridlock.synchronetbbs.org 23 utf-8
@@ -5877,10 +5583,8 @@ gtc.synchronetbbs.org 513
 guardian.synchro.net 23
 gubby.letsneverdie.net 4000
 guis.es 23
-gundam.aresmush.com 4201
 gurth.ddns.net 2002
 gusto-bbs.com 23
-h2h.pocketmud.com 23
 habbnn.com 23
 haciend.com 8821
 hades-talker.org 6660
@@ -5893,11 +5597,9 @@ hamshack.synchro.net 23 utf-8
 happylandbbs.com 11892
 happylnd.synchro.net 23
 harmless.us.to 23
-harvestmoons.aresmush.com 4000
 hash.obsqra.xyz 23
 hatedreality.homeunix.net 23
 haven.enyc.org.uk 7777
-haven.havenmud.com 4000
 havenrpg.net 3000
 havens.synchro.net 23
 hayseed.net 7777
@@ -5909,23 +5611,16 @@ heavybbs.ddns.net 23
 heightsbbs.heightspc.net 6860 petscii
 hellabbs.com 23
 hellbridge.com 4505
-hellmoo.org 7777
 hemisphere.baselinux.net 2323
 herbies-bbs.ddns.net 23
 herbies-bbs.ddns.net 2323
 herbies-bbs.ddns.net 2424 utf-8
-hercmud.net 3000
 hercules.mthelicon.com 8888
-herm-worldmush.silvertree.org 3337
 hermes.okyler.com 23 utf-8
-heroesassemble.mushhaven.com 3000
-heromux.com 9999
 herp.derp.org.org.za 23
 hexahedron.dynv6.net 5500
 hexedbbs.com 23999
 hhbbs.ddns.net 9000
-hiddendimensions.aresmush.com 4201
-hiddenworldsmud.com 4040
 hiervard.ru 4000
 highdesertbbs.ddns.net 6400
 highsocietybbs.com 23
@@ -5933,10 +5628,8 @@ hobbylinebbs.com 23
 hobbyspace.ddns.net 23 utf-8
 holomuck.org 5757
 home.bsrealm.net 23
-home.starmud.com 4000
 home.winserver.com 23
 hopeisland.net 1024
-horizon.aresmush.com 1138
 horizons-rpg.dynu.com 4242
 horrormu.com 1880
 hot-mess.net 9900
@@ -5955,7 +5648,6 @@ https://connect2400.com 443 petscii
 hub.chivanet.org 23
 hub.fidonet.network 23
 hurricanebbs.dynu.net 6401 petscii
-hvmush.com 1975
 hw2k.com 23
 hyperborea.net 2000
 hypernode.ddns.net 23
@@ -5963,43 +5655,31 @@ ibbs.ucann2.net 23
 iberia.jdai.pt 5900
 ice.cold.org 1138
 icesus.org 4000
-icewindmud.org 2021
 iconoclast.org 7777
 idomain.synchro.net 23
-ifmud.port4000.com 4000
 ignitionbbs.com 23
-igormud.org 1701
 igs.joyjoy.net 6969
 ill2000.synchronetbbs.org 23
 illusionforge.rocks 6400 petscii
-imagine.aresmush.com 1338
 imperial.modeemi.fi 6969
 imperian.com 23
-imperium.genesismuds.com 40000
-imud.fluffos.info 1701
 india.colorado.edu 13
-indirestraits.themuds.org 6666
 inferno.optiquest.org 7777
-infiniteadventuresmush.com 2022
 infinitespacebbs.ddns.net 23
-infinitymud.com 4242
 infonet-bbs.rclabs.com.br 2323
 inhahe.dynu.net 23
 inheritancegambit.com 2099
 innercircle.vineyard.haus 7500
 innercirclebbs.com 23 petscii
 innerrealmbbs.us 2323
-insomnia-mud.com 4000
 insomnia.synchronetbbs.org 23 utf-8
 insomniacs.got-game.org 7000
-insomniacshideout.pocketmud.com 5555
 insymnia.com 6600
 interim.silvertree.org 4321
 internalaffairsbbs.com 23
 interstellarimperia.com 4201
 interzone.annexia.xyz 2002
 intranet.fites.net 23
-intrepidmud.com 4020
 ipiss.rocks 7155
 irata.online 6502
 ircbbs.ddns.net 5023
@@ -6008,11 +5688,9 @@ irvingfamily.net 23
 isengard.nazgul.com 4040
 ishar.com 9999
 islandsofmyth.org 3000
-islesmud.org 3232
 itcbbs.ddns.net 23000
 itchybutt.net 8888
 itchybutt.org 6502 petscii
-ithirMUSH.org 4000
 iutopia.duckdns.org 2023
 iwilf.synchro.net 23
 ixworx.nl 23
@@ -6021,7 +5699,6 @@ jabbergames.ru 5678
 jamesmauler.net 23
 jasonhan.xen.prgmr.com 23
 javatrek.org 1764
-jedimud.net 4000
 jenandcal.familyds.org 2323
 jerrykuhn.net 23
 jhalt.ddns.net 23
@@ -6038,7 +5715,6 @@ junglebbs.com 23
 jupiter.bbs.io 23 utf-8
 jupiter.iamyourgod.org 3169
 k0jebish.synchro.net 23
-kallistimud.com 4000
 kantele.dev 4455
 kbs-cloud.com 4000
 kd8rev.net 23
@@ -6047,34 +5723,25 @@ kenlinx.net 23
 kernelfortress.org 23
 kerovnia.com 1984
 keur.demon.nl 4000
-keys.aresmush.com 4201
 kf4yey.com 23
 kf5qeo.servebbs.net 23
 kf5qeo.synchronetbbs.org 23
 kia.synchro.net 23 utf-8
-kidmud.kidpub.com 7777
-killer-mud.pl 3003
 killgodwithachainsaw.top 7666
 kingdoms.bithir.co.uk 1812
 kitsumuck.com 8888
 kk4qbn.com 23
 kk4qbn.synchro.net 23 utf-8
 klud.ge 23
-kludgemush.com 10321
 kneesurgery.moe 23
-kobramud.org 1138
-kota.genesismuds.com 1440
 kotl.org 2221
 kove.hollyfeld.org 6715
 kraaby.synchro.net 23 utf-8
 krco.synchronetbbs.org 513
 krion.io 1337
-krynn.d20mud.com 4300
 ktbbs.hanzou.jp 11123
 kuehlbox.wtf 23
 kycor.org 3250
-la2043.aresmush.com 4201
-labmush.mushpark.com 3939
 lac.pl 4000
 lakehouse.lilpenguins.com 2333 utf-8
 lament.ghostglass.net 8181
@@ -6086,7 +5753,6 @@ lapa.tw 23
 last-outpost.com 4000
 lastrangers.com 23 utf-8
 latenight.diversidial.com 313
-latitude.muck.ca 23
 laurel.indstate.edu 2150
 ldbbs.synchro.net 513
 leagueofcommodore.ddns.net 6401
@@ -6111,14 +5777,11 @@ lions.cs.ndsu.nodak.edu 7777
 lionsden.synchronetbbs.org 23
 liquiddreamz.ddns.net 2023
 lisdude.com 8888
-lishmud.com 9002
 lit.klfree.cz 7680
 literature.twbbs.io 23 big5
 littlebobbytables.org 23
-live.darkemud.com 5559
 livewirebbs.com 1025 utf-8
 lkynrd73.synchro.net 148
-lnl.aresmush.com 4201
 localyocalbbs.com 23
 locbbs.ddns.net 6400
 lofac.mintyfresh.love 23 utf-8
@@ -6127,13 +5790,11 @@ lofi.ooo 23
 lofi.rip 23
 login.ibiblio.org 2895
 login.snoconebbs.com 23
-lolamud.net 6969
 lombbs.dyndns.org 23
 loo.vineyard.haus 7000
 looneybinbbs.com 2023 utf-8
 lopht.hexedbbs.com 1337
 lord.stabs.org 23
-lorenmud.com 9100
 lost.wishes.net 5555
 lostcity.synchronetbbs.org 23
 lostcryp.synchro.net 23
@@ -6146,7 +5807,6 @@ lostworries.duckdns.org 2303
 lotw.mywire.org 2323
 lovelybits.org 1337
 lovelybits.org 513
-lpcdb.themuds.org 4000
 lu1dso.synchronetbbs.org 23
 lu8fjh-c64.ddns.net 6400
 lu8fjh-image.ddns.net 6400
@@ -6156,14 +5816,12 @@ lunatic.synchro.net 23
 lunaticsunleashed.ddns.net 2333
 lurkingfear.org 4040
 lusternia.com 23
-lustymud.net 2000
 lutin.projetpetitpeuple.org 2323
 lv426bbs.hopto.org 6464
 lynx.scramworks.net 23
 m80s.blinklab.com 4421
 macos.retro-os.live 23 utf-8 tall
 macos.retro-os.live 513 utf-8
-macross.genesismuds.com 2050
 macsshack.zapto.org 23
 mad-rom.org 1536
 maddness.dune.net 6000
@@ -6171,25 +5829,20 @@ madmanbbs.ddns.net 23
 madrom.net 1536
 mael.bounceme.net 23
 maelstrombbs.synchronetbbs.org 513
-magiccitymush.com 2000
 magickabbs.com 2023
 magnumbbs.net 23
 magnumbbs.net 513
-mahoumush.com 7342
 maikslostyouth.hoodoer.com 8888
 mail.centralontarioremote.net 5555
 mail.drf-solutions.net 23
 mail.hohimer.org 1336
 mail.jmentz.com 8888
-majia.genesismuds.com 4220
 majicka.at2k.org 1955
 major.butt.care 23
 majorbbs.ddnsfree.com 4000
 majorbbs.ddnsfree.net 4000 petscii
-majormud.gotdns.com 23
 mambabbs.hopto.org 2020
 manalejandro.com 23 utf-8
-mangusmud.com 4000
 mapscii.me 23 utf-8
 mare.hoardersheaven.net 4201
 marrach.skotos.net 443
@@ -6211,23 +5864,18 @@ mbpeikert.ddns.net 23 utf-8
 mbse.gzrbbs.net 2320
 mbsedev.bnbbbs.net 2323
 mc.bq.is 23
-mclmud.mclink.it 6000
 mdhavian.net 7500
 mdhoria.net 6996
 mdrfkr.ddns.net 23
-mearth.mushpark.com 9376
 medievia.com 4000
-medinamud.tk 3232
 mega.awesome.super.deluxe.tel 23
 megadodo.online 4242
 megalextoria.com 23
-megamanmush.com 1997
 mekcity.com 3067
 melmoth.org 9000
 members.excaliber.club 23
 mentalmeltdown.us 23
 merlin.silvertree.org 3113
-mg.mud.de 23
 mhsled.com 4000
 micah.mp 2023
 microblaster.net 2002
@@ -6240,9 +5888,6 @@ microtownbbs.com 6400
 midbbs.kinet.ne.jp 3123 shift-jis
 middle-earth.us 4500
 middleages.pw 4000
-midgard-mud.de 4711
-midianmud.com 3456
-midmud.com 5555
 midnight.horse 7777
 midnightsun2.org 3000
 mikusbbs.icu 23
@@ -6253,55 +5898,28 @@ mimac.bizzi.org 2323 utf-8
 mindseye.synchronetbbs.org 23
 ministrybbs.com 23123
 minstrelhall.com 221
-mirkwoodmud.org 4000
 mirroredlands.ddns.net 23
-mirrorsmud.net 2222
 mistressoffire.com 23
 mitbbs.com 23
 mmn.thepalace.network 22323
 mmoaggro.com 2323
 mnm.glassdragon.xyz 4444
-mo.mushpark.com 2012
 modem.serial-port.com 1333
 modematider.selstam.nu 50023
 moetiki.ddns.net 27
 mojo.synchro.net 23 utf-8
 momiabbs.no-ip.info 2002
 monero.place 8888
-mongoose.moo.mud.org 7777
 mono.org 23 utf-8 40
 montereybbs.com 23
-moo.asi.org 7777
-moo.ca 7777
-moo.demetro.nl 8888
-moo.di.uminho.pt 7777
-moo.ghostmoo.org 6969
-moo.harpers-tale.com 7007
-moo.hellyeah.com 7777
-moo.marshome.org 7777
-moo.medievalmoo.nl 1111
-moo.metro.cx 7777
-moo.midgard.org 1359
-moo.neural.net.ai 7777
-moo.opal.org 7878
-moo.ryksyll.com 8888
-moo.samsara-moo.com 7999
-moo.sindome.org 5555
-moo.squidsoft.net 4444
-moo.stclaresalumni.org 8888
-moo.straylightrun.org 5400
-moo.torchship.org 7777
-moo.weyrmount.org 8000
 moomellow.com 7777
 moonrivermu.com 8888
 moratahack.com 23
-mordormud.net 4000
 mortalbbs.com 23
 mortuary.ddns.net 23
 motherlodebbs.duckdns.org 23
 motm.kicks-ass.net 2002
 mouthofhell.duckdns.org 23
-mozartmud.net 4500
 mozz.us 23
 mrpenguin.ddns.net 2023
 msbgtn01.synchro.net 2002
@@ -6323,139 +5941,20 @@ muck.tlkmuck.org 7675
 muck.universitymuck.org 2052
 muck.wintersoasis.com 8888
 mucks.cyberleo.net 6660
-mud.a-mud.ru 4000
-mud.accursed-lands.com 8000
-mud.agesofdespair.net 5000
-mud.ancients.org 5000
-mud.apocalypsemud.org 4050
-mud.arcadia.net 4000
-mud.arctic.org 2700
-mud.areth.org 6000
-mud.austinmud.dk 4000
-mud.balzhur.org 5400
-mud.barsawia.pl 23
-mud.bundiland.hu 1222
-mud.burning-eye.net 4000
-mud.c7i.ru 4000
-mud.chalacyn.com 1000
-mud.clessidra.it 4000
-mud.crimson2.com 4000
-mud.darkrisings.org 1313
-mud.df2.ru 4000
-mud.dizzymud.com 4000
-mud.dominiamud.net 3333
-mud.draknor.com 4000
-mud.drastical.net 9099
-mud.dreampiece.com 4000
-mud.dreamsmud.com 3000
-mud.dreamverse.org 9600
-mud.durismud.com 7777
-mud.dusk.org 7000
-mud.emeraldvalley.net 4000
-mud.fataldimensions.nl 4000
-mud.fohmud.com 7000
-mud.foxmud.com 4848
-mud.genesismud.org 3011
-mud.harshlands.net 5555
-mud.havenmud.net 2000
-mud.hexonyx.com 7777
-mud.highlands3.org 9001
-mud.hu 5555
-mud.imaginautica.com 4000
-mud.infinityforgotten.com 5555
-mud.kallindor.org 5800
-mud.kharkov.org 3000
-mud.killerpcs.com 8888
-mud.landsofstone.org 4801
-mud.legendmud.org 9999
-mud.litsea.com 5566
-mud.lysator.liu.se 2000
-mud.merentha.com 10000
-mud.merging.org 5454
-mud.mog.ninja 4000
-mud.molylepke.hu 37381
-mud.morchronium.com 1979
-mud.mysteria.dk 3000
-mud.mystic-adventure.org 4000
-mud.nemesis.de 2000
-mud.niflheim.one 3000
-mud.nnov.net 9000
-mud.ourplace.org 6543
-mud.pkuxkx.net 8080
-mud.primaldarkness.com 5000
-mud.prophecy.lu 4000
-mud.redemptionmud.com 4000
-mud.ren 3166
-mud.rod.org 3000
-mud.rohonline.net 3333
-mud.scrollsmud.com 4040
-mud.seattle2064.net 4000
-mud.shatteredkingdoms.org 1996
-mud.simauria.org 23
-mud.sndd.io 23
-mud.spin.de 6666
-mud.stack.nl 3333
-mud.stick.org 9000
-mud.streetwitch.com 4000
-mud.swmud.org 6666
-mud.tamedhon.de 4711
-mud.temporasanguinis.it 4000
-mud.tempusmud.com 2020
-mud.tfcmud.com 4000
-mud.tgchan.org 5555
-mud.theforestsedge.com 4000
-mud.theghostbox.com 4000
-mud.timetoplaythegame.com 3333
-mud.valheru.com 4242
-mud.valinor.com.br 4000
-mud.wolfwings.us 4000
-mud.wormhole.se 4000
-mud.xyllomer.de 3000
-mud.zeemud.org 4000
-mud2.com 27723
-muddomain.com 80
-mudhaven.net 3339
-mudii.co.uk 23
-mudlib.anarres.org 5000
-mudpuddle.shwaine.com 3000
-mudrealms.net 3333
-muds.maldorne.org 5002
-muds.toccobrator.com 9901
-mudsanddragons.com 4000
-mudz.org 6969
-muffinmush.club 2469
 muinet.com 2323
 mulettotim.ddns.net 10023
-multimud.net 4242
 multinube.net 23
-multiversemush.com 5001
 multizork.icculus.org 23
 mume.org 4242
 muq.org 9999
 museum.synchro.net 2324
-mush.CosmicCuttlefish.org 8178
-mush.aresmush.com 7206
-mush.disloops.com 4201
-mush.eldertaleonline.com 7705
-mush.elendor.net 1892
-mush.equestriandawn.com 8789
-mush.fadingsuns.org 5001
-mush.pennmush.org 4201
-mush.pokemorph.com 2222
-mush.shelteringcolorado.com 2601
-mush.worldofextant.com 4201
-mushhaven.com 1220
-mushhell.com 8250
-mushpark.com 1972
 music543.com 23
 mutiny.cigdangle.com 65023
 mutiny86.asuscomm.com 23
 mutinybbs.com 2300
-mux.net 5555
 mv2k.com 23
 mvbbs.dyndns.org 6900
 mvradio.synchro.net 2023
-mw.muddywaters.org 3000
 my-workspace.us 6764 utf-8
 mycult.servebbs.com 6400
 myrradel.com 4000
@@ -6466,7 +5965,6 @@ mystic-hobbies.com 23 utf-8
 mystic.bbsgametime.com 2002
 mystic.fireballex.com 23
 mystic.wwivbbs.org 23
-mysticalmud.org 5000
 mysticalrealmbbs.com 23
 mysticdreams.dyndns.org 24
 mysticdungeon.club 1666
@@ -6481,7 +5979,6 @@ nanvaent.org 3000
 narutofor.us 4545
 narutomu.com 7777
 nativosoft.com 6023
-ncmud.net 9000
 nebbie.nebbie.it 4000
 nebbs.servehttp.com 9223
 necrobbs.com 23
@@ -6493,7 +5990,6 @@ neitherlands.world 4201
 nekosoft.tk 23
 neocinci.bbs.io 2323
 neodraconis.com 4201
-neon-moo.space 7777
 nerbbs.com 2002
 nerdragebbs.ddns.net 23
 neronis.eu 9000
@@ -6504,7 +6000,6 @@ netasylum.com 2323
 nethack.alt.org 23
 nethack.zoggins.net 23
 nethack4.org 23 utf-8
-netherworldmud.com 3666
 netpoint.webhop.me 23 utf-8
 netpoint.webhop.me 513
 nettwerked.synchronetbbs.org 23 utf-8
@@ -6512,7 +6007,6 @@ netvillage.com 23
 neverneverlandbbs.com 2323
 new-leu.leu.it 6000
 new.vampire-wars.com 6666
-newage.genesismuds.com 9010
 news.belchi.org 2323
 newsmth.org 23 gbk
 next-wallet.com 666
@@ -6541,9 +6035,7 @@ noodlenet.synchronetbbs.org 23
 noplace.lostcrypt.com 23
 noreality.org 4000
 norrisa.plus.com 23
-north.mudhosting.net 9500
 northernborderlands.ddns.net 23
-nostalgiamud.l-w.ca 4000
 nostalmania.com 23 utf-8
 nostromo.synchro.net 23
 notbbs.com 23
@@ -6552,13 +6044,8 @@ notionmu.com 2120
 nottinghambbs.com 2323
 noverdu.com 23
 nrgbbs.ddns.net 520
-nuclearwarmud.com 4080
-nuclearwarmudusa.com 4080
 nuke.club 513
-numetalmux.com 4201
 nvm.ilmatar.net 8456
-nwm.genesismuds.com 8888
-nycmush.net 4228
 nyx.zirak.org 23
 oacsys.com 2323
 oasisbbs.hopto.org 6400
@@ -6570,7 +6057,6 @@ offshoreplatform.synchronetbbs.org 513
 ofo.tw 23 big5
 ogcserver02.onlinegamescompany.net 31000
 ohb.synchronetbbs.org 23 utf-8
-oim.wolfpaw.net 1960
 oit.ndsu.edu 8888
 oldschoo.synchro.net 2002
 oldschool.synchronetbbs.org 513 utf-8
@@ -6596,18 +6082,14 @@ oregonian.social 23
 oriongalaxy.mywire.org 9023
 osuny.bell-labs.co 666
 otemporaomor.es 4000
-otherspace.aresmush.com 2650
 otherworldbbs.dyndns.org 6502 petscii
 otsbbs.ddns.net 2323
-outerinn.pocketmud.com 5555
 outerlimitsbbs.ddns.net 23
 outerwall.net 23
 outland.synchronetbbs.org 23
-outlandsmud.com 4000
 outpost22.strangled.net 23
 outremer.silvertree.org 1421
 outwest.synchro.net 23 utf-8
-overdrive.overdrivemud.net 5195
 overfit.retrievo.xyz 8023 utf-8
 owen2k6.com 23
 oxz.ddns.net 4000
@@ -6623,7 +6105,6 @@ parallelrpi.com 4500
 parkave.synchronetbbs.org 23
 particlesbbs.dyndns.org 6400 petscii
 partybowlbbs.ddns.net 2323
-passion.mushpark.com 1313
 pathunknown.net 23 utf-8
 paxrepublica.net 9999
 payden.ddns.net 23
@@ -6639,7 +6120,6 @@ pegasusmuck.com 4242
 pendulumscalm.com 4000
 penisys.online 6502 ascii
 pennybbs.synchro.net 23
-penultimatemush.com 9500
 pepzi.se 23
 perilousrealms.com 23
 perlbbs.tw 23 big5
@@ -6656,7 +6136,6 @@ phillip.noip.me 1985
 phitel.us 23
 phoenix.bnbbbs.net 23
 phoenix.bnbbbs.net 2323
-phoenixmud.net 4000
 pibbs.sytes.net 23
 picovebbs.com 6860
 pie33.com 2223
@@ -6665,33 +6144,22 @@ pinksugarheartattack.net 2873
 piratebbs.com 23
 piratesden.net 23
 pixeldud.com 23
-pixiemud.com 6789
-pkmud.net 5000
 planb.synchronetbbs.org 23
 planetafr0.org 8888
 planetpath.net 4000
 play.aelisus.com 1848
 play.allegiancesunbroken.net 1234
-play.aocmud.com 4000
-play.arxmush.org 3000
-play.brmud.com.br 4001
-play.conquestmud.ca 5000
 play.cosrintwo.com 31000
 play.ddgame.us 23
-play.dennismud.xyz 37380
-play.exodusmud.com 9000
 play.federation2.com 30003
 play.islands-game.live 3000
 play.legendsofkrynn.net 6100
 play.shardsofempire.com 9999
-play.sneezymud.com 7900
 play.theforsakenlands.com 1848
 play.titanx.games 23
-play.willowdalemud.com 4000
 playdecay.com 3003
 playlom.com 4000
 playlord.org 23
-playmajormud.com 23
 playpenbbs.com 23
 pleroma.nobodyhasthe.biz 8888
 pmacpherson.org 23
@@ -6700,7 +6168,6 @@ pocbbs.duckdns.org 2323 utf-8
 pocbbs.duckdns.org 6400
 pofobbs.ddns.net 992
 pogbbs.synchronetbbs.org 513
-pogo.mudhosting.net 5555
 pogsmu.com 4201
 pointofnoreturn.zapto.org 2323
 pokemonfusion.servegame.org 4321
@@ -6708,13 +6175,10 @@ polar.crabdance.com 23
 polarwireless.ca 23
 portalmelon.xyz 23
 portent.digital-genesis.com 2009
-portent.genesismuds.com 2077
 portugal-virtual.org 6969
 posbbs.ddns.net 23
 positronicbrain.net 11892
-potp-mud.com 6400
 powerbbs.ddns.net 2300
-powermud.com 2000
 ppnews.eu 23
 prahy.mmh.cz 3333
 predikhe.synchro.net 2323
@@ -6730,7 +6194,6 @@ prometheus-enterprises.com 2223
 prooltest-8g.kharkov.org 4000
 prostar.synchronetbbs.org 513
 prostarplus.com 23
-prs.muxnexus.com 5555
 pruffino.com 23
 ps2.dc4.us 23
 psychosisbbs.ddns.net 2323
@@ -6738,15 +6201,12 @@ ptbbs.ddns.net 8000
 ptt.cc 23
 ptt2.cc 23 big5
 pufa.pbnet.ro 23
-puggy.mushpark.com 9033
 pulsar.dune.net 2001
 pulsebbs.hopto.org 1984
 pwecksretreat.com 23
 px4.kitsunet.net 2069
 pyradrake.id.au 8887
 pyroto.mysticmountain.us 8086
-pythonmud.online 4000
-pythonmud.org 4000
 q.geek.nz 8888
 qeeai.com 23 big5
 quazarbbs.dynu.net 2523
@@ -6763,7 +6223,6 @@ rapidfire.hopto.org 64128
 raspibbs.synchro.net 23
 rauvyon.com 7075
 ravenchat.ddns.net 23
-ravenmud.com 6060
 ravenskraft.sytes.net 3000
 raveolution.hopto.org 64128
 razecus.go.ro 2323
@@ -6773,7 +6232,6 @@ rbb.fidonet.fi 32
 rbbbs.mtonetwork.com 24
 rc2014.ddns.net 2014
 rcpm.mitsaltair.com 8800
-rdamud.afraid.org 4000
 rdfig.net 2002
 rdnetbbs.com 23 utf-8
 react-bbs.nikoh.it 2323 latin-1
@@ -6785,21 +6243,18 @@ realitypoint.com 12112
 realmofshadows.us 1133
 realms.fur.com 7765
 realms.reichel.net 4000
-realmsmud.org 1501
 realmsofchaos.com 3456
 realmsofdespair.com 4000
 reasonablyinteresting.com 6502
 reaux.vineyard.haus 3033
 red40free.com 23
 redland.synchronetbbs.org 23
-redmudbbs.site 2560
 redstreak.no-ip.org 4000
 redwall.realm.limitless.org 4203
 reerelic.com 23
 reflections.hopto.org 64128
 region15.net 2002
 reisub.nsupdate.info 7020
-remnant.aresmush.com 4201
 remotecpu.com 6502
 renaissance-hle.cf 23
 renegadeoutpost.com 9999
@@ -6812,7 +6267,6 @@ retrobbs.sinclair.homepc.it 23
 retroconnect.org 23 utf-8
 retrodreams.net 23
 retrolair.amigaretro.net 6800
-retromud.org 3000
 retronetneo.synchronetbbs.org 23 utf-8
 retroroster.net 23
 retrorunning.ddns.net 8880 utf-8
@@ -6822,22 +6276,15 @@ rfairman.synchronetbbs.org 23
 rfstudio.mine.nu 2424
 rg1.retrogoldbbs.com 6411
 rgbbs.org 23
-rhostdev.mushpark.com 4201
-rhostmush.com 1066
-rhostshyl.mushpark.com 4096
 rhun.co.nz 23
 richardf.synchro.net 23
 ricksbbs.synchro.net 23
 riddermark.gg 23
-riftmud.com 8001
 rilumcustom.ddns.net 23
 riskybusiness.hopto.org 2323
-riva.silvren.com 7777
 riverstyx.ddns.net 2323
 rkbbs.net 23
-rlmud.org 5001
 rmac.d-dial.com 23
-rmud.org 3041
 rns.risenshinebbs.com 23
 rns.risenshinebbs.com 513
 roadtoamber.com 6250
@@ -6846,14 +6293,9 @@ rofbbs.ddns.net 2300
 rogue.doesntexist.org 5518
 roguetw.org 2002
 rolla.hopto.org 23
-rom.genesismuds.com 4422
-rom.mud.de 4000
 rome.vineyard.haus 7530
 rooky.looney.com 8888
 ror.us.to 3000
-rosaliamush.com 4201
-rotjmud.com 9400
-rotsmud.dyndns.org 3791
 roxie-silver.org 5555
 roxybbs.synchro.net 23
 rq.araknet.xyz 8888
@@ -6861,7 +6303,6 @@ rsr.synchro.net 23
 rtbbs.ddns.net 23
 rtc.to 23
 rubberoom.org 6969
-rudmud.com 1701
 ruinsofcrestil.com 8000
 rupert.twyst.org 7777
 rustbyte.servebbs.com 8888
@@ -6877,7 +6318,6 @@ sanctumbbs.com 6502
 sandwich.net 4201
 sanitysedge.com 2020
 sarasum.com.ar 13023
-savageskies.aresmush.com 1616
 savsoul.com 6666
 sb-discovery.com 23
 sbbs.dmine.net 24
@@ -6889,7 +6329,6 @@ sbbs.sytes.net 2002
 sbbs.viennamatrix.at 23
 sc.scworlds.net 4321
 scalesmuck.com 8887
-scannerhead.pocketmud.com 4444
 scarlet-citadel.co.uk 2000
 scbbs.ddns.net 6400
 scbbs.nsupdate.info 61023
@@ -6908,8 +6347,6 @@ sd-bbs.net 23
 sdf-1.vm.tornadovps.net 5023
 sdf.lonestar.org 23
 sdf.org 23 utf-8 40
-sdmud.com 7000
-sdmud.drwho.org 7777
 seabreeze.servegame.com 23
 seansproject.org 23
 seaoffantasy.synchronetbbs.org 23 utf-8
@@ -6920,16 +6357,12 @@ secretservice.mooo.com 23
 sector31.lorfinglab.com 2002
 segaa.net 23 big5
 segfault.hopto.org 2324
-sentiencemud.net 9000
-serenitymush.com 2020
-server.equilibrium-mud.org 4000
 server.joaorodrigo.eu 23
 server.wiwe.org 23
 server1.klangdynasty.com 2009
 server6.homeip.net 23
 sestar.synchro.net 23
 sestar.synchro.net 513
-sevennations.aresmush.com 2021
 sf.a-net.online 2323
 sgnet.synchro.net 23
 sgp.alyssasmith.id.au 23
@@ -6937,7 +6370,6 @@ sgprobbs.com 1337
 shadowbbs.com 23
 shadowempirebbs.com 2002
 shadowgate.org 8080
-shadowmud.com 1030
 shadowrealm.ddns.net 2002
 shadowrun.team7d0.com 4000
 shadows.dreamstealer.net 4000
@@ -6946,7 +6378,6 @@ shadowscope.noip.us 23 topaz
 shadowsiege.com 4080
 shadowwars.org 4000
 shakeybbs.com 23
-shangrilamux.com 9999
 shattered.org 23
 shatteredmu.com 4201
 shell.roughneckbbs.com 23 utf-8
@@ -6961,20 +6392,16 @@ shsbbs.net 23
 shsha221.duckdns.org 8888
 shye.org 1701
 signal-interrupt.exventure.world 5555
-silasMUD.themuds.org 5555
 silentheaven.org 4000
 silentnode.ddns.net 6400
 siliconu.com 23
 silveroaks.synchronetbbs.org 23
-silvren.com 1510
-sixth-estate.aresmush.com 4201
 sixthfloor.ddns.net 23
 sk-twgs.com 2002
 skatgame.net 5000
 sky.winds.org 4208
 skynetbbs.dynu.net 6400
 skynetsystems.zapto.org 2020
-sl.mud.at 4711
 slack.nosuchluck.net 7979
 slasho.me 23
 slbbs.com 23
@@ -6982,7 +6409,6 @@ sleepless.cheese.org 6789
 slinkybbs.com 2002
 slipstreambbs.net 23 utf-8
 sloanebbs.com 2323
-slothmud.org 6101
 sluggy.surly.org 2025
 smalltimebbs.ddns.net 23
 smashbot.com 23
@@ -6994,24 +6420,18 @@ snet.johnnyware.net 23
 snobsoft.de 6401
 snowplains.org 3456
 soco.bbs.io 24412
-sodmud.com 5600
 sofaking.social 23
-sofmud.mudhosting.net 7000
-solareclipse.genesismuds.com 4321
 solarflow.dynu.net 23
 solidbbs.net 23
 sony.tfcis.org 23
 sos-bbs.net 23
 sotanomsxbbs.org 23 utf-8
-sotmud.genesismuds.com 4000
-sotmud.slackhalla.org 4321
 sou-bbssa.f5.si 5387
 soulruins.com 5000
 southboundpachyderm.servebbs.org 2323
 southcentral.se 1023 topaz
 southernamis.ddns.net 23 atascii
 sovdawn.kicks-ass.net 4000
-sowmud.ru 5555
 spabbs.synchro.net 23
 spacecac.synchro.net 23
 spacejunkbbs.com 1992
@@ -7029,8 +6449,6 @@ spotbbs.k9zw.com 1123
 sprock.io 23
 spynet.ddns.net 23
 srnetworks.ddns.net 23
-srtmoo.net 8492
-srwmush.com 2015
 ssbbs.ddns.net 6502 petscii
 ssbbs.ddns.net 6510
 ssbbs3.ddns.net 6502 petscii
@@ -7039,10 +6457,7 @@ ssmokingirl.ath.cx 23 petscii
 stabbynet.synchronetbbs.org 23
 starbase.synchro.net 23
 starbugbbs.com 23
-starcrossed.aresmush.com 4201
-stardust.genesismuds.com 4010
 starfron.synchronetbbs.org 23
-stargate.aresmush.com 1994
 stargate.synchro.net 23
 starlight.zapto.org 2323
 starmourn.com 23
@@ -7050,30 +6465,23 @@ startmenu.run 23
 startrek.corpexpanse.com 2100
 startrekcorpora.com 23
 startrekkin.net 1701
-starwars.d20mud.com 5500
-starwarsmush.com 4402
 stateoftheark.ca 1990
-staticchaos.mudhosting.net 1982
 stealthworld.tk 2023
 stellaraeon.com 4000
 stellardarkness.com 1023
 steppingstonebbs.com 2000
 stevensbbs.stevenshive.xyz 23 utf-8
 stguildbbs.ddns.net 23
-stickmud.com 7680
-stockmud.com 5000
 stokmarknes.org 24
 stonia.ttu.ee 4000
 storm-mountain.ddns.net 24000
 stormbreaker.net 4444
 stormgate.synchronetbbs.org 23 utf-8
-strangemud.net 9332
 strangeplanet.org 6800
 streamvibe.org 23
 streetcorner.ddns.net 6400
 stronghold.vineyard.haus 7800
 studios.synchro.net 513
-stuphmud.net 2112
 subcarrier.ignorelist.com 2323
 subflame.ddns.net 2323
 subhuman.ddns.net 1338 topaz
@@ -7088,14 +6496,10 @@ supertux.gameplayer.club 23
 surfers.fysh.org 4242
 sursum-corda.com 2002
 swamp.lol 23
-swanpath.aresmush.com 4201
-swaoa-mush.com 5500
 swatsbbs.ddns.net 2323
 swchronicles.com 4000
 swedgeofdestiny.net 2424
-swjvs.themudhost.net 8707
 swnh.vineyard.haus 4219
-swrestorationmush.com 4201
 sylvanus.net 4343
 synch.spyvspy.us 23
 synchronet.retronetworking.org 513
@@ -7114,9 +6518,7 @@ tainan.jal.tw 23
 taliadon.ddns.net 23
 tankantswebhosting.mywire.org 23
 tapestries.fur.com 2069
-taurosmud.com 5005
 tavengard.hopto.org 23
-tbamud.com 9091
 tbolt.synchro.net 49815
 tbrasilis.ddns.net 23000 latin-1
 tc-bbs.com 2330
@@ -7128,13 +6530,10 @@ tdod.org 23
 tdod.org 5000
 tdome.net 5555
 tec.skotos.net 6730
-tecfamoo.unige.ch 7777
-techVidange.themuds.org 5555
 technoanarchy.synchronetbbs.org 513 utf-8
 technotron.asuscomm.com 23
 techrono.synchro.net 23 utf-8
 teehill.adirondackpc.com 2020
-teenymush.dynu.net 4096
 tek1systems.com 23
 telegodzilla.com 50023
 telehack.com 23
@@ -7159,28 +6558,19 @@ telnet://bbs.retrohack.se 64128 petscii
 telnetbible.com 23
 temple.crabdance.com 23
 ten.eaglesnest89.net 23
-tenebraemush.net 4001
 tenebrousisles.com 9001
 teod.dyndns.org 7410
-terabithia.genesismuds.com 4700
-teramud.com 4000
 terazur.online 4000
 terminal-obsession.hopto.org 1541 topaz
 terminalmeltdown.com 23
 terminalunderground.zapto.org 6502
 terminus.greylands.net 23
-terrafirma.terra.mud.org 2222
 terranempire.ddns.net 1227
 terrorkom-server.de 56656
 testbbs.arcticzonebbs.net 23
 tfb-bbs.org 23
 tfcbbs.com 6400
-tfgmush.org 3349
-tfosmux.org 2511
-tfuniverse.mudhosting.net 1976
 tg.nrbbs.net 23
-tghmud.org 8500
-tgmud.net 9010
 tgp.tgphosting.ml 23
 tgr.freeddns.org 23
 thafaker.crabdance.com 8088
@@ -7211,7 +6601,6 @@ theedgebbs.dyndns.org 1541
 thegateb.synchro.net 2424
 thegatebbs.sytes.net 2424
 theghettobbs.com 2323
-thehatshop.mudhosting.net 3000
 theinquisition.org 5050
 thekeep.net 23
 theland.notroot.com 5000
@@ -7232,7 +6621,6 @@ theoldnet.com 6400 petscii
 theoraclebbs.com 23
 theotherrealmbbs.com 23
 theouterinn.synchronetbbs.org 23
-thepack.aresmush.com 2022
 theparityerror.com 23
 thepenaltybox.org 23
 thequesttwgs.game-host.org 23
@@ -7241,14 +6629,12 @@ therockbbs.net 10023
 thesandbox-twgs.com 2002
 theseeke.synchro.net 23
 thesprawl.ca 2002
-thesprawlmud.com 2074
 thethercraftbbs.ddns.net 23
 theunderground.us 1717
 thevaultbbs.ddns.net 2323
 theviperbbs.ddnsfree.com 23 utf-8
 theviperbbs.mywire.org 2002
 thevoid.servebbs.org 23 petscii
-thewayhome.aresmush.com 4201
 theworstserver.online 23
 thierryslair.dynet.com 64128
 thlbbs.ddns.net 23
@@ -7259,7 +6645,6 @@ thtpku.3322.org 23
 thunder-storm.ca 10023
 thunder.synchro.net 23
 thunder.synchro.net 513
-thundergulch.aresmush.com 1870
 ti-legacy.com 5050
 tiabbs.synchro.net 23
 tiabbs.synchro.net 513
@@ -7270,11 +6655,8 @@ tilde.sbs 23
 time.synchro.net 24 utf-8
 timemachinebbs.com 2323
 timeslost.duckdns.org 4000
-timesmud.com 8500
 timrouter.dns.army 2323
 tinycore.synchronetbbs.org 23
-tinymush.net 6250
-tinymux.hodgeheg.co.uk 2860
 tinysbbs.com 3023
 tinytime.synchro.net 23
 tirnaill.com 4000
@@ -7288,7 +6670,6 @@ tlhvintagebbs.ddns.net 23
 tloc2.ddns.net 6464 petscii
 tlocbbs.ddns.net 6800
 tlp.zapto.org 23
-tmux.wonko.info 4042
 tmz.synchronetbbs.org 23 utf-8
 tmz.synchronetbbs.org 513 utf-8
 tmzbbs01.synchro.net 23
@@ -7302,14 +6683,11 @@ toolazy.synchro.net 2323 utf-8
 toolshed.synchro.net 2323
 top-swadba.de 2323
 topoftexas.net 23
-torilmud.com 9999
 tormentbbs.ddns.net 513
 tos.synchronetbbs.org 23
 totallynerd.com 5523
 totalresponsehq.org 23
-totg.genesismuds.com 6969
 towel.blinkenlights.nl 23
-towers.t2tmud.org 9999
 toxic.araknet.org 1337
 toxic.oldskoolbbs.com 1337
 toxicbbs.com 23 utf-8
@@ -7325,10 +6703,8 @@ tradewars.outpost9.com 2002
 tradewars.wyesoft.com 23
 tradewarsacademy.com 2002
 tranquilityba.se 23
-transformers.mudhosting.net 1995
 transportbbs.ddns.net 23
 trapdoor.synchro.net 23
-trelawneycove.aresmush.com 1707
 trexbbs.org 23
 triadcity.smartmonsters.com 9094
 tribbs.net 9000
@@ -7337,18 +6713,15 @@ trollattack.com 4000
 troybbs.com 23
 troyjohnston.net 23
 truefriends.org.uk 3000
-tsosmud.org 7070
 tssbbs.servebeer.com 6400 petscii
 tsunami.thebigwave.net 23
 ttb.rgbbs.info 23
 ttbbs.synchronetbbs.org 23
 ttps.dyndns.org 2323
 tubbs.synchro.net 23
-tubmud.de 7680
 tuffy.dyndns.dk 1541
 turealm.no-ip.org 3023 utf-8
 turf.org 4000
-turkmud.vineyard.haus 5190
 tville.synchronetbbs.org 513
 tw.hollensbe.org 2002
 tw.internetking.us 23
@@ -7375,13 +6748,11 @@ twgs.jmp.cx 2002
 twgs.lostworldsbbs.com 2112
 twgs.scinet-ftn.org 513
 twilight.tigerden.com 6010
-twilitdreams.genesismuds.com 23
 twinklebbs.xyz 31337
 twistedrealm.online 2323
 twitnet.net 23
 tws.thecrustychicken.com 2500
 twyst.org 3333
-tymemud.com 6969
 typotown.net 6666
 tzone.nxly.org 5000
 uabbs.servebbs.com 23 petscii
@@ -7400,16 +6771,12 @@ uncensored.citadel.org 23
 undercurrents.io 8088 utf8
 undernet.uy 23
 uniquelyelite.com 9001
-unitedheroesmush.com 1999
 universe.synchronetbbs.org 513
 unknown.identi.ty.cg 23
 untold-dawn.com 4000
 unwrittenlegends.net 6666
-uossmud.sandwich.net 9000
 upsidedownmagic.net 2002
-urbsnovumeboracum.aresmush.com 4201
 userclub-bbs.com 23 utf-8
-utopiamoo.net 1111
 uzisuicide.servebbs.org 23 topaz
 vadv.fireballex.com 2323
 vague.ddns.net 23 utf-8
@@ -7418,18 +6785,14 @@ valles.marineris.one 4000
 valley.servebbs.com 6400
 valley64.com 6400 petscii
 valleybbs.com 23
-vanciamud.fr 4000
-vanity.genesismuds.com 23
 vattuserver.ddns.net 23
 ve2pkt.dyndns.org 6300
 vengeance.dynu.com 1337
 verify-nebula.kicks-ass.net 23 utf-8
 vern.cc 23
-versemud.com 4000
 vert.synchro.net 23 utf-8
 vger.cloud 23
 vic-bbs.com 6502 petscii
-vikingmud.org 2001
 vintage.thcbbs.com 23
 vintagebbsing.com 23
 vintagepi.asuscomm.com 23
@@ -7442,19 +6805,15 @@ void.greenfinch.com 1234
 voidbbs.com 23
 volnay.org 2323
 vore.got-game.org 8888
-vormud.genesismuds.com 7777
 vortex.redirectme.net 3777
 vortexbbs.com 23
-voxdei.genesismuds.com 3000
 vpn.kennedy.pub 2323
 vr.frostbite.org 3019
 vroma.org 8200
-vtvr.mudhosting.net 5555
 w0pr.win 23
 wa7npx.org 2323 utf-8
 wabac.ccsnet.com 23
 wacbbs.ddns.net 6502
-wackymoo.jellybean.co.uk 7777
 waffle.c4bmore.com 2001
 wait-wtf.com 8888
 wani.net 23
@@ -7468,7 +6827,6 @@ wassup.the.net.nz 23
 wastelands-bbs.net 23
 wastelands-bbs.net 2323
 waterdeep.org 4200
-waterpoint.moo.mud.org 8301
 waxradioindy.com 8888
 wayfar1444.com 7777
 waystonebbs.duckdns.org 1337
@@ -7477,7 +6835,6 @@ wc4.winserver.org 23
 wcalt.rdfig.net 2121
 wcbbs.ddnsfree.com 6800
 wccastle.synchro.net 24
-wcmush.com 2199
 wd1cks.org 23 utf-8
 wdbbs.tw 23
 we6jbobbsdotorg.duckdns.org 23
@@ -7486,7 +6843,6 @@ weaversh.synchro.net 23
 web.penguinfriends.org 7676
 webmail.bcgonsite.com 24
 weehours.net 2000
-welcome2hell.aresmush.com 3366
 westwoodbbs.net 64738
 wfido.ru 1234
 wgbbs.ddns.net 23
@@ -7502,16 +6858,13 @@ wickedbbs.com 2333
 wilco.ydns.eu 2300 utf-8
 wildeadventures.net 1221
 wildsau.holy-mission.org 6666
-wildsofpern.aresmush.com 2021
 wildwestbbs.com 2600
 willowcreekbbs.dynu.net 6400 petscii
 win10.retro-os.live 23
 windows93.net 8082
 winds.org 4000
-windsmud.com 4500
 winnow.1q1.me 23 utf-8
 winserver.org 23
-winter.mushpark.com 3000
 wintermoon.servebeer.com 4003
 wintermutebbs.ddns.net 23
 wishywish.duckdns.org 8888
@@ -7519,15 +6872,12 @@ wizardsrainbow.com 23
 wizbbs.c64bbs.org 23 petscii
 wizzybbs.win 23 utf-8
 wk.fi 23
-wl.mud.de 4711
 wn2.duckdns.org 6408
 wn2.wrgnbr.com 6405 utf-8
 wn3.wrgnbr.com 6400
 wn4.wrgnbr.com 3000
 wn6.wrgnbr.com 6411
-wocmud.org 4000
 wodanaz.se 23
-wonmud.com 9000
 woodwardagency.com 4201
 woof.engineering.dog 23
 woofer.v6.rocks 8888
@@ -7535,14 +6885,8 @@ wordbbs.hopto.org 64128 petscii
 wordle64.mywire.org 8864
 wordpainter.net 5269
 workstation.ddmcomputers.com.au 2323
-worldhymnonline.aresmush.com 4201
-worldneedsheroes.aresmush.com 2025
-worldofclousecraft.themuds.org 5555
 worldofpa.in 6969
-worldtreemush.com 4099
-wot.eyemud.com 2222
 wotf.org 23
-wulin.17mud.com 4000
 wunderlust.ddns.net 2023
 wwiv.bsbbs.com 2323
 wwiv.dmine.net 2323
@@ -7551,28 +6895,22 @@ www.actofwar.com 4000
 www.amigaretro.com 23
 www.ateraan.com 4002
 www.companycitadel.us 23
-www.coremud.org 4000
 www.crappiecracker.com 23
 www.czaralex.com 7777
-www.darkstonemud.com 5432
-www.derpymud.com 23
 www.diglet.ca 23
 www.dragonsspine.com 3000
 www.eifelaktiv.de 23
 www.ems-bbs.com 23
 www.exciter.ws 23 utf-8
-www.furymud.com 1234
 www.h0.tel 2323
 www.holyquest.org 7777
 www.jafhl2.com 2002
 www.jrs-security.com 23
 www.kimmoviitanen.fi 2323
-www.kinslayermud.org 2222
 www.madworldbbs.com 52146
 www.maruo.co.jp 23 shift-jis
 www.proaudiotech.net 23
 www.sayinnet.org 9009
-www.sjcqmud.xyz 5555
 www.theunderground.us 10023
 www.too-spooky.com 8888
 www.unleashedinet.org 23 utf-8
@@ -7587,7 +6925,6 @@ x.a-net.online 2323 utf-8
 x.theundergroundbbs.net 23
 x22.ddns.net 9000
 xanadubbs.ca 23
-xaosmud.org 5000
 xhost.ca 23
 xibalba.l33t.codes 44510 utf-8
 xiyouji.org 6666
@@ -7601,21 +6938,16 @@ xunil.sytes.net 23
 xylinvale.space 23
 yanxi.org 23
 yay.tim.org 5440
-yibmoo.dyndns.org 7777
-yormush.com 9988
 yospos.cloud 23
 yso.blue 23
 yuriba.com 4201
 zahrl.ddns.net 2023
 zakhooi.synchronetbbs.org 23
 zandura.synchronetbbs.org 23
-zebedee-mud.org 7000
 zen.kawasu.wtf 23
 zenolab.synchro.net 23 utf-8
 zeus.cybercitizen.net 1122
 zl4kj.nz 23
-zombiemud.net 2150
-zombiemud.org 3000
 zombietoolshed.us 23
 zonebbs.net 23
 zooropabbs.ddns.net 2323 latin-1

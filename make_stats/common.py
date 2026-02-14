@@ -613,6 +613,26 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     return None, None
 
 
+def purge_failed_banners(banners_dir):
+    """Remove 0-byte banner PNGs so failed renders are retried.
+
+    Failed renders are cached as empty files to avoid repeated attempts
+    within a single run.  Between runs, these should be cleared so that
+    transient failures (e.g. renderer timeouts) get another chance.
+
+    :param banners_dir: path to the banners directory
+    """
+    count = 0
+    for name in os.listdir(banners_dir):
+        if name.startswith('banner_') and name.endswith('.png'):
+            path = os.path.join(banners_dir, name)
+            if os.path.getsize(path) == 0:
+                os.remove(path)
+                count += 1
+    if count:
+        print(f"  purged {count} failed banner cache file(s)", file=sys.stderr)
+
+
 def init_renderer(check_dupes=False, **kwargs):
     """Initialize the terminal rendering pool.
 

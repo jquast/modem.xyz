@@ -42,6 +42,8 @@ _FONT_GROUPS = {
             'cp737', 'cp775', 'cp850', 'cp852', 'cp855',
             'cp857', 'cp860', 'cp861', 'cp862', 'cp863',
             'cp865', 'cp866', 'cp869', 'koi8_r', 'unknown',
+            'ascii', 'latin_1', 'iso_8859_1', 'iso_8859_1:1987',
+            'iso_8859_2', 'utf_8', 'big5', 'gbk', 'shift_jis', 'euc_kr',
         }),
     },
     'topaz': {
@@ -65,15 +67,6 @@ _FONT_GROUPS = {
         'encodings': frozenset({'atarist', 'atascii'}),
         'aspect_ratio': 1.25,  # Atari 320x192 on 4:3 CRT (5:4)
         'columns': 40,
-    },
-    'hack': {
-        'font_family': 'Hack',
-        'cell_ratio': 2.0,  # approximate for Hack at terminal defaults
-        'native_height': 24,
-        'encodings': frozenset({
-            'ascii', 'latin_1', 'iso_8859_1', 'iso_8859_1:1987',
-            'iso_8859_2', 'utf_8', 'big5', 'gbk', 'shift_jis', 'euc_kr',
-        }),
     },
 }
 
@@ -556,13 +549,11 @@ class TerminalInstance(abc.ABC):
 
 
 def _apply_crt_effects(path, group_name, columns, font_size):
-    """Apply supersampled CRT phosphor bloom and scanline effects.
+    """Apply CRT phosphor bloom and scanline effects.
 
-    The input image (already 2x from ``font_size=24``) is upscaled a
-    further 2x to 4x total, where bloom and scanlines are applied at
-    high resolution.  A LANCZOS downscale back to 2x produces smooth
-    analog-looking gradients that far exceed the fidelity of effects
-    rendered at the final resolution.
+    The input image (1x from ``font_size=12``) is upscaled 2x via
+    nearest-neighbor, then bloom and scanlines are applied at the
+    final 2x resolution.
 
     Scanline frequency is derived from the font's native pixel height
     so that each bitmap row gets one scanline, matching the physical
@@ -581,11 +572,10 @@ def _apply_crt_effects(path, group_name, columns, font_size):
     if orig_mode not in ('RGB', 'RGBA'):
         img = img.convert('RGB')
 
-    # --- 2x upscale to 4x total (nearest-neighbor to keep sharp pixels) ---
-    target_w, target_h = img.width, img.height
+    # --- 2x upscale from 1x to 2x (nearest-neighbor to keep sharp pixels) ---
     img = img.resize((img.width * 2, img.height * 2), Image.NEAREST)
 
-    # --- Bloom at 4x ---
+    # --- Bloom at 2x ---
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
         result = pg.pixelgreat(
@@ -602,12 +592,12 @@ def _apply_crt_effects(path, group_name, columns, font_size):
             rounding=0,
         )
 
-    # --- Scanlines at 4x ---
+    # --- Scanlines at 2x ---
     # Period is computed from font metrics, not image dimensions (the
     # image is cropped to content so height/rows would be wrong).
     # At 96 DPI, font_size pt = font_size*96/72 px cell height at 1x.
-    # The 2x input is upscaled 2x more → 4x total, so each native
-    # pixel row occupies font_size*8/(3*native_height) 4x-pixels.
+    # The 1x input is upscaled 2x, so each native pixel row occupies
+    # font_size*8/(3*native_height) 2x-pixels.
     group_info = _FONT_GROUPS.get(group_name, {})
     native_height = group_info.get('native_height', 16)
     period = font_size * 8.0 / (3.0 * native_height)
@@ -618,14 +608,13 @@ def _apply_crt_effects(path, group_name, columns, font_size):
     total_scanlines = int(result.height / period) + 1
     # Dark band must be narrower than the period so bright gaps remain.
     # Target ~40% of the period as the full band width (flat center +
-    # soft edges), leaving ~60% bright.  After LANCZOS downscale from
-    # 4x to 2x the soft edges blend into gentle luminance variation.
+    # soft edges), leaving ~60% bright.
     band_half = period * 0.20
     flat_half = max(0, round(band_half * 0.5))
     edge = max(0, round(band_half * 0.5))
-    # Boost alpha for small periods since the narrow band gets diluted
-    # by the downscale.
-    peak_alpha = min(255, int(100 + 80 * (8.0 / max(period, 1))))
+    # Reduced alpha since there is no LANCZOS downscale to soften the
+    # scanline bands — they render at final resolution.
+    peak_alpha = min(255, int(50 + 40 * (8.0 / max(period, 1))))
     for i in range(total_scanlines):
         cy = round(i * period)
         for offset in range(-flat_half - edge, flat_half + edge + 1):
@@ -643,8 +632,6 @@ def _apply_crt_effects(path, group_name, columns, font_size):
                     draw.line([(0, y), (w, y)], fill=(0, 0, 0, alpha))
     result = Image.alpha_composite(result.convert('RGBA'), overlay)
 
-    # --- LANCZOS downscale from 4x to 2x ---
-    result = result.resize((target_w, target_h), Image.LANCZOS)
     result = result.convert('RGB')
 
     if orig_mode == 'L':
@@ -668,7 +655,7 @@ class RendererPool:
     :param crt_effects: apply CRT bloom and scanlines to output PNGs
     """
 
-    def __init__(self, columns=80, rows=60, font_size=24,
+    def __init__(self, columns=80, rows=60, font_size=12,
                  crt_effects=True, check_dupes=False):
         self._columns = columns
         self._rows = rows
