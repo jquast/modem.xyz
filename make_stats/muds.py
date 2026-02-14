@@ -294,6 +294,9 @@ def load_server_data(data_dir, encoding_overrides=None,
 
     records = []
     for record in base_records:
+        # MUDs default to tall (100-row) terminals for banner capture.
+        if record.get('row_override') is None:
+            record['row_override'] = 100
         session_data = record.pop('_session_data')
         mssp = session_data.get('mssp', {})
 
@@ -720,6 +723,8 @@ def display_server_table(servers):
     print("   * - **Name**")
     print("     - Server name (from MSSP) or hostname. Links to"
           " a detail page.")
+    print("   * - **\U0001f30d**")
+    print("     - Country flag from GeoIP lookup.")
     print("   * - **Code/Family**")
     print("     - Codebase and codebase family -- the server"
           " software and its lineage (e.g. PennMUSH/TinyMUD,"
@@ -741,8 +746,7 @@ def display_server_table(servers):
         name = s['name'] or s['host']
         mud_file = s['_mud_file']
         flag = _country_flag(s.get('_country_code', ''))
-        flag_prefix = f"{flag} " if flag else ''
-        name_cell = (f"{flag_prefix}:doc:`{_rst_escape(name)}"
+        name_cell = (f":doc:`{_rst_escape(name)}"
                      f" <mud_detail/{mud_file}>`")
         host = s['host']
         sport = s['port']
@@ -779,6 +783,7 @@ def display_server_table(servers):
         rows.append({
             'Players': players,
             'Name': name_cell,
+            '\U0001f30d': flag,
             'Code/Family': _rst_escape(code_family[:30]),
             'Genre': _rst_escape(genre[:25]),
             'Created': created,
@@ -1467,7 +1472,8 @@ def run(args):
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
-    init_renderer(crt_effects=not getattr(args, 'no_crt_effects', False),
+    init_renderer(columns=120, rows=100,
+                  crt_effects=not getattr(args, 'no_crt_effects', False),
                   check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)

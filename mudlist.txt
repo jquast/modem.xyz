@@ -1,5 +1,5 @@
 # format,
-# ip address [port number [encoding [columns]]]
+# ip address [port number [encoding [columns [tall]]]]
 104.154.76.197 4333
 107.172.21.36 4000
 108.252.255.105 3333

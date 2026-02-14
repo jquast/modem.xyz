@@ -616,11 +616,16 @@ def _apply_crt_effects(path, group_name, columns, font_size):
     draw = ImageDraw.Draw(overlay)
     w = result.width - 1
     total_scanlines = int(result.height / period) + 1
-    # Flat center band at full alpha with soft edges — for small periods
-    # (≈4px) this gives 2 rows at alpha 100 plus 1-row edges; for larger
-    # periods (≈8px) the gradient widens proportionally.
-    flat_half = max(1, round(period * 0.2))
-    edge = max(1, round(period * 0.15))
+    # Dark band must be narrower than the period so bright gaps remain.
+    # Target ~40% of the period as the full band width (flat center +
+    # soft edges), leaving ~60% bright.  After LANCZOS downscale from
+    # 4x to 2x the soft edges blend into gentle luminance variation.
+    band_half = period * 0.20
+    flat_half = max(0, round(band_half * 0.5))
+    edge = max(0, round(band_half * 0.5))
+    # Boost alpha for small periods since the narrow band gets diluted
+    # by the downscale.
+    peak_alpha = min(255, int(100 + 80 * (8.0 / max(period, 1))))
     for i in range(total_scanlines):
         cy = round(i * period)
         for offset in range(-flat_half - edge, flat_half + edge + 1):
@@ -628,10 +633,12 @@ def _apply_crt_effects(path, group_name, columns, font_size):
             if 0 <= y < result.height:
                 d = abs(offset)
                 if d <= flat_half:
-                    alpha = 100
-                else:
+                    alpha = peak_alpha
+                elif edge > 0:
                     t = (d - flat_half) / (edge + 1)
-                    alpha = int(100 * (1.0 - t))
+                    alpha = int(peak_alpha * (1.0 - t))
+                else:
+                    alpha = 0
                 if alpha > 0:
                     draw.line([(0, y), (w, y)], fill=(0, 0, 0, alpha))
     result = Image.alpha_composite(result.convert('RGBA'), overlay)
@@ -747,11 +754,13 @@ class RendererPool:
     def _determine_columns(self, group_name):
         return _FONT_GROUPS.get(group_name, {}).get('columns', self._columns)
 
-    def _make_instance(self, group_name, effective_cols, east_asian_wide=False):
+    def _make_instance(self, group_name, effective_cols, effective_rows,
+                       east_asian_wide=False):
         """Create a WeztermMuxInstance for the given font group.
 
         :param group_name: font group key from ``_FONT_GROUPS``
         :param effective_cols: resolved column width
+        :param effective_rows: resolved row height
         :param east_asian_wide: treat ambiguous-width chars as 2 cells
         :returns: a WeztermMuxInstance, or None if mux server is unavailable
         """
@@ -761,6 +770,8 @@ class RendererPool:
         group_info = _FONT_GROUPS[group_name]
         display = (f"{group_name}-{effective_cols}"
                    if effective_cols != 80 else group_name)
+        if effective_rows != self._rows:
+            display += f'-{effective_rows}r'
         font_group_key = group_name
         if east_asian_wide:
             display += '-cjk'
@@ -771,24 +782,28 @@ class RendererPool:
             font_family=group_info['font_family'],
             group_name=display,
             columns=effective_cols,
-            rows=self._rows,
+            rows=effective_rows,
             font_size=self._font_size,
             east_asian_wide=east_asian_wide,
             display_env=self._display_env,
             check_dupes=self._check_dupes,
         )
 
-    def _get_instance(self, group_name, columns=None, east_asian_wide=False):
+    def _get_instance(self, group_name, columns=None, rows=None,
+                      east_asian_wide=False):
         """Get or lazily create an instance for the given group.
 
         :param group_name: font group key from ``_FONT_GROUPS``
         :param columns: optional column width override
+        :param rows: optional row height override
         :param east_asian_wide: treat ambiguous-width chars as 2 cells
         :returns: TerminalInstance or None on failure
         """
         effective_cols = (columns if columns is not None
                           else self._determine_columns(group_name))
-        instance_key = (group_name, effective_cols, east_asian_wide)
+        effective_rows = rows if rows is not None else self._rows
+        instance_key = (group_name, effective_cols, effective_rows,
+                        east_asian_wide)
 
         if instance_key in self._instances:
             inst = self._instances[instance_key]
@@ -805,7 +820,8 @@ class RendererPool:
         if group_info is None:
             return None
 
-        inst = self._make_instance(group_name, effective_cols, east_asian_wide)
+        inst = self._make_instance(group_name, effective_cols, effective_rows,
+                                   east_asian_wide)
         try:
             inst.start()
         except RuntimeError as exc:
@@ -850,19 +866,22 @@ class RendererPool:
         time.sleep(0.5)
         self._start_mux_server()
 
-    def capture(self, text, output_path, encoding='cp437', columns=None):
+    def capture(self, text, output_path, encoding='cp437', columns=None,
+                rows=None):
         """Route a banner to the appropriate terminal instance.
 
         :param text: preprocessed banner text
         :param output_path: path to write the output PNG
         :param encoding: server encoding for font group selection
         :param columns: optional column width override
+        :param rows: optional row height override
         :returns: instance display name on success, None on failure
         """
         group_name = _encoding_to_font_group(encoding)
         east_asian = encoding.lower().replace('-', '_') in _EAST_ASIAN_ENCODINGS
         instance = self._get_instance(
-            group_name, columns=columns, east_asian_wide=east_asian)
+            group_name, columns=columns, rows=rows,
+            east_asian_wide=east_asian)
         if instance is None:
             return None
         if not instance.capture(text, output_path):
@@ -881,14 +900,15 @@ class RendererPool:
                     pass
                 time.sleep(0.3)  # let X11 clean up old window
                 instance = self._get_instance(
-                    group_name, columns=columns, east_asian_wide=east_asian)
+                    group_name, columns=columns, rows=rows,
+                    east_asian_wide=east_asian)
                 if instance is None or not instance.capture(text, output_path):
                     # Nuclear option: restart entire mux server.
                     print(f"  renderer [{group_name}] retry also failed, "
                           f"restarting mux server...", file=sys.stderr)
                     self._restart_mux_server()
                     instance = self._get_instance(
-                        group_name, columns=columns,
+                        group_name, columns=columns, rows=rows,
                         east_asian_wide=east_asian)
                     if instance is not None:
                         if not instance.capture(text, output_path):

@@ -13,6 +13,7 @@ import tabulate as tabulate_mod
 from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
+    _load_row_overrides,
     _load_base_records, _generate_rst,
     _render_banner_section, _render_json_section,
     _render_log_section, _render_fingerprint_section,
@@ -60,7 +61,8 @@ def _ensure_banner(server):
             server.get('encoding_override') or DEFAULT_ENCODING)
         banner_fname, display_w = _banner_to_png(
             banner, BANNERS_PATH, effective_enc,
-            columns=server.get('column_override'))
+            columns=server.get('column_override'),
+            rows=server.get('row_override'))
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:
@@ -155,16 +157,17 @@ def load_bbslist_encodings(bbslist_path):
 # ---------------------------------------------------------------------------
 
 def load_server_data(data_dir, encoding_overrides=None,
-                     column_overrides=None):
+                     column_overrides=None, row_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
     :param encoding_overrides: dict mapping (host, port) to encoding
     :param column_overrides: dict mapping (host, port) to column width
+    :param row_overrides: dict mapping (host, port) to row height
     :returns: list of parsed server record dicts
     """
     base_records = _load_base_records(
-        data_dir, encoding_overrides, column_overrides)
+        data_dir, encoding_overrides, column_overrides, row_overrides)
 
     records = []
     for record in base_records:
@@ -449,6 +452,8 @@ def display_server_table(servers):
     print("     - Hostname and port. Links to a detail page"
           " with banner,"
           " fingerprint, and connection log.")
+    print("   * - **\U0001f30d**")
+    print("     - Country flag from GeoIP lookup.")
     print("   * - **Software**")
     print("     - BBS software detected from the login banner"
           " (e.g. Synchronet, Mystic BBS).")
@@ -469,8 +474,7 @@ def display_server_table(servers):
         bbs_file = s['_bbs_file']
         host_display = f"{s['host']}:{s['port']}"
         flag = _country_flag(s.get('_country_code', ''))
-        flag_prefix = f"{flag} " if flag else ''
-        host_cell = (f"{flag_prefix}:doc:`{_rst_escape(host_display)}"
+        host_cell = (f":doc:`{_rst_escape(host_display)}"
                      f" <bbs_detail/{bbs_file}>`")
         if s['website']:
             href = s['website']
@@ -491,6 +495,7 @@ def display_server_table(servers):
 
         rows.append({
             'Host': host_cell,
+            '\U0001f30d': flag,
             'Software': _rst_escape(software),
             'Encoding': encoding,
             'Fingerprint': f':ref:`{fp} <fp_{s["fingerprint"]}>`',
@@ -1133,9 +1138,14 @@ def run(args):
         print(f"Loaded {len(column_overrides)} column width"
               f" overrides from {bbslist}", file=sys.stderr)
 
+    row_overrides = _load_row_overrides(bbslist)
+    if row_overrides:
+        print(f"Loaded {len(row_overrides)} tall terminal"
+              f" overrides from {bbslist}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
     records = load_server_data(data_dir, encoding_overrides,
-                               column_overrides)
+                               column_overrides, row_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 

@@ -1,5 +1,5 @@
 # format,
-# ip address [port number [encoding [columns]]]
+# ip address [port number [encoding [columns [tall]]]]
 104.142.112.149 9000 utf-8
 104.174.3.6 23 utf-8
 104.57.170.70 6840
@@ -93,7 +93,6 @@
 45.33.40.193 443
 45.72.180.214 23 topaz
 45.79.37.227 23 utf-8
-45.79.37.227 513 utf-8
 45.79.66.72 23
 45.79.69.172 513
 47.223.173.180 23
@@ -192,7 +191,7 @@ alcatrazbbs.ddns.net 9000
 alco.bbs.io 23 topaz
 alephbbs.com 2626
 altairiv.ddns.net 2323
-altarofwaresbbs.hopto.org 6464
+altarofwaresbbs.hopto.org 6464 petscii
 alterant.bbs.dege.au 23 utf-8
 amibbs.amigaretro.com 6880 topaz
 amigacity.xyz 23 utf-8
@@ -200,7 +199,7 @@ amiganer.amms-bbs.de 23 topaz
 amigaunderground.com 1985 topaz
 amigaunderground.com 2002 topaz
 amigaunderground.com 2300 topaz
-amis86.ddns.net 9000 atascii
+amis86.ddns.net 9000 atascii 80 tall
 amnesiabbs.duckdns.org 23 utf-8
 amstrad.simulant.uk 464
 andcycle.idv.tw 23 big5
@@ -212,13 +211,13 @@ arda-bbs.com 23
 area52.tk 5200 atascii
 asanocomp.ddns.net 2300 utf-8
 ascii.dynu.net 4096
-atari-bbs.zapto.org 8888 atascii
+atari-bbs.zapto.org 8888 atascii 80 tall
 atari8.us 10001 atascii
 ataribbs.ddns.net 6502 atascii
 atl.ddns.net 6400 petscii
 atl.ddns.net 6401
 aturiondynasty.hopto.org 4444
-avastbbs.servegame.com 23
+avastbbs.servegame.com 23 cp437 80 tall
 aws1.fmerino.com.br 23 utf-8
 ayestaran.co.uk 5357
 backintime.ddns.net 6510
@@ -245,9 +244,9 @@ bbs.alsgeeklab.com 2323 utf-8
 bbs.anduin.net 23
 bbs.archaicbinary.net 23
 bbs.arcticzonebbs.net 23
-bbs.as.ntu.edu.tw 23 big5
+bbs.as.ntu.edu.tw 23 big5 tall
 bbs.at2k.org 23
-bbs.b-wells.us 23 utf-8
+bbs.b-wells.us 23 utf-8 80 tall
 bbs.bajer.cz 32
 bbs.beanzilla.net 2323 big5
 bbs.beardy.se 23 utf-8
@@ -280,7 +279,6 @@ bbs.cyrellia.com 23 utf-8
 bbs.darkcarnival.org 23
 bbs.darkrealms.ca 23
 bbs.decafbad.com 6513 utf-8
-bbs.decafbad.com 6523 utf-8
 bbs.deek.se 23
 bbs.deepskies.com 6400
 bbs.demigoth.com 23 utf-8
@@ -295,9 +293,9 @@ bbs.dragons-server.com 8888
 bbs.dragonsweb.org 23
 bbs.dsbbs.ca 23
 bbs.duensing.digital 23
-bbs.efectolinux.com 23 utf-8
+bbs.efectolinux.com 23 utf-8 80 tall
 bbs.emeraldhill.org 23
-bbs.emeraldvalley.net 23 utf-8
+bbs.emeraldvalley.net 23 utf-8 80 tall
 bbs.emu486.net 23 big5
 bbs.eotd.com 23
 bbs.erb.pw 23
@@ -371,7 +369,7 @@ bbs.orreli.net 2002
 bbs.orreli.net 45023 utf-8
 bbs.pewp.us 23 utf-8
 bbs.phantombbs.info 2323
-bbs.pharcyde.org 23 utf-8
+bbs.pharcyde.org 23 utf-8 80 tall
 bbs.pharos.rocks 23 big5
 bbs.phospher.com 23 utf-8
 bbs.pixelgrounds.net 8888 utf-8
@@ -386,7 +384,7 @@ bbs.retrocampus.com 6510 petscii
 bbs.retrohack.se 23 utf-8
 bbs.retrohack.se 64128
 bbs.riddells.net 10023
-bbs.rockvilletavern.com 23
+bbs.rockvilletavern.com 23 cp437 80 tall
 bbs.roguenet.work 8888 utf-8
 bbs.roonsbbs.hu 1212
 bbs.sbbsystems.com 8888 utf-8
@@ -426,7 +424,7 @@ bbs.twomice.net 23 gbk
 bbs.tychostation.it 23
 bbs.uncomfortable.business 6423
 bbs.undermine.ca 23 utf-8
-bbs.unicyber.co.uk 2323 utf-8
+bbs.unicyber.co.uk 2323 utf-8 80 tall
 bbs.vcgsa.co.za 23 utf-8
 bbs.venerandi.it 23
 bbs.vslib.cz 23
@@ -480,7 +478,7 @@ capitolcityonline.net 513
 capitolshrill.com 23
 casbah.goip.de 5354 latin-1
 casper.homeip.net 23
-cavebbs.homeip.net 23 utf-8
+cavebbs.homeip.net 23 utf-8 80 tall
 cbbs.mitsaltair.com 8800
 ccbbs.zapto.org 3143
 cd.csie.io 23 big5
@@ -514,8 +512,8 @@ connect.rayzer.net 2112
 connect.serionbbs.com 23
 convolution.us 23 utf-8
 corsysystem.org 2300
-cosmicrage.earth 7777
-cottonwoodbbs.dyndns.org 6502
+cosmicrage.earth 7777 cp437 80 tall
+cottonwoodbbs.dyndns.org 6502 petscii
 cpbbs.de 2323 cp437 90
 cqbbs.ddns.net 6800
 crackintimebbs.ddns.net 2323
@@ -528,7 +526,7 @@ cyberspacebbs.net 2323
 cybersphere.net 7777
 dangerbaybbs.dyndns.org 1337
 darkagesbbs.com 23 utf-8
-darkendlessbbs.hopto.org 6510
+darkendlessbbs.hopto.org 6510 petscii
 darkforce-bbs.dyndns.org 1040
 darkgame.buanzo.org 23
 darklevel.hopto.org 64128
@@ -671,6 +669,7 @@ kraaby.synchro.net 23 utf-8
 krion.io 1337
 kuehlbox.wtf 23
 lakehouse.lilpenguins.com 2333 utf-8
+macos.retro-os.live 513 utf-8
 landofthelost.ca 2300
 landover.synchronetbbs.org 23 utf-8
 lastrangers.com 23 utf-8
@@ -691,8 +690,7 @@ lunarout.synchro.net 8023
 lunaticsunleashed.ddns.net 2333
 lv426bbs.hopto.org 6464
 lynx.scramworks.net 23
-macos.retro-os.live 23 utf-8
-macos.retro-os.live 513 utf-8
+macos.retro-os.live 23 utf-8 tall
 madmanbbs.ddns.net 23
 magnumbbs.net 23
 magnumbbs.net 513
@@ -700,7 +698,7 @@ mail.drf-solutions.net 23
 mail.hohimer.org 1336
 majicka.at2k.org 1955
 manalejandro.com 23 utf-8
-mapscii.me 23
+mapscii.me 23 utf-8
 maxbbs.ddns.net 24023
 mba.dnsalias.com 2002
 mba.dnsalias.com 23
@@ -775,7 +773,7 @@ outerwall.net 23
 outwest.synchro.net 23 utf-8
 overfit.retrievo.xyz 8023 utf-8
 packet.w4bfb.org 2333
-palace.brokedownpalace.online 2323
+palace.brokedownpalace.online 2323 cp437 80 tall
 paladium.servebbs.com 20
 palantirbbs.ddns.net 23
 paradoxbbs.qc.to 57323 utf-8
@@ -804,7 +802,7 @@ ptbbs.ddns.net 8000
 ptt2.cc 23 big5
 pulsebbs.hopto.org 1984
 pyroto.mysticmountain.us 8086
-qeeai.com 23
+qeeai.com 23 big5
 quazarbbs.dynu.net 2523
 radiostream.amigaz.org 2323
 rapidfire.hopto.org 64128
@@ -863,9 +861,9 @@ solarflow.dynu.net 23
 sos-bbs.net 23
 sotanomsxbbs.org 23 utf-8
 southcentral.se 1023 topaz
-southernamis.ddns.net 23
+southernamis.ddns.net 23 atascii
 spaghettihut.amigaretro.net 6800
-sparx.bbs.io 23
+sparx.bbs.io 23 cp437 80 tall
 splatter.haus 666
 ssbbs.ddns.net 6502 petscii
 ssbbs.ddns.net 6510
@@ -909,7 +907,7 @@ terrorkom-server.de 56656
 tfb-bbs.org 23
 tfcbbs.com 6400
 tgr.freeddns.org 23
-the-hidden.hopto.org 64128
+the-hidden.hopto.org 64128 petscii
 the-rotten-core.strangled.net 2323 utf-8
 the.alienmindbenders.net 23
 the.ericade.net 23
@@ -1003,7 +1001,7 @@ wn2.wrgnbr.com 6405 utf-8
 wn3.wrgnbr.com 6400
 wn4.wrgnbr.com 3000
 wn6.wrgnbr.com 6411
-wordbbs.hopto.org 64128
+wordbbs.hopto.org 64128 petscii
 workstation.ddmcomputers.com.au 2323
 wwiv.bsbbs.com 2323
 wwiv.dmine.net 2323

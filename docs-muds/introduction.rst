@@ -64,13 +64,14 @@ widely in purpose:
   The original type. Focused on combat, exploration, quests, and character advancement, usually in
   a fantasy or science fiction setting. Common codebase families include `DikuMUD
   <https://en.wikipedia.org/wiki/DikuMUD>`_, `LPMud <https://en.wikipedia.org/wiki/LPMud>`_, and
-  `ROM <https://muds.fandom.com/wiki/ROM>`.
+  `ROM <https://muds.fandom.com/wiki/ROM>`_.
 
 - **MUSH** (Multi-User Shared Hallucination)
 
   Focused on collaborative storytelling and roleplay rather than combat mechanics. Players can
-  build rooms and objects using an in-game scripting language. Common codebases include PennMUSH,
-  TinyMUSH, and RhostMUSH.
+  build rooms and objects using an in-game scripting language. Common codebases include `PennMUSH
+  <https://github.com/pennmush/pennmush>`_, `TinyMUSH <https://github.com/TinyMUSH/TinyMUSH>`_, and
+  `RhostMUSH <https://github.com/RhostMUSH/trunk>`_.
 
 - **MUX** (Multi-User eXperience)
 
@@ -84,15 +85,16 @@ widely in purpose:
 
 - **MUCK** (Multi-User Created Kingdom)
 
-  Social and creative environments where players build areas and write programs in MUF (Multi-User
-  Forth). Fuzzball MUCK is the dominant codebase. MUCKs are popular in the furry community.
+  Social and creative environments where players build areas and write programs in `MUF
+  <https://www.mufarchive.com/>`_ (Multi-User Forth). `Fuzzball MUCK
+  <https://github.com/fuzzball-muck/fuzzball>`_ is the dominant codebase. MUCKs
+  are popular in the furry community.
 
   .. warning::
 
      **Adult Content** -- Some of the most popular servers in this census by player count are not
-     traditional games at all but sophisticated adult chat rooms. Servers detected as having adult
-     content (via MSSP ``ADULT MATERIAL`` or ``MINIMUM AGE`` >= 18) are tagged with ``Adult`` in the
-     genre column of the :doc:`server_list`.
+     traditional games at all but sophisticated adult chat rooms. All servers of this kind clearly
+     state whether adult content is allowed or strictly forbidden.
 
 About This Site
 ---------------

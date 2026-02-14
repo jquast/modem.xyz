@@ -168,8 +168,35 @@ def _load_column_overrides(path):
     return overrides
 
 
+def _load_row_overrides(path):
+    """Load row height overrides from a server list file.
+
+    Looks for the keyword ``tall`` anywhere after the port field.
+
+    :param path: path to server list file
+    :returns: dict mapping (host, port) to row count
+    """
+    overrides = {}
+    if not os.path.isfile(path):
+        return overrides
+    with open(path) as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            parts = line.split()
+            if len(parts) >= 3 and 'tall' in parts[2:]:
+                host = parts[0]
+                try:
+                    port = int(parts[1])
+                except ValueError:
+                    continue
+                overrides[(host, port)] = 100
+    return overrides
+
+
 def _load_base_records(data_dir, encoding_overrides=None,
-                       column_overrides=None):
+                       column_overrides=None, row_overrides=None):
     """Load base server records from fingerprint JSON files.
 
     Parses session data, fingerprint data, encoding overrides, and
@@ -180,6 +207,7 @@ def _load_base_records(data_dir, encoding_overrides=None,
     :param data_dir: path to telnetlib3 data directory
     :param encoding_overrides: dict mapping (host, port) to encoding
     :param column_overrides: dict mapping (host, port) to column width
+    :param row_overrides: dict mapping (host, port) to row height
     :returns: list of dicts, each containing base record fields plus
         ``_session_data`` and ``_session`` for caller enrichment
     """
@@ -187,6 +215,8 @@ def _load_base_records(data_dir, encoding_overrides=None,
         encoding_overrides = {}
     if column_overrides is None:
         column_overrides = {}
+    if row_overrides is None:
+        row_overrides = {}
 
     server_dir = os.path.join(data_dir, "server")
     if not os.path.isdir(server_dir):
@@ -258,6 +288,8 @@ def _load_base_records(data_dir, encoding_overrides=None,
                 'encoding_override': encoding_overrides.get(
                     (host, port), ''),
                 'column_override': column_overrides.get(
+                    (host, port)),
+                'row_override': row_overrides.get(
                     (host, port)),
                 'banner_before': banner_before,
                 'banner_after': banner_after,
@@ -508,7 +540,8 @@ def _png_display_width(path):
     return None
 
 
-def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
+def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
+                   rows=None):
     """Render ANSI banner text to a deduplicated PNG file.
 
     Preprocesses the banner text, hashes it with the encoding and
@@ -520,6 +553,7 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     :param banners_dir: directory for output PNG files
     :param encoding: server encoding for font group selection
     :param columns: optional terminal column width override
+    :param rows: optional terminal row height override
     :returns: ``(filename, display_width)`` tuple, or ``(None, None)``
         on failure.  *display_width* is the intended CSS pixel width
         for HiDPI rendering (half the actual PNG pixel width).
@@ -529,9 +563,18 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
 
     text = text.replace('\x00', '')
     text = text.replace('\r\n', '\n').replace('\n\r', '\n')
+    # PETSCII uses standalone \r as newline (0x0D = carriage return only
+    # in ASCII, but acts as newline on C64).  After \r\n pairs are already
+    # collapsed above, remaining \r are standalone PETSCII newlines.
+    if encoding == 'petscii':
+        text = text.replace('\r', '\n')
     text = _strip_mxp_sgml(text)
     # Strip terminal report/query sequences (DSR, DA, window ops)
-    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text).rstrip()
+    text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text)
+    # Strip newlines before absolute cursor positioning — they are
+    # redundant and produce unwanted blank lines (e.g. Mystic BBS).
+    text = re.sub(r'\n(\x1b\[\d+;\d*H)', r'\1', text)
+    text = text.rstrip()
 
     # Skip banners with no visible content — they all render to the same
     # blank image and waste renderer cycles.
@@ -548,6 +591,8 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
     hash_input = text + '\x00' + encoding
     if columns is not None:
         hash_input += '\x00' + str(columns)
+    if rows is not None:
+        hash_input += '\x00r' + str(rows)
     key = hashlib.sha1(
         hash_input.encode('utf-8', errors='surrogateescape')).hexdigest()[:12]
 
@@ -560,7 +605,7 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None):
         return fname, _png_display_width(output_path)
 
     instance_name = _renderer_pool.capture(
-        text, output_path, encoding, columns=columns)
+        text, output_path, encoding, columns=columns, rows=rows)
     if instance_name:
         return fname, _png_display_width(output_path)
     # Cache failure as 0-byte file to avoid retrying on next run.
@@ -625,6 +670,7 @@ def _jinja_env():
     env.filters['banner_alt_text'] = _banner_alt_text
     env.filters['telnet_url'] = lambda h, p: _telnet_url(h, p)
     env.filters['clean_log_line'] = _clean_log_line
+    env.filters['rst_width'] = lambda t: wcwidth.width(t, control_codes='ignore')
     return env
 
 
@@ -647,10 +693,7 @@ def _render_template(template_name, **context):
 def _rst_heading(title, char):
     """Print an RST section heading with the given underline character."""
     print(title)
-    width = wcwidth.wcswidth(title)
-    if width < 0:
-        width = len(title)
-    print(char * max(width, 4))
+    print(char * max(wcwidth.width(title, control_codes='ignore'), 4))
     print()
 
 
@@ -1451,7 +1494,8 @@ def _render_banner_section(server, banners_path, default_encoding=None):
     if banner and not _is_garbled(banner):
         banner_fname, display_w = _banner_to_png(
             banner, banners_path, effective_enc,
-            columns=server.get('column_override'))
+            columns=server.get('column_override'),
+            rows=server.get('row_override'))
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:
