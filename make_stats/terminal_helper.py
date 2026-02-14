@@ -233,9 +233,6 @@ def main():
         # with payload size (base 5s + 1s per 64 KiB).
         flush_timeout = 5.0 + nbytes / 65536
         if _wait_for_cpr(timeout=flush_timeout):
-            # Brief pause for compositor to paint the frame after the
-            # terminal has processed all escape sequences.
-            time.sleep(0.10)
             _log(f'banner #{count}: flush confirmed')
             if not _signal_ready(ready_pipe, f'ok {nbytes}'):
                 break

@@ -21,6 +21,8 @@ import tempfile
 import time
 import warnings
 
+import wcwidth
+
 _HELPER_SCRIPT = os.path.join(os.path.dirname(__file__), 'terminal_helper.py')
 
 # CGA/VGA 16-color palette matching ansilove defaults.
@@ -493,7 +495,7 @@ class TerminalInstance(abc.ABC):
             return False
 
         self._activate()
-        time.sleep(0.20)
+        time.sleep(0.05)
 
         self._last_capture_content_blank = False
         ok, raw_w, raw_h, raw_md5 = self._screenshot_and_crop(output_path)
@@ -524,9 +526,28 @@ class TerminalInstance(abc.ABC):
         w, h = _png_dimensions(output_path)
         if 0 < w < 20 and 0 < h < 20:
             if raw_w >= 100 and raw_h >= 100:
-                # Terminal captured fine, content was just too sparse to
-                # produce a meaningful banner after crop.  Not poison.
-                self._last_capture_content_blank = True
+                visible_len = len(
+                    wcwidth.strip_sequences(text).strip())
+                if visible_len < 50:
+                    # Content genuinely sparse (backspaces, whitespace,
+                    # short prompts).  Terminal is fine, skip retry.
+                    self._last_capture_content_blank = True
+                    print(f"  banner trimmed to {w}x{h}px "
+                          f"(raw {raw_w}x{raw_h}, "
+                          f"{visible_len} visible chars), "
+                          f"skipping: "
+                          f"{os.path.basename(output_path)}",
+                          file=sys.stderr)
+                else:
+                    # Substantial banner rendered to near-empty
+                    # screenshot — likely a paint-lag or form-feed
+                    # timing issue.  Let retry mechanism fire.
+                    print(f"  banner trimmed to {w}x{h}px "
+                          f"(raw {raw_w}x{raw_h}, "
+                          f"{visible_len} visible chars), "
+                          f"will retry: "
+                          f"{os.path.basename(output_path)}",
+                          file=sys.stderr)
                 try:
                     os.unlink(output_path)
                 except OSError:
@@ -854,7 +875,7 @@ class RendererPool:
         self._start_mux_server()
 
     def capture(self, text, output_path, encoding='cp437', columns=None,
-                rows=None):
+                rows=None, no_ambig=False):
         """Route a banner to the appropriate terminal instance.
 
         :param text: preprocessed banner text
@@ -862,10 +883,12 @@ class RendererPool:
         :param encoding: server encoding for font group selection
         :param columns: optional column width override
         :param rows: optional row height override
+        :param no_ambig: if True, disable ambiguous-width-as-wide for CJK
         :returns: instance display name on success, None on failure
         """
         group_name = _encoding_to_font_group(encoding)
-        east_asian = encoding.lower().replace('-', '_') in _EAST_ASIAN_ENCODINGS
+        east_asian = (encoding.lower().replace('-', '_') in _EAST_ASIAN_ENCODINGS
+                      and not no_ambig)
         instance = self._get_instance(
             group_name, columns=columns, rows=rows,
             east_asian_wide=east_asian)

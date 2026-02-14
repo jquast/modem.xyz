@@ -16,6 +16,7 @@ from make_stats.common import (
     PLOT_FG, PLOT_GREEN, PLOT_CYAN,
     _listify, _first_str, _parse_int, _format_scan_time,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
+    _load_no_ambig_overrides,
     _load_base_records, _generate_rst,
     _render_banner_section, _render_json_section,
     _render_log_section, _render_fingerprint_section,
@@ -281,16 +282,18 @@ def _detect_protocols(record):
 # ---------------------------------------------------------------------------
 
 def load_server_data(data_dir, encoding_overrides=None,
-                     column_overrides=None):
+                     column_overrides=None, no_ambig_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
     :param encoding_overrides: dict mapping (host, port) to encoding
     :param column_overrides: dict mapping (host, port) to column width
+    :param no_ambig_overrides: dict mapping (host, port) to True
     :returns: list of parsed server record dicts
     """
     base_records = _load_base_records(
-        data_dir, encoding_overrides, column_overrides)
+        data_dir, encoding_overrides, column_overrides,
+        no_ambig_overrides=no_ambig_overrides)
 
     records = []
     for record in base_records:
@@ -1432,10 +1435,15 @@ def run(args):
         print(f"Loaded {len(column_overrides)} column width"
               f" overrides from {server_list}", file=sys.stderr)
 
+    no_ambig_overrides = _load_no_ambig_overrides(server_list)
+    if no_ambig_overrides:
+        print(f"Loaded {len(no_ambig_overrides)} no_ambig"
+              f" overrides from {server_list}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
 
     records = load_server_data(data_dir, encoding_overrides,
-                               column_overrides)
+                               column_overrides, no_ambig_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 

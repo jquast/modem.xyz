@@ -336,13 +336,6 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
   },
   {
-    "host": "discworld.starturtle.net",
-    "port": 23,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
-  },
-  {
     "host": "gra.cygnusreborn.pl",
     "port": 1111,
     "ssl": 0,

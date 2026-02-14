@@ -195,8 +195,38 @@ def _load_row_overrides(path):
     return overrides
 
 
+def _load_no_ambig_overrides(path):
+    """Load no_ambig overrides from a server list file.
+
+    Looks for the keyword ``no_ambig`` anywhere after the port field.
+    Servers with this flag render CJK banners without treating
+    ambiguous-width characters as wide.
+
+    :param path: path to server list file
+    :returns: dict mapping (host, port) to True
+    """
+    overrides = {}
+    if not os.path.isfile(path):
+        return overrides
+    with open(path) as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            parts = line.split()
+            if len(parts) >= 3 and 'no_ambig' in parts[2:]:
+                host = parts[0]
+                try:
+                    port = int(parts[1])
+                except ValueError:
+                    continue
+                overrides[(host, port)] = True
+    return overrides
+
+
 def _load_base_records(data_dir, encoding_overrides=None,
-                       column_overrides=None, row_overrides=None):
+                       column_overrides=None, row_overrides=None,
+                       no_ambig_overrides=None):
     """Load base server records from fingerprint JSON files.
 
     Parses session data, fingerprint data, encoding overrides, and
@@ -208,6 +238,7 @@ def _load_base_records(data_dir, encoding_overrides=None,
     :param encoding_overrides: dict mapping (host, port) to encoding
     :param column_overrides: dict mapping (host, port) to column width
     :param row_overrides: dict mapping (host, port) to row height
+    :param no_ambig_overrides: dict mapping (host, port) to True
     :returns: list of dicts, each containing base record fields plus
         ``_session_data`` and ``_session`` for caller enrichment
     """
@@ -217,6 +248,8 @@ def _load_base_records(data_dir, encoding_overrides=None,
         column_overrides = {}
     if row_overrides is None:
         row_overrides = {}
+    if no_ambig_overrides is None:
+        no_ambig_overrides = {}
 
     server_dir = os.path.join(data_dir, "server")
     if not os.path.isdir(server_dir):
@@ -291,6 +324,8 @@ def _load_base_records(data_dir, encoding_overrides=None,
                     (host, port)),
                 'row_override': row_overrides.get(
                     (host, port)),
+                'no_ambig_override': no_ambig_overrides.get(
+                    (host, port), False),
                 'banner_before': banner_before,
                 'banner_after': banner_after,
                 'timing': session_data.get('timing', {}),
@@ -541,7 +576,7 @@ def _png_display_width(path):
 
 
 def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
-                   rows=None):
+                   rows=None, no_ambig=False):
     """Render ANSI banner text to a deduplicated PNG file.
 
     Preprocesses the banner text, hashes it with the encoding and
@@ -554,6 +589,7 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     :param encoding: server encoding for font group selection
     :param columns: optional terminal column width override
     :param rows: optional terminal row height override
+    :param no_ambig: if True, disable ambiguous-width-as-wide for CJK
     :returns: ``(filename, display_width)`` tuple, or ``(None, None)``
         on failure.  *display_width* is the intended CSS pixel width
         for HiDPI rendering (half the actual PNG pixel width).
@@ -593,6 +629,8 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
         hash_input += '\x00' + str(columns)
     if rows is not None:
         hash_input += '\x00r' + str(rows)
+    if no_ambig:
+        hash_input += '\x00no_ambig'
     key = hashlib.sha1(
         hash_input.encode('utf-8', errors='surrogateescape')).hexdigest()[:12]
 
@@ -605,10 +643,15 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
         return fname, _png_display_width(output_path)
 
     instance_name = _renderer_pool.capture(
-        text, output_path, encoding, columns=columns, rows=rows)
+        text, output_path, encoding, columns=columns, rows=rows,
+        no_ambig=no_ambig)
     if instance_name:
         return fname, _png_display_width(output_path)
     # Cache failure as 0-byte file to avoid retrying on next run.
+    plain_len = len(_strip_ansi(text).strip())
+    print(f"  banner render failed: {fname} "
+          f"({plain_len} visible chars, enc={encoding})",
+          file=sys.stderr)
     open(output_path, 'w').close()
     return None, None
 
@@ -1515,7 +1558,8 @@ def _render_banner_section(server, banners_path, default_encoding=None):
         banner_fname, display_w = _banner_to_png(
             banner, banners_path, effective_enc,
             columns=server.get('column_override'),
-            rows=server.get('row_override'))
+            rows=server.get('row_override'),
+            no_ambig=server.get('no_ambig_override', False))
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:

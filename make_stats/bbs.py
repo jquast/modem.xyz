@@ -13,7 +13,7 @@ import tabulate as tabulate_mod
 from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
-    _load_row_overrides,
+    _load_row_overrides, _load_no_ambig_overrides,
     _load_base_records, _generate_rst,
     _render_banner_section, _render_json_section,
     _render_log_section, _render_fingerprint_section,
@@ -62,7 +62,8 @@ def _ensure_banner(server):
         banner_fname, display_w = _banner_to_png(
             banner, BANNERS_PATH, effective_enc,
             columns=server.get('column_override'),
-            rows=server.get('row_override'))
+            rows=server.get('row_override'),
+            no_ambig=server.get('no_ambig_override', False))
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:
@@ -157,17 +158,20 @@ def load_bbslist_encodings(bbslist_path):
 # ---------------------------------------------------------------------------
 
 def load_server_data(data_dir, encoding_overrides=None,
-                     column_overrides=None, row_overrides=None):
+                     column_overrides=None, row_overrides=None,
+                     no_ambig_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
     :param encoding_overrides: dict mapping (host, port) to encoding
     :param column_overrides: dict mapping (host, port) to column width
     :param row_overrides: dict mapping (host, port) to row height
+    :param no_ambig_overrides: dict mapping (host, port) to True
     :returns: list of parsed server record dicts
     """
     base_records = _load_base_records(
-        data_dir, encoding_overrides, column_overrides, row_overrides)
+        data_dir, encoding_overrides, column_overrides, row_overrides,
+        no_ambig_overrides)
 
     records = []
     for record in base_records:
@@ -840,7 +844,15 @@ def _write_bbs_server_info(server, sec_char):
     display_enc = server['display_encoding']
     scanner_enc = server.get('encoding', 'unknown')
     _rst_heading("Encoding", sec_char)
-    print(f"- **Effective encoding**: {display_enc}")
+    enc_note = ''
+    enc_norm = display_enc.lower().replace('-', '_')
+    if enc_norm in ('big5', 'gbk', 'shift_jis', 'euc_kr',
+                    'euc_jp', 'gb2312'):
+        if server.get('no_ambig_override'):
+            enc_note = ' (CJK, narrow ambiguous width)'
+        else:
+            enc_note = ' (with ambiguous width as wide)'
+    print(f"- **Effective encoding**: {display_enc}{enc_note}")
     if server.get('encoding_override'):
         print(f"- **Override**: {server['encoding_override']}"
               " (from bbslist.txt)")
@@ -1143,9 +1155,15 @@ def run(args):
         print(f"Loaded {len(row_overrides)} tall terminal"
               f" overrides from {bbslist}", file=sys.stderr)
 
+    no_ambig_overrides = _load_no_ambig_overrides(bbslist)
+    if no_ambig_overrides:
+        print(f"Loaded {len(no_ambig_overrides)} no_ambig"
+              f" overrides from {bbslist}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
     records = load_server_data(data_dir, encoding_overrides,
-                               column_overrides, row_overrides)
+                               column_overrides, row_overrides,
+                               no_ambig_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 
