@@ -495,7 +495,7 @@ class TerminalInstance(abc.ABC):
             return False
 
         self._activate()
-        time.sleep(0.05)
+        time.sleep(0.10)
 
         self._last_capture_content_blank = False
         ok, raw_w, raw_h, raw_md5 = self._screenshot_and_crop(output_path)
@@ -871,7 +871,7 @@ class RendererPool:
         if self._mux_server is not None:
             self._mux_server.stop()
             self._mux_server = None
-        time.sleep(0.5)
+        time.sleep(0.75)
         self._start_mux_server()
 
     def capture(self, text, output_path, encoding='cp437', columns=None,
@@ -908,7 +908,7 @@ class RendererPool:
                     instance.stop()
                 except Exception:
                     pass
-                time.sleep(0.3)  # let X11 clean up old window
+                time.sleep(0.45)  # let X11 clean up old window
                 instance = self._get_instance(
                     group_name, columns=columns, rows=rows,
                     east_asian_wide=east_asian)

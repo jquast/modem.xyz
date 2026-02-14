@@ -1486,7 +1486,7 @@ def generate_fingerprint_details(servers, detail_path, generate_detail_fn,
 
 
 def create_telnet_options_plot(stats, output_path):
-    """Create grouped bar chart of telnet option negotiation patterns."""
+    """Create stacked bar chart of telnet option negotiation patterns."""
     offered = stats['option_offered']
     requested = stats['option_requested']
 
@@ -1511,13 +1511,14 @@ def create_telnet_options_plot(stats, output_path):
     requested_counts = [requested.get(o, 0) for o in options]
 
     x = np.arange(len(options))
-    width = 0.35
+    width = 0.6
 
     fig, ax = plt.subplots(figsize=(14, 6))
-    ax.bar(x - width / 2, offered_counts, width,
+    ax.bar(x, offered_counts, width,
            label='Server Offers',
            color=PLOT_GREEN, edgecolor='#222222', alpha=0.85)
-    ax.bar(x + width / 2, requested_counts, width,
+    ax.bar(x, requested_counts, width,
+           bottom=offered_counts,
            label='Server Requests',
            color=PLOT_CYAN, edgecolor='#222222', alpha=0.85)
 

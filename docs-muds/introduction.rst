@@ -24,13 +24,15 @@ What is Telnet?
 
 `Telnet <https://en.wikipedia.org/wiki/Telnet>`_ is one of the earliest network protocols still in
 use today. Developed for `ARPANET <https://en.wikipedia.org/wiki/ARPANET>`_ in 1969 and described in
-`RFC 97 <https://datatracker.ietf.org/doc/html/rfc97>`_), it allowed systems to establish a two-way
+`RFC 97 <https://datatracker.ietf.org/doc/html/rfc97>`_, it allowed systems to establish a two-way
 text-only connection over the internet. Despite its age, Telnet remains widely deployed and used all
-over the world and for embedded/IoT systems.
+over the world.
 
-Although the Telnet protocol has **option negotiation**, a complex procedure of negotiating extended
-options, a majority of the MUD servers surveyed do not perform any Telnet option negotiation at all.
-They simply send and receive raw ASCII text, which is fully compliant with the original standard.
+Although later Telnet Protocol standards introduced Command structure (IAC "Interpret as Command")
+and Option negotiation (WILL/WONT/DO/DONT), (`RFC 854 <https://www.rfc-editor.org/rfc/rfc854.html>`)
+to negotiate more advanced features, like window size, terminal type, echo and others, a majority of
+the MUD servers surveyed do not perform any Telnet option negotiation at all.  They simply send and
+receive raw ASCII text, which is fully compliant with the original standard.
 
 See Also: BBSes
 ~~~~~~~~~~~~~~~
