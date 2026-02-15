@@ -218,7 +218,7 @@ def main():
     )
     do_encodings = args.only_encodings or not any_only
     do_columns = args.only_columns
-    do_empty = args.only_empty
+    do_empty = args.only_empty or not any_only
     do_renders_empty = args.only_renders_empty
     do_renders_small = args.only_renders_small
 

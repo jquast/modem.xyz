@@ -371,6 +371,9 @@
     "104.57.170.70:6840|absinthebbs.net:1940|adibbs.sytes.net:6800|lv426bbs.hopto.org:6464|strangeplanet.org:6800|wn3.wrgnbr.com:6400": {
       "action": "skip"
     },
+    "104.57.170.70:6840|adibbs.sytes.net:6800|lv426bbs.hopto.org:6464|strangeplanet.org:6800|wn3.wrgnbr.com:6400": {
+      "action": "skip"
+    },
     "104.57.170.70:6840|adibbs.sytes.net:6800|lv426bbs.hopto.org:6464|wn3.wrgnbr.com:6400": {
       "action": "skip"
     },
@@ -917,6 +920,12 @@
         "92.220.71.106:23"
       ]
     },
+    "92.249.193.213:1212|99.106.75.128:95|bbs.ramifications.ca:5128|tfcbbs.com:6400": {
+      "action": "skip"
+    },
+    "92.249.193.213:1212|bbs.roonsbbs.hu:1212": {
+      "action": "skip"
+    },
     "96.231.233.52:23|96.231.233.58:23": {
       "action": "skip"
     },
@@ -1047,6 +1056,9 @@
     "adults.mushpark.com:6969|labmush.mushpark.com:3939|mearth.mushpark.com:9376|mo.mushpark.com:2012|mushpark.com:1972|mushpark.com:6000|passion.mushpark.com:1313|puggy.mushpark.com:9033|shangrilamux.com:9999|winter.mushpark.com:3000": {
       "action": "skip"
     },
+    "adventmud.vineyard.haus:8310|phoenixmud.net:4000": {
+      "action": "skip"
+    },
     "ageofdragonsmud.com:4000|starwars.d20mud.com:5500": {
       "action": "skip"
     },
@@ -1101,7 +1113,16 @@
     "aoh.genesismuds.com:6969|dragonballrevolt.genesismuds.com:6969|elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|rom.genesismuds.com:4422": {
       "action": "skip"
     },
+    "aoh.genesismuds.com:6969|dragonballrevolt.genesismuds.com:6969|ianshirm.genesismuds.com:2251": {
+      "action": "remove",
+      "remove": [
+        "dragonballrevolt.genesismuds.com:6969"
+      ]
+    },
     "aoh.genesismuds.com:6969|dragonballrevolt.genesismuds.com:6969|rom.genesismuds.com:4422": {
+      "action": "skip"
+    },
+    "aoh.genesismuds.com:6969|ianshirm.genesismuds.com:2251": {
       "action": "skip"
     },
     "aoh.zitz.dk:2345|aoh.zitz.dk:2348": {
@@ -1212,6 +1233,9 @@
     "bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|jamesmauler.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|teehill.adirondackpc.com:2020|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|jamesmauler.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|teehill.adirondackpc.com:2020|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "bbs.memphistw.org:23|greywolf.synchro.net:23": {
       "action": "skip"
     },
@@ -1250,6 +1274,12 @@
     },
     "bcrgames.com:31337|wizardsrainbow.com:23": {
       "action": "skip"
+    },
+    "bl.mud.at:5678|bl.mud.at:5679": {
+      "action": "remove",
+      "remove": [
+        "bl.mud.at:5678"
+      ]
     },
     "blackflag.acid.org:23|blackflag.acid.org:26|blackflag.acid.org:27": {
       "action": "skip"
@@ -1455,6 +1485,9 @@
       "action": "skip"
     },
     "echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
+      "action": "skip"
+    },
+    "elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|rom.genesismuds.com:4422": {
       "action": "skip"
     },
     "elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|terabithia.genesismuds.com:4700": {
@@ -1963,6 +1996,7 @@
       "104.168.7.122:9010": "dns",
       "104.17.126.66:23": "dns",
       "104.173.38.226:6400": "dns",
+      "104.174.3.6:23": "dead",
       "104.178.162.141:23": "dns",
       "104.183.105.157:25565": "dead",
       "104.183.107.153:2002": "dns",
@@ -3061,6 +3095,7 @@
       "174.54.53.254:7777": "dns",
       "174.57.141.95:23": "dead",
       "174.57.212.118:4201": "dns",
+      "174.58.81.72:23": "dns",
       "174.60.10.106:2002": "dead",
       "174.60.48.239:23": "dead",
       "174.62.12.65:7500": "dns",
@@ -3096,6 +3131,7 @@
       "178.164.15.6:4001": "dns",
       "178.21.116.132:1111": "dns",
       "178.216.162.35:23": "dns",
+      "178.232.208.156:23": "dns",
       "178.235.53.139:2020": "dead",
       "178.254.24.248:23": "dns",
       "178.255.144.212:24": "dns",
@@ -4052,6 +4088,7 @@
       "35.208.43.57:23": "dns",
       "35.208.71.2:23": "dead",
       "35.211.249.27:23": "dns",
+      "35.212.169.241:4000": "dns",
       "35.222.72.166:23": "dns",
       "35.222.85.204:2002": "dead",
       "35.224.171.255:23": "dead",
@@ -4841,6 +4878,7 @@
       "68.12.154.202:23": "dead",
       "68.12.84.161:23": "dead",
       "68.12.86.134:23": "dead",
+      "68.134.179.115:2023": "dns",
       "68.134.67.34:8888": "dead",
       "68.147.138.241:23": "dead",
       "68.148.187.88:23": "dns",
@@ -4853,6 +4891,7 @@
       "68.183.156.10:4201": "dead",
       "68.183.58.86:5000": "dns",
       "68.185.121.92:23": "dns",
+      "68.185.215.194:8888": "dns",
       "68.194.25.15:9223": "dns",
       "68.195.140.207:2323": "dns",
       "68.196.53.144:6400": "dns",
@@ -4944,6 +4983,7 @@
       "69.95.180.108:23": "dead",
       "6d.quest:4100": "dead",
       "6ixremains.thecryingbeard.com:4201": "dead",
+      "7.tcp.eu.ngrok.io:19468": "dead",
       "70.112.250.127:6666": "dead",
       "70.114.158.176:6969": "dns",
       "70.115.195.133:2323": "dead",
@@ -5680,6 +5720,7 @@
       "92.242.62.26:5555": "dns",
       "92.243.24.159:1234": "dns",
       "92.243.9.88:23": "dns",
+      "92.249.193.213:1212": "dns",
       "92.34.0.65:23": "dead",
       "92.60.37.79:23": "dead",
       "93.107.43.213:4444": "dns",
@@ -6068,6 +6109,7 @@
       "bbs.buces.org:3131": "dead",
       "bbs.c64.xyz:6400": "dead",
       "bbs.castlerockbbs.com:23": "dead",
+      "bbs.catracing.org:6400": "dead",
       "bbs.chelny.online:23": "dead",
       "bbs.cheshirezine.com:23": "dead",
       "bbs.chookfest.net:6800": "dead",
@@ -6710,6 +6752,7 @@
       "freedom.servebbs.org:2323": "dead",
       "freedombone.net:23": "dead",
       "freeside.bbs.io:23": "dead",
+      "freespeak.hopto.org:233": "dead",
       "freespeech.smeghead.club:6623": "dead",
       "freestar.synchro.net:23": "dead",
       "friedpi.bbs.io:23": "dead",
@@ -6727,6 +6770,7 @@
       "fusen.ddns.net:55223": "dead",
       "fusionbbs.ddns.net:9900": "dead",
       "galacticexplorers.servegame.com:22002": "dead",
+      "gallaxial.com:23": "dead",
       "game.eaxia.com:347": "dead",
       "game.guncho.com:4108": "cross",
       "game.mortalrealms.com:4321": "cross",
@@ -6829,6 +6873,7 @@
       "ignitionbbs.com:23": "dead",
       "ill2000.synchronetbbs.org:23": "dead",
       "imperial.modeemi.fi:6969": "cross",
+      "india.colorado.edu:13": "dead",
       "inferno.optiquest.org:7777": "cross",
       "infinitespacebbs.ddns.net:23": "dead",
       "inhahe.dynu.net:23": "dead",
@@ -6860,6 +6905,7 @@
       "jjjt.de:4000": "dead",
       "johnhalk.tplinkdns.com:23": "dead",
       "jointhesaga.com:1790": "cross",
+      "jp3tlc.com:23": "dead",
       "jp3tlc.no-ip.biz:23": "dead",
       "julia.wilcox.ovh:8888": "dead",
       "jupiter.iamyourgod.org:3169": "cross",
@@ -7169,6 +7215,7 @@
       "play.titanx.games:23": "dead",
       "playdecay.com:3003": "dead",
       "playlom.com:4000": "cross",
+      "playlord.org:23": "dead",
       "pleroma.nobodyhasthe.biz:8888": "dead",
       "pmacpherson.org:23": "dead",
       "pogbbs.synchronetbbs.org:513": "dead",
@@ -7510,6 +7557,7 @@
       "tinysbbs.com:3023": "dead",
       "tinytime.synchro.net:23": "dead",
       "tirnaill.com:4000": "dead",
+      "tka.8bitboyz.com:6400": "dead",
       "tleeonly.zapto.org:23": "dead",
       "tlhvintagebbs.ddns.net:23": "dead",
       "tloc2.ddns.net:6464": "dead",
@@ -7884,6 +7932,7 @@
       "bedlam.mudportal.com:9000": "dead",
       "beforethering.aresmush.com:2026": "dead",
       "belameephus.mudmagic.com:1220": "dead",
+      "bl.mud.at:5678": "duplicate",
       "brakebills.aresmush.com:4201": "dead",
       "buffy.mush-rp.com:1997": "dead",
       "catworld.muds.tw:23": "dead",
@@ -7908,6 +7957,7 @@
       "doomsday.themuds.org:7000": "dead",
       "downmoo.sloth.org:8888": "dead",
       "dragon.abermud.net:6715": "dead",
+      "dragonballrevolt.genesismuds.com:6969": "duplicate",
       "dragonstone.mudmagic.com:2345": "dead",
       "elessar.mudhosting.net:7778": "dead",
       "elseverse.aresmush.com:4201": "dead",

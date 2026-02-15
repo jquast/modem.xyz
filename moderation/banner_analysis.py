@@ -304,15 +304,34 @@ def discover_empty_banners(data_dir, list_path, logs_dir):
     return issues
 
 
+def _group_by_reason(issues):
+    """Group empty-banner issues by their log reason.
+
+    :param issues: list of issue dicts with a ``reason`` key
+    :returns: list of ``(reason, issues)`` tuples, ordered by first
+        occurrence
+    """
+    groups = {}
+    order = []
+    for issue in issues:
+        reason = issue['reason']
+        if reason not in groups:
+            groups[reason] = []
+            order.append(reason)
+        groups[reason].append(issue)
+    return [(r, groups[r]) for r in order]
+
+
 def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
                          logs_dir, mud_data=None, bbs_data=None,
                          report_only=False, dry_run=False):
     """Interactively review servers with empty banners.
 
-    For each server, the user can:
+    Servers are grouped by log reason.  For each group, the user can
+    apply a single action to every server in the group:
 
     - ``x`` to expunge log and data files for rescan
-    - ``y`` to remove the entry from the server list
+    - ``y`` to remove entries from the server list
     - ``n`` to skip
     - ``q`` to quit
 
@@ -337,46 +356,58 @@ def review_empty_banners(mud_issues, bbs_issues, mud_list, bbs_list,
               f"{len(issues)} ---")
         removals = set()
         rescans = 0
-        rescan_servers = []
+        quit_requested = False
 
-        for issue in issues:
-            host = issue['host']
-            port = issue['port']
-            reason = issue['reason']
-            fp = 'yes' if issue['has_fingerprint'] else 'no'
-            sd = 'yes' if issue['has_session_data'] else 'no'
-            print(f"\n  {host}:{port}")
-            print(f"    fingerprint: {fp}, session_data: {sd}")
-            print(f"    log: {reason}")
+        for reason, group in _group_by_reason(issues):
+            if quit_requested:
+                break
+
+            print(f"\n  [{reason}] ({len(group)} server(s)):")
+            for issue in group:
+                host = issue['host']
+                port = issue['port']
+                fp = 'yes' if issue['has_fingerprint'] else 'no'
+                sd = 'yes' if issue['has_session_data'] else 'no'
+                print(f"    {host}:{port}"
+                      f"  (fp: {fp}, session: {sd})")
 
             if report_only:
                 continue
 
             choice = _prompt(
-                "    [x]expunge for rescan / "
+                f"\n  Apply to all {len(group)}: "
+                "[x]expunge for rescan / "
                 "[y]remove from list / [n]skip / [q]uit? ",
                 "xynq")
             if choice == 'q':
+                quit_requested = True
                 break
+            if choice == 'n' or choice is None:
+                continue
             if choice == 'x':
-                log_file = Path(logs_dir) / f"{host}:{port}.log"
-                if log_file.is_file() and not dry_run:
-                    log_file.unlink()
-                    print(f"    deleted {log_file}")
-                elif log_file.is_file():
-                    print(f"    [dry-run] would delete"
-                          f" {log_file}")
-                else:
-                    print(f"    no log file to delete")
+                for issue in group:
+                    host = issue['host']
+                    port = issue['port']
+                    log_file = (
+                        Path(logs_dir) / f"{host}:{port}.log"
+                    )
+                    if log_file.is_file() and not dry_run:
+                        log_file.unlink()
+                        print(f"    deleted {log_file}")
+                    elif log_file.is_file():
+                        print(f"    [dry-run] would delete"
+                              f" {log_file}")
                 if data_dir and not dry_run:
+                    servers = [(i['host'], i['port'])
+                               for i in group]
                     nj = _expunge_server_json(
-                        data_dir, [(host, port)])
+                        data_dir, servers)
                     if nj:
                         print(f"    deleted {nj} data file(s)")
-                rescans += 1
-                rescan_servers.append((host, port))
+                rescans += len(group)
             elif choice == 'y':
-                removals.add((host, port))
+                for issue in group:
+                    removals.add((issue['host'], issue['port']))
 
         if removals:
             entries = load_server_list(list_path)

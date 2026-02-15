@@ -290,6 +290,9 @@ def _load_base_records(data_dir, encoding_overrides=None,
             banner_after = session_data.get(
                 'banner_after_return', '')
 
+            if not banner_before and not banner_after:
+                continue
+
             if detected_encoding in ('ascii', 'utf-8', 'unknown'):
                 if banner_before:
                     banner_before = _redecode_banner(

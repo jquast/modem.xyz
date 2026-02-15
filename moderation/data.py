@@ -61,8 +61,9 @@ def write_filtered_list(path, entries, removals, dry_run=False):
     removed = 0
     kept = 0
     lines = []
+    removals_lower = {(h.lower(), p) for h, p in removals}
     for host, port, original in entries:
-        if host is not None and (host, port) in removals:
+        if host is not None and (host.lower(), port) in removals_lower:
             removed += 1
             continue
         lines.append(original + "\n")
