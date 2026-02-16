@@ -4,7 +4,7 @@
 104.154.76.197 4333
 107.172.21.36 4000
 108.252.255.105 3333
-112.124.31.157 5555 gbk
+112.124.31.157 5555 big5
 112.124.8.59 6666 gbk
 114.32.122.32 4002 big5
 114.34.189.30 7000 big5 90
@@ -197,7 +197,7 @@ chaos.caile.org 5555 utf-8 90
 charis.servegame.com 4240
 charis.servegame.com 4242
 charis.servegame.com 5864
-chatmud.com 7777
+chatmud.com 7777 cp437 60
 cheeseworld.wtf 3000 utf-8 110
 cheesymud.com 4001
 cityofhope.genesismuds.com 8888
@@ -278,7 +278,7 @@ dreamscapes.dyn.dhs.org 4500
 drygulch.aresmush.com 4201 utf-8 100
 ds.enyc.org.uk 8688
 dsl-mud.org 4000
-dsmush.com 4000 utf-8 140
+dsmush.com 4000 utf-8 180
 dum.acc.umu.se 2001
 dunemud.net 6789
 dungeon.name 20022 utf-8 80
@@ -640,7 +640,7 @@ mw.muddywaters.org 3000
 mystavaria.com 4000
 mysticalmud.org 5000
 mysticmud.com 3000
-nanvaent.org 23 gbk
+nanvaent.org 23
 nanvaent.org 3000
 narutofor.us 4545
 ncmud.net 9000
@@ -658,7 +658,7 @@ nodeka.com 23
 nomoreheroes.org 4201 utf-8 100
 noreality.org 4000
 nuclearwarmud.com 4080 utf-8 100
-obsidianreverie.com 4201 utf-8 130
+obsidianreverie.com 4201 utf-8 140
 oit.ndsu.edu 8888
 omen.genesismuds.com 1100
 onjin.net 4000
@@ -848,7 +848,7 @@ uberworld.org 2020
 unitedheroesmush.com 1999
 unitopia.de 23 utf-8
 uossmud.sandwich.net 9000
-us.muds.net 4000 utf-8
+us.muds.net 4000 big5
 valhalla.com 4242
 vanciamud.fr 4000 latin-1
 vanity.genesismuds.com 23
@@ -891,7 +891,7 @@ www.fengyunmud.top 6000 gbk
 www.kinslayermud.org 2222
 www.midianmud.com 3456
 www.mudbar.cn 3333 gbk
-www.sjcqmud.xyz 5555 gbk
+www.sjcqmud.xyz 5555 big5
 xaosmud.org 5000
 xiyouji.org 6666 gbk
 xyj.thu.cn 6666 gbk

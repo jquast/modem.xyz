@@ -3,7 +3,7 @@
 import datetime
 import os
 
-project = "muds.modem.xyz"
+project = "Telnet MUDs Census"
 if datetime.datetime.now().year != 2026:
     copyright = f"2026-{datetime.datetime.now().year}, Jeff Quast"
 else:
@@ -24,6 +24,7 @@ datatables_options = {
     "searching": True,
 }
 
+templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "sphinx_rtd_theme"
