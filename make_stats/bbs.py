@@ -486,7 +486,9 @@ def display_server_table(servers):
                 href = f'http://{href}'
             host_cell += f' `\U0001f310 <{href}>`__'
         if s['tls_support']:
-            host_cell += ' :tls-lock:`\U0001f512`'
+            host_cell += f' :tls-lock:`{s["host"]} {s["port"]}`'
+        else:
+            host_cell += f' :copy-btn:`{s["host"]} {s["port"]}`'
 
         software = s['bbs_software'] or ''
         encoding = s['display_encoding']
@@ -558,8 +560,10 @@ def display_bbs_software_groups(servers):
                         key=lambda s: s['host'].lower()):
             bbs_file = s['_bbs_file']
             label = f"{s['host']}:{s['port']}"
-            tls = (' :tls-lock:`\U0001f512`'
-                   if s['tls_support'] else '')
+            if s['tls_support']:
+                tls = f' :tls-lock:`{s["host"]} {s["port"]}`'
+            else:
+                tls = f' :copy-btn:`{s["host"]} {s["port"]}`'
             print(f"- :doc:`{_rst_escape(label)}"
                   f" <bbs_detail/{bbs_file}>`{tls}")
         print()
@@ -604,9 +608,10 @@ def display_fidonet_servers(servers):
         label = f"{s['host']}:{s['port']}"
         host_cell = (f":doc:`{_rst_escape(label)}"
                      f" <bbs_detail/{bbs_file}>`")
-        tls = (' :tls-lock:`\U0001f512`'
-               if s['tls_support'] else '')
-        host_cell += tls
+        if s['tls_support']:
+            host_cell += f' :tls-lock:`{s["host"]} {s["port"]}`'
+        else:
+            host_cell += f' :copy-btn:`{s["host"]} {s["port"]}`'
         addrs = ', '.join(s['fidonet_addresses']) or ''
         software = s['bbs_software'] or ''
         mailer = s['emsi_mailer'] or ''
@@ -787,11 +792,21 @@ def _write_bbs_server_urls(server, sec_char):
           f' aria-hidden="true">'
           f'&#x1F4CB;</span>')
     print(f'   </button>')
-    if server['tls_support']:
-        print(f'   <span class="tls-lock"'
-              f' title="Supports TLS">'
-              f'&#x1f512;</span>')
     print(f'   </li>')
+    if server['tls_support']:
+        tls_url = f"telnets://{host}:{port}"
+        print(f'   <li><strong>TLS/SSL</strong>: '
+              f'<a href="{tls_url}">{tls_url}</a>')
+        print(f'   <button class="copy-btn"'
+              f' data-host="{host}"'
+              f' data-port="{port}"'
+              f' title="Copy host and port"'
+              f' aria-label="Copy {host} port {port}'
+              f' to clipboard">')
+        print(f'   <span class="copy-icon"'
+              f' aria-hidden="true">'
+              f'&#x1F4CB;</span>')
+        print(f'   </button></li>')
     if server['website']:
         href = server['website']
         if not href.startswith(('http://', 'https://')):
@@ -1065,8 +1080,10 @@ def generate_fingerprint_detail(fp_hash, fp_servers, force=False,
         for s in fp_servers:
             bbs_file = s['_bbs_file']
             label = f"{s['host']}:{s['port']}"
-            tls = (' :tls-lock:`\U0001f512`'
-                   if s['tls_support'] else '')
+            if s['tls_support']:
+                tls = f' :tls-lock:`{s["host"]} {s["port"]}`'
+            else:
+                tls = f' :copy-btn:`{s["host"]} {s["port"]}`'
             print(f":doc:`{_rst_escape(label)}"
                   f" <../bbs_detail/{bbs_file}>`{tls}")
             print()

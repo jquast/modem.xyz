@@ -866,8 +866,18 @@ def display_server_table(servers):
             if not href.startswith(('http://', 'https://')):
                 href = f'http://{href}'
             name_cell += f' `\U0001f310 <{href}>`__'
-        if s['tls_port']:
-            name_cell += ' :tls-lock:`\U0001f512`'
+        if s['discord']:
+            dhref = s['discord']
+            if not dhref.startswith(('http://', 'https://')):
+                dhref = f'https://{dhref}'
+            name_cell += f' `\U0001f4ac <{dhref}>`__'
+        tls_port = s['tls_port']
+        if tls_port:
+            tls_p = (sport if tls_port in ('1', str(sport))
+                     else tls_port)
+            name_cell += f' :tls-lock:`{host} {tls_p}`'
+        else:
+            name_cell += f' :copy-btn:`{host} {sport}`'
         if s['pay_to_play']:
             name_cell += ' :pay-icon:`$`'
 
@@ -946,8 +956,13 @@ def display_codebase_groups(servers):
                             s['name'] or s['host']).lower()):
             mud_file = s['_mud_file']
             label = s['name'] or s['host']
-            tls = (' :tls-lock:`\U0001f512`'
-                   if s['tls_port'] else '')
+            if s['tls_port']:
+                tp = s['tls_port']
+                tls_p = (s['port'] if tp in ('1', str(s['port']))
+                         else tp)
+                tls = f' :tls-lock:`{s["host"]} {tls_p}`'
+            else:
+                tls = f' :copy-btn:`{s["host"]} {s["port"]}`'
             print(f"- :doc:`{_rst_escape(label)}"
                   f" <mud_detail/{mud_file}>`{tls}")
         print()
@@ -1188,11 +1203,22 @@ def _write_mud_server_urls(server, sec_char):
         tls_port = server['tls_port']
         if tls_port == '1' or tls_port == str(port):
             tls_url = f"telnets://{host}:{port}"
+            tls_copy_port = port
         else:
             tls_url = f"telnets://{host}:{tls_port}"
+            tls_copy_port = tls_port
         print(f'   <li><strong>TLS/SSL</strong>: '
-              f'<a href="{tls_url}">{tls_url}</a>'
-              f'</li>')
+              f'<a href="{tls_url}">{tls_url}</a>')
+        print(f'   <button class="copy-btn"'
+              f' data-host="{host}"'
+              f' data-port="{tls_copy_port}"'
+              f' title="Copy host and port"'
+              f' aria-label="Copy {host} port {tls_copy_port}'
+              f' to clipboard">')
+        print(f'   <span class="copy-icon"'
+              f' aria-hidden="true">'
+              f'&#x1F4CB;</span>')
+        print(f'   </button></li>')
     print(f'   </ul>')
     print()
 
@@ -1498,8 +1524,13 @@ def generate_fingerprint_detail(fp_hash, fp_servers):
         for s in fp_servers:
             name = s['name'] or s['host']
             mud_file = s['_mud_file']
-            tls = (' :tls-lock:`\U0001f512`'
-                   if s['tls_port'] else '')
+            if s['tls_port']:
+                tp = s['tls_port']
+                tls_p = (s['port'] if tp in ('1', str(s['port']))
+                         else tp)
+                tls = f' :tls-lock:`{s["host"]} {tls_p}`'
+            else:
+                tls = f' :copy-btn:`{s["host"]} {s["port"]}`'
             print(f":doc:`{_rst_escape(name)}"
                   f" <../mud_detail/{mud_file}>`{tls}")
             print()

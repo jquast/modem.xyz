@@ -77,12 +77,12 @@ $(document).ready(function() {
             text = host + ' ' + port;
         }
 
+        var $icon = $btn.find('.copy-icon');
+        var origIcon = $btn.hasClass('tls-lock') ? '&#x1f512;' : '&#x1F4CB;';
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(function() {
-                $btn.find('.copy-icon').html('&#x2713;');
-                setTimeout(function() {
-                    $btn.find('.copy-icon').html('&#x1F4CB;');
-                }, 1500);
+                $icon.html('&#x2713;');
+                setTimeout(function() { $icon.html(origIcon); }, 1500);
             });
         } else {
             // Fallback for older browsers
@@ -91,10 +91,8 @@ $(document).ready(function() {
             $temp.val(text).select();
             document.execCommand('copy');
             $temp.remove();
-            $btn.find('.copy-icon').html('&#x2713;');
-            setTimeout(function() {
-                $btn.find('.copy-icon').html('&#x1F4CB;');
-            }, 1500);
+            $icon.html('&#x2713;');
+            setTimeout(function() { $icon.html(origIcon); }, 1500);
         }
     });
 });

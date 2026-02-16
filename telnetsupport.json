@@ -791,13 +791,6 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"MCCP2\"]"
   },
   {
-    "host": "fss.twcos.com",
-    "port": 5000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\"]"
-  },
-  {
     "host": "dungeon.name",
     "port": 20022,
     "ssl": 0,
@@ -1027,6 +1020,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"MSSP\"]"
+  },
+  {
+    "host": "bat.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\"]"
   },
   {
     "host": "aldebaran-mud.de",

@@ -26,6 +26,9 @@ _URL_RE = re.compile(r'https?://[^\s<>"\']+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:/[^\s<>
 _RST_SECTION_RE = re.compile(r'([=\-~#+^"._]{4,})')
 _SURROGATES_RE = re.compile(r'[\udc80-\udcff]')
 
+# Keywords in server list files that are not encoding names.
+_LIST_KEYWORDS = {'ssl', 'no_ambig'}
+
 TELNET_OPTIONS_OF_INTEREST = [
     'BINARY', 'ECHO', 'SGA', 'STATUS', 'TTYPE', 'TSPEED',
     'NAWS', 'NEW_ENVIRON', 'CHARSET', 'EOR', 'LINEMODE',
@@ -138,7 +141,10 @@ def _load_encoding_overrides(path):
                     port = int(parts[1])
                 except ValueError:
                     continue
-                overrides[(host, port)] = parts[2]
+                enc = parts[2]
+                if enc in _LIST_KEYWORDS:
+                    continue
+                overrides[(host, port)] = enc
     return overrides
 
 
@@ -499,6 +505,29 @@ def _telnet_url(host, port):
     if port == 23:
         return f"telnet://{host}"
     return f"telnet://{host}:{port}"
+
+
+def _copy_btn_markup(server, tls_fn):
+    """Build RST copy-button markup for a server entry.
+
+    Returns a :tls-lock: copy button when TLS is supported, otherwise
+    a plain :copy-btn: clipboard button.
+
+    :param server: server record dict with ``host`` and ``port`` keys
+    :param tls_fn: callable(server) -> truthy if TLS supported (for MUDs,
+        returns the TLS port string; for BBS returns True/False)
+    :returns: RST role string (leading space included)
+    """
+    host = server['host']
+    port = server['port']
+    tls = tls_fn(server)
+    if tls:
+        if isinstance(tls, str) and tls not in ('1', str(port)):
+            copy_port = tls
+        else:
+            copy_port = port
+        return f' :tls-lock:`{host} {copy_port}`'
+    return f' :copy-btn:`{host} {port}`'
 
 
 # ---------------------------------------------------------------------------
@@ -1281,8 +1310,7 @@ def display_encoding_groups(servers, detail_subdir, file_key,
             sorted_members.append({
                 '_label': server_label_fn(s),
                 '_detail_file': s[file_key],
-                '_tls': (' :tls-lock:`\U0001f512`'
-                         if tls_fn(s) else ''),
+                '_tls': _copy_btn_markup(s, tls_fn),
             })
         groups.append((name, sorted_members))
 
@@ -1325,8 +1353,7 @@ def display_location_groups(servers, detail_subdir, file_key,
             sorted_members.append({
                 '_label': server_label_fn(s),
                 '_detail_file': s[file_key],
-                '_tls': (' :tls-lock:`\U0001f512`'
-                         if tls_fn(s) else ''),
+                '_tls': _copy_btn_markup(s, tls_fn),
             })
         groups.append((key, flag, name, sorted_members))
 
@@ -1380,8 +1407,7 @@ def _prepare_banner_page_groups(page_groups, file_key,
             sd['_name'] = server_name_fn(s)
             sd['_detail_file'] = s[file_key]
             sd['_detail_anchor'] = s.get('_detail_anchor', '')
-            sd['_tls'] = (' :tls-lock:`\U0001f512`'
-                          if tls_fn(s) else '')
+            sd['_tls'] = _copy_btn_markup(s, tls_fn)
             sd['_flag'] = _country_flag(s.get('_country_code', ''))
             enriched_servers.append(sd)
         g['servers'] = enriched_servers

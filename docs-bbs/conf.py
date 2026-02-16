@@ -52,10 +52,27 @@ def _make_class_role(class_name):
 
 
 def _tls_lock_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    """RST role that renders a TLS padlock icon with tooltip."""
+    """RST role that renders a TLS padlock icon, optionally as a copy button.
+
+    If *text* contains spaces (``host port``), renders as a copy button
+    with the padlock icon.  Otherwise renders as a plain icon span.
+    """
+    import html as html_mod
     from docutils import nodes
-    html = f'<span class="tls-lock" title="Supports TLS">{text}</span>'
-    node = nodes.raw('', html, format='html')
+    parts = text.split()
+    if len(parts) >= 2:
+        host = html_mod.escape(parts[0])
+        port = html_mod.escape(parts[1])
+        markup = (
+            f'<button class="copy-btn tls-lock"'
+            f' data-host="{host}" data-port="{port}"'
+            f' title="Copy TLS host and port"'
+            f' aria-label="Copy {host} port {port} to clipboard">'
+            f'<span class="copy-icon" aria-hidden="true">'
+            f'&#x1f512;</span></button>')
+    else:
+        markup = f'<span class="tls-lock" title="Supports TLS">{text}</span>'
+    node = nodes.raw('', markup, format='html')
     return [node], []
 
 

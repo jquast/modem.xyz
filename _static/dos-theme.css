@@ -218,6 +218,16 @@ pre.ansi-banner {
   vertical-align: middle;
 }
 
+button.tls-lock {
+  cursor: pointer;
+  border-color: #55ff55;
+}
+
+button.tls-lock:hover {
+  color: #88ff88;
+  border-color: #88ff88;
+}
+
 /* ── Field description tables ────────────────────────────────────────── */
 .field-descriptions {
   font-size: 0.9em;
