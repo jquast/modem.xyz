@@ -1,0 +1,15 @@
+{{ description }}
+
+.. raw:: html
+
+   <details><summary>Show JSON</summary>
+
+.. code-block:: json
+
+{% for line in json_lines %}
+   {{ line }}
+{% endfor %}
+
+.. raw:: html
+
+   </details>

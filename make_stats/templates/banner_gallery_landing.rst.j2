@@ -1,0 +1,17 @@
+Banner Gallery
+==============
+
+A gallery of ANSI connection banners collected from responding
+{{ entity_name }}. Servers that display identical visible banner text are
+grouped together. Each group shows the shared banner image
+and a list of all servers in that group.
+
+{{ total_groups }} unique banners across {{ total_servers }} servers.
+
+.. toctree::
+   :maxdepth: 1
+
+{% for p_num, label in page_labels %}
+   Page {{ p_num }} {{ label }} <banner_gallery_{{ p_num }}>
+{% endfor %}
+

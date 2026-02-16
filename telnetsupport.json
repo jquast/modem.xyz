@@ -280,13 +280,6 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
   },
   {
-    "host": "ansalon.net",
-    "port": 8662,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
-  },
-  {
     "host": "kallistimud.com",
     "port": 4000,
     "ssl": 0,
@@ -366,13 +359,6 @@
   {
     "host": "ckmud.com",
     "port": 8500,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
-  },
-  {
-    "host": "ansalon.net",
-    "port": 8679,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
@@ -658,13 +644,6 @@
     "options": "[\"TERMINAL TYPE\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\"]"
   },
   {
-    "host": "realmofmagic.org",
-    "port": 4000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"END OF RECORD\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
-  },
-  {
     "host": "omen.genesismuds.com",
     "port": 1100,
     "ssl": 0,
@@ -768,6 +747,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"CHARSET\",\"MSDP\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "realmofmagic.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"END OF RECORD\",\"MCCP2\",\"MSP\",\"MXP\"]"
   },
   {
     "host": "mud.theforestsedge.com",

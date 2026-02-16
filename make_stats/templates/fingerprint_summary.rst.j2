@@ -1,0 +1,27 @@
+Fingerprints
+============
+
+A fingerprint is a hash of a server's Telnet option negotiation
+behavior -- which options it offers to the client, which it requests
+from the client, and which it refuses. Servers running the same software
+version typically produce identical fingerprints. A majority of servers
+perform no negotiation at all and share the same empty fingerprint.
+
+Click a fingerprint link to see the full negotiation details and all
+servers in that group.
+
+.. list-table:: Column Descriptions
+   :widths: 20 80
+   :class: field-descriptions
+
+   * - **Fingerprint**
+     - Truncated hash identifying the negotiation pattern. Click to see the full detail page.
+   * - **Servers**
+     - Number of servers sharing this exact negotiation behavior.
+   * - **Offers**
+     - Telnet options the server offers (WILL) to the client during negotiation.
+   * - **Requests**
+     - Telnet options the server requests (DO) from the client.
+   * - **Examples**
+     - Sample server names sharing this fingerprint.
+

@@ -1,0 +1,20 @@
+Encodings
+=========
+
+Servers grouped by their detected or configured character encoding.
+{% for name, members in groups %}
+
+- `{{ name|rst_escape }}`_: {{ members|length }}
+{% endfor %}
+
+{% for name, members in groups %}
+
+.. _{{ name }}:
+
+{{ name }}
+{{ '-' * name|length }}
+{% for s in members %}
+- :doc:`{{ s._label|rst_escape }} <{{ detail_subdir }}/{{ s._detail_file }}>`{{ s._tls }}
+{% endfor %}
+
+{% endfor %}

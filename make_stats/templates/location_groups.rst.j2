@@ -1,0 +1,20 @@
+Server Locations
+================
+
+Servers grouped by the geographic location of their IP address.
+{% for key, flag, name, members in groups %}
+
+- `{{ flag }}{{ name|rst_escape }}`_: {{ members|length }}
+{% endfor %}
+
+{% for key, flag, name, members in groups %}
+
+.. _{{ name }}:
+
+{{ flag }}{{ name }}
+{{ '-' * (flag ~ name)|rst_width }}
+{% for s in members %}
+- :doc:`{{ s._label|rst_escape }} <{{ detail_subdir }}/{{ s._detail_file }}>`{{ s._tls }}
+{% endfor %}
+
+{% endfor %}

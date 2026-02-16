@@ -1,0 +1,51 @@
+.. _fp_{{ fp_hash }}:
+
+{{ fp_hash }}
+{{ '=' * fp_hash|length }}
+
+**Servers sharing this fingerprint**: {{ server_count }}
+
+Telnet Options
+--------------
+
+{% if offered %}
+**Offered by server**: {{ offered }}
+{% else %}
+**Offered by server**: none
+{% endif %}
+
+{% if requested %}
+**Requested from client**: {{ requested }}
+{% else %}
+**Requested from client**: none
+{% endif %}
+
+{% if refused_display %}
+**Refused (notable)**: {{ refused_display }}
+{% if other_refused > 0 %}
+  *(and {{ other_refused }} other standard options)*
+{% endif %}
+{% endif %}
+
+{% if negotiated_offered or negotiated_requested %}
+Negotiation Results
+~~~~~~~~~~~~~~~~~~~
+
+{% if negotiated_offered %}
+**Server offered (accepted)**: {{ negotiated_offered }}
+
+{% endif %}
+{% if negotiated_requested %}
+**Server requested (accepted)**: {{ negotiated_requested }}
+
+{% endif %}
+{% endif %}
+{% if dsr_requests %}
+Device Status Reports
+~~~~~~~~~~~~~~~~~~~~~
+
+**DSR requests from server**: {{ dsr_requests }}
+
+**CPR replies sent**: {{ dsr_replies }}
+
+{% endif %}

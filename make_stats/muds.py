@@ -53,48 +53,60 @@ MUD_PROTOCOLS = [
     'MXP', 'MSP', 'MCP', 'ZMP',
 ]
 
-# Canonical family names — maps lowercased variants to display name.
+# Canonical codebase names — maps lowercased variants to display name.
 _FAMILY_CANONICAL = {
+    # DikuMUD family
     'dikumud': 'DikuMUD',
     'dikumud/rom': 'DikuMUD',
     'dikumud/merc': 'DikuMUD',
     'diku': 'DikuMUD',
     'diku/merc': 'DikuMUD',
+    'tbamud': 'DikuMUD',
+    'circlemud': 'DikuMUD',
+    'circlemud/byliny': 'DikuMUD',
+    'rom': 'DikuMUD',
+    'rom derivative': 'DikuMUD',
+    'merc': 'DikuMUD',
+    'mordor': 'DikuMUD',
+    'smaug': 'DikuMUD',
+    'empiremud': 'DikuMUD',
+    'luminarimud': 'DikuMUD',
+    'emlenmud': 'DikuMUD',
+    # LPMud family
     'lpmud': 'LPMud',
     'ldmud': 'LPMud',
     'fluffos': 'LPMud',
+    'dead souls': 'LPMud',
+    # TinyMUD family
     'tinymud': 'TinyMUD',
     'muck': 'TinyMUD',
-    'coffeemud': 'CoffeeMUD',
+    'protomuck': 'TinyMUD',
+    'zetamuck': 'TinyMUD',
+    'mucklet': 'TinyMUD',
+    'pennmush': 'TinyMUD',
+    # MOO family
     'moo': 'MOO',
-    'tbamud': 'DikuMUD',
-    'circlemud': 'DikuMUD',
-    'rom': 'DikuMUD',
-    'mordor': 'DikuMUD',
+    'lambdamoo': 'MOO',
+    'lambdamoo-toaststunt': 'MOO',
+    # Other
+    'coffeemud': 'CoffeeMUD',
     'musicmud': 'MusicMUD',
+    'custom': 'Custom',
 }
 
 
-def _normalize_family(raw):
-    """Normalize a FAMILY string to a canonical display name.
+def _normalize_codebase(raw):
+    """Normalize a CODEBASE or FAMILY string to a canonical display name.
 
-    :param raw: raw MSSP FAMILY value
-    :returns: canonical family name
+    Strips version numbers, then maps known aliases to canonical names.
+
+    :param raw: raw MSSP CODEBASE or FAMILY value
+    :returns: canonical codebase name
     """
-    key = raw.strip().lower()
-    return _FAMILY_CANONICAL.get(key, raw.strip())
-
-
-def _strip_codebase_version(codebase):
-    """Strip version number from a codebase string.
-
-    :param codebase: raw MSSP CODEBASE value
-    :returns: engine name without version
-    """
-    codebase = codebase.strip()
-    if not codebase:
-        return codebase
-    parts = codebase.split()
+    raw = raw.strip()
+    if not raw:
+        return raw
+    parts = raw.split()
     result = []
     for part in parts:
         if part and (part[0].isdigit()
@@ -103,7 +115,8 @@ def _strip_codebase_version(codebase):
                          and part[1:2].isdigit())):
             break
         result.append(part)
-    return ' '.join(result) if result else codebase
+    name = ' '.join(result) if result else raw
+    return _FAMILY_CANONICAL.get(name.lower(), name)
 
 
 # ---------------------------------------------------------------------------
@@ -432,10 +445,7 @@ def compute_statistics(servers):
         'unique_fingerprints': len(
             set(s['fingerprint'] for s in servers)),
         'total_players': sum(s['players'] or 0 for s in servers),
-        'unique_codebases': len(
-            set(s['codebase'] for s in servers if s['codebase'])),
-        'unique_families': len(
-            set(s['family'] for s in servers if s['family'])),
+        'unique_codebases': 0,  # computed below after normalization
         'scan_time_first': (connected_times[0]
                             if connected_times else ''),
         'scan_time_last': (connected_times[-1]
@@ -449,36 +459,22 @@ def compute_statistics(servers):
                 proto_counts[proto] += 1
     stats['protocol_counts'] = dict(proto_counts)
 
-    family_counts = Counter()
-    family_players = Counter()
-    for s in servers:
-        if s['family']:
-            for fam in _listify(s['mssp'].get('FAMILY', '')):
-                if fam:
-                    norm = _normalize_family(fam)
-                    family_counts[norm] += 1
-                    if s['players'] is not None and s['players'] > 0:
-                        family_players[norm] += s['players']
-    stats['family_counts'] = dict(family_counts)
-    stats['family_players'] = dict(family_players)
-
     codebase_counts = Counter()
-    engine_counts = Counter()
-    engine_players = Counter()
+    codebase_players = Counter()
     for s in servers:
-        if s['codebase']:
-            for cb in _listify(s['mssp'].get('CODEBASE', '')):
-                if cb:
-                    codebase_counts[cb] += 1
-                    engine = _strip_codebase_version(cb)
-                    if engine:
-                        engine_counts[engine] += 1
-                        if (s['players'] is not None
-                                and s['players'] > 0):
-                            engine_players[engine] += s['players']
+        raw_values = _listify(s['mssp'].get('CODEBASE', ''))
+        if not any(raw_values):
+            raw_values = _listify(s['mssp'].get('FAMILY', ''))
+        for val in raw_values:
+            if val:
+                norm = _normalize_codebase(val)
+                if norm:
+                    codebase_counts[norm] += 1
+                    if s['players'] is not None and s['players'] > 0:
+                        codebase_players[norm] += s['players']
     stats['codebase_counts'] = dict(codebase_counts)
-    stats['engine_counts'] = dict(engine_counts)
-    stats['engine_players'] = dict(engine_players)
+    stats['codebase_players'] = dict(codebase_players)
+    stats['unique_codebases'] = len(codebase_counts)
 
     year_counts = Counter()
     for s in servers:
@@ -548,18 +544,8 @@ def create_protocol_support_plot(stats, output_path):
     plt.close()
 
 
-def create_codebase_families_plot(stats, output_path):
-    """Create pie chart of codebase families."""
-    family_counts = stats['family_counts']
-    if not family_counts:
-        return
-    sorted_items = sorted(family_counts.items(),
-                          key=lambda x: x[1], reverse=True)
-    _create_pie_chart(sorted_items, output_path, min_count=None)
-
-
 def create_codebases_plot(stats, output_path, top_n=15):
-    """Create pie chart of top N specific codebases."""
+    """Create pie chart of top codebases."""
     codebase_counts = stats['codebase_counts']
     if not codebase_counts:
         return
@@ -596,57 +582,22 @@ def create_creation_years_plot(stats, output_path):
     plt.close()
 
 
-def create_players_by_family_plot(stats, output_path):
-    """Create horizontal bar chart of total players by codebase family."""
-    family_players = stats.get('family_players', {})
-    if not family_players:
+def create_players_by_codebase_plot(stats, output_path, top_n=15):
+    """Create horizontal bar chart of top codebases by player count."""
+    codebase_players = stats.get('codebase_players', {})
+    if not codebase_players:
         return
 
-    sorted_items = sorted(family_players.items(),
-                          key=lambda x: x[1])
-    families = [item[0] for item in sorted_items]
-    counts = [item[1] for item in sorted_items]
-    total = sum(counts)
-
-    fig, ax = plt.subplots(
-        figsize=(16, max(8, len(families) * 0.8)))
-    bars = ax.barh(families, counts, color=PLOT_GREEN,
-                   edgecolor=PLOT_CYAN, linewidth=0.5, alpha=0.85)
-
-    for bar, count in zip(bars, counts):
-        pct = count / total * 100 if total else 0
-        ax.text(bar.get_width() + 0.5,
-                bar.get_y() + bar.get_height() / 2,
-                f' {count} ({pct:.0f}%)',
-                va='center', color=PLOT_FG, fontsize=24)
-
-    ax.set_xlabel('Players Online', fontsize=28)
-    ax.tick_params(axis='both', labelsize=22)
-    ax.set_xlim(0, max(counts) * 1.3 if counts else 10)
-    ax.grid(True, axis='x')
-
-    plt.tight_layout()
-    plt.savefig(output_path, dpi=100, bbox_inches='tight',
-                transparent=True, metadata={'CreationDate': None})
-    plt.close()
-
-
-def create_players_by_engine_plot(stats, output_path, top_n=15):
-    """Create horizontal bar chart of top engines by player count."""
-    engine_players = stats.get('engine_players', {})
-    if not engine_players:
-        return
-
-    sorted_items = sorted(engine_players.items(),
+    sorted_items = sorted(codebase_players.items(),
                           key=lambda x: x[1], reverse=True)[:top_n]
     sorted_items.reverse()
-    engines = [item[0] for item in sorted_items]
+    codebases = [item[0] for item in sorted_items]
     counts = [item[1] for item in sorted_items]
-    total = sum(engine_players.values())
+    total = sum(codebase_players.values())
 
     fig, ax = plt.subplots(
-        figsize=(16, max(8, len(engines) * 0.8)))
-    bars = ax.barh(engines, counts, color=PLOT_GREEN,
+        figsize=(16, max(8, len(codebases) * 0.8)))
+    bars = ax.barh(codebases, counts, color=PLOT_GREEN,
                    edgecolor=PLOT_CYAN, linewidth=0.5, alpha=0.85)
 
     for bar, count in zip(bars, counts):
@@ -674,16 +625,12 @@ def create_all_plots(stats):
 
     create_protocol_support_plot(
         stats, os.path.join(PLOTS_PATH, 'protocol_support.png'))
-    create_codebase_families_plot(
-        stats, os.path.join(PLOTS_PATH, 'codebase_families.png'))
     create_codebases_plot(
         stats, os.path.join(PLOTS_PATH, 'codebases.png'))
     create_creation_years_plot(
         stats, os.path.join(PLOTS_PATH, 'creation_years.png'))
-    create_players_by_family_plot(
-        stats, os.path.join(PLOTS_PATH, 'players_by_family.png'))
-    create_players_by_engine_plot(
-        stats, os.path.join(PLOTS_PATH, 'players_by_engine.png'))
+    create_players_by_codebase_plot(
+        stats, os.path.join(PLOTS_PATH, 'players_by_codebase.png'))
     create_telnet_options_plot(
         stats, os.path.join(PLOTS_PATH, 'telnet_options.png'))
     create_location_plot(
@@ -731,8 +678,6 @@ def display_summary_stats(stats):
     print(f"- **Unique protocol fingerprints**:"
           f" {stats['unique_fingerprints']}")
     print(f"- **Unique codebases**: {stats['unique_codebases']}")
-    print(f"- **Unique codebase families**:"
-          f" {stats['unique_families']}")
     footnotes = []
     if stats['total_players']:
         print(f"- **Total players online**:"
@@ -755,7 +700,7 @@ def display_summary_stats(stats):
     return footnotes
 
 
-def display_plots():
+def display_plots(stats):
     """Print figure directives for all plots."""
     print("The charts below summarize data from servers that report")
     print("MSSP metadata. Servers without MSSP appear in the")
@@ -763,57 +708,40 @@ def display_plots():
           " breakdowns.")
     print()
 
-    print("Codebase Families")
-    print("------------------")
+    codebase_total = sum(stats['codebase_counts'].values())
+    print("Codebases")
+    print("----------")
     print()
-    print(".. figure:: _static/plots/codebase_families.png")
-    print("   :align: center")
-    print("   :width: 800px")
-    print("   :alt: Pie chart showing the distribution of MUD"
-          " codebase families such as DikuMUD, LPMud, or TinyMUD,"
-          " with the proportion of servers using each.")
-    print()
-    print("   Distribution of MUD codebase families"
-          " (from MSSP data).")
-    print()
-
-    print("Top Codebases")
-    print("--------------")
+    print(f"{codebase_total} entries report a ``CODEBASE`` or"
+          " ``FAMILY`` field via MSSP.")
+    print("Version numbers are stripped and known aliases are"
+          " normalized to")
+    print("a canonical name (e.g. FluffOS and LDMud are counted"
+          " as LPMud,")
+    print("Merc and SMAUG as DikuMUD, PennMUSH and ProtoMUCK"
+          " as TinyMUD).")
     print()
     print(".. figure:: _static/plots/codebases.png")
     print("   :align: center")
     print("   :width: 800px")
-    print("   :alt: Pie chart showing the most common specific"
-          " codebase versions across all servers reporting"
-          " MSSP data.")
+    print("   :alt: Pie chart showing the most common codebases"
+          " across all servers reporting MSSP data.")
     print()
-    print("   Most common specific codebase versions.")
-    print()
-
-    print("Players Online by Codebase Family")
-    print("-----------------------------------")
-    print()
-    print(".. figure:: _static/plots/players_by_family.png")
-    print("   :align: center")
-    print("   :width: 800px")
-    print("   :alt: Horizontal bar chart showing total players"
-          " online by codebase family.")
-    print()
-    print("   Total players online at scan time, grouped by"
-          " codebase family.")
+    print(f"   Most common codebases"
+          f" ({codebase_total} entries from MSSP data).")
     print()
 
-    print("Players Online by Engine")
-    print("-------------------------")
+    print("Players Online by Codebase")
+    print("---------------------------")
     print()
-    print(".. figure:: _static/plots/players_by_engine.png")
+    print(".. figure:: _static/plots/players_by_codebase.png")
     print("   :align: center")
     print("   :width: 800px")
-    print("   :alt: Horizontal bar chart showing top engines"
+    print("   :alt: Horizontal bar chart showing top codebases"
           " by total players online.")
     print()
-    print("   Top engines by total players online at scan time"
-          " (version numbers stripped).")
+    print("   Top codebases by total players online"
+          " at scan time.")
     print()
 
     print("Creation Years")
@@ -881,7 +809,7 @@ def display_server_table(servers):
           " during the most")
     print("recent scan. Click a column header to sort. Use the"
           " search box to")
-    print("filter by name, codebase family, or genre.")
+    print("filter by name, codebase, or genre.")
     print()
     print(".. list-table:: Column Descriptions")
     print("   :widths: 20 80")
@@ -896,10 +824,9 @@ def display_server_table(servers):
           " a detail page.")
     print("   * - **\U0001f30d**")
     print("     - Country flag from GeoIP lookup.")
-    print("   * - **Code/Family**")
-    print("     - Codebase and codebase family -- the server"
-          " software and its lineage (e.g. PennMUSH/TinyMUD,"
-          " FluffOS/LPMud).")
+    print("   * - **Codebase**")
+    print("     - Server software and its lineage"
+          " (e.g. PennMUSH/TinyMUD, FluffOS/LPMud).")
     print("   * - **Genre**")
     print("     - Game genre or theme (e.g. Fantasy, Sci-Fi,"
           " Social)."
@@ -935,13 +862,13 @@ def display_server_table(servers):
         if s['pay_to_play']:
             name_cell += ' :pay-icon:`$`'
 
-        codebase = s['codebase'] or ''
-        family = s['family'] or ''
-        if (codebase and family
-                and codebase.lower() != family.lower()):
-            code_family = f"{codebase}/{family}"
+        raw_codebase = s['codebase'] or s['family'] or ''
+        norm = _normalize_codebase(raw_codebase) if raw_codebase else ''
+        if (raw_codebase and norm
+                and raw_codebase.lower() != norm.lower()):
+            code_family = f"{raw_codebase}/{norm}"
         else:
-            code_family = codebase or family
+            code_family = norm or raw_codebase
 
         genre = s['genre'] or ''
         if s['adult'] and 'adult' not in genre.lower():
@@ -955,7 +882,7 @@ def display_server_table(servers):
             'Players': players,
             'Name': name_cell,
             '\U0001f30d': flag,
-            'Code/Family': _rst_escape(code_family[:30]),
+            'Codebase': _rst_escape(code_family[:30]),
             'Genre': _rst_escape(genre[:25]),
             'Created': created,
         })
@@ -963,6 +890,58 @@ def display_server_table(servers):
     table_str = tabulate_mod.tabulate(
         rows, headers="keys", tablefmt="rst")
     print_datatable(table_str, caption="MUD Servers")
+
+
+def display_codebase_groups(servers):
+    """Print MUDs by Codebase page."""
+    _rst_heading("Codebases", '=')
+    print("Servers grouped by the codebase reported via MSSP.")
+    print("The ``CODEBASE`` field is used when available, falling"
+          " back to")
+    print("``FAMILY``. Version numbers are stripped and known"
+          " aliases are")
+    print("normalized (e.g. FluffOS and LDMud become LPMud,"
+          " PennMUSH and")
+    print("ProtoMUCK become TinyMUD). Servers that do not report"
+          " either")
+    print("field are listed under *Unknown*.")
+    print()
+
+    by_codebase = {}
+    for s in servers:
+        raw = s['codebase'] or s['family'] or ''
+        key = _normalize_codebase(raw) if raw else 'Unknown'
+        by_codebase.setdefault(key, []).append(s)
+
+    rows = []
+    for name, members in sorted(by_codebase.items(),
+                                 key=lambda x: (-len(x[1]),
+                                                x[0])):
+        rows.append({
+            'Codebase': (
+                f'`{_rst_escape(name)}`_'
+                if name != 'Unknown'
+                else '`Unknown`_'),
+            'Number of Servers': str(len(members)),
+        })
+    table_str = tabulate_mod.tabulate(
+        rows, headers="keys", tablefmt="rst")
+    print_datatable(table_str, caption="MUD Codebases")
+
+    for name, members in sorted(by_codebase.items(),
+                                 key=lambda x: (-len(x[1]),
+                                                x[0])):
+        _rst_heading(name, '-')
+        for s in sorted(members,
+                        key=lambda s: (
+                            s['name'] or s['host']).lower()):
+            mud_file = s['_mud_file']
+            label = s['name'] or s['host']
+            tls = (' :tls-lock:`\U0001f512`'
+                   if s['tls_port'] else '')
+            print(f"- :doc:`{_rst_escape(label)}"
+                  f" <mud_detail/{mud_file}>`{tls}")
+        print()
 
 
 def display_fingerprint_summary(servers):
@@ -1007,7 +986,7 @@ def generate_summary_rst(stats):
 
     def _display(stats):
         footnotes = display_summary_stats(stats)
-        display_plots()
+        display_plots(stats)
         for fn in footnotes:
             print(fn)
             print()
@@ -1041,6 +1020,13 @@ def generate_server_list_rst(servers):
     _generate_rst(
         os.path.join(DOCS_PATH, "server_list.rst"),
         _display, servers)
+
+
+def generate_codebases_rst(servers):
+    """Generate the codebases.rst file."""
+    _generate_rst(
+        os.path.join(DOCS_PATH, "codebases.rst"),
+        display_codebase_groups, servers)
 
 
 def generate_fingerprints_rst(servers):
@@ -1226,12 +1212,10 @@ def _write_mud_server_info(server, sec_char, fn_suffix=''):
         return footnotes
 
     _rst_heading("Server Info", sec_char)
-    if server['codebase']:
+    codebase_display = server['codebase'] or server['family']
+    if codebase_display:
         print(f"- **Codebase**:"
-              f" {_rst_escape(server['codebase'])}")
-    if server['family']:
-        print(f"- **Family**:"
-              f" {_rst_escape(server['family'])}")
+              f" {_rst_escape(codebase_display)}")
     if server['genre']:
         print(f"- **Genre**:"
               f" {_rst_escape(server['genre'])}")
@@ -1508,12 +1492,10 @@ def generate_fingerprint_detail(fp_hash, fp_servers):
             print()
 
             if s['has_mssp']:
-                if s['codebase']:
+                cb_display = s['codebase'] or s['family']
+                if cb_display:
                     print(f"  - Codebase:"
-                          f" {_rst_escape(s['codebase'])}")
-                if s['family']:
-                    print(f"  - Family:"
-                          f" {_rst_escape(s['family'])}")
+                          f" {_rst_escape(cb_display)}")
                 if s['genre']:
                     print(f"  - Genre:"
                           f" {_rst_escape(s['genre'])}")
@@ -1656,6 +1638,7 @@ def run(args):
         print("Generating RST ...", file=sys.stderr)
         generate_summary_rst(stats)
         generate_server_list_rst(servers)
+        generate_codebases_rst(servers)
         generate_fingerprints_rst(servers)
         generate_encoding_rst(servers)
         generate_locations_rst(servers)
