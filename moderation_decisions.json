@@ -531,6 +531,9 @@
     "173.217.78.103:2323|206.189.226.31:23|217.198.137.127:23|24.80.160.127:23|37.27.85.185:2323|5.198.54.18:23|51.222.110.111:2323|70.123.70.30:23|82.64.227.162:23|bbs.8bitboyz.com:6502|bbs.androidsdungeon.co.uk:23|bbs.bytebarn.de:2300|bbs.canerduh.com:23905|bbs.crnet.net:2323|bbs.dicksonlabs.net:2325|bbs.digicombbs.com:2323|bbs.disconnected-by-peer.at:23|bbs.error200.tech:1337|bbs.g00r00.com:23|bbs.idbbs.ca:59|bbs.jasonwalker.ca:2323|bbs.korenblom.nl:23|bbs.sdf1.net:5023|centralontarioremote.net:23|cloud.kanskje.com:23|csbbs.dyndns.org:23|djdave.uk:8088|gcbbs.net:2323|infonet-bbs.rclabs.com.br:2323|joesbbs.com:23|kuehlbox.wtf:23|looneybinbbs.com:2023|mail.hohimer.org:1336|mimac.bizzi.org:2323|modem.serial-port.com:1333|mv2k.com:23|mystic-hobbies.com:23|netpoint.webhop.me:23|nottinghambbs.com:2323|oldtimebbs.com:23|planetafr0.org:8888|pulsebbs.hopto.org:1984|radiostream.amigaz.org:2323|react-bbs.nikoh.it:2323|retr0aktiv.com:23|riverstyx.ddns.net:2323|rofbbs.ddns.net:2300|rtc.to:23|subcarrier.ignorelist.com:2323|telnet.deadmodemsociety.com:1337|telnet.stormbbs.com:23|themegabbs.com:6400|thenineworlds.dnshome.de:923|top-swadba.de:2323|vintagepi.asuscomm.com:23|zahrl.ddns.net:2023|zen.kawasu.wtf:23": {
       "action": "skip"
     },
+    "173.230.135.147:4000|3.211.118.17:6001|37.59.41.114:3001": {
+      "action": "skip"
+    },
     "173.230.135.147:4000|3.211.118.17:6001|37.59.41.114:3001|atbmud.dune.net:4000": {
       "action": "skip"
     },
@@ -1155,6 +1158,9 @@
     "ataribbs.ddns.net:6502|nitelite.ddns.net:9000": {
       "action": "skip"
     },
+    "atbmud.dune.net:4000|everwar.dune.net:4000": {
+      "action": "skip"
+    },
     "atl.ddns.net:6400|atl.ddns.net:6401": {
       "action": "skip"
     },
@@ -1406,6 +1412,9 @@
     "crazyworldbbs.com:2323|dott.synchro.net:2424": {
       "action": "skip"
     },
+    "crimsonstainedlands.net:4001|kbs-cloud.com:4000": {
+      "action": "skip"
+    },
     "crusify.kharkov.org:5000|mud.kharkov.org:3000|mud.kharkov.org:4000": {
       "action": "skip"
     },
@@ -1484,6 +1493,9 @@
     "ds.enyc.org.uk:8688|pit.enyc.org.uk:7422|zmc-place.enyc.org.uk:8682": {
       "action": "skip"
     },
+    "dunemud.net:6788|dunemud.net:6789": {
+      "action": "skip"
+    },
     "echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
       "action": "skip"
     },
@@ -1517,6 +1529,9 @@
       "action": "skip"
     },
     "eternaldarkness.net:9700|kallindor.com:5800|mud.kallindor.org:5800|solareclipse.genesismuds.com:4321": {
+      "action": "skip"
+    },
+    "eternalfantasy.org:3333|eternalfantasy.org:3334|timmud.com:5555": {
       "action": "skip"
     },
     "eternalfantasy.org:3333|timmud.com:5555": {
@@ -1592,6 +1607,9 @@
       "action": "skip"
     },
     "ianshirm.genesismuds.com:2251|terabithia.genesismuds.com:4700": {
+      "action": "skip"
+    },
+    "iberia.jdai.pt:5899|iberia.jdai.pt:5900": {
       "action": "skip"
     },
     "icesus.org:23|icesus.org:4000": {
@@ -1733,6 +1751,9 @@
     "mud.tamedhon.de:4711|mud.tamedhon.de:4712": {
       "action": "skip"
     },
+    "mud.tempusmud.com:2020|mud.tempusmud.com:2023": {
+      "action": "skip"
+    },
     "mud.tempusmud.com:2020|tempusmud.com:2020": {
       "action": "remove",
       "remove": [
@@ -1770,6 +1791,9 @@
       "action": "skip"
     },
     "nightbite.redirectme.net:2323|subhuman.ddns.net:1338": {
+      "action": "skip"
+    },
+    "penultimatemush.com:9500|penultimatemush.com:9501": {
       "action": "skip"
     },
     "phantasm.bbs.io:4489|scenewall.bbs.io:4000": {
@@ -1830,6 +1854,9 @@
     "ssbbs.ddns.net:6502|ssbbs.ddns.net:6510": {
       "action": "skip"
     },
+    "stickmud.com:6680|stickmud.com:7670|stickmud.com:7680": {
+      "action": "skip"
+    },
     "stickmud.com:6680|stickmud.com:7680": {
       "action": "skip"
     },
@@ -1866,6 +1893,9 @@
     "tlcbbs.dynu.net:6400|www.madworldbbs.com:52146": {
       "action": "skip"
     },
+    "toastsoft.net:1234|toastsoft.net:1443": {
+      "action": "skip"
+    },
     "toox.co.kr:4000|toox.co.kr:5800|toox.co.kr:6000|toox.co.kr:6255": {
       "action": "skip"
     },
@@ -1898,6 +1928,9 @@
       "remove": [
         "vormud.genesismuds.com:7777"
       ]
+    },
+    "warlock.pl:23|warlock.pl:2424": {
+      "action": "skip"
     },
     "wl.mud.de:4711|wunderland.mud.de:4711": {
       "action": "remove",

@@ -59,3 +59,24 @@ def _group_cache_key(members):
     """
     parts = sorted(f"{r['host']}:{r['port']}" for r in members)
     return "|".join(parts)
+
+
+def find_stale_tls_decisions(decisions, ssl_entries):
+    """Find cached dupe decisions that include TLS-flagged entries.
+
+    These decisions may have been incorrectly classified before TLS
+    scanning support existed.
+
+    :param decisions: decisions dict from :func:`load_decisions`
+    :param ssl_entries: set of ``(host_lower, port, ssl_bool)`` tuples
+    :returns: list of cache key strings that are stale
+    """
+    hp_ssl = {f"{h}:{p}" for h, p, s in ssl_entries if s}
+    if not hp_ssl:
+        return []
+    stale = []
+    for cache_key in decisions.get("dupes", {}):
+        parts = cache_key.split("|")
+        if any(part in hp_ssl for part in parts):
+            stale.append(cache_key)
+    return stale

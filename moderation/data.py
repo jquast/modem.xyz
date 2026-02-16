@@ -35,6 +35,16 @@ def load_server_list(path):
     return entries
 
 
+def _parse_ssl_from_line(line):
+    """Extract ssl keyword presence from a server list line.
+
+    :param line: original line text from the server list
+    :returns: True if ``ssl`` keyword is present after host and port
+    """
+    parts = line.split()
+    return 'ssl' in parts[2:]
+
+
 def _parse_host_port_set(path):
     """Parse a server list into a set of (host_lower, port) tuples.
 
@@ -45,6 +55,20 @@ def _parse_host_port_set(path):
     for host, port, _ in load_server_list(path):
         if host is not None:
             result.add((host.lower(), port))
+    return result
+
+
+def _parse_host_port_ssl_set(path):
+    """Parse a server list into a set of (host_lower, port, ssl) tuples.
+
+    :param path: path to server list file
+    :returns: set of (host, port, ssl_bool) tuples
+    """
+    result = set()
+    for host, port, line in load_server_list(path):
+        if host is not None:
+            ssl = _parse_ssl_from_line(line)
+            result.add((host.lower(), port, ssl))
     return result
 
 
@@ -129,6 +153,7 @@ def load_server_records(data_dir):
                 "banner_before": banner_before,
                 "banner_after": banner_after,
                 "mssp_name": mssp_name,
+                "mssp": mssp if isinstance(mssp, dict) else {},
                 "encoding": session_data.get("encoding", ""),
                 "data_path": str(path),
             })
@@ -211,3 +236,66 @@ def detect_failure_reason(host, port, logs_dir):
     if re.search(r"error|exception|fail", lower):
         return "error (see log)"
     return "no fingerprint data"
+
+
+def append_to_list(path, new_lines, dry_run=False):
+    """Append new entries to a server list file.
+
+    Uses atomic write via ``.new`` + :func:`os.replace`, same
+    pattern as :func:`write_filtered_list`.
+
+    :param path: path to server list file
+    :param new_lines: list of line strings to append (without newlines)
+    :param dry_run: if True, only print what would happen
+    :returns: number of lines appended
+    """
+    if not new_lines:
+        return 0
+    path = Path(path)
+    if dry_run:
+        print(f"  [dry-run] would append {len(new_lines)}"
+              f" line(s) to {path.name}")
+        return len(new_lines)
+
+    existing = path.read_text(encoding="utf-8")
+    output = Path(str(path) + ".new")
+    with open(output, "w", encoding="utf-8") as f:
+        f.write(existing)
+        if existing and not existing.endswith("\n"):
+            f.write("\n")
+        for line in new_lines:
+            f.write(line + "\n")
+    os.replace(output, path)
+    print(f"  appended {len(new_lines)} line(s) to {path.name}")
+    return len(new_lines)
+
+
+def update_list_entry(path, host, port, add_keyword, dry_run=False):
+    """Add a keyword to an existing server list entry.
+
+    :param path: path to server list file
+    :param host: server hostname to match
+    :param port: server port to match
+    :param add_keyword: keyword string to append (e.g. ``'ssl'``)
+    :param dry_run: if True, don't write
+    :returns: True if the entry was found and updated
+    """
+    entries = load_server_list(path)
+    updated = False
+    new_entries = []
+    for h, p, line in entries:
+        if h == host and p == port:
+            parts = line.split()
+            if add_keyword not in parts[2:]:
+                parts.append(add_keyword)
+            new_entries.append((h, p, ' '.join(parts)))
+            updated = True
+        else:
+            new_entries.append((h, p, line))
+    if updated and not dry_run:
+        output = Path(str(path) + ".new")
+        with open(output, "w", encoding="utf-8") as f:
+            for _, _, line in new_entries:
+                f.write(line + "\n")
+        os.replace(output, path)
+    return updated

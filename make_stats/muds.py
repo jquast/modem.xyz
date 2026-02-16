@@ -38,6 +38,7 @@ from make_stats.common import (
     generate_fingerprint_details as _generate_fingerprint_details,
 )
 from make_stats.geoip import lookup_countries, _country_flag
+from make_stats.tls import lookup_tls_certs
 
 DOCS_PATH = os.path.join(_PROJECT_ROOT, "docs-muds")
 PLOTS_PATH = os.path.join(DOCS_PATH, "_static", "plots")
@@ -234,6 +235,47 @@ def _detect_tls_port(record):
         except ValueError:
             continue
     return ''
+
+
+def _tls_rst_suffix(server):
+    """Return RST inline markup for TLS/connection info.
+
+    - Verified cert: ``:tls-lock:`` padlock with TLS port
+    - Self-signed/expired/starttls/unverified: ``:copy-btn:`` with
+      TLS port (no padlock) plus status note
+    - Not TLS/unreachable/no TLS: ``:copy-btn:`` with regular port
+
+    :param server: server record dict
+    :returns: RST string like ``' :tls-lock:`host port`'``
+    """
+    host = server['host']
+    port = server['port']
+    tls_port = server.get('tls_port', '')
+    cert_status = server.get('_tls_cert_status', '')
+
+    if not tls_port or cert_status in ('not_tls', 'unreachable', ''):
+        return f' :copy-btn:`{host} {port}`'
+
+    tls_p = (port if tls_port in ('1', str(port))
+             else tls_port)
+
+    if cert_status == 'verified':
+        return f' :tls-lock:`{host} {tls_p}`'
+
+    return f' :copy-btn:`{host} {tls_p}`'
+
+
+def _tls_port_if_valid(server):
+    """Return TLS port string only if the server actually supports TLS.
+
+    Returns the ``tls_port`` value when the server's cert status indicates
+    real TLS support, or ``''`` for misreports (``not_tls``), unreachable,
+    or unchecked servers.  Used as ``tls_fn`` for shared display helpers.
+    """
+    status = server.get('_tls_cert_status', '')
+    if status in ('not_tls', 'unreachable', ''):
+        return ''
+    return server.get('tls_port', '')
 
 
 def _is_adult(record):
@@ -514,6 +556,46 @@ def compute_statistics(servers):
         country_counts[s.get('_country_name', 'Unknown')] += 1
     stats['country_counts'] = dict(country_counts)
 
+    tls_enabled = sum(
+        1 for s in servers
+        if s.get('tls_port')
+        and s.get('_tls_cert_status') != 'not_tls')
+    stats['tls_counts'] = {
+        'TLS Enabled': tls_enabled,
+        'No TLS': len(servers) - tls_enabled,
+    }
+
+    cert_counts = Counter()
+    tls_misreport_count = 0
+    for s in servers:
+        if s.get('tls_port'):
+            status = s.get('_tls_cert_status', '')
+            if status == 'not_tls':
+                tls_misreport_count += 1
+            elif status:
+                label = status.replace('_', ' ').title()
+                cert_counts[label] += 1
+    stats['tls_cert_counts'] = dict(cert_counts)
+    stats['tls_misreport_count'] = tls_misreport_count
+
+    tls_by_codebase = {}
+    for s in servers:
+        raw_values = _listify(s['mssp'].get('CODEBASE', ''))
+        if not any(raw_values):
+            raw_values = _listify(s['mssp'].get('FAMILY', ''))
+        for val in raw_values:
+            if val:
+                norm = _normalize_codebase(val)
+                if norm:
+                    entry = tls_by_codebase.setdefault(
+                        norm, {'tls': 0, 'no_tls': 0})
+                    if (s.get('tls_port')
+                            and s.get('_tls_cert_status') != 'not_tls'):
+                        entry['tls'] += 1
+                    else:
+                        entry['no_tls'] += 1
+    stats['tls_by_codebase'] = tls_by_codebase
+
     return stats
 
 
@@ -627,6 +709,69 @@ def create_players_by_codebase_plot(stats, output_path, top_n=15):
     plt.close()
 
 
+def create_tls_support_plot(stats, output_path):
+    """Create pie chart of TLS-enabled vs non-TLS servers."""
+    tls_counts = stats.get('tls_counts', {})
+    if not tls_counts or not tls_counts.get('TLS Enabled'):
+        return
+    sorted_items = sorted(tls_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path)
+
+
+def create_tls_cert_plot(stats, output_path):
+    """Create pie chart of TLS certificate validation status."""
+    cert_counts = stats.get('tls_cert_counts', {})
+    if not cert_counts:
+        return
+    sorted_items = sorted(cert_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path)
+
+
+def create_tls_by_codebase_plot(stats, output_path, top_n=15):
+    """Create stacked bar chart of TLS support by codebase family."""
+    import numpy as np
+
+    tls_by_codebase = stats.get('tls_by_codebase', {})
+    if not tls_by_codebase:
+        return
+
+    sorted_items = sorted(
+        tls_by_codebase.items(),
+        key=lambda x: x[1]['tls'],
+        reverse=True)[:top_n]
+    sorted_items.reverse()
+
+    codebases = [item[0] for item in sorted_items]
+    tls_counts = [item[1]['tls'] for item in sorted_items]
+    no_tls_counts = [item[1]['no_tls'] for item in sorted_items]
+
+    fig, ax = plt.subplots(
+        figsize=(12, max(6, len(codebases) * 0.5)))
+    y = np.arange(len(codebases))
+    height = 0.6
+
+    ax.barh(y, tls_counts, height,
+            label='TLS Enabled',
+            color=PLOT_GREEN, edgecolor='#222222', alpha=0.85)
+    ax.barh(y, no_tls_counts, height, left=tls_counts,
+            label='No TLS',
+            color='#666666', edgecolor='#222222', alpha=0.85)
+
+    ax.set_yticks(y)
+    ax.set_yticklabels(codebases)
+    ax.set_xlabel('Number of Servers', fontsize=12)
+    ax.legend(facecolor='none', edgecolor=PLOT_FG,
+              labelcolor=PLOT_FG)
+    ax.grid(True, axis='x')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=100, bbox_inches='tight',
+                transparent=True, metadata={'CreationDate': None})
+    plt.close()
+
+
 def create_all_plots(stats):
     """Generate all matplotlib plots."""
     os.makedirs(PLOTS_PATH, exist_ok=True)
@@ -644,6 +789,12 @@ def create_all_plots(stats):
         stats, os.path.join(PLOTS_PATH, 'telnet_options.png'))
     create_location_plot(
         stats, os.path.join(PLOTS_PATH, 'server_locations.png'))
+    create_tls_support_plot(
+        stats, os.path.join(PLOTS_PATH, 'tls_support.png'))
+    create_tls_cert_plot(
+        stats, os.path.join(PLOTS_PATH, 'tls_certs.png'))
+    create_tls_by_codebase_plot(
+        stats, os.path.join(PLOTS_PATH, 'tls_by_codebase.png'))
 
 
 # ---------------------------------------------------------------------------
@@ -687,6 +838,9 @@ def display_summary_stats(stats):
     print(f"- **Unique protocol fingerprints**:"
           f" {stats['unique_fingerprints']}")
     print(f"- **Unique codebases**: {stats['unique_codebases']}")
+    tls_enabled = stats.get('tls_counts', {}).get('TLS Enabled', 0)
+    if tls_enabled:
+        print(f"- **TLS-enabled**: {tls_enabled}")
     footnotes = []
     if stats['total_players']:
         print(f"- **Total players online**:"
@@ -804,9 +958,58 @@ def display_plots(stats):
           " of servers by country.")
     print()
     print("   Server locations by country.")
-    print("   Telnet options offered vs requested by servers"
-          " during negotiation.")
     print()
+
+    tls_total = stats.get('tls_counts', {}).get('TLS Enabled', 0)
+    if tls_total:
+        print("TLS/SSL Support")
+        print("----------------")
+        print()
+        print(f"{tls_total} servers support TLS/SSL connections,"
+              " either advertised")
+        print("via MSSP metadata or configured with the ``ssl``"
+              " keyword in the")
+        print("server list. See :doc:`tls` for a full breakdown"
+              " by certificate status.")
+        print()
+        misreport = stats.get('tls_misreport_count', 0)
+        if misreport:
+            print(f"Although {misreport} servers report TLS support"
+                  " via MSSP variable ``SSL`` or ``TLS=1``, they"
+                  " failed to negotiate TLS when requested and are"
+                  " not included in these totals.")
+            print()
+        print(".. figure:: _static/plots/tls_support.png")
+        print("   :align: center")
+        print("   :width: 800px")
+        print("   :alt: Pie chart showing servers with TLS"
+              " support vs without.")
+        print()
+        print("   TLS-enabled servers vs servers without TLS.")
+        print()
+
+        cert_counts = stats.get('tls_cert_counts', {})
+        if cert_counts:
+            print(".. figure:: _static/plots/tls_certs.png")
+            print("   :align: center")
+            print("   :width: 800px")
+            print("   :alt: Pie chart showing TLS certificate"
+                  " validation results.")
+            print()
+            print("   Certificate validation results for"
+                  " TLS-enabled servers.")
+            print()
+
+        tls_by_codebase = stats.get('tls_by_codebase', {})
+        if tls_by_codebase:
+            print(".. figure:: _static/plots/tls_by_codebase.png")
+            print("   :align: center")
+            print("   :width: 800px")
+            print("   :alt: Stacked bar chart showing TLS"
+                  " support by codebase family.")
+            print()
+            print("   TLS support breakdown by codebase family.")
+            print()
 
 
 def display_server_table(servers):
@@ -858,7 +1061,8 @@ def display_server_table(servers):
         host = s['host']
         sport = s['port']
         if s.get('_loci_supported'):
-            loci = _lociterm_url(host, sport, s['tls_port'],
+            loci = _lociterm_url(host, sport,
+                                 _tls_port_if_valid(s),
                                  s.get('_loci_ssl'))
             name_cell += f' `\U0001f5a5 <{loci}>`__'
         if s['website']:
@@ -871,13 +1075,7 @@ def display_server_table(servers):
             if not dhref.startswith(('http://', 'https://')):
                 dhref = f'https://{dhref}'
             name_cell += f' `\U0001f4ac <{dhref}>`__'
-        tls_port = s['tls_port']
-        if tls_port:
-            tls_p = (sport if tls_port in ('1', str(sport))
-                     else tls_port)
-            name_cell += f' :tls-lock:`{host} {tls_p}`'
-        else:
-            name_cell += f' :copy-btn:`{host} {sport}`'
+        name_cell += _tls_rst_suffix(s)
         if s['pay_to_play']:
             name_cell += ' :pay-icon:`$`'
 
@@ -932,37 +1130,46 @@ def display_codebase_groups(servers):
         key = _normalize_codebase(raw) if raw else 'Unknown'
         by_codebase.setdefault(key, []).append(s)
 
+    min_count = 2
+    other_members = []
+    filtered = {}
+    for name, members in by_codebase.items():
+        if name != 'Unknown' and len(members) < min_count:
+            other_members.extend(members)
+        else:
+            filtered[name] = members
+    if other_members:
+        filtered.setdefault('Other', []).extend(other_members)
+
     rows = []
-    for name, members in sorted(by_codebase.items(),
+    for name, members in sorted(filtered.items(),
                                  key=lambda x: (-len(x[1]),
                                                 x[0])):
         rows.append({
             'Codebase': (
                 f'`{_rst_escape(name)}`_'
-                if name != 'Unknown'
-                else '`Unknown`_'),
+                if name not in ('Unknown', 'Other')
+                else f'`{name}`_'),
             'Number of Servers': str(len(members)),
         })
     table_str = tabulate_mod.tabulate(
         rows, headers="keys", tablefmt="rst")
     print_datatable(table_str, caption="MUD Codebases")
 
-    for name, members in sorted(by_codebase.items(),
+    for name, members in sorted(filtered.items(),
                                  key=lambda x: (-len(x[1]),
                                                 x[0])):
         _rst_heading(name, '-')
+        if name == 'Other':
+            print(f"Codebases with fewer than {min_count}"
+                  " servers each.")
+            print()
         for s in sorted(members,
                         key=lambda s: (
                             s['name'] or s['host']).lower()):
             mud_file = s['_mud_file']
             label = s['name'] or s['host']
-            if s['tls_port']:
-                tp = s['tls_port']
-                tls_p = (s['port'] if tp in ('1', str(s['port']))
-                         else tp)
-                tls = f' :tls-lock:`{s["host"]} {tls_p}`'
-            else:
-                tls = f' :copy-btn:`{s["host"]} {s["port"]}`'
+            tls = _tls_rst_suffix(s)
             print(f"- :doc:`{_rst_escape(label)}"
                   f" <mud_detail/{mud_file}>`{tls}")
         print()
@@ -985,7 +1192,7 @@ def display_encoding_groups(servers):
             s['name'] or f"{s['host']}:{s['port']}"),
         server_sort_key=lambda s: (
             s['name'] or s['host']).lower(),
-        tls_fn=lambda s: s.get('tls_port'))
+        tls_fn=_tls_port_if_valid)
 
 
 def display_location_groups(servers):
@@ -998,7 +1205,85 @@ def display_location_groups(servers):
             s['name'] or f"{s['host']}:{s['port']}"),
         server_sort_key=lambda s: (
             s['name'] or s['host']).lower(),
-        tls_fn=lambda s: s.get('tls_port'))
+        tls_fn=_tls_port_if_valid)
+
+
+def display_tls_groups(servers):
+    """Print Supporting TLS page, grouping servers by certificate status."""
+    _rst_heading("Supporting TLS", '=')
+    print("Servers grouped by their TLS certificate validation status.")
+    print("TLS support is determined by connecting to each server and")
+    print("attempting a TLS handshake, either directly on a dedicated")
+    print("TLS port or via STARTTLS negotiation on the primary port.")
+    print()
+
+    _TLS_GROUPS = [
+        ('verified', 'Verified',
+         "These servers have a valid TLS certificate signed by a trusted"
+         " certificate authority. Connections are encrypted and the server"
+         " identity is confirmed."),
+        ('starttls', 'STARTTLS',
+         "These servers support TLS via Telnet STARTTLS negotiation"
+         " (Telnet option 46) on their primary port. The connection"
+         " begins unencrypted and upgrades to TLS after negotiation."),
+        ('self_signed', 'Self-Signed',
+         "These servers support TLS but use a self-signed certificate."
+         " The connection is encrypted, but the server identity cannot"
+         " be verified by a trusted certificate authority."),
+        ('expired', 'Expired',
+         "These servers support TLS but their certificate has expired."
+         " The connection is encrypted, but the certificate should be"
+         " renewed."),
+        ('unverified', 'Unverified',
+         "These servers support TLS but their certificate could not be"
+         " verified. The certificate may be issued by an unknown"
+         " certificate authority."),
+        ('not_tls', 'MSSP Reported but Not TLS',
+         "These servers advertise TLS support via MSSP (``SSL`` or"
+         " ``TLS`` field set to ``1``) but failed to negotiate TLS"
+         " when requested. The MSSP metadata reports TLS capability"
+         " that could not be confirmed, so these servers are **not**"
+         " counted as TLS-enabled in the statistics."),
+        ('unreachable', 'Unreachable',
+         "These servers advertise a TLS port but could not be reached"
+         " on that port at the time of the scan."),
+    ]
+
+    groups = {}
+    for s in servers:
+        status = s.get('_tls_cert_status', '')
+        if status:
+            groups.setdefault(status, []).append(s)
+
+    rows = []
+    for status_key, label, _desc in _TLS_GROUPS:
+        members = groups.get(status_key, [])
+        if members:
+            rows.append({
+                'Status': f'`{label}`_',
+                'Servers': str(len(members)),
+            })
+    if rows:
+        table_str = tabulate_mod.tabulate(
+            rows, headers="keys", tablefmt="rst")
+        print_datatable(table_str, caption="TLS Certificate Status")
+
+    for status_key, label, desc in _TLS_GROUPS:
+        members = groups.get(status_key, [])
+        if not members:
+            continue
+        _rst_heading(label, '-')
+        print(desc)
+        print()
+        for s in sorted(members,
+                        key=lambda s: (
+                            s['name'] or s['host']).lower()):
+            mud_file = s['_mud_file']
+            slabel = s['name'] or s['host']
+            tls = _tls_rst_suffix(s)
+            print(f"- :doc:`{_rst_escape(slabel)}"
+                  f" <mud_detail/{mud_file}>`{tls}")
+        print()
 
 
 # ---------------------------------------------------------------------------
@@ -1074,6 +1359,13 @@ def generate_locations_rst(servers):
         display_location_groups, servers)
 
 
+def generate_tls_rst(servers):
+    """Generate the tls.rst file."""
+    _generate_rst(
+        os.path.join(DOCS_PATH, "tls.rst"),
+        display_tls_groups, servers)
+
+
 def generate_banner_gallery_rst(servers):
     """Generate paginated banner_gallery*.rst files."""
     _generate_banner_gallery(
@@ -1087,7 +1379,7 @@ def generate_banner_gallery_rst(servers):
         server_sort_key=lambda g: (
             g['servers'][0].get('name')
             or g['servers'][0]['host']).lower(),
-        tls_fn=lambda s: s.get('tls_port'))
+        tls_fn=_tls_port_if_valid)
 
 
 def generate_details_rst(servers):
@@ -1186,7 +1478,7 @@ def _write_mud_server_urls(server, sec_char):
     print(f'   </button></li>')
     if server.get('_loci_supported'):
         loci_url = _lociterm_url(
-            host, port, server['tls_port'],
+            host, port, _tls_port_if_valid(server),
             server.get('_loci_ssl'))
         print(f'   <li><strong>Play in Browser'
               f'</strong>: <a href="{loci_url}">'
@@ -1199,7 +1491,8 @@ def _write_mud_server_urls(server, sec_char):
               f'<a href="{href}">'
               f'{_rst_escape(server["website"])}'
               f'</a></li>')
-    if server['tls_port']:
+    cert_status = server.get('_tls_cert_status', '')
+    if server['tls_port'] and cert_status not in ('not_tls', 'unreachable', ''):
         tls_port = server['tls_port']
         if tls_port == '1' or tls_port == str(port):
             tls_url = f"telnets://{host}:{port}"
@@ -1207,8 +1500,18 @@ def _write_mud_server_urls(server, sec_char):
         else:
             tls_url = f"telnets://{host}:{tls_port}"
             tls_copy_port = tls_port
+        status_note = ''
+        if cert_status == 'self_signed':
+            status_note = ' (self-signed certificate)'
+        elif cert_status == 'expired':
+            status_note = ' (expired certificate)'
+        elif cert_status == 'starttls':
+            status_note = ' (STARTTLS)'
+        elif cert_status == 'unverified':
+            status_note = ' (unverified certificate)'
         print(f'   <li><strong>TLS/SSL</strong>: '
-              f'<a href="{tls_url}">{tls_url}</a>')
+              f'<a href="{tls_url}">{tls_url}</a>'
+              f'{status_note}')
         print(f'   <button class="copy-btn"'
               f' data-host="{host}"'
               f' data-port="{tls_copy_port}"'
@@ -1524,13 +1827,7 @@ def generate_fingerprint_detail(fp_hash, fp_servers):
         for s in fp_servers:
             name = s['name'] or s['host']
             mud_file = s['_mud_file']
-            if s['tls_port']:
-                tp = s['tls_port']
-                tls_p = (s['port'] if tp in ('1', str(s['port']))
-                         else tp)
-                tls = f' :tls-lock:`{s["host"]} {tls_p}`'
-            else:
-                tls = f' :copy-btn:`{s["host"]} {s["port"]}`'
+            tls = _tls_rst_suffix(s)
             print(f":doc:`{_rst_escape(name)}"
                   f" <../mud_detail/{mud_file}>`{tls}")
             print()
@@ -1672,6 +1969,7 @@ def run(args):
               file=sys.stderr)
 
     lookup_countries(servers)
+    lookup_tls_certs(servers)
 
     stats = compute_statistics(servers)
 
@@ -1692,6 +1990,7 @@ def run(args):
         generate_fingerprints_rst(servers)
         generate_encoding_rst(servers)
         generate_locations_rst(servers)
+        generate_tls_rst(servers)
         generate_mud_details(servers, logs_dir=logs_dir,
                              data_dir=data_dir,
                              ip_groups=ip_groups)

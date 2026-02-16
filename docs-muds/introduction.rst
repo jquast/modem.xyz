@@ -109,15 +109,14 @@ widely in purpose:
 Secure Connections (TLS)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Less than 1 percent of MUDs support `TLS <https://en.wikipedia.org/wiki/Transport_Layer_Security>`_
-(Transport Layer Security), sometimes also called ``TELNETS``.  Servers that support TLS are marked
+A small amount of MUDs :doc:`support TLS <tls>`
+(`Transport Layer Security <https://en.wikipedia.org/wiki/Transport_Layer_Security>`_),
+sometimes also called ``TELNETS``.  Servers that support TLS are marked
 with a lock icon on this site.
 
-The Python `telnetlib3 <https://telnetlib3.readthedocs.io/>`_ CLI ``telnetlib3-client`` supports TLS
-using the ``--ssl`` argument::
-
-    telnetlib3-client --ssl mud.tamedhon.de 4712
-
+Most modern MUD clients support TLS, or `stunnel <https://www.stunnel.org/>`_ can be used with your
+system-supplied telnet client. The Python `telnetlib3 <https://telnetlib3.readthedocs.io/>`_ CLI
+``telnetlib3-client`` supports TLS using argument, ``--ssl``.
 
 About This Site
 ---------------

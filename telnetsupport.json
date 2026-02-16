@@ -525,6 +525,13 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "thechattingzone.uk",
+    "port": 8342,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LFLOW\",\"LINEMODE\"]"
+  },
+  {
     "host": "yuriba.com",
     "port": 4201,
     "ssl": 0,
@@ -726,13 +733,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\"]"
-  },
-  {
-    "host": "thechattingzone.uk",
-    "port": 8342,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\"]"
   },
   {
     "host": "forgottenkingdoms.org",

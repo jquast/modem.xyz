@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .data import (
     _parse_host_port_set,
+    _parse_host_port_ssl_set,
     build_alive_set,
     deduplicate_records,
     detect_failure_reason,
@@ -15,6 +16,7 @@ from .data import (
     load_server_records,
     write_filtered_list,
 )
+from .tls import _detect_tls_port
 from .decisions import _group_cache_key
 from .encoding import _expunge_logs, _expunge_server_json
 from .util import (
@@ -68,7 +70,84 @@ def _subtract_covered(groups, covered):
     return result
 
 
-def _print_group_member(idx, rec, removals, source_label=None):
+def _identify_tls_pairs(records, ssl_entries):
+    """Identify (host, port) pairs where both plaintext and TLS exist.
+
+    A pair is identified when:
+    - The server list has both a plaintext and ``ssl`` entry for the
+      same hostname (possibly different ports), OR
+    - A record's MSSP advertises TLS on a port that also appears in
+      the same fingerprint+IP group.
+
+    :param records: list of record dicts
+    :param ssl_entries: set of ``(host_lower, port, ssl_bool)`` tuples
+    :returns: set of ``(host_lower, port)`` tuples that are TLS-paired
+    """
+    paired = set()
+    ssl_hosts = {}
+    plain_hosts = {}
+    for host, port, is_ssl in ssl_entries:
+        if is_ssl:
+            ssl_hosts.setdefault(host, set()).add(port)
+        else:
+            plain_hosts.setdefault(host, set()).add(port)
+
+    for host in ssl_hosts:
+        if host in plain_hosts:
+            for port in ssl_hosts[host]:
+                paired.add((host, port))
+            for port in plain_hosts[host]:
+                paired.add((host, port))
+
+    by_fp_ip = collections.defaultdict(set)
+    for rec in records:
+        if rec["fingerprint"] and rec["ip"]:
+            by_fp_ip[(rec["fingerprint"], rec["ip"])].add(
+                (rec["host"].lower(), rec["port"]))
+
+    for rec in records:
+        mssp = rec.get("mssp", {})
+        if not mssp:
+            continue
+        tls_port, same_port = _detect_tls_port(mssp)
+        if tls_port is None:
+            continue
+        host_lower = rec["host"].lower()
+        if same_port:
+            continue
+        fp_ip_key = (rec["fingerprint"], rec["ip"])
+        group_members = by_fp_ip.get(fp_ip_key, set())
+        if (host_lower, tls_port) in group_members:
+            paired.add((host_lower, rec["port"]))
+            paired.add((host_lower, tls_port))
+
+    return paired
+
+
+def _filter_tls_pair_groups(groups, tls_paired):
+    """Remove groups whose members are all TLS variants of the same host.
+
+    :param groups: dict of group key -> list of record dicts
+    :param tls_paired: set of ``(host_lower, port)`` from
+        :func:`_identify_tls_pairs`
+    :returns: filtered groups dict
+    """
+    result = {}
+    for key, members in groups.items():
+        hosts = {m["host"].lower() for m in members}
+        if len(hosts) == 1:
+            all_paired = all(
+                (m["host"].lower(), m["port"]) in tls_paired
+                for m in members
+            )
+            if all_paired:
+                continue
+        result[key] = members
+    return result
+
+
+def _print_group_member(idx, rec, removals, source_label=None,
+                        ssl_entries=None):
     """Print one member of a duplicate group."""
     marker = (
         "x" if (rec["host"], rec["port"]) in removals else " "
@@ -77,9 +156,25 @@ def _print_group_member(idx, rec, removals, source_label=None):
         f"  name={rec['mssp_name']!r}" if rec["mssp_name"] else ""
     )
     source = f"  [{source_label}]" if source_label else ""
+
+    tls_marker = ""
+    if ssl_entries:
+        hp_ssl = {(h, p) for h, p, s in ssl_entries if s}
+        if (rec["host"].lower(), rec["port"]) in hp_ssl:
+            tls_marker = " [TLS]"
+
+    tls_info = ""
+    rec_mssp = rec.get("mssp", {})
+    if rec_mssp and not tls_marker:
+        tls_port, _ = _detect_tls_port(rec_mssp)
+        if tls_port is not None and tls_port != 1:
+            tls_info = f"  tls_port={tls_port}"
+
     print(f"  [{marker}] {idx}. {rec['host']}:{rec['port']}"
+          f"{tls_marker}"
           f"  ip={rec['ip']}"
-          f"  fp={rec['fingerprint'][:12]}{mssp}{source}")
+          f"  fp={rec['fingerprint'][:12]}{mssp}"
+          f"{tls_info}{source}")
 
     before = rec.get("banner_before", "")
     if before:
@@ -90,7 +185,7 @@ def _print_group_member(idx, rec, removals, source_label=None):
 
 
 def _review_groups(groups, label, decisions=None, logs_dir=None,
-                   data_dir=None):
+                   data_dir=None, ssl_entries=None):
     """Interactive review of duplicate groups.
 
     :param groups: dict of group key -> list of record dicts
@@ -98,6 +193,7 @@ def _review_groups(groups, label, decisions=None, logs_dir=None,
     :param decisions: mutable decisions dict for caching, or None
     :param logs_dir: path to logs directory for rescan, or None
     :param data_dir: path to data directory (for JSON expunge)
+    :param ssl_entries: set of (host, port, ssl_bool) for TLS display
     :returns: set of (host, port) to remove
     """
     removals = set()
@@ -142,7 +238,8 @@ def _review_groups(groups, label, decisions=None, logs_dir=None,
         print(f"  {len(members)} entries:\n")
 
         for i, rec in enumerate(members, 1):
-            _print_group_member(i, rec, removals)
+            _print_group_member(i, rec, removals,
+                                ssl_entries=ssl_entries)
 
         print("  Enter numbers to remove (e.g. '2 3'),"
               " [*] rescan all, [s]kip, [q]uit")
@@ -208,8 +305,12 @@ def _review_groups(groups, label, decisions=None, logs_dir=None,
     return removals
 
 
-def _report_groups(groups, label):
+def _report_groups(groups, label, ssl_entries=None):
     """Non-interactive report of duplicate groups."""
+    hp_ssl = set()
+    if ssl_entries:
+        hp_ssl = {(h, p) for h, p, s in ssl_entries if s}
+
     items = sorted(
         groups.items(), key=lambda kv: (-len(kv[1]), kv[0]))
     print(f"\n  {label}: {len(items)} group(s)")
@@ -223,7 +324,11 @@ def _report_groups(groups, label):
                 f"  name={rec['mssp_name']!r}"
                 if rec["mssp_name"] else ""
             )
-            print(f"      {rec['host']}:{rec['port']}{mssp}")
+            tls = ""
+            if (rec["host"].lower(), rec["port"]) in hp_ssl:
+                tls = " [TLS]"
+            print(f"      {rec['host']}:{rec['port']}"
+                  f"{tls}{mssp}")
 
 
 def _prune_data_files(records, removals):
@@ -342,7 +447,8 @@ def find_duplicates(list_path, data_dir, report_only=False,
     records = load_server_records(data_dir)
     records = deduplicate_records(records)
 
-    current_entries = _parse_host_port_set(list_path)
+    ssl_entries = _parse_host_port_ssl_set(list_path)
+    current_entries = {(h, p) for h, p, _ in ssl_entries}
     records = [r for r in records
                if (r["host"].lower(), r["port"])
                in current_entries]
@@ -353,9 +459,17 @@ def find_duplicates(list_path, data_dir, report_only=False,
         print("  No fingerprint data to analyze.")
         return set()
 
+    tls_paired = _identify_tls_pairs(records, ssl_entries)
+
     fp_ip_groups = _find_fp_ip_groups(records)
+    fp_ip_groups = _filter_tls_pair_groups(
+        fp_ip_groups, tls_paired)
     banner_groups = _find_banner_groups(records)
+    banner_groups = _filter_tls_pair_groups(
+        banner_groups, tls_paired)
     mssp_groups = _find_mssp_groups(records)
+    mssp_groups = _filter_tls_pair_groups(
+        mssp_groups, tls_paired)
 
     covered = set()
     for members in fp_ip_groups.values():
@@ -372,6 +486,9 @@ def find_duplicates(list_path, data_dir, report_only=False,
     total = (
         len(fp_ip_groups) + len(extra_banner) + len(extra_mssp)
     )
+    if tls_paired:
+        print(f"  {len(tls_paired)} TLS-paired entries"
+              f" (excluded from duplicate detection)")
     print(f"  {len(fp_ip_groups)} groups by fingerprint + IP")
     if extra_banner:
         print(f"  {len(extra_banner)} additional"
@@ -385,11 +502,14 @@ def find_duplicates(list_path, data_dir, report_only=False,
 
     if report_only:
         if fp_ip_groups:
-            _report_groups(fp_ip_groups, "Fingerprint + IP")
+            _report_groups(fp_ip_groups, "Fingerprint + IP",
+                           ssl_entries=ssl_entries)
         if extra_banner:
-            _report_groups(extra_banner, "Banner similarity")
+            _report_groups(extra_banner, "Banner similarity",
+                           ssl_entries=ssl_entries)
         if extra_mssp:
-            _report_groups(extra_mssp, "MSSP NAME")
+            _report_groups(extra_mssp, "MSSP NAME",
+                           ssl_entries=ssl_entries)
         return set()
 
     removals = set()
@@ -397,18 +517,21 @@ def find_duplicates(list_path, data_dir, report_only=False,
         r = _review_groups(
             fp_ip_groups, "Fingerprint + IP duplicates",
             decisions,
-            logs_dir=logs_dir, data_dir=str(data_dir))
+            logs_dir=logs_dir, data_dir=str(data_dir),
+            ssl_entries=ssl_entries)
         removals.update(r)
     if extra_banner:
         r = _review_groups(
             extra_banner, "Banner similarity duplicates",
             decisions,
-            logs_dir=logs_dir, data_dir=str(data_dir))
+            logs_dir=logs_dir, data_dir=str(data_dir),
+            ssl_entries=ssl_entries)
         removals.update(r)
     if extra_mssp:
         r = _review_groups(
             extra_mssp, "MSSP NAME duplicates", decisions,
-            logs_dir=logs_dir, data_dir=str(data_dir))
+            logs_dir=logs_dir, data_dir=str(data_dir),
+            ssl_entries=ssl_entries)
         removals.update(r)
 
     if not removals:

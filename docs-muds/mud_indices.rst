@@ -6,6 +6,7 @@ MUD Indices
 
    server_list
    codebases
+   tls
    locations
    encodings
    fingerprints

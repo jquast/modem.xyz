@@ -27,6 +27,7 @@ from .encoding import (
     review_encoding_issues,
     show_all_banners,
 )
+from .tls import discover_tls_ports, review_tls_ports
 from .util import (
     DEFAULT_BBS_DATA,
     DEFAULT_BBS_LIST,
@@ -101,6 +102,11 @@ def _get_argument_parser():
         help=("only find banners whose rendered PNGs"
               " are tiny (<1KB)"),
     )
+    mode_mx.add_argument(
+        "--only-tls", action="store_true",
+        help=("only discover MSSP-advertised TLS ports"
+              " not in the server list"),
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -133,7 +139,7 @@ def _get_argument_parser():
     )
     parser.add_argument(
         "--skip-dns", action="store_true",
-        help="skip DNS deduplication step",
+        help="(ignored, kept for compatibility)",
     )
     parser.add_argument(
         "--no-cache", action="store_true",
@@ -207,20 +213,19 @@ def main():
         args.only_cross, args.only_dns,
         args.only_encodings, args.only_columns,
         args.only_empty, args.only_renders_empty,
-        args.only_renders_small,
+        args.only_renders_small, args.only_tls,
     )
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
-    do_dns = (
-        (args.only_dns or not any_only) and not args.skip_dns
-    )
+    do_dns = args.only_dns
     do_encodings = args.only_encodings or not any_only
     do_columns = args.only_columns
     do_empty = args.only_empty or not any_only
     do_renders_empty = args.only_renders_empty
     do_renders_small = args.only_renders_small
+    do_tls = args.only_tls
 
     if do_cross and (args.mud or args.bbs):
         do_cross = False
@@ -415,6 +420,51 @@ def main():
                 dry_run=args.dry_run)
         else:
             print("No banners with small renders detected.")
+
+    if do_tls:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_tls_ports(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_tls_ports(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            review_tls_ports(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+
+            if decisions is not None and not args.report_only:
+                from .data import _parse_host_port_ssl_set
+                from .decisions import find_stale_tls_decisions
+                ssl_entries = set()
+                if os.path.isfile(args.mud_list):
+                    ssl_entries |= _parse_host_port_ssl_set(
+                        args.mud_list)
+                if os.path.isfile(args.bbs_list):
+                    ssl_entries |= _parse_host_port_ssl_set(
+                        args.bbs_list)
+                stale = find_stale_tls_decisions(
+                    decisions, ssl_entries)
+                if stale:
+                    print(f"\n  {len(stale)} cached dupe"
+                          f" decision(s) may be stale"
+                          f" (include TLS entries)")
+                    from .util import _prompt
+                    ans = _prompt(
+                        "  Clear these decisions? [y/N] ",
+                        "yn")
+                    if ans == 'y':
+                        for key in stale:
+                            del decisions["dupes"][key]
+                        print(f"  Cleared {len(stale)}"
+                              f" stale decision(s)")
+        else:
+            print("No MSSP-advertised TLS ports to add.")
 
     if decisions is not None:
         save_decisions(args.decisions, decisions)
