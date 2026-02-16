@@ -964,6 +964,10 @@ def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
             host = server['host']
             port = server['port']
             sub_title = f"{host}:{port}"
+            anchor = server.get('_detail_anchor', '')
+            if anchor:
+                print(f".. _{anchor}:")
+                print()
             escaped_sub = _rst_escape(sub_title)
             _rst_heading(escaped_sub, '-')
 

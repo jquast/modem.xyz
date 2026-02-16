@@ -16,7 +16,7 @@ from make_stats.common import (
     PLOT_FG, PLOT_GREEN, PLOT_CYAN,
     _listify, _first_str, _parse_int, _format_scan_time,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
-    _load_no_ambig_overrides,
+    _load_ssl_overrides, _load_no_ambig_overrides,
     _load_base_records, _generate_rst,
     _render_banner_section, _render_json_section,
     _render_log_section, _render_fingerprint_section,
@@ -347,15 +347,19 @@ def _detect_protocols(record):
 # ---------------------------------------------------------------------------
 
 def load_server_data(data_dir, encoding_overrides=None,
-                     column_overrides=None, no_ambig_overrides=None):
+                     column_overrides=None, no_ambig_overrides=None,
+                     ssl_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
     :param encoding_overrides: dict mapping (host, port) to encoding
     :param column_overrides: dict mapping (host, port) to column width
     :param no_ambig_overrides: dict mapping (host, port) to True
+    :param ssl_overrides: set of (host, port) tuples that use SSL
     :returns: list of parsed server record dicts
     """
+    if ssl_overrides is None:
+        ssl_overrides = set()
     base_records = _load_base_records(
         data_dir, encoding_overrides, column_overrides,
         no_ambig_overrides=no_ambig_overrides)
@@ -402,6 +406,11 @@ def load_server_data(data_dir, encoding_overrides=None,
             or record['encoding']).lower()
 
         record['tls_port'] = _detect_tls_port(record)
+        # If this server is in the SSL overrides list (scanned via TLS)
+        # and MSSP didn't advertise a TLS port, mark its own port as TLS.
+        if (not record['tls_port']
+                and (record['host'], record['port']) in ssl_overrides):
+            record['tls_port'] = str(record['port'])
         record['uptime_days'] = _parse_uptime_days(
             mssp.get('UPTIME', ''), record['connected'])
 
@@ -1399,6 +1408,10 @@ def generate_mud_detail_group(ip, group_servers, logs_dir=None,
                 sub_title = f"{name} ({host}:{port})"
             else:
                 sub_title = f"{host}:{port}"
+            anchor = server.get('_detail_anchor', '')
+            if anchor:
+                print(f".. _{anchor}:")
+                print()
             escaped_sub = _rst_escape(sub_title)
             _rst_heading(escaped_sub, '-')
 
@@ -1590,10 +1603,16 @@ def run(args):
         print(f"Loaded {len(no_ambig_overrides)} no_ambig"
               f" overrides from {server_list}", file=sys.stderr)
 
+    ssl_overrides = _load_ssl_overrides(server_list)
+    if ssl_overrides:
+        print(f"Loaded {len(ssl_overrides)} SSL/TLS"
+              f" overrides from {server_list}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
 
     records = load_server_data(data_dir, encoding_overrides,
-                               column_overrides, no_ambig_overrides)
+                               column_overrides, no_ambig_overrides,
+                               ssl_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 

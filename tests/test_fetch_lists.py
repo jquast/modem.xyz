@@ -141,6 +141,22 @@ class TestMergeEntries:
         _merge_entries(existing, [('mud.org', 4000)])
         assert existing[('mud.org', 4000)] == 'mud.org 4000'
 
+    def test_ssl_flag_appended(self):
+        existing = {}
+        _merge_entries(existing, [('secure.mud.org', 4712, True)])
+        assert existing[('secure.mud.org', 4712)] == 'secure.mud.org 4712 ssl'
+
+    def test_ssl_with_encoding_hint(self):
+        existing = {}
+        _merge_entries(existing, [('secure.mud.org', 4712, True)],
+                       encoding_hint='utf-8')
+        assert existing[('secure.mud.org', 4712)] == 'secure.mud.org 4712 utf-8 ssl'
+
+    def test_no_ssl_flag(self):
+        existing = {}
+        _merge_entries(existing, [('plain.mud.org', 23, False)])
+        assert existing[('plain.mud.org', 23)] == 'plain.mud.org 23'
+
     def test_idempotent(self):
         existing = {}
         _merge_entries(existing, [('a.com', 23), ('b.com', 80)])
@@ -315,11 +331,24 @@ class TestFetchTelnetsupport:
         local = tmp_path / 'telnetsupport.json'
         result = fetch_telnetsupport(
             'file://' + str(p), local_path=str(local))
-        assert ('aardwolf.org', 23) in result
-        assert ('batmud.bat.org', 23) in result
+        assert ('aardwolf.org', 23, False) in result
+        assert ('batmud.bat.org', 23, False) in result
         assert local.exists()
         saved = json.loads(local.read_text())
         assert len(saved) == 2
+
+    def test_ssl_flag_detected(self, tmp_path):
+        data = [
+            {'host': 'secure.mud.org', 'port': 4712, 'ssl': 1, 'up': 1},
+            {'host': 'plain.mud.org', 'port': 23, 'ssl': 0, 'up': 1},
+        ]
+        p = tmp_path / 'ts.json'
+        p.write_text(json.dumps(data))
+        local = tmp_path / 'telnetsupport.json'
+        result = fetch_telnetsupport(
+            'file://' + str(p), local_path=str(local))
+        assert ('secure.mud.org', 4712, True) in result
+        assert ('plain.mud.org', 23, False) in result
 
     def test_skips_empty_host(self, tmp_path):
         data = [
@@ -332,6 +361,7 @@ class TestFetchTelnetsupport:
         result = fetch_telnetsupport(
             'file://' + str(p), local_path=str(local))
         assert len(result) == 1
+        assert result[0][0] == 'valid.org'
 
     def test_deduplicates_within_source(self, tmp_path):
         data = [

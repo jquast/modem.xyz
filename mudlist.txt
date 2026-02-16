@@ -1,5 +1,5 @@
 # format,
-# ip address [port number [encoding [columns [tall]]]]
+# ip address [port number [encoding [columns [tall]]]] [ssl]
 1.13.190.230 8000 gbk
 104.154.76.197 4333
 107.172.21.36 4000
@@ -113,7 +113,7 @@ akanbar.com 23
 aladon.sovintel.ru 9000
 alcatraz.wolfpaw.net 8000
 alcatraz.wolfpaw.net 8070
-aldebaran-mud.de 2000
+aldebaran-mud.de 2000 ssl
 alexmud.stacken.kth.se 4000
 alfandria.net 8888
 alteraeon.com 23
@@ -167,6 +167,7 @@ batmud.bat.org 23
 baymoo.org 8888
 bc.kelotz.net 2018
 biyg.org 1801 utf-8 90
+bl.mud.at 5679 ssl
 blackfire.online 4000
 blackmud.com 2000
 bod.westeros.org 3000
@@ -221,6 +222,7 @@ cosmicrage.nathantech.net 7777
 cotn.subnigra.com 6969
 cowboybebop.vineyard.haus 4020 utf-8 100
 cptalker.com 9900
+crimsonstainedlands.net 4001 ssl
 crusify.kharkov.org 5000 utf-8 90
 cryosphere.uk 6666
 crystalmush.kydance.net 6886
@@ -281,6 +283,7 @@ dsl-mud.org 4000
 dsmush.com 4000 utf-8 180
 dum.acc.umu.se 2001
 dunemud.net 6789
+dunemud.net 6788 ssl
 dungeon.name 20022 utf-8 80
 dw.kicks-ass.org 1111
 dynamix.fansi.org 4200
@@ -306,10 +309,12 @@ es.clovers.tw 8000 big5
 escape.wolfpaw.net 2020
 eternaldarkness.net 9700
 eternalfantasy.org 3333 utf-8 90
+eternalfantasy.org 3334 utf-8 90 ssl
 eternitymud.com 23
 euphoria.mudinfo.net 8888 cp437
 euts.org 2000
 everdark.org 3000
+everwar.dune.net 4000
 everwarmud.net 4545 utf-8 90
 evil.xibo.com 4201
 excelsior.troll20.com 4201 utf-8 100
@@ -427,6 +432,7 @@ hyperborea.net 2000
 ianshirm.genesismuds.com 2250
 ianshirm.genesismuds.com 2251
 iberia.jdai.pt 5900
+iberia.jdai.pt 5899 ssl
 icesus.org 23
 icesus.org 4000
 icewindmud.org 2021
@@ -599,11 +605,14 @@ mud.stack.nl 3333
 mud.stick.org 9000
 mud.swmud.org 6666
 mud.tamedhon.de 4711
+mud.tamedhon.de 4712 ssl
 mud.temporasanguinis.it 4000
 mud.tempusmud.com 2020 utf-8 100
+mud.tempusmud.com 2023 ssl
 mud.tgchan.org 5555
 mud.tgchan.org 5585
 mud.theforestsedge.com 4000
+mud.theforestsedge.com 3999 ssl
 mud.theghostbox.com 4000
 mud.theghostbox.com 4001
 mud.timetoplaythegame.com 3333
@@ -675,6 +684,7 @@ pdragon.org 5555
 pegasusmuck.com 4242
 pendulumscalm.com 4000
 penultimatemush.com 9500
+penultimatemush.com 9501 ssl
 perilousrealms.com 23
 pern.gaslightswitch.com 4201
 phaze.ca 9999
@@ -776,6 +786,7 @@ starwars.d20mud.com 5500 utf-8 100
 starwarsmush.com 4402
 stellaraeon.com 4000
 stickmud.com 6680
+stickmud.com 7670 ssl
 stickmud.com 7680
 stockmud.com 5000
 stonia.ttu.ee 4000
@@ -818,6 +829,7 @@ tirradyn.com 9010
 tl.maoyu.com 8888 gbk
 tmux.wonko.info 4042
 toastsoft.net 1234
+toastsoft.net 1443 ssl
 toobis.org 4420
 toox.co.kr 4000 euc-kr
 toox.co.kr 5000 euc-kr
@@ -859,6 +871,7 @@ vore.got-game.org 8888
 vr.frostbite.org 3019
 wackymoo.jellybean.co.uk 7777
 warlock.pl 23
+warlock.pl 2424 ssl
 waterdeep.org 4200
 waterpoint.moo.mud.org 8301
 weehours.net 2000

@@ -106,6 +106,19 @@ widely in purpose:
      traditional games at all but sophisticated adult chat rooms. All servers of this kind clearly
      state whether adult content is allowed or strictly forbidden.
 
+Secure Connections (TLS)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Less than 1 percent of MUDs support `TLS <https://en.wikipedia.org/wiki/Transport_Layer_Security>`_
+(Transport Layer Security), sometimes also called ``TELNETS``.  Servers that support TLS are marked
+with a lock icon on this site.
+
+The Python `telnetlib3 <https://telnetlib3.readthedocs.io/>`_ CLI ``telnetlib3-client`` supports TLS
+using the ``--ssl`` argument::
+
+    telnetlib3-client --ssl mud.tamedhon.de 4712
+
+
 About This Site
 ---------------
 

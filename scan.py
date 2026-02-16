@@ -28,10 +28,10 @@ _running_procs_lock = threading.Lock()
 
 
 def parse_server_list(path):
-    """Parse a server list into a list of (host, port, encoding) tuples.
+    """Parse a server list into a list of (host, port, encoding, ssl) tuples.
 
     :param path: path to server list file
-    :returns: list of (host, port_str, encoding_or_None) tuples
+    :returns: list of (host, port_str, encoding_or_None, ssl_bool) tuples
     """
     entries = []
     with open(path) as f:
@@ -44,8 +44,10 @@ def parse_server_list(path):
                 continue
             host = parts[0]
             port = parts[1]
-            encoding = parts[2] if len(parts) >= 3 else None
-            entries.append((host, port, encoding))
+            ssl_flag = 'ssl' in parts[2:]
+            remaining = [p for p in parts[2:] if p != 'ssl']
+            encoding = remaining[0] if remaining else None
+            entries.append((host, port, encoding, ssl_flag))
     return entries
 
 
@@ -69,7 +71,7 @@ def _kill_process_group(proc):
 
 
 def scan_host(host, port, data_dir, logs_dir, encoding=None,
-              banner_max_wait=20, connect_timeout=60):
+              ssl=False, banner_max_wait=20, connect_timeout=60):
     """Scan a single server.
 
     :param host: server hostname
@@ -77,6 +79,8 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
     :param data_dir: directory for fingerprint data output
     :param logs_dir: directory for log files
     :param encoding: optional encoding argument for telnetlib3-fingerprint
+    :param ssl: use TLS for connection (tries verified first, falls back
+        to unverified)
     :param banner_max_wait: seconds to wait for banner data
     :param connect_timeout: seconds to wait for TCP connection
     :returns: (host, port, status_message)
@@ -108,6 +112,8 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
     _RENDER_ONLY_ENCODINGS = {'topaz'}
     if encoding and encoding not in _RENDER_ONLY_ENCODINGS:
         cmd.extend(["--encoding", encoding])
+    if ssl:
+        cmd.append("--ssl")
 
     try:
         proc = subprocess.Popen(
@@ -119,10 +125,43 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
         with _running_procs_lock:
             _running_procs.add(proc)
         try:
-            proc.wait(timeout=connect_timeout + (banner_max_wait * 2) + 3)
+            wait_timeout = connect_timeout + (banner_max_wait * 2) + 3
+            proc.wait(timeout=wait_timeout)
             if _shutdown:
                 return (host, port, "cancelled")
-            return (host, port, "scanned")
+            if proc.returncode == 0:
+                if ssl:
+                    return (host, port, "scanned (tls verified)")
+                return (host, port, "scanned")
+            # TLS with strict verification failed — retry without
+            # certificate verification so we still get banner data.
+            if ssl:
+                cmd_noverify = [
+                    a for a in cmd if a != "--ssl"
+                ] + ["--ssl-no-verify"]
+                proc2 = subprocess.Popen(
+                    cmd_noverify,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    start_new_session=True,
+                )
+                with _running_procs_lock:
+                    _running_procs.add(proc2)
+                try:
+                    proc2.wait(timeout=wait_timeout)
+                    if _shutdown:
+                        return (host, port, "cancelled")
+                    if proc2.returncode == 0:
+                        return (host, port,
+                                "scanned (tls unverified)")
+                    return (host, port, "error (tls)")
+                except subprocess.TimeoutExpired:
+                    _kill_process_group(proc2)
+                    return (host, port, "timeout (tls)")
+                finally:
+                    with _running_procs_lock:
+                        _running_procs.discard(proc2)
+            return (host, port, "error (exit code %d)" % proc.returncode)
         except subprocess.TimeoutExpired:
             _kill_process_group(proc)
             return (host, port, "timeout (subprocess)")
@@ -186,7 +225,7 @@ def main():
     # that will be skipped, so --connect-delay only affects real scans.
     to_scan = []
     skipped = 0
-    for host, port, encoding in entries:
+    for host, port, encoding, ssl_flag in entries:
         if not host or not port:
             print(f"{host}:{port} -- skip: empty host or port")
             skipped += 1
@@ -197,7 +236,7 @@ def main():
         else:
             if not encoding and args.default_encoding:
                 encoding = args.default_encoding
-            to_scan.append((host, port, encoding))
+            to_scan.append((host, port, encoding, ssl_flag))
 
     print(f"Scanning {len(to_scan)} servers with"
           f" {args.num_workers} workers"
@@ -241,12 +280,12 @@ def main():
     try:
         with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
             futures = set()
-            for host, port, encoding in to_scan:
+            for host, port, encoding, ssl_flag in to_scan:
                 if _shutdown:
                     break
                 future = pool.submit(
                     scan_host, host, port, args.data_dir, args.logs_dir,
-                    encoding, args.banner_max_wait,
+                    encoding, ssl_flag, args.banner_max_wait,
                     args.connect_timeout)
                 future_to_server[future] = (host, port)
                 futures.add(future)

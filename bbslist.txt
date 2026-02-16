@@ -616,7 +616,6 @@ error404bbs.ddns.net 513
 eternalforest.net 9000
 euklid.ddns.net 5745 utf-8
 euts.org 1998
-everwar.dune.net 4000
 excelsiorbbs.ddns.net 2000
 exciter.ws 2002
 exigenesis.net 4201

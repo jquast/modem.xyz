@@ -195,6 +195,33 @@ def _load_row_overrides(path):
     return overrides
 
 
+def _load_ssl_overrides(path):
+    """Load SSL overrides from a server list file.
+
+    Looks for the keyword ``ssl`` anywhere after the port field.
+
+    :param path: path to server list file
+    :returns: set of (host, port) tuples that use SSL
+    """
+    overrides = set()
+    if not os.path.isfile(path):
+        return overrides
+    with open(path) as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            parts = line.split()
+            if len(parts) >= 3 and 'ssl' in parts[2:]:
+                host = parts[0]
+                try:
+                    port = int(parts[1])
+                except ValueError:
+                    continue
+                overrides.add((host, port))
+    return overrides
+
+
 def _load_no_ambig_overrides(path):
     """Load no_ambig overrides from a server list file.
 
@@ -1118,16 +1145,20 @@ def _assign_filenames(servers, ip_groups, file_key, toc_key,
         else:
             toc_label = f"{ip} ({hostname_hint})"
         for s in members:
+            host_safe = re.sub(r'[^a-zA-Z0-9_-]', '_', s['host'])
+            anchor = f"{filename}_{host_safe}_{s['port']}"
             grouped_keys[(s['host'], s['port'])] = (
-                filename, toc_label)
+                filename, toc_label, anchor)
 
     for s in servers:
         key = (s['host'], s['port'])
         if key in grouped_keys:
-            s[file_key], s[toc_key] = grouped_keys[key]
+            s[file_key], s[toc_key], s['_detail_anchor'] = (
+                grouped_keys[key])
         else:
             s[file_key] = filename_fn(s)
             s[toc_key] = standalone_label_fn(s)
+            s['_detail_anchor'] = ''
 
 
 def display_fingerprint_summary(servers, server_label_fn):
@@ -1348,6 +1379,7 @@ def _prepare_banner_page_groups(page_groups, file_key,
             sd = dict(s)
             sd['_name'] = server_name_fn(s)
             sd['_detail_file'] = s[file_key]
+            sd['_detail_anchor'] = s.get('_detail_anchor', '')
             sd['_tls'] = (' :tls-lock:`\U0001f512`'
                           if tls_fn(s) else '')
             sd['_flag'] = _country_flag(s.get('_country_code', ''))
