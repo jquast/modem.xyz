@@ -1123,6 +1123,14 @@ def display_codebase_groups(servers):
           " either")
     print("field are listed under *Unknown*.")
     print()
+    print(".. figure:: _static/plots/codebases.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the most common"
+          " codebases across all servers.")
+    print()
+    print("   Most common codebases from MSSP data.")
+    print()
 
     by_codebase = {}
     for s in servers:
@@ -1154,7 +1162,8 @@ def display_codebase_groups(servers):
         })
     table_str = tabulate_mod.tabulate(
         rows, headers="keys", tablefmt="rst")
-    print_datatable(table_str, caption="MUD Codebases")
+    print(table_str)
+    print()
 
     for name, members in sorted(filtered.items(),
                                  key=lambda x: (-len(x[1]),
@@ -1205,7 +1214,8 @@ def display_location_groups(servers):
             s['name'] or f"{s['host']}:{s['port']}"),
         server_sort_key=lambda s: (
             s['name'] or s['host']).lower(),
-        tls_fn=_tls_port_if_valid)
+        tls_fn=_tls_port_if_valid,
+        figure_path='_static/plots/server_locations.png')
 
 
 def display_tls_groups(servers):
@@ -1215,6 +1225,31 @@ def display_tls_groups(servers):
     print("TLS support is determined by connecting to each server and")
     print("attempting a TLS handshake, either directly on a dedicated")
     print("TLS port or via STARTTLS negotiation on the primary port.")
+    print()
+    print(".. figure:: _static/plots/tls_support.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing servers with TLS"
+          " support vs without.")
+    print()
+    print("   TLS-enabled servers vs servers without TLS.")
+    print()
+    print(".. figure:: _static/plots/tls_certs.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing TLS certificate"
+          " validation results.")
+    print()
+    print("   Certificate validation results for"
+          " TLS-enabled servers.")
+    print()
+    print(".. figure:: _static/plots/tls_by_codebase.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Stacked bar chart showing TLS"
+          " support by codebase family.")
+    print()
+    print("   TLS support breakdown by codebase family.")
     print()
 
     _TLS_GROUPS = [
@@ -1255,24 +1290,28 @@ def display_tls_groups(servers):
         if status:
             groups.setdefault(status, []).append(s)
 
+    tls_label = {k: l for k, l, _d in _TLS_GROUPS}
     rows = []
-    for status_key, label, _desc in _TLS_GROUPS:
-        members = groups.get(status_key, [])
-        if members:
-            rows.append({
-                'Status': f'`{label}`_',
-                'Servers': str(len(members)),
-            })
+    for status_key, members in sorted(
+            groups.items(),
+            key=lambda x: -len(x[1])):
+        label = tls_label.get(status_key, status_key)
+        rows.append({
+            'Status': f'`{label}`_',
+            'Servers': str(len(members)),
+        })
     if rows:
         table_str = tabulate_mod.tabulate(
             rows, headers="keys", tablefmt="rst")
         print(table_str)
         print()
 
-    for status_key, label, desc in _TLS_GROUPS:
-        members = groups.get(status_key, [])
-        if not members:
-            continue
+    tls_desc = {k: d for k, _l, d in _TLS_GROUPS}
+    for status_key, members in sorted(
+            groups.items(),
+            key=lambda x: -len(x[1])):
+        label = tls_label.get(status_key, status_key)
+        desc = tls_desc.get(status_key, '')
         _rst_heading(label, '-')
         print(desc)
         print()

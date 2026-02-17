@@ -1286,7 +1286,8 @@ def _write_fingerprint_options_section(fp_hash, fp_servers):
 
 
 def display_encoding_groups(servers, detail_subdir, file_key,
-                            server_label_fn, server_sort_key, tls_fn):
+                            server_label_fn, server_sort_key, tls_fn,
+                            figure_path=None):
     """Print servers-by-encoding page.
 
     :param servers: list of server records
@@ -1295,6 +1296,7 @@ def display_encoding_groups(servers, detail_subdir, file_key,
     :param server_label_fn: callable(server) -> display label string
     :param server_sort_key: callable(server) -> sort key
     :param tls_fn: callable(server) -> truthy if TLS supported
+    :param figure_path: optional relative path to a plot image to embed
     """
     by_encoding = {}
     for s in servers:
@@ -1318,11 +1320,13 @@ def display_encoding_groups(servers, detail_subdir, file_key,
         'encoding_groups.rst.j2',
         groups=groups,
         detail_subdir=detail_subdir,
+        figure_path=figure_path,
     ))
 
 
 def display_location_groups(servers, detail_subdir, file_key,
-                            server_label_fn, server_sort_key, tls_fn):
+                            server_label_fn, server_sort_key, tls_fn,
+                            figure_path=None):
     """Print servers-by-location page.
 
     :param servers: list of server records (must have ``_country_code``
@@ -1332,6 +1336,7 @@ def display_location_groups(servers, detail_subdir, file_key,
     :param server_label_fn: callable(server) -> display label string
     :param server_sort_key: callable(server) -> sort key
     :param tls_fn: callable(server) -> truthy if TLS supported
+    :param figure_path: optional relative path to a plot image to embed
     """
     from .geoip import _country_flag
 
@@ -1361,6 +1366,7 @@ def display_location_groups(servers, detail_subdir, file_key,
         'location_groups.rst.j2',
         groups=groups,
         detail_subdir=detail_subdir,
+        figure_path=figure_path,
     ))
 
 

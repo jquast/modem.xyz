@@ -2,6 +2,15 @@ Server Locations
 ================
 
 Servers grouped by the geographic location of their IP address.
+{% if figure_path %}
+
+.. figure:: {{ figure_path }}
+   :align: center
+   :width: 800px
+   :alt: Pie chart showing the geographic distribution of servers by country.
+
+   Server locations by country.
+{% endif %}
 {% for key, flag, name, members in groups %}
 
 - `{{ flag }}{{ name|rst_escape }}`_: {{ members|length }}

@@ -531,6 +531,14 @@ def display_bbs_software_groups(servers):
           " identified")
     print("are listed under *Unidentified*.")
     print()
+    print(".. figure:: _static/plots/bbs_software.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the distribution of"
+          " detected BBS software.")
+    print()
+    print("   BBS software detected from login banners.")
+    print()
 
     by_software = {}
     for s in servers:
@@ -550,7 +558,8 @@ def display_bbs_software_groups(servers):
         })
     table_str = tabulate_mod.tabulate(
         rows, headers="keys", tablefmt="rst")
-    print_datatable(table_str, caption="BBS Software")
+    print(table_str)
+    print()
 
     for name, members in sorted(by_software.items(),
                                  key=lambda x: (-len(x[1]),
@@ -577,7 +586,8 @@ def display_encoding_groups(servers):
         file_key='_bbs_file',
         server_label_fn=lambda s: f"{s['host']}:{s['port']}",
         server_sort_key=lambda s: s['host'].lower(),
-        tls_fn=lambda s: s['tls_support'])
+        tls_fn=lambda s: s['tls_support'],
+        figure_path='_static/plots/encoding_distribution.png')
 
 
 def display_location_groups(servers):
@@ -588,7 +598,8 @@ def display_location_groups(servers):
         file_key='_bbs_file',
         server_label_fn=lambda s: f"{s['host']}:{s['port']}",
         server_sort_key=lambda s: s['host'].lower(),
-        tls_fn=lambda s: s['tls_support'])
+        tls_fn=lambda s: s['tls_support'],
+        figure_path='_static/plots/server_locations.png')
 
 
 def display_fidonet_servers(servers):

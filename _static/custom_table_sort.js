@@ -20,11 +20,6 @@ $(document).ready(function() {
                     var serversIdx = headers.indexOf('Servers');
                     table.order([serversIdx, 'desc']).draw();
                 }
-                // Codebases table: sort by Number of Servers (descending)
-                else if (headers.includes('Codebase') && headers.includes('Number of Servers')) {
-                    var countIdx = headers.indexOf('Number of Servers');
-                    table.order([countIdx, 'desc']).draw();
-                }
             }
         });
 

@@ -2,6 +2,15 @@ Encodings
 =========
 
 Servers grouped by their detected or configured character encoding.
+{% if figure_path %}
+
+.. figure:: {{ figure_path }}
+   :align: center
+   :width: 800px
+   :alt: Pie chart showing character encoding distribution.
+
+   Character encoding distribution.
+{% endif %}
 {% for name, members in groups %}
 
 - `{{ name|rst_escape }}`_: {{ members|length }}
