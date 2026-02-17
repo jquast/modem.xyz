@@ -1266,7 +1266,8 @@ def display_tls_groups(servers):
     if rows:
         table_str = tabulate_mod.tabulate(
             rows, headers="keys", tablefmt="rst")
-        print_datatable(table_str, caption="TLS Certificate Status")
+        print(table_str)
+        print()
 
     for status_key, label, desc in _TLS_GROUPS:
         members = groups.get(status_key, [])

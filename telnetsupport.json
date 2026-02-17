@@ -273,6 +273,13 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "midgardmud.de",
+    "port": 4711,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"UNKNOWN-46\",\"MSSP\"]"
+  },
+  {
     "host": "lost.wishes.net",
     "port": 5555,
     "ssl": 0,
@@ -390,13 +397,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\"]"
-  },
-  {
-    "host": "midgardmud.de",
-    "port": 4711,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"UNKNOWN-46\",\"MSSP\"]"
   },
   {
     "host": "mud.primaldarkness.com",
@@ -763,6 +763,13 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "lament.ghostglass.net",
+    "port": 8600,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\"]"
+  },
+  {
     "host": "chatmud.com",
     "port": 7777,
     "ssl": 0,
@@ -880,13 +887,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"NAWS\",\"CHARSET\"]"
-  },
-  {
-    "host": "lament.ghostglass.net",
-    "port": 8600,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
   },
   {
     "host": "alteraeon.com",

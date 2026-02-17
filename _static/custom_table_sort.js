@@ -20,6 +20,11 @@ $(document).ready(function() {
                     var serversIdx = headers.indexOf('Servers');
                     table.order([serversIdx, 'desc']).draw();
                 }
+                // Codebases table: sort by Number of Servers (descending)
+                else if (headers.includes('Codebase') && headers.includes('Number of Servers')) {
+                    var countIdx = headers.indexOf('Number of Servers');
+                    table.order([countIdx, 'desc']).draw();
+                }
             }
         });
 
@@ -57,6 +62,12 @@ $(document).ready(function() {
             $summary.append($btn);
         });
     }, 200);
+
+    // Prevent telnet:// and telnets:// links from triggering a browser
+    // download dialog (Firefox has no handler for these protocols).
+    $(document).on('click', 'a[href^="telnet://"], a[href^="telnets://"]', function(e) {
+        e.preventDefault();
+    });
 
     // Copy button click handler (delegated for dynamic content)
     $(document).on('click', '.copy-btn', function(e) {
