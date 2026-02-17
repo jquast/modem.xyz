@@ -25,14 +25,12 @@
 139.162.249.62 5555
 13leader.net 8023 utf-8
 13th.hoyvision.com 6400
-140.114.87.5 443
 142.11.212.221 23
 142.44.247.204 23 utf-8
 142.93.52.94 23
 144.217.252.203 7900
 146.59.43.83 23 utf-8
 148.251.169.181 23
-149.202.59.89 5000
 149.56.47.118 1023
 150.107.201.19 4000
 153.127.6.190 2323
@@ -50,16 +48,13 @@
 173.199.127.12 2002
 173.217.78.103 2323 utf-8
 173.255.220.187 443
-173.61.230.102 23
 174.1.49.147 2323
 174.3.235.112 230 utf-8
 184.58.204.114 7777
-185.114.193.46 3340
 188.128.39.239 110 utf-8
 188.166.9.190 23
 188.81.201.94 2323
 192.0.135.41 23
-192.184.90.222 256
 192.243.111.121 2323
 192.82.254.205 8888
 192.99.17.109 4000
@@ -73,7 +68,6 @@
 205.166.250.238 23
 206.189.226.31 23 utf-8
 207.90.251.241 2323
-209.141.35.127 23 big5 no_ambig
 20forbeers.com 1337
 211.68.71.66 23 gbk
 213.166.5.201 23
@@ -92,8 +86,6 @@
 3.72.83.34 23
 300baud.dynu.net 2525
 34.162.43.84 23 utf-8
-34.68.85.161 49154
-34.98.99.30 443
 35.185.116.119 8000
 37.27.85.185 2323
 38.188.130.43 23
@@ -102,7 +94,6 @@
 45.33.40.193 443
 45.72.180.214 23 topaz
 45.79.37.227 23 utf-8
-45.79.66.72 23
 45.79.69.172 513
 45.79.93.198 23
 47.223.173.180 23 utf-8
@@ -120,7 +111,6 @@
 50.20.127.213 23
 50.47.85.64 23
 51.222.110.111 2323
-51.222.142.175 8888
 51.222.85.183 5555
 52.40.49.152 23 latin-1
 54.238.90.108 23 big5
@@ -128,7 +118,6 @@
 64.227.89.30 1138
 64life.net 1983
 64vintageremixbbs.dyndns.org 6400 petscii
-65.108.245.243 23
 66.228.57.87 2323
 66.23.221.29 2323 utf-8
 66.55.66.25 23
@@ -149,7 +138,6 @@
 73.42.12.93 23 utf-8
 74.138.82.254 23 utf-8
 74.65.39.90 6809 utf-8
-75.186.39.144 or fodim.bounceme.net 23 petscii
 75.3.200.42 9000
 76.104.161.135 23
 76.179.0.166 2002
@@ -171,7 +159,6 @@
 91.138.216.205 2323
 92.91.25.209 2323
 94.22.232.77 23
-94.32.85.38 2023
 95.217.16.88 8888 utf-8
 96.231.233.46 23
 96.231.233.47 23
@@ -184,7 +171,6 @@
 97.76.12.194 23
 98.113.13.134 2323
 98.144.7.205 23
-98.152.200.190 6000
 98.45.212.129 23
 99.106.75.128 95 topaz
 99.85.80.17 23
@@ -202,7 +188,6 @@ adeptbbs.com 23
 adibbs.sytes.net 6800
 aeug.asuscomm.com 8888 big5
 agency.bbs.nz 23
-alamobbs.mywire.org 6400
 alcatrazbbs.ddns.net 9000
 alco.bbs.io 23 topaz
 alephbbs.com 2626 utf-8
@@ -222,7 +207,6 @@ amstrad.simulant.uk 464
 ancientmists.vineyard.haus 1538
 andcycle.idv.tw 23 big5
 andr01d.zapto.org 9999
-anotherbbs.dynu.net 1337
 ansalon.net 8679
 antidote.triad.se 64128
 anybox.freedyndns.de 23 utf-8
@@ -233,18 +217,13 @@ asanocomp.ddns.net 2300 utf-8
 ascii.dynu.net 4096
 ashlands.com 23
 atari-bbs.zapto.org 8888 atascii 80 tall
-atari8.us 10001 atascii
 ataribbs.ddns.net 6502 atascii
 athelstan.org 23
-atl.ddns.net 6400 petscii
-atl.ddns.net 6401
 aturiondynasty.hopto.org 4444
-aubbs.zapto.org or aubbs.dyndns.org 2300 petscii
 avastbbs.servegame.com 23 cp437 80 tall
 aws1.fmerino.com.br 23 utf-8
 ayestaran.co.uk 5357
 backintime.ddns.net 6510
-basementbbs.ddns.net 9000 atascii
 bay.jayscafe.net 6401
 bayvillewireless.com 23
 bbbs.net 23
@@ -274,7 +253,6 @@ bbs.bajer.cz 32
 bbs.beanzilla.net 2323 big5
 bbs.beardy.se 23 utf-8
 bbs.bearfather.net 23
-bbs.bigjim.ventures 6969
 bbs.birdenuf.com 2003
 bbs.bnbbbs.net 2023
 bbs.bottomlessabyss.net 2023 topaz
@@ -312,7 +290,6 @@ bbs.digitalrainbow.info 23 utf-8
 bbs.disconnected-by-peer.at 23 latin-1
 bbs.distantempires.com 8023
 bbs.dosnetz.de 3232
-bbs.dragons-server.com 8888
 bbs.dragonsweb.org 23
 bbs.dsbbs.ca 23
 bbs.duensing.digital 23
@@ -323,11 +300,9 @@ bbs.emu486.net 23 big5
 bbs.eotd.com 23
 bbs.erb.pw 23
 bbs.error200.tech 1337 utf-8
-bbs.eruditorium.org 23
 bbs.eternaldomain.net 23
 bbs.excalibursheath.com 23 utf-8
 bbs.f4fbbs.com 2323
-bbs.faithcollapsing.com 2323
 bbs.fozztexx.com 23
 bbs.ftelnet.ca 23 utf-8
 bbs.furryrefuge.com 23 utf-8
@@ -410,7 +385,6 @@ bbs.retrohack.se 64128
 bbs.riddells.net 10023 utf-8
 bbs.rockvilletavern.com 23 cp437 80 tall
 bbs.roguenet.work 8888 utf-8
-bbs.roonsbbs.hu 1212
 bbs.sbbsystems.com 8888 utf-8
 bbs.sdf1.net 5023
 bbs.sfhqbbs.org 5983
@@ -445,7 +419,6 @@ bbs.trod.org 23
 bbs.twixed.net 62323
 bbs.twlounge.net 23 utf-8
 bbs.twomice.net 23 gbk
-bbs.tychostation.it 23
 bbs.uncomfortable.business 6423
 bbs.undermine.ca 23 utf-8
 bbs.unicyber.co.uk 2323 utf-8 80 tall
@@ -634,7 +607,6 @@ fido.beholderbbs.org 23
 fido.fidobbs.it 2301
 firesidebbs.com 23231 utf-8
 fix.no 24
-flailingbbs.synchronetbbs.org 23
 flashbackbbs.sytes.net 6502 utf-8
 fmrl.throwbackbbs.com 2324
 foremxebbs.ddns.net 9999 atascii
@@ -649,7 +621,6 @@ funtopia.synchro.net 3023 utf-8
 futureland.today 23
 futureland.today 2323
 fw2.cnetbbs.net 6800 topaz
-g-point.tunk.org 500
 galaxy74bbs.com 23 utf-8
 galaxybbs.net 23 utf-8
 game.a-net-online.lol 2002
@@ -768,7 +739,6 @@ modematider.selstam.nu 50023
 mojo.synchro.net 23 utf-8
 mono.org 23 utf-8 40
 montereybbs.com 23
-moratahack.com 23
 mortuary.ddns.net 23
 mouthofhell.duckdns.org 23
 mozz.us 23
@@ -858,7 +828,6 @@ portugal-virtual.org 6969
 proline.ksherlock.com 6523
 pruffino.com 23
 ps2.dc4.us 23
-ptbbs.ddns.net 8000
 ptt2.cc 23 big5
 pulsebbs.hopto.org 1984 utf-8
 px4.kitsunet.net 2069
@@ -934,7 +903,6 @@ splatter.haus 666
 spobbs.servebbs.org 23
 ssbbs.ddns.net 6502 petscii
 ssbbs.ddns.net 6510
-stateoftheark.ca 1990
 stevensbbs.stevenshive.xyz 23 utf-8
 stokmarknes.org 24
 storm-mountain.ddns.net 24000
@@ -965,7 +933,6 @@ telnet.bluewavebbs.com 23 utf-8
 telnet.deadmodemsociety.com 1337
 telnet.harborbbs.com 23
 telnet.holdfastbbs.ca 2323
-telnet.manic-modem.com 23
 telnet.projectopengate.com 23 utf-8
 telnet.sanctumbbs.com 23
 telnet.stormbbs.com 23
@@ -986,7 +953,6 @@ theattic.v1cd3m1z3r.net 23 utf-8
 thebassplanet.com 64128
 thebrewery.servebeer.com 6400
 thecabinbbs.com 6400
-thecell.ar 1040
 thecrypt.synchronetbbs.org 513
 thedigitalpost.freeddns.org 23
 thegateb.synchro.net 2424
@@ -997,10 +963,8 @@ thenervoushospital.com 1996
 thenineworlds.dnshome.de 923 utf-8
 thenorthernpalace.com 2020 topaz
 theoldnet.com 6400 petscii
-theparityerror.com 23
 thepenaltybox.org 23
 therockbbs.net 10023 utf-8
-thevaultbbs.ddns.net 2323
 theviperbbs.ddnsfree.com 23 utf-8
 threeblindmice.synchronetbbs.org 23 utf-8
 threeblindmice.synchronetbbs.org 513 utf-8
