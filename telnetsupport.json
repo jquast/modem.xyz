@@ -273,18 +273,18 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "midgardmud.de",
-    "port": 4711,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"UNKNOWN-46\",\"MSSP\"]"
-  },
-  {
     "host": "lost.wishes.net",
     "port": 5555,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "ansalon.net",
+    "port": 8662,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
   },
   {
     "host": "kallistimud.com",
@@ -364,8 +364,8 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"GMCP\"]"
   },
   {
-    "host": "ckmud.com",
-    "port": 8500,
+    "host": "ansalon.net",
+    "port": 8679,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
@@ -392,11 +392,25 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"SEND LOCATION\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"NEW-ENVIRON\"]"
   },
   {
+    "host": "thechattingzone.uk",
+    "port": 8342,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LFLOW\",\"LINEMODE\",\"NEW-ENVIRON\"]"
+  },
+  {
     "host": "darcness.net",
     "port": 4201,
     "ssl": 0,
     "up": 1,
     "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\"]"
+  },
+  {
+    "host": "midgardmud.de",
+    "port": 4711,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"UNKNOWN-46\",\"MSSP\"]"
   },
   {
     "host": "mud.primaldarkness.com",
@@ -525,13 +539,6 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "thechattingzone.uk",
-    "port": 8342,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LFLOW\",\"LINEMODE\"]"
-  },
-  {
     "host": "yuriba.com",
     "port": 4201,
     "ssl": 0,
@@ -586,6 +593,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "achaea.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"MSSP\",\"MCCP2\",\"ATCP\",\"GMCP\"]"
   },
   {
     "host": "dreamchasers.space",
@@ -651,18 +665,18 @@
     "options": "[\"TERMINAL TYPE\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\"]"
   },
   {
+    "host": "realmofmagic.org",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"END OF RECORD\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
     "host": "omen.genesismuds.com",
     "port": 1100,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\"]"
-  },
-  {
-    "host": "achaea.com",
-    "port": 23,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP2\",\"ATCP\",\"GMCP\"]"
   },
   {
     "host": "ranmamuck.dyndns.org",
@@ -749,25 +763,11 @@
     "options": "[\"CHARSET\",\"MSDP\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "realmofmagic.org",
-    "port": 4000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"END OF RECORD\",\"MCCP2\",\"MSP\",\"MXP\"]"
-  },
-  {
     "host": "mud.theforestsedge.com",
     "port": 3999,
     "ssl": 1,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"GMCP\"]"
-  },
-  {
-    "host": "lament.ghostglass.net",
-    "port": 8600,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\"]"
   },
   {
     "host": "chatmud.com",
@@ -889,6 +889,13 @@
     "options": "[\"NAWS\",\"CHARSET\"]"
   },
   {
+    "host": "lament.ghostglass.net",
+    "port": 8600,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
     "host": "alteraeon.com",
     "port": 3000,
     "ssl": 0,
@@ -922,6 +929,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"MSSP\",\"GMCP\"]"
+  },
+  {
+    "host": "zebedee-mud.org",
+    "port": 7000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NAWS\",\"MSSP\"]"
   },
   {
     "host": "ateraan.com",
@@ -1022,13 +1036,6 @@
     "options": "[\"MSSP\"]"
   },
   {
-    "host": "bat.org",
-    "port": 23,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\"]"
-  },
-  {
     "host": "aldebaran-mud.de",
     "port": 2000,
     "ssl": 1,
@@ -1090,5 +1097,19 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"LINEMODE\"]"
+  },
+  {
+    "host": "ckmud.com",
+    "port": 8500,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\"]"
+  },
+  {
+    "host": "play.theforsakenlands.com",
+    "port": 1848,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"GMCP\"]"
   }
 ]

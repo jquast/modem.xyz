@@ -7,10 +7,12 @@ from pathlib import Path
 from .banner_analysis import (
     discover_column_width_issues,
     discover_empty_banners,
+    discover_http_banners,
     discover_renders_empty,
     discover_renders_small,
     review_column_width_issues,
     review_empty_banners,
+    review_http_banners,
     review_renders_empty,
     review_renders_small,
 )
@@ -101,6 +103,11 @@ def _get_argument_parser():
         "--only-renders-small", action="store_true",
         help=("only find banners whose rendered PNGs"
               " are tiny (<1KB)"),
+    )
+    mode_mx.add_argument(
+        "--only-http", action="store_true",
+        help=("only find servers responding with HTTP"
+              " instead of telnet"),
     )
     mode_mx.add_argument(
         "--only-tls", action="store_true",
@@ -213,7 +220,8 @@ def main():
         args.only_cross, args.only_dns,
         args.only_encodings, args.only_columns,
         args.only_empty, args.only_renders_empty,
-        args.only_renders_small, args.only_tls,
+        args.only_renders_small, args.only_http,
+        args.only_tls,
     )
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
@@ -225,6 +233,7 @@ def main():
     do_empty = args.only_empty or not any_only
     do_renders_empty = args.only_renders_empty
     do_renders_small = args.only_renders_small
+    do_http = args.only_http or not any_only
     do_tls = args.only_tls
 
     if do_cross and (args.mud or args.bbs):
@@ -420,6 +429,32 @@ def main():
                 dry_run=args.dry_run)
         else:
             print("No banners with small renders detected.")
+
+    if do_http:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_http_banners(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_http_banners(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            mud_rm, bbs_rm = review_http_banners(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                mud_data=args.mud_data,
+                bbs_data=args.bbs_data,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "mud", mud_rm, "http_banner")
+                record_rejections(
+                    decisions, "bbs", bbs_rm, "http_banner")
+        else:
+            print("No HTTP response banners detected.")
 
     if do_tls:
         mud_issues = []

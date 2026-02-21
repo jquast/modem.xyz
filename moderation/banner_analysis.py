@@ -898,3 +898,182 @@ def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
         if removals:
             print(f"  {len(removals)} server(s) removed"
                   f" from {list_path}")
+
+
+def _is_http_banner(text):
+    """Check whether banner text is an HTTP response.
+
+    :param text: raw banner text
+    :returns: True if the text starts with an HTTP status line
+    """
+    if not text:
+        return False
+    return text.lstrip().startswith('HTTP/')
+
+
+def discover_http_banners(data_dir, list_path):
+    """Find servers whose banners are HTTP responses.
+
+    These are servers on telnet ports that respond with HTTP error
+    pages (e.g. ``HTTP/1.1 400 Bad Request``) instead of telnet
+    banners.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param list_path: path to server list file
+    :returns: list of dicts with host, port, data_path, raw_banner
+    """
+    issues = []
+    seen = set()
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed = {(h, p) for h, p, _ in list_entries if h and p}
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            probe = data.get('server-probe', {})
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get(
+                'banner_before_return', '')
+            banner_after = session_data.get(
+                'banner_after_return', '')
+            if isinstance(banner_before, dict):
+                banner_before = banner_before.get('text', '')
+            if isinstance(banner_after, dict):
+                banner_after = banner_after.get('text', '')
+
+            if not (_is_http_banner(banner_before)
+                    or _is_http_banner(banner_after)):
+                continue
+
+            combined = (
+                (banner_before or '') + (banner_after or '')
+            )
+
+            for session in data.get('sessions', []):
+                host = session.get('host', '')
+                port = session.get('port', 0)
+                if not host or not port:
+                    continue
+                if (host, port) not in allowed:
+                    continue
+                if (host, port) in seen:
+                    continue
+                seen.add((host, port))
+
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'data_path': fpath,
+                    'raw_banner': combined,
+                })
+    return issues
+
+
+def review_http_banners(mud_issues, bbs_issues, mud_list, bbs_list,
+                        logs_dir, mud_data=None, bbs_data=None,
+                        report_only=False, dry_run=False):
+    """Interactively review servers with HTTP response banners.
+
+    For each server, shows the HTTP status line and ``repr()`` of
+    the response text.  Options:
+
+    - ``x`` to expunge log and data files for rescan
+    - ``y`` to remove the entry from the server list
+    - ``n`` to skip
+    - ``q`` to quit
+
+    :param mud_issues: list of HTTP banner issues from MUD data
+    :param bbs_issues: list of HTTP banner issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param mud_data: path to MUD data directory (for JSON expunge)
+    :param bbs_data: path to BBS data directory (for JSON expunge)
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    :returns: tuple of ``(mud_removals, bbs_removals)`` sets of
+        ``(host, port)`` tuples that were removed from the lists
+    """
+    all_issues = [('mud', mud_issues, mud_list, mud_data),
+                  ('bbs', bbs_issues, bbs_list, bbs_data)]
+    result = {'mud': set(), 'bbs': set()}
+
+    for mode, issues, list_path, data_dir in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n--- {mode.upper()} servers with HTTP response"
+              f" banners: {len(issues)} ---")
+        removals = set()
+        rescans = 0
+
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            raw = issue['raw_banner']
+            print(f"\n  {host}:{port}")
+            first_line = raw.lstrip().split('\n', 1)[0].strip()
+            print(f"    {first_line}")
+            raw_repr = repr(raw)
+            if len(raw_repr) > 500:
+                raw_repr = raw_repr[:500] + '...'
+            print(f"    Raw ({len(raw)} chars): {raw_repr}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(
+                "    [x]expunge for rescan / "
+                "[Y]remove from list / [n]skip / [q]uit? ",
+                "xynq")
+            if choice == 'q':
+                break
+            if choice == 'n':
+                continue
+            if choice == 'x':
+                log_file = Path(logs_dir) / f"{host}:{port}.log"
+                if log_file.is_file() and not dry_run:
+                    log_file.unlink()
+                    print(f"    deleted {log_file}")
+                elif log_file.is_file():
+                    print(f"    [dry-run] would delete"
+                          f" {log_file}")
+                else:
+                    print(f"    no log file to delete")
+                if data_dir and not dry_run:
+                    nj = _expunge_server_json(
+                        data_dir, [(host, port)])
+                    if nj:
+                        print(f"    deleted {nj} data file(s)")
+                rescans += 1
+            else:
+                removals.add((host, port))
+
+        if removals:
+            entries = load_server_list(list_path)
+            write_filtered_list(list_path, entries, removals,
+                                dry_run=dry_run)
+        if rescans:
+            print(f"  {rescans} server(s) queued for rescan")
+        if removals:
+            print(f"  {len(removals)} server(s) removed"
+                  f" from {list_path}")
+        result[mode] = removals
+
+    return result['mud'], result['bbs']

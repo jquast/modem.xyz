@@ -68,7 +68,7 @@
 205.166.250.238 23
 206.189.226.31 23 utf-8
 207.90.251.241 2323
-20forbeers.com 1337
+20forbeers.com 1337 utf-8
 211.68.71.66 23 gbk
 213.166.5.201 23
 216.136.9.5 1809
@@ -83,7 +83,6 @@
 24.96.157.17 23
 3.132.134.107 4000
 3.132.92.116 24
-3.72.83.34 23
 300baud.dynu.net 2525
 34.162.43.84 23 utf-8
 35.185.116.119 8000
@@ -222,7 +221,6 @@ athelstan.org 23
 aturiondynasty.hopto.org 4444
 avastbbs.servegame.com 23 cp437 80 tall
 aws1.fmerino.com.br 23 utf-8
-ayestaran.co.uk 5357
 backintime.ddns.net 6510
 bay.jayscafe.net 6401
 bayvillewireless.com 23
@@ -1055,7 +1053,6 @@ x-bit.org 23230
 x.a-net.online 2323 utf-8
 x22.ddns.net 9000
 xibalba.l33t.codes 44510 utf-8
-yso.blue 23
 zahrl.ddns.net 2023
 zen.kawasu.wtf 23
 zenolab.synchro.net 23 utf-8

@@ -156,6 +156,7 @@ data, user reviews and descriptions, these other sites are probably a lot more h
 - https://mudstats.com
 - https://www.mudverse.com/
 - https://telnet.org/
+- https://tintin.mudhalla.net/protocols/
 
 Questions
 ---------

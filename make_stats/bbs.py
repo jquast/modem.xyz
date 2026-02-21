@@ -29,6 +29,8 @@ from make_stats.common import (
     deduplicate_servers,
     _setup_plot_style, _create_pie_chart,
     create_telnet_options_plot, create_location_plot,
+    create_option_pie_chart,
+    display_charset_section as _display_charset_section,
     _assign_filenames,
     display_fingerprint_summary as _display_fingerprint_summary,
     _write_fingerprint_options_section,
@@ -377,7 +379,7 @@ def display_summary_stats(stats):
     print()
 
 
-def display_plots():
+def display_plots(servers):
     """Print figure directives for all plots."""
     print("The charts below summarize data from all responding"
           " servers.")
@@ -409,6 +411,8 @@ def display_plots():
     print("   Character encoding distribution"
           " (default: CP437).")
     print()
+
+    _display_charset_section(servers)
 
     print("Telnet Option Negotiation")
     print("--------------------------")
@@ -646,16 +650,16 @@ def display_fidonet_servers(servers):
 # RST generation
 # ---------------------------------------------------------------------------
 
-def generate_summary_rst(stats):
+def generate_summary_rst(stats, servers):
     """Generate the statistics.rst file."""
 
-    def _display(stats):
+    def _display(stats, servers):
         display_summary_stats(stats)
-        display_plots()
+        display_plots(servers)
 
     _generate_rst(
         os.path.join(DOCS_PATH, "statistics.rst"),
-        _display, stats)
+        _display, stats, servers)
 
 
 def generate_server_list_rst(servers):
@@ -1224,6 +1228,12 @@ def run(args):
 
     print("Generating plots ...", file=sys.stderr)
     create_all_plots(stats)
+    create_option_pie_chart(
+        servers, 'CHARSET',
+        os.path.join(PLOTS_PATH, 'charset.png'))
+    create_option_pie_chart(
+        servers, 'BINARY',
+        os.path.join(PLOTS_PATH, 'binary.png'))
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
@@ -1233,7 +1243,7 @@ def run(args):
                   check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)
-        generate_summary_rst(stats)
+        generate_summary_rst(stats, servers)
         generate_server_list_rst(servers)
         generate_fingerprints_rst(servers)
         generate_bbs_software_rst(servers)

@@ -23,7 +23,7 @@ Page {{ page_num }} of {{ total_pages }} {{ page_label|rst_escape }}
 
 {% endif %}
 {% for s in group.servers %}
-{% if s.get('_detail_anchor') %}- {{ s._flag }} :ref:`{{ s._name|rst_escape }} <{{ s._detail_anchor }}>`{{ s._tls }} :copy-btn:`{{ s.host|rst_escape }} {{ s.port }}`{% else %}- {{ s._flag }} :doc:`{{ s._name|rst_escape }} <{{ detail_subdir }}/{{ s._detail_file }}>`{{ s._tls }} :copy-btn:`{{ s.host|rst_escape }} {{ s.port }}`{% endif %}
+{% if s.get('_detail_anchor') %}- {{ s._flag }} :ref:`{{ s._name|rst_escape }} <{{ s._detail_anchor }}>`{{ s._tls }}{% else %}- {{ s._flag }} :doc:`{{ s._name|rst_escape }} <{{ detail_subdir }}/{{ s._detail_file }}>`{{ s._tls }}{% endif %}
   | Encoding: {{ s.get('display_encoding', 'utf-8')|rst_escape }}{% if s.get('display_encoding', '').lower().replace('-', '_') in ('big5', 'gbk', 'shift_jis', 'euc_kr', 'euc_jp', 'gb2312') %}{% if s.get('no_ambig_override') %} (narrow ambig){% else %} (wide ambig){% endif %}{% endif %}
 
 {% endfor %}

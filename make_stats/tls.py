@@ -7,6 +7,7 @@ import socket
 import ssl
 import sys
 import time
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
@@ -166,6 +167,44 @@ def _check_starttls(host, port, timeout=10):
     return asyncio.run(_probe())
 
 
+_TLS_CONFIRMED = frozenset({
+    'verified', 'self_signed', 'starttls', 'expired', 'unverified',
+})
+
+
+def _reconcile_tls_by_host(servers):
+    """Clear ``not_tls`` misreports when the same host has confirmed TLS.
+
+    When a hostname has multiple ports and one port has confirmed TLS
+    (e.g. ``verified``), any sibling port marked ``not_tls`` was
+    truthfully reporting that TLS is available on the host — just on a
+    different port.  Clear the misreport so it is not counted against
+    the server.
+
+    :param servers: list of server record dicts (modified in place)
+    """
+    by_host = defaultdict(list)
+    for s in servers:
+        by_host[s['host']].append(s)
+
+    reconciled = 0
+    for host, group in by_host.items():
+        if len(group) < 2:
+            continue
+        has_confirmed = any(
+            s.get('_tls_cert_status') in _TLS_CONFIRMED for s in group)
+        if not has_confirmed:
+            continue
+        for s in group:
+            if s.get('_tls_cert_status') == 'not_tls':
+                s['_tls_cert_status'] = ''
+                s['tls_port'] = ''
+                reconciled += 1
+    if reconciled:
+        print(f"TLS reconciled: {reconciled} misreport(s) cleared"
+              f" (sibling port has confirmed TLS)", file=sys.stderr)
+
+
 def lookup_tls_certs(servers, cache_path=_CACHE_FILE, workers=8):
     """Check TLS certificates and annotate server records.
 
@@ -251,3 +290,5 @@ def lookup_tls_certs(servers, cache_path=_CACHE_FILE, workers=8):
 
     for s in servers:
         s.setdefault('_tls_cert_status', '')
+
+    _reconcile_tls_by_host(servers)

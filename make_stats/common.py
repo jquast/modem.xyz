@@ -1607,6 +1607,102 @@ def create_telnet_options_plot(stats, output_path):
     plt.close()
 
 
+def _classify_option(servers, option_name):
+    """Classify servers by negotiation direction for a telnet option.
+
+    :param servers: list of server records
+    :param option_name: telnet option name (e.g. ``'CHARSET'``, ``'BINARY'``)
+    :returns: tuple of (both, will_only, do_only) server lists
+    """
+    both = []
+    will_only = []
+    do_only = []
+    for s in servers:
+        has_will = option_name in s['offered']
+        has_do = option_name in s['requested']
+        if has_will and has_do:
+            both.append(s)
+        elif has_will:
+            will_only.append(s)
+        elif has_do:
+            do_only.append(s)
+    return both, will_only, do_only
+
+
+def create_option_pie_chart(servers, option_name, output_path):
+    """Create a pie chart of negotiation support for a telnet option.
+
+    Slices are: Bi-directional, WILL only, DO only, None.
+
+    :param servers: list of server records
+    :param option_name: telnet option name (e.g. ``'CHARSET'``)
+    :param output_path: path to write the output PNG
+    """
+    both, will_only, do_only = _classify_option(servers, option_name)
+    none_count = (len(servers)
+                  - len(both) - len(will_only) - len(do_only))
+    items = [
+        (f'Bi-directional ({len(both)})', len(both)),
+        (f'WILL only ({len(will_only)})', len(will_only)),
+        (f'DO only ({len(do_only)})', len(do_only)),
+        (f'None ({none_count})', none_count),
+    ]
+    items = [(label, count) for label, count in items if count > 0]
+    _create_pie_chart(items, output_path)
+
+
+def display_charset_section(servers):
+    """Print CHARSET and BINARY sections for the statistics page.
+
+    :param servers: list of server records
+    """
+    _rst_heading("CHARSET", '-')
+
+    print("The default encoding of Telnet is the system locale, usually")
+    print("UTF-8. By strict compliance, without negotiation of BINARY")
+    print("transmission all protocol text *should* be limited to 7-bit")
+    print("ASCII. The encoding used *should* be negotiated by CHARSET.")
+    print()
+    print("Any server capable of negotiating CHARSET or LANG through")
+    print("NEW_ENVIRON is also presumed to support BINARY, regardless")
+    print("of its response to the BINARY telnet option. In practice,")
+    print("many servers transmit 8-bit data without negotiating either")
+    print("mode.")
+    print()
+
+    total = len(servers)
+    charset_both, charset_will, charset_do = _classify_option(
+        servers, 'CHARSET')
+    charset_any = len(charset_both) + len(charset_will) + len(charset_do)
+
+    print(".. figure:: _static/plots/charset.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the proportion of servers"
+          " that negotiate the CHARSET telnet option.")
+    print()
+    print(f"   {charset_any} of {total} servers negotiate CHARSET"
+          f" ({100 * charset_any / total:.1f}%).")
+    print()
+
+    _rst_heading("BINARY", '-')
+
+    binary_both, binary_will, binary_do = _classify_option(
+        servers, 'BINARY')
+    binary_any = len(binary_both) + len(binary_will) + len(binary_do)
+
+    print(".. figure:: _static/plots/binary.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the proportion of servers"
+          " that negotiate the BINARY telnet option.")
+    print()
+    print(f"   {binary_any} of {total} servers negotiate BINARY"
+          f" ({100 * binary_any / total:.1f}%).")
+    print()
+
+
+
 # ---------------------------------------------------------------------------
 # Unified detail page helpers
 # ---------------------------------------------------------------------------

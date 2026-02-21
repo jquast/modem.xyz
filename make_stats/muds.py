@@ -29,6 +29,8 @@ from make_stats.common import (
     _clean_dir, deduplicate_servers,
     _setup_plot_style, _create_pie_chart,
     create_telnet_options_plot, create_location_plot,
+    create_option_pie_chart,
+    display_charset_section as _display_charset_section,
     _assign_filenames,
     display_fingerprint_summary as _display_fingerprint_summary,
     _write_fingerprint_options_section,
@@ -436,6 +438,11 @@ def load_server_data(data_dir, encoding_overrides=None,
             mssp.get('WEBSITE', ''))
         record['description'] = _first_str(
             mssp.get('DESCRIPTION', ''))
+        record['descriptions_i18n'] = {
+            k: _first_str(v)
+            for k, v in mssp.items()
+            if k.startswith('DESCRIPTION-') and _first_str(v)
+        }
         record['location'] = ', '.join(
             _listify(mssp.get('LOCATION', '')))
         record['language'] = ', '.join(
@@ -863,7 +870,7 @@ def display_summary_stats(stats):
     return footnotes
 
 
-def display_plots(stats):
+def display_plots(stats, servers):
     """Print figure directives for all plots."""
     print("The charts below summarize data from servers that report")
     print("MSSP metadata. Servers without MSSP appear in the")
@@ -947,6 +954,8 @@ def display_plots(stats):
     print("   Telnet options offered vs requested by servers"
           " during negotiation.")
     print()
+
+    _display_charset_section(servers)
 
     print("Server Locations")
     print("-----------------")
@@ -1330,19 +1339,19 @@ def display_tls_groups(servers):
 # RST generation
 # ---------------------------------------------------------------------------
 
-def generate_summary_rst(stats):
+def generate_summary_rst(stats, servers):
     """Generate the statistics.rst file with stats and plots."""
 
-    def _display(stats):
+    def _display(stats, servers):
         footnotes = display_summary_stats(stats)
-        display_plots(stats)
+        display_plots(stats, servers)
         for fn in footnotes:
             print(fn)
             print()
 
     _generate_rst(
         os.path.join(DOCS_PATH, "statistics.rst"),
-        _display, stats)
+        _display, stats, servers)
 
 
 def generate_server_list_rst(servers):
@@ -1722,8 +1731,15 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
     _write_mud_server_urls(server, sec_char)
 
     if server['has_mssp'] and server['description']:
-        print(f"*{_rst_escape(server['description'][:300])}*")
+        _rst_heading("Description", sec_char)
+        print(_rst_escape(server['description']))
         print()
+        for key, text in sorted(
+                server.get('descriptions_i18n', {}).items()):
+            lang = key.split('-', 1)[1]
+            _rst_heading(f"Description ({lang})", sec_char)
+            print(_rst_escape(text))
+            print()
 
     footnotes = _write_mud_server_info(
         server, sec_char, fn_suffix=fn_suffix)
@@ -2015,6 +2031,12 @@ def run(args):
 
     print("Generating plots ...", file=sys.stderr)
     create_all_plots(stats)
+    create_option_pie_chart(
+        servers, 'CHARSET',
+        os.path.join(PLOTS_PATH, 'charset.png'))
+    create_option_pie_chart(
+        servers, 'BINARY',
+        os.path.join(PLOTS_PATH, 'binary.png'))
     print(f"  wrote plots to {PLOTS_PATH}", file=sys.stderr)
 
     os.makedirs(BANNERS_PATH, exist_ok=True)
@@ -2024,7 +2046,7 @@ def run(args):
                   check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)
-        generate_summary_rst(stats)
+        generate_summary_rst(stats, servers)
         generate_server_list_rst(servers)
         generate_codebases_rst(servers)
         generate_fingerprints_rst(servers)

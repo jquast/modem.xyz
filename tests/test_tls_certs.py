@@ -14,6 +14,7 @@ from make_stats.tls import (
     _check_starttls,
     _extract_cn,
     _load_cache,
+    _reconcile_tls_by_host,
     _save_cache,
     lookup_tls_certs,
 )
@@ -547,3 +548,83 @@ class TestTlsStatsComputation:
         assert stats['tls_misreport_count'] == 0
         assert stats['tls_cert_counts'] == {}
         assert stats['tls_by_codebase'] == {}
+
+
+class TestReconcileTlsByHost:
+
+    def test_clears_not_tls_when_sibling_verified(self):
+        servers = [
+            {'host': 'mud.example.com', 'port': 6789,
+             'tls_port': '6788', '_tls_cert_status': 'verified'},
+            {'host': 'mud.example.com', 'port': 6788,
+             'tls_port': '6788', '_tls_cert_status': 'not_tls'},
+        ]
+        _reconcile_tls_by_host(servers)
+        assert servers[0]['_tls_cert_status'] == 'verified'
+        assert servers[1]['_tls_cert_status'] == ''
+        assert servers[1]['tls_port'] == ''
+
+    def test_clears_not_tls_when_sibling_self_signed(self):
+        servers = [
+            {'host': 'mud.example.com', 'port': 4000,
+             'tls_port': '4001', '_tls_cert_status': 'self_signed'},
+            {'host': 'mud.example.com', 'port': 4001,
+             'tls_port': '1', '_tls_cert_status': 'not_tls'},
+        ]
+        _reconcile_tls_by_host(servers)
+        assert servers[1]['_tls_cert_status'] == ''
+
+    def test_no_change_when_no_confirmed_sibling(self):
+        servers = [
+            {'host': 'mud.example.com', 'port': 4000,
+             'tls_port': '1', '_tls_cert_status': 'not_tls'},
+            {'host': 'mud.example.com', 'port': 5000,
+             'tls_port': '', '_tls_cert_status': ''},
+        ]
+        _reconcile_tls_by_host(servers)
+        assert servers[0]['_tls_cert_status'] == 'not_tls'
+
+    def test_no_change_for_single_port_host(self):
+        servers = [
+            {'host': 'solo.example.com', 'port': 4000,
+             'tls_port': '1', '_tls_cert_status': 'not_tls'},
+        ]
+        _reconcile_tls_by_host(servers)
+        assert servers[0]['_tls_cert_status'] == 'not_tls'
+
+    def test_different_hosts_not_affected(self):
+        servers = [
+            {'host': 'a.example.com', 'port': 4000,
+             'tls_port': '4001', '_tls_cert_status': 'verified'},
+            {'host': 'b.example.com', 'port': 5000,
+             'tls_port': '1', '_tls_cert_status': 'not_tls'},
+        ]
+        _reconcile_tls_by_host(servers)
+        assert servers[1]['_tls_cert_status'] == 'not_tls'
+
+    def test_multiple_not_tls_all_cleared(self):
+        servers = [
+            {'host': 'mud.example.com', 'port': 4000,
+             'tls_port': '4003', '_tls_cert_status': 'verified'},
+            {'host': 'mud.example.com', 'port': 4001,
+             'tls_port': '1', '_tls_cert_status': 'not_tls'},
+            {'host': 'mud.example.com', 'port': 4002,
+             'tls_port': '1', '_tls_cert_status': 'not_tls'},
+        ]
+        _reconcile_tls_by_host(servers)
+        assert servers[1]['_tls_cert_status'] == ''
+        assert servers[2]['_tls_cert_status'] == ''
+
+    def test_reconciled_not_counted_as_misreport(self):
+        servers = [
+            _make_server('mud.example.com', 6789, tls_port='6788',
+                         tls_cert_status='verified'),
+            _make_server('mud.example.com', 6788, tls_port='6788',
+                         tls_cert_status='not_tls'),
+        ]
+        _reconcile_tls_by_host(servers)
+        stats = compute_statistics(servers)
+        assert stats['tls_misreport_count'] == 0
+        assert stats['tls_counts'] == {
+            'TLS Enabled': 1, 'No TLS': 1,
+        }
