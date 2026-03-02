@@ -60,8 +60,8 @@ character stats or even audio.
 
 Two popular open source actively developed clients,
 
-- Mudlet https://www.mudlet.org/ - mouse-based interface
-- tintin++ https://tintin.mudhalla.net/ - CLI interface
+- Mudlet https://www.mudlet.org/
+- tintin++ https://tintin.mudhalla.net/
 
 Types of Servers
 ~~~~~~~~~~~~~~~~
