@@ -1560,10 +1560,11 @@ def create_telnet_options_plot(stats, output_path):
     """Create stacked bar chart of telnet option negotiation patterns."""
     offered = stats['option_offered']
     requested = stats['option_requested']
+    both = stats.get('option_both', {})
 
     all_opts = set()
     for opt in TELNET_OPTIONS_OF_INTEREST:
-        if offered.get(opt, 0) > 0 or requested.get(opt, 0) > 0:
+        if offered.get(opt, 0) > 0 or requested.get(opt, 0) > 0 or both.get(opt, 0) > 0:
             all_opts.add(opt)
     for opt, count in offered.items():
         if count >= 3:
@@ -1571,15 +1572,19 @@ def create_telnet_options_plot(stats, output_path):
     for opt, count in requested.items():
         if count >= 3:
             all_opts.add(opt)
+    for opt, count in both.items():
+        if count >= 3:
+            all_opts.add(opt)
 
     if not all_opts:
         return
 
     options = sorted(all_opts,
-                     key=lambda o: offered.get(o, 0) + requested.get(o, 0),
+                     key=lambda o: offered.get(o, 0) + requested.get(o, 0) + both.get(o, 0),
                      reverse=True)
     offered_counts = [offered.get(o, 0) for o in options]
     requested_counts = [requested.get(o, 0) for o in options]
+    both_counts = [both.get(o, 0) for o in options]
 
     x = np.arange(len(options))
     width = 0.6
@@ -1592,6 +1597,11 @@ def create_telnet_options_plot(stats, output_path):
            bottom=offered_counts,
            label='Server Requests',
            color=PLOT_CYAN, edgecolor='#222222', alpha=0.85)
+    bottom_both = [o + r for o, r in zip(offered_counts, requested_counts)]
+    ax.bar(x, both_counts, width,
+           bottom=bottom_both,
+           label='Server Both',
+           color=PLOT_YELLOW, edgecolor='#222222', alpha=0.85)
 
     ax.set_xlabel('Telnet Option', fontsize=12)
     ax.set_ylabel('Number of Servers', fontsize=12)

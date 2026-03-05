@@ -473,13 +473,16 @@ def _review_mojibake_group(issues, list_path, logs_dir, data_dir,
             else:
                 print(f"  Updated {updated} entries"
                       f" in {list_basename}")
-            if choice == 'x' and not dry_run:
+            if not dry_run:
                 servers = [
                     (i['host'], i['port']) for i in need_list_fix
                 ]
                 deleted_logs = _expunge_logs(logs_dir, servers)
-                deleted_json = _expunge_server_json(
-                    data_dir, servers)
+                if choice == 'x':
+                    deleted_json = _expunge_server_json(
+                        data_dir, servers)
+                else:
+                    deleted_json = 0
                 print(f"  Expunged {deleted_logs} log files,"
                       f" {deleted_json} data files"
                       f" (will re-scan with utf-8)")
@@ -582,6 +585,11 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list,
                              for i in utf8_native}
                     result = _apply_encoding_fixes_bulk(
                         list_path, fixes, dry_run=dry_run)
+                    if not dry_run:
+                        servers = list(fixes.keys())
+                        deleted = _expunge_logs(logs_dir, servers)
+                        print(f"  Expunged {deleted} log files"
+                              f" (will re-scan with utf-8)")
                     applied_count += result
 
         for issue in other:

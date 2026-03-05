@@ -266,16 +266,22 @@ def compute_statistics(servers):
 
     option_offered = Counter()
     option_requested = Counter()
+    option_both = Counter()
     option_refused = Counter()
     for s in servers:
-        for opt in s['offered']:
+        offered_set = set(s['offered'])
+        requested_set = set(s['requested'])
+        for opt in offered_set & requested_set:
+            option_both[opt] += 1
+        for opt in offered_set - requested_set:
             option_offered[opt] += 1
-        for opt in s['requested']:
+        for opt in requested_set - offered_set:
             option_requested[opt] += 1
         for opt in s['refused']:
             option_refused[opt] += 1
     stats['option_offered'] = dict(option_offered)
     stats['option_requested'] = dict(option_requested)
+    stats['option_both'] = dict(option_both)
     stats['option_refused'] = dict(option_refused)
 
     return stats

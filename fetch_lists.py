@@ -288,6 +288,24 @@ def _merge_entries(existing, new_entries, encoding_hint='',
     return added, skipped_rejected, skipped_alt_port, skipped_cross_list
 
 
+def _remove_rlogin_dupes(entries):
+    """Remove rlogin (port 513) entries when the host has another port.
+
+    :param entries: dict ``{(host_lower, port): line}`` — modified in place
+    :returns: number of rlogin entries removed
+    """
+    hosts = {}
+    for host, port in entries:
+        hosts.setdefault(host, set()).add(port)
+
+    removed = 0
+    for host, ports in hosts.items():
+        if 513 in ports and len(ports) > 1:
+            del entries[(host, 513)]
+            removed += 1
+    return removed
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
@@ -389,10 +407,15 @@ def main(argv=None):
                 print(f'  commodorebbs.com: fetch failed ({exc})',
                       file=sys.stderr)
 
+        rlogin_removed = _remove_rlogin_dupes(entries)
+        if rlogin_removed:
+            print(f'  rlogin dedup: {rlogin_removed} port-513'
+                  f' entries removed', file=sys.stderr)
+
         after = len(entries)
         print(f'  total: {after - before} entries added'
               f' ({before} -> {after})', file=sys.stderr)
-        if after > before:
+        if after > before or rlogin_removed:
             _write_merged_list(args.bbslist, header, entries,
                                dry_run=args.dry_run)
 
@@ -428,10 +451,15 @@ def main(argv=None):
                 print(f'  telnetsupport.json: fetch failed'
                       f' ({exc})', file=sys.stderr)
 
+        rlogin_removed = _remove_rlogin_dupes(entries)
+        if rlogin_removed:
+            print(f'  rlogin dedup: {rlogin_removed} port-513'
+                  f' entries removed', file=sys.stderr)
+
         after = len(entries)
         print(f'  total: {after - before} entries added'
               f' ({before} -> {after})', file=sys.stderr)
-        if after > before:
+        if after > before or rlogin_removed:
             _write_merged_list(args.mudlist, header, entries,
                                dry_run=args.dry_run)
 

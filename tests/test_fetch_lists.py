@@ -6,6 +6,7 @@ from fetch_lists import (
     _load_list,
     _load_rejected,
     _merge_entries,
+    _remove_rlogin_dupes,
     _write_merged_list,
     fetch_commodorebbs,
     fetch_relay_cfg,
@@ -374,6 +375,55 @@ class TestFetchTelnetsupport:
         result = fetch_telnetsupport(
             'file://' + str(p), local_path=str(local))
         assert len(result) == 1
+
+
+class TestRemoveRloginDupes:
+
+    def test_removes_513_when_other_port_exists(self):
+        entries = {
+            ('example.com', 23): 'example.com 23',
+            ('example.com', 513): 'example.com 513',
+        }
+        removed = _remove_rlogin_dupes(entries)
+        assert removed == 1
+        assert ('example.com', 23) in entries
+        assert ('example.com', 513) not in entries
+
+    def test_keeps_513_when_only_port(self):
+        entries = {
+            ('rlogin-only.com', 513): 'rlogin-only.com 513',
+        }
+        removed = _remove_rlogin_dupes(entries)
+        assert removed == 0
+        assert ('rlogin-only.com', 513) in entries
+
+    def test_no_rlogin_entries(self):
+        entries = {
+            ('a.com', 23): 'a.com 23',
+            ('b.com', 4000): 'b.com 4000',
+        }
+        removed = _remove_rlogin_dupes(entries)
+        assert removed == 0
+        assert len(entries) == 2
+
+    def test_multiple_hosts(self):
+        entries = {
+            ('a.com', 23): 'a.com 23',
+            ('a.com', 513): 'a.com 513',
+            ('b.com', 513): 'b.com 513',
+            ('c.com', 2323): 'c.com 2323',
+            ('c.com', 513): 'c.com 513 utf-8',
+        }
+        removed = _remove_rlogin_dupes(entries)
+        assert removed == 2
+        assert ('a.com', 513) not in entries
+        assert ('c.com', 513) not in entries
+        assert ('b.com', 513) in entries
+
+    def test_empty_dict(self):
+        entries = {}
+        removed = _remove_rlogin_dupes(entries)
+        assert removed == 0
 
 
 class TestEndToEnd:

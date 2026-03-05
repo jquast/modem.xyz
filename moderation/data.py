@@ -140,6 +140,8 @@ def load_server_records(data_dir):
         mssp_name = (
             mssp.get("NAME", "") if isinstance(mssp, dict) else ""
         )
+        if isinstance(mssp_name, list):
+            mssp_name = mssp_name[0] if mssp_name else ""
 
         for session in data.get("sessions", []):
             records.append({

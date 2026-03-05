@@ -22,6 +22,7 @@ from .dedup import (
     find_dns_duplicates,
     find_duplicates,
     prune_dead,
+    remove_rlogin_duplicates,
 )
 from .encoding import (
     discover_encoding_issues,
@@ -80,6 +81,11 @@ def _get_argument_parser():
     mode_mx.add_argument(
         "--only-dns", action="store_true",
         help="only remove IP entries that duplicate a hostname",
+    )
+    mode_mx.add_argument(
+        "--only-rlogin", action="store_true",
+        help="only remove rlogin (port 513) entries that"
+             " duplicate another port for the same host",
     )
     mode_mx.add_argument(
         "--only-encodings", action="store_true",
@@ -218,6 +224,7 @@ def main():
     only_flags = (
         args.only_prune, args.only_dupes,
         args.only_cross, args.only_dns,
+        args.only_rlogin,
         args.only_encodings, args.only_columns,
         args.only_empty, args.only_renders_empty,
         args.only_renders_small, args.only_http,
@@ -228,6 +235,7 @@ def main():
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
     do_dns = args.only_dns
+    do_rlogin = args.only_rlogin or not any_only
     do_encodings = args.only_encodings or not any_only
     do_columns = args.only_columns
     do_empty = args.only_empty or not any_only
@@ -257,6 +265,24 @@ def main():
                     decisions, "mud", mud_rm, "dns")
                 record_rejections(
                     decisions, "bbs", bbs_rm, "dns")
+
+    if do_rlogin:
+        if do_mud and os.path.isfile(args.mud_list):
+            removed = remove_rlogin_duplicates(
+                args.mud_list,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "mud", removed, "rlogin")
+        if do_bbs and os.path.isfile(args.bbs_list):
+            removed = remove_rlogin_duplicates(
+                args.bbs_list,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "bbs", removed, "rlogin")
 
     if do_prune:
         if do_mud and os.path.isfile(args.mud_list):

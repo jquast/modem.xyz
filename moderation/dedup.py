@@ -838,6 +838,54 @@ def find_cross_list_conflicts(mud_list, bbs_list, mud_data_dir,
     return mud_removals, bbs_removals
 
 
+def remove_rlogin_duplicates(list_path, report_only=False,
+                             dry_run=False):
+    """Remove rlogin (port 513) entries when the host has another port.
+
+    Rlogin entries are redundant when the same host already has a
+    telnet or other service port in the list.  This step is fully
+    automatic and requires no interactive prompts.
+
+    :param list_path: path to server list file
+    :param report_only: if True, only print report
+    :param dry_run: if True, don't write changes
+    :returns: set of ``(host, port)`` removed
+    """
+    list_path = Path(list_path)
+    print(f"\n--- Rlogin deduplication in {list_path.name} ---")
+
+    entries = load_server_list(list_path)
+
+    hosts_by_port = {}
+    for host, port, _ in entries:
+        if host is None:
+            continue
+        hosts_by_port.setdefault(host.lower(), set()).add(port)
+
+    removals = set()
+    for host_lower, ports in hosts_by_port.items():
+        if 513 in ports and len(ports) > 1:
+            removals.add((host_lower, 513))
+
+    if not removals:
+        print("  No rlogin duplicates found.")
+        return set()
+
+    for host, port in sorted(removals):
+        other = sorted(hosts_by_port[host] - {513})
+        print(f"  remove {host}:513"
+              f"  (also on port {', '.join(map(str, other))})")
+
+    print(f"\n  {len(removals)} rlogin entries to remove")
+
+    if report_only:
+        return set()
+
+    write_filtered_list(
+        list_path, entries, removals, dry_run=dry_run)
+    return removals
+
+
 def find_dns_duplicates(mud_list, bbs_list, report_only=False,
                         dry_run=False):
     """Remove IP entries that duplicate a hostname entry.

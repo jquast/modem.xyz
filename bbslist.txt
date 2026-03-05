@@ -1,185 +1,429 @@
 # format,
 # ip address [port number [encoding [columns [tall]]]]
+1.157.7.224 6880
+100.34.239.193 23
+100.36.165.206 62323
+100.6.29.103 2323
 103.95.48.171 23
+104.131.109.59 2052
 104.142.112.149 9000 utf-8
+104.173.38.226 6502
+104.195.221.163 23
 104.246.170.121 23
+104.37.189.44 6996
 104.57.170.70 6840
+104.9.144.110 5864
+107.161.22.171 9999
+107.173.85.173 2223
 107.175.69.10 60023 utf-8
 107.195.72.202 1170
+107.200.207.176 23
+107.217.154.237 513
+107.218.189.71 5983
+108.210.207.115 6401
 108.216.156.236 2423 utf-8
 108.242.55.251 23 utf-8
-108.242.55.251 513 utf-8
 108.29.0.206 23
 109.247.190.78 2323
+115.70.188.112 23
 118.195.237.158 6666
 120.92.212.76 23 gbk
+121.200.29.194 24
 121.99.249.4 23
 122.199.12.99 8888 utf-8
 122.199.58.252 2323
+122.58.172.195 1024 utf-8
+127.0.0.1 23
+13.72.87.55 3000
 130.95.13.14 4242
 132.145.210.148 3000
+132.145.58.129 513
 132.226.155.29 23
 134.185.84.52 2323 utf-8
+134.209.162.238 7423
 134.209.40.1 31337 utf-8
+134.22.249.120 23
+135.148.33.10 2569
 136.144.155.250 8888
+137.184.144.158 23
+138.197.134.82 6789
+138.197.193.89 7777
+138.197.57.47 4300
+139.162.227.40 513
 139.162.249.62 5555
+139.59.222.14 23
 13leader.net 8023 utf-8
 13th.hoyvision.com 6400
+140.114.87.5 23
+141.0.110.62 2323
 142.11.212.221 23
 142.44.247.204 23 utf-8
 142.93.52.94 23
+143.103.124.204 6984
+143.109.10.156 5321
+143.223.235.160 23 utf-8
 144.217.252.203 7900
+146.0.33.231 64128
 146.59.43.83 23 utf-8
+146.59.45.33 4004
+148.170.167.4 23
 148.251.169.181 23
+148.252.85.88 4000
+149.200.66.97 1222
+149.202.59.89 5002 utf-8
 149.56.47.118 1023
 150.107.201.19 4000
+152.53.142.77 2323
+153.100.181.200 23
+153.100.182.80 23
 153.127.6.190 2323
+155.138.164.96 5555
+155.212.185.109 4000
 157.230.64.29 4000
 157.245.141.84 8888 utf-8
+158.248.112.65 45023
 158.69.212.139 1234
 158.69.60.181 2323 utf-8
 162.118.68.104 23
 162.212.158.202 23
+162.243.208.108 4201
 162.243.54.214 23
 167.86.109.250 23 utf-8
+170.249.198.110 1825
 172.101.80.169 2000
+172.105.94.5 5555
+172.110.183.196 2323
+172.111.168.176 23
+172.111.168.90 23
 173.14.206.213 23
 173.14.208.154 9911
 173.199.127.12 2002
 173.217.78.103 2323 utf-8
+173.237.117.4 6789
+173.255.201.173 4080
 173.255.220.187 443
+173.255.226.43 4000
+173.63.126.200 513
+173.72.199.77 24
+173.75.131.40 4000
+173.88.200.16 23
 174.1.49.147 2323
+174.130.99.64 23
+174.27.213.174 23
 174.3.235.112 230 utf-8
+174.54.53.254 8000
+174.58.81.72 2323
+174.64.125.29 4000
+178.254.24.248 2424
+18.191.141.122 4000
+180.150.61.50 23
 184.58.204.114 7777
+185.229.238.56 513
+185.246.66.117 9001
 188.128.39.239 110 utf-8
 188.166.9.190 23
+188.246.205.174 6969
+188.60.225.170 23
+188.67.201.84 32
 188.81.201.94 2323
+189.124.192.53 23
+189.181.46.61 23
+190.92.134.117 2323
 192.0.135.41 23
+192.138.210.158 513
 192.243.111.121 2323
+192.3.122.156 2002
+192.3.80.52 6523
+192.65.239.147 27750
+192.81.129.7 513
+192.81.132.253 7765
+192.81.133.87 513
 192.82.254.205 8888
+192.95.118.156 2002
 192.99.17.109 4000
+195.201.166.132 8000
+198.16.195.252 57323
 198.71.48.13 7777
 1984.ws 23 utf8
+199.166.252.65 27723
+199.180.250.22 3074
+199.195.254.241 6800
+199.255.220.235 6789
 199.74.141.8 1035
 1stchoicecore.co.nz 1028 big5
 1stchoicecore.co.nz 1030
+2.87.214.237 6502 utf-8
+20.121.15.153 4489
 20.245.25.86 23
 202.61.251.17 23
+203.191.173.168 23
+203.191.174.46 23
+203.96.209.7 2323
+204.144.162.156 23
+204.209.44.23 9000
+204.209.44.3 8000
 205.166.250.238 23
 206.189.226.31 23 utf-8
+207.148.108.123 443
+207.167.252.79 2324
+207.38.87.97 23
+207.47.192.67 2018
+207.58.151.67 8888
 207.90.251.241 2323
+208.97.60.219 2300
 20forbeers.com 1337 utf-8
 211.68.71.66 23 gbk
 213.166.5.201 23
+213.95.46.21 513
+216.117.130.175 2523
 216.136.9.5 1809
+216.137.246.169 23
+216.14.251.122 2323
+216.167.189.34 2000
+216.226.144.124 9000
+216.251.47.10 4000
+216.252.162.218 5002
 217.154.107.144 23 utf-8
+217.180.211.228 23999
 217.198.137.127 23 utf-8
+217.81.85.246 23
+23.239.23.228 513
+23.245.128.9 23 utf-8
+23.253.235.38 1764
 23.95.146.28 8282 utf-8
 24.131.193.139 23
 24.166.43.233 23
 24.209.50.108 2332
+24.245.105.161 64738
+24.36.201.89 59 utf-8
+24.57.53.43 23000
+24.62.218.205 23
 24.64.95.197 23903
 24.80.160.127 23 cp437
 24.96.157.17 23
 3.132.134.107 4000
 3.132.92.116 24
 300baud.dynu.net 2525
+31.208.229.250 23
+32.216.242.85 2323
 34.162.43.84 23 utf-8
 35.185.116.119 8000
+35.192.18.87 6000
+35.201.128.35 88
 37.27.85.185 2323
+38.162.129.234 23
+38.179.43.181 1202 utf-8
+38.179.43.245 2323
 38.188.130.43 23
 39.106.161.147 23 gbk
 3scapes.org 3200
+45.10.160.94 64
+45.24.186.195 513
+45.24.186.198 513
 45.33.40.193 443
+45.48.10.136 23
+45.55.253.83 6250
+45.55.35.48 2332
 45.72.180.214 23 topaz
 45.79.37.227 23 utf-8
+45.79.66.72 23
 45.79.69.172 513
 45.79.93.198 23
+45.93.239.212 1337
+46.110.227.9 23
+46.235.224.142 7777
+46.59.44.50 23 utf-8
+47.176.57.117 4567
+47.185.76.199 23
 47.223.173.180 23 utf-8
 47.25.173.251 23
 47.38.20.227 23
 47.46.52.130 23
+47.6.104.218 24000
 5.150.245.20 2323 topaz
 5.150.254.12 31337
 5.198.54.18 23
+5.38.247.23 1212
 5.39.80.203 7000
 5.9.58.175 2002
+50.104.161.62 23
+50.107.162.117 23
+50.109.246.46 23
 50.110.169.17 23
+50.116.29.47 3640
 50.116.41.177 23 utf-8
 50.116.51.149 23
+50.120.60.120 23
 50.20.127.213 23
+50.214.28.50 8888
 50.47.85.64 23
+51.161.5.210 4001
 51.222.110.111 2323
 51.222.85.183 5555
+51.81.209.251 6502
+52.19.37.158 7465
+52.2.244.77 4000
+52.212.238.182 2323
+52.35.137.231 1972
 52.40.49.152 23 latin-1
 54.238.90.108 23 big5
 59.167.142.49 12800 petscii 80
+63.230.156.110 2424
+64.121.82.225 9999
+64.182.46.5 5000
 64.227.89.30 1138
 64life.net 1983
 64vintageremixbbs.dyndns.org 6400 petscii
+65.129.149.202 5559
+65.32.142.239 23
+66.102.151.98 23
+66.168.116.58 23
 66.228.57.87 2323
 66.23.221.29 2323 utf-8
 66.55.66.25 23
+66.94.120.186 513
+67.131.59.192 27
 67.149.17.69 23 utf-8
 67.163.148.95 23
 67.190.218.57 2323
 67.205.168.255 2323
+67.230.158.234 23
 68.145.253.237 23 utf-8
+68.168.184.229 23
+68.197.140.28 6400
+68.75.195.9 4208
 68.98.101.79 23
+69.128.114.51 24
 69.178.59.98 23 utf-8
+69.201.1.134 23
+69.24.117.72 23
 69.4.62.151 23
+69.46.7.242 5454
 69.87.219.91 8221
+69.9.131.124 4000
 70.122.247.57 2002
 70.123.70.30 23
+70.19.64.120 23
+70.53.253.249 23
+71.171.93.80 1959
+71.193.203.232 9000
+71.194.107.158 6401
+71.204.139.119 23
+71.225.82.6 6464
+71.56.69.213 2002
+71.95.196.34 513
 72.12.252.162 31810
+72.167.227.17 23
+72.178.2.58 513
+72.180.37.67 6423
+72.215.52.60 23
+73.112.196.135 6400
+73.178.46.44 1701
 73.183.161.134 8887
+73.219.250.223 2424
 73.242.209.94 23 utf-8
+73.29.102.205 4201
 73.42.12.93 23 utf-8
+73.96.188.76 2424
 74.138.82.254 23 utf-8
+74.196.38.185 6510
+74.207.233.40 23
+74.208.126.44 4100
+74.208.46.242 2020
 74.65.39.90 6809 utf-8
+74.75.213.5 23
+74.93.16.50 7777
+74.98.223.74 23233
+75.186.39.144 or fodim.bounceme.net 23 petscii
 75.3.200.42 9000
 76.104.161.135 23
+76.120.211.86 8888
+76.132.157.214 2323
 76.179.0.166 2002
 76.242.166.61 2002
+76.53.35.202 23
+76.91.152.209 31337
+77.3.205.42 23
 78.47.102.200 4000
+79.202.49.242 3023
+79.224.46.195 23
+80.144.3.91 3023
 80.153.193.93 23
 80.211.167.123 23
 80.229.19.209 23 utf-8
 80.7.90.17 31337 topaz
+80.95.82.122 1212
+81.182.77.35 1222
+81.187.167.178 8688
+81.201.49.14 7680
+82.51.113.85 2323
 82.68.167.68 4242
+83.135.0.174 5745 utf-8
+83.135.7.11 5745 utf-8
 84.104.78.157 23
 84.92.196.99 23
+85.74.7.40 9999
 86.12.24.168 23 utf-8
+86.175.149.135 23
+86.180.19.193 1338
+86.184.171.95 1338
 86.88.76.77 6323
+87.106.7.15 23
+87.148.28.165 8888
+87.161.36.36 64128
 87.212.201.57 4000
+88.0.196.111 23
+88.8.105.93 2300
 88.97.75.68 8000
+89.168.114.235 23
+89.216.101.71 3777
+89.244.217.180 23
+89.58.51.248 3334
 8bit.hoyvision.com 6400
 8bit.hoyvision.com 6502 petscii
 91.138.216.205 2323
+91.210.224.213 2323
+91.48.226.1 2323
+91.56.162.74 8888
 92.91.25.209 2323
 94.22.232.77 23
+94.32.85.38 2023
+95.217.157.136 5000
 95.217.16.88 8888 utf-8
+95.217.22.142 2323
+95.33.25.119 2323
+95.33.93.81 2323
+95.94.255.112 6969
 96.231.233.46 23
 96.231.233.47 23
+96.231.233.50 23
 96.231.233.52 23
 96.231.233.53 23
 96.231.233.58 23
 96.231.233.60 23
 96.231.233.61 23
 96.27.249.221 23
+97.113.163.85 6359
+97.115.95.251 4000 utf-8
+97.247.163.174 23
 97.76.12.194 23
 98.113.13.134 2323
 98.144.7.205 23
+98.235.15.14 23
 98.45.212.129 23
+98.48.66.57 5555
+98.50.23.19 23
 99.106.75.128 95 topaz
+99.184.243.231 23
 99.85.80.17 23
+99.88.247.49 2324
+99.89.65.1 23
 99.89.65.2 23
 Error1202bbs.DDns.net 1202 utf-8
 TheDen.Angel-Hare.com 8888
 Tp.org 9999
-UNItopia.DE 4444
 a-net.online 23 utf-8
-a-net.online 513 utf-8
+aardmud.org 23
 abandonedstardock.ddns.net 2002
 absinthebbs.net 1940 topaz
 acentauribbs.no-ip.org 2424 utf-8
@@ -187,6 +431,7 @@ adeptbbs.com 23
 adibbs.sytes.net 6800
 aeug.asuscomm.com 8888 big5
 agency.bbs.nz 23
+alamobbs.mywire.org 6400
 alcatrazbbs.ddns.net 9000
 alco.bbs.io 23 topaz
 alephbbs.com 2626 utf-8
@@ -206,6 +451,7 @@ amstrad.simulant.uk 464
 ancientmists.vineyard.haus 1538
 andcycle.idv.tw 23 big5
 andr01d.zapto.org 9999
+angstridden.net 1337
 ansalon.net 8679
 antidote.triad.se 64128
 anybox.freedyndns.de 23 utf-8
@@ -215,14 +461,18 @@ area52.tk 5200 atascii
 asanocomp.ddns.net 2300 utf-8
 ascii.dynu.net 4096
 ashlands.com 23
+astronetbbs.ddns.net 23
 atari-bbs.zapto.org 8888 atascii 80 tall
 ataribbs.ddns.net 6502 atascii
 athelstan.org 23
+atl.ddns.net 6401
 aturiondynasty.hopto.org 4444
+aubbs.zapto.org or aubbs.dyndns.org 2300 petscii
 avastbbs.servegame.com 23 cp437 80 tall
 aws1.fmerino.com.br 23 utf-8
 backintime.ddns.net 6510
 bay.jayscafe.net 6401
+bayoublog.ddns.net 23
 bayvillewireless.com 23
 bbbs.net 23
 bbs-mousenet.dynip.online 8889
@@ -242,6 +492,7 @@ bbs.alcatrash.org 23 utf-8
 bbs.alecoexp.cz 23
 bbs.alsgeeklab.com 2323 utf-8
 bbs.anduin.net 23
+bbs.apostols.org 23 utf-8
 bbs.archaicbinary.net 23
 bbs.arcticzonebbs.net 23
 bbs.as.ntu.edu.tw 23 big5 tall
@@ -277,6 +528,7 @@ bbs.cs.nthu.edu.tw 23 big5 no_ambig
 bbs.cyrellia.com 23 utf-8
 bbs.darkcarnival.org 23
 bbs.darkrealms.ca 23
+bbs.deadparrotbbs.com 2323
 bbs.decafbad.com 6513 utf-8
 bbs.deek.se 23
 bbs.deepskies.com 6400
@@ -284,6 +536,7 @@ bbs.demigoth.com 23 utf-8
 bbs.dicksonlabs.net 2325
 bbs.digicombbs.com 2323 utf-8
 bbs.digital-warfare.net 1337
+bbs.digitaldistortionbbs.com 23
 bbs.digitalrainbow.info 23 utf-8
 bbs.disconnected-by-peer.at 23 latin-1
 bbs.distantempires.com 8023
@@ -291,6 +544,7 @@ bbs.dosnetz.de 3232
 bbs.dragonsweb.org 23
 bbs.dsbbs.ca 23
 bbs.duensing.digital 23
+bbs.echo-mirage.net 1989
 bbs.efectolinux.com 23 utf-8 80 tall
 bbs.emeraldhill.org 23
 bbs.emeraldvalley.net 23 utf-8 80 tall
@@ -329,6 +583,7 @@ bbs.jacobcat.app 513
 bbs.jammingsignal.com   [206.248.167.113] 23 petscii
 bbs.jasonwalker.ca 2323
 bbs.jayscafe.net 6402
+bbs.jerseyjam.com 2323
 bbs.kd3.us 23
 bbs.kd8hfx.net 23
 bbs.kiwi.net 23
@@ -337,6 +592,7 @@ bbs.korenblom.nl 23
 bbs.kry.pt 2323 big5
 bbs.lightly-salted.com 8023 utf-8
 bbs.lizardmaster.com 23 utf-8
+bbs.lizsugar.me 6000 utf-8
 bbs.lostcause.house 23
 bbs.lostcrypt.com 23
 bbs.lowcrash.dev 8888 utf-8
@@ -351,11 +607,13 @@ bbs.mlinks.com 23
 bbs.mozysswamp.org 23
 bbs.mozysswamp.org 24
 bbs.mycrowd.ca 23 utf-8
+bbs.mynameisgabe.com 23
 bbs.mythicalkingdom.com 5023 utf-8
 bbs.newtoncity.org 23 utf-8
 bbs.nikom.org 2323
 bbs.ninthchevron.com.au 23
 bbs.novass.net 2323
+bbs.nuageinfo.com 23 utf-8
 bbs.nykz.net 23 gbk
 bbs.oldchat.ru 23
 bbs.olddos.kr 9000 euc-kr
@@ -369,8 +627,10 @@ bbs.phantombbs.info 2323
 bbs.pharcyde.org 23 utf-8 80 tall
 bbs.pharos.rocks 23 big5
 bbs.phospher.com 23 utf-8
+bbs.photik.org 23
 bbs.pixelgrounds.net 8888 utf-8
 bbs.powerbbs.com 23
+bbs.pwecksretreat.com 2332
 bbs.qzwx.com 23
 bbs.ramifications.ca 5128
 bbs.retro32.com 1337 topaz
@@ -383,6 +643,7 @@ bbs.retrohack.se 64128
 bbs.riddells.net 10023 utf-8
 bbs.rockvilletavern.com 23 cp437 80 tall
 bbs.roguenet.work 8888 utf-8
+bbs.roonsbbs.hu 1212
 bbs.sbbsystems.com 8888 utf-8
 bbs.sdf1.net 5023
 bbs.sfhqbbs.org 5983
@@ -396,7 +657,6 @@ bbs.softsolutions.net.br 2023 utf-8
 bbs.starbase11.de 2323 utf-8
 bbs.starbase21.net 23
 bbs.stardoc134.com 2323
-bbs.stardoc134.com 513
 bbs.starshipjunkyard.com 23
 bbs.sunspothq.dyndns.org 23
 bbs.swissirc.net 2323
@@ -407,7 +667,7 @@ bbs.terminaltavern.com 23
 bbs.tfsi.dev 23 utf-8 80 tall
 bbs.thebrokenbubble.com 23 utf-8
 bbs.theiguru.au 2323 utf-8
-bbs.thejollyrogerbbs.com 8023
+bbs.thejollyrogerbbs.com 8023 cp437
 bbs.themajorbbs.com 23
 bbs.thisoldcabin.net 2323
 bbs.throwbackbbs.com 23
@@ -417,6 +677,7 @@ bbs.trod.org 23
 bbs.twixed.net 62323
 bbs.twlounge.net 23 utf-8
 bbs.twomice.net 23 gbk
+bbs.ultimatebbs.net 23
 bbs.uncomfortable.business 6423
 bbs.undermine.ca 23 utf-8
 bbs.unicyber.co.uk 2323 utf-8 80 tall
@@ -441,7 +702,6 @@ bbs2.ipingthereforeiam.com 2323
 bbsdev.net 23
 bbsdoors.com 23
 bbsgamer.ddns.net 2600 utf-8
-bbsgamer.ddns.net 513 utf-8
 bbswordle.com 23
 bcrgames.com 31337
 beryl.h-o-soft.com 2323 shift-jis
@@ -467,13 +727,11 @@ bwrbbs.ddns.net 23 utf-8
 bylins.su 4000 utf-8
 byob.hopto.org 64128
 c3bbs.retronetworking.org 23 utf-8
-c3bbs.retronetworking.org 513 utf-8
 c64u.club 6400 petscii
 call.rofbbs.com 6400
 call.rofbbs.com 6800 topaz
 call.rofbbs.com 8502 petscii
 capitolcityonline.net 23
-capitolcityonline.net 513
 capitolshrill.com 23
 casbah.goip.de 5354 latin-1
 casper.homeip.net 23
@@ -503,6 +761,7 @@ cjsplace.thruhere.net 2002
 cjsplace.thruhere.net 23 utf-8
 claudes.lovelybits.org 23
 cloud.kanskje.com 23 utf-8
+coconet.ddns.net 6809
 commodoreserver.com 1541 petscii
 conchaos.synchro.net 2002
 conchaos.synchro.net 23 utf-8
@@ -520,8 +779,10 @@ cqbbs.ddns.net 6800 utf-8
 crackintimebbs.ddns.net 2323
 crazyworldbbs.com 2323 utf-8
 crisisbbs.net 23 utf-8
+crowsnestbbs.ddns.net 6801
 cryosphere.net 6666
 csbbs.dyndns.org 23 utf-8
+cscnet1.net 23
 cvic.org 23 big5
 cyberiabbs.zapto.org 23 utf-8
 cyberspacebbs.net 23 utf-8
@@ -535,6 +796,7 @@ darkendlessbbs.hopto.org 6510 petscii
 darkforce-bbs.dyndns.org 1040
 darkgame.buanzo.org 23
 darklevel.hopto.org 64128
+darklordmud.duckdns.org 5000
 darkwood.ddns.net 23
 datgsguy.com 513
 datotal.net 35723 utf-8
@@ -564,6 +826,7 @@ doozy.thruhere.net 23 utf-8
 dose.0wnz.at 23
 dott.synchro.net 2424
 dragon.vk3heg.net 6800 topaz
+dragonballrevolt.genesismuds.com 6969
 dumuzi.lykaina.com 23 utf-8
 dungeon.name 20020
 dungeon.synchro.net 23
@@ -576,14 +839,13 @@ echochamber.zapto.org 3640
 echoes.120v.ac 23
 elveszettvilag.hu 6666
 endofthelinebbs.com 23 utf-8
-endofthelinebbs.com 513 utf-8
 eniacv2.net 1337
 enigma-bbs.com 23 utf-8
 enterprisebbs.ddns.net 1701
+entropybbs.zapto.org 23
 eow.lol 2377
 error404bbs.ddns.net 24
 error404bbs.ddns.net 404 utf-8
-error404bbs.ddns.net 513
 eternalforest.net 9000
 euklid.ddns.net 5745 utf-8
 euts.org 1998
@@ -598,6 +860,7 @@ fdd.one 23
 fedapoc.tel 2301
 fenglin.info 2323
 ferchobbs.ddns.net 2323 latin-1
+ff.mud.de 7600
 fibs.com 4321
 fido.alltsk.ru 23
 fido.bajtek.org 23
@@ -611,6 +874,7 @@ foremxebbs.ddns.net 9999 atascii
 forze.opicron.eu 23
 fqbbs.synchro.net 23 utf-8
 freechess.org 23
+freespeak.hopto.org 1337
 freeway.vkradio.com 23
 friabad.hopto.org 64128
 frontierbbs.co.uk 23 utf-8
@@ -619,11 +883,11 @@ funtopia.synchro.net 3023 utf-8
 futureland.today 23
 futureland.today 2323
 fw2.cnetbbs.net 6800 topaz
+g-point.tunk.org 500
 galaxy74bbs.com 23 utf-8
 galaxybbs.net 23 utf-8
 game.a-net-online.lol 2002
 game.a-net-online.lol 2112
-game.a-net-online.lol 513 utf-8
 game.tw2002.net 23
 gamenet.synchronetbbs.org 23 utf-8
 games.libreplanet.org 23
@@ -656,6 +920,7 @@ hiervard.ru 4000
 highdesertbbs.ddns.net 6400 petscii
 hobbylinebbs.com 23
 hobbyspace.ddns.net 23 utf-8
+home.thezen.garden 23
 houseofbaud.com 8888 utf-8
 houseoftna.xyz 23 utf-8
 hovalbbs.com 2333 utf-8
@@ -667,6 +932,7 @@ infonet-bbs.rclabs.com.br 2323
 insomnia.synchronetbbs.org 23 utf-8
 interzone.annexia.xyz 2002
 intranet.fites.net 23
+irc.s3tg5z.com 23
 itcbbs.ddns.net 23000 cp437 80 tall
 itchybutt.org 6502 petscii
 iyersmith.com 23
@@ -706,16 +972,13 @@ lofac.mintyfresh.love 23 utf-8
 looneybinbbs.com 2023 utf-8
 lord.stabs.org 23
 lovelybits.org 1337
-lovelybits.org 513
 lunarout.synchro.net 8023
 lunaticsunleashed.ddns.net 2333
 lv426bbs.hopto.org 6464
 lynx.scramworks.net 23
 macos.retro-os.live 23 utf-8 tall
-macos.retro-os.live 513 utf-8
 madmanbbs.ddns.net 23 utf-8
 magnumbbs.net 23
-magnumbbs.net 513
 mail.drf-solutions.net 23 utf-8
 mail.hohimer.org 1336
 majicka.at2k.org 1955
@@ -726,6 +989,7 @@ mba.dnsalias.com 23
 mbpeikert.ddns.net 23 utf-8
 mbse.gzrbbs.net 2320
 mbsedev.bnbbbs.net 2323
+mclmud.mclink.it 6000
 megadodo.online 4242 utf-8
 microblaster.net 2002
 microtownbbs.com 6400
@@ -735,8 +999,10 @@ mimac.bizzi.org 2323 utf-8
 modem.serial-port.com 1333
 modematider.selstam.nu 50023
 mojo.synchro.net 23 utf-8
+mongoose.moo.mud.org 7777
 mono.org 23 utf-8 40
-montereybbs.com 23
+montereybbs.com 23 topaz
+moratahack.com 23
 mortuary.ddns.net 23
 mouthofhell.duckdns.org 23
 mozz.us 23
@@ -744,16 +1010,17 @@ msmacbbs.maletazul.pt 23 utf-8 90 110
 mstation.servebbs.com 23 topaz
 mtlgeek.synchro.net 2002
 mtlgeek.synchro.net 23
-mtlgeek.synchro.net 513
+mud.tfcmud.com 4000
 muinet.com 2323
 multinube.net 23
 multizork.icculus.org 23
+mush.elendor.net 1892
+mushhaven.com 1280
 mutiny.cigdangle.com 65023 cp437 80 tall
 mutinybbs.com 2300
 mv2k.com 23
 my-workspace.us 6764 utf-8
 mystic-anet.online 23
-mystic-anet.online 513
 mystic-hobbies.com 23 utf-8
 mystic.wwivbbs.org 23
 mysticalrealmbbs.com 23
@@ -763,10 +1030,9 @@ nebbs.servehttp.com 9223
 nerdragebbs.ddns.net 23 utf-8
 neronis.eu 9000 cp1251
 netasylum.com 2323
-nethack.alt.org 23
+nethack.alt.org 23 utf-8
 nethack4.org 23 utf-8
 netpoint.webhop.me 23 utf-8
-netpoint.webhop.me 513
 nettwerked.synchronetbbs.org 23 utf-8
 neverneverlandbbs.com 2323
 news.belchi.org 2323
@@ -784,6 +1050,7 @@ nuke.club 513
 oasisbbs.hopto.org 6400
 ofo.tw 23 big5
 ohb.synchronetbbs.org 23 utf-8
+oim.wolfpaw.net 1960
 oldschool.synchronetbbs.org 513 utf-8
 oldtimebbs.com 23
 omen.digital-genesis.com 1806
@@ -815,6 +1082,7 @@ perlbbs.tw 23 big5
 phantasm.bbs.io 4489 topaz
 phantomrage.ddns.net 23
 phoenix.bnbbbs.net 23
+pkmud.net 5000
 planetafr0.org 8888
 play.ddgame.us 23
 playpenbbs.com 23
@@ -822,6 +1090,7 @@ pocbbs.duckdns.org 23
 pocbbs.duckdns.org 2323 utf-8
 pocbbs.duckdns.org 6400
 pofobbs.ddns.net 992
+portal.wanderingmad.com 23
 portugal-virtual.org 6969
 proline.ksherlock.com 6523
 pruffino.com 23
@@ -844,6 +1113,7 @@ reality.throwbackbbs.com 2323
 realitycheckbbs.org 23 utf-8
 realitypoint.com 12112
 reaux.vineyard.haus 3033
+region15.net 23
 retrobbs.sinclair.homepc.it 23
 retroconnect.org 23 utf-8
 retrolair.amigaretro.net 6800
@@ -853,8 +1123,8 @@ rg1.retrogoldbbs.com 6411
 ricksbbs.synchro.net 23
 riverstyx.ddns.net 2323
 rns.risenshinebbs.com 23
-rns.risenshinebbs.com 513
 rofbbs.ddns.net 2300
+rom.mud.de 4000
 ror.us.to 3000
 sanctuary.zapto.org 1541 topaz
 sanctumbbs.com 6502
@@ -873,7 +1143,6 @@ seattle.tw 23 big5
 sector31.lorfinglab.com 2002
 segaa.net 23 big5 no_ambig
 sestar.synchro.net 23
-sestar.synchro.net 513
 sf.a-net.online 2323
 sgprobbs.com 1337
 shadowbbs.com 23
@@ -957,19 +1226,18 @@ thegateb.synchro.net 2424
 thekeep.net 23
 theland.notroot.com 5000
 themegabbs.com 6400 utf-8
+themegabbs.ddns.net 6400 utf-8
 thenervoushospital.com 1996
 thenineworlds.dnshome.de 923 utf-8
 thenorthernpalace.com 2020 topaz
 theoldnet.com 6400 petscii
+theparityerror.com 23
 thepenaltybox.org 23
 therockbbs.net 10023 utf-8
 theviperbbs.ddnsfree.com 23 utf-8
 threeblindmice.synchronetbbs.org 23 utf-8
-threeblindmice.synchronetbbs.org 513 utf-8
 thunder.synchro.net 23
-thunder.synchro.net 513
 tiabbs.synchro.net 23
-tiabbs.synchro.net 513
 tigernet.dewindt.us 23
 time.synchro.net 24 utf-8
 tlcbbs.dynu.net 6400
@@ -977,12 +1245,13 @@ tlcbbs.dynu.net 6401 petscii
 tlcbbs.synchro.net 23 utf-8
 tlcbbs.synchro.net 6400
 tmz.synchronetbbs.org 23 utf-8
-tmz.synchronetbbs.org 513 utf-8
 tmzbbs01.synchro.net 23
 tnabbs.org 2323 petscii
 toolazy.synchro.net 2323 utf-8
 toolshed.synchro.net 2323
 top-swadba.de 2323
+torilmud.com 9999
+towers.t2tmud.org 9999
 toxicbbs.com 23 utf-8
 tqps.ddns.net 23
 tradewarsacademy.com 2002
@@ -1006,11 +1275,13 @@ valley64.com 6400 petscii
 verify-nebula.kicks-ass.net 23 utf-8
 vern.cc 23
 vert.synchro.net 23 utf-8
+vikingmud.org 2001
 vintage.thcbbs.com 23
 vintagepi.asuscomm.com 23
 violetyggdrasil.live 1144 utf-8
 void.canerduh.com 23056 utf-8
 voidbbs.com 23
+vormud.genesismuds.com 7777 utf-8
 vortex.redirectme.net 3777
 vortexbbs.com 23
 wa7npx.org 2323 utf-8
@@ -1030,6 +1301,7 @@ winnow.1q1.me 23 utf-8
 wintermutebbs.ddns.net 23
 wizardsrainbow.com 23
 wizzybbs.win 23 utf-8
+wl.mud.de 4711
 wn2.wrgnbr.com 6405 utf-8
 wn3.wrgnbr.com 6400
 wn4.wrgnbr.com 3000
@@ -1052,10 +1324,11 @@ x-bit.org 2112
 x-bit.org 23230
 x.a-net.online 2323 utf-8
 x22.ddns.net 9000
-xibalba.l33t.codes 44510 utf-8
+xibalba.l33t.codes 44510 cp437
 zahrl.ddns.net 2023
 zen.kawasu.wtf 23
 zenolab.synchro.net 23 utf-8
+zeus.cybercitizen.net 3337
 zl4kj.nz 23
 zonebbs.net 23
 zooropabbs.ddns.net 2323 cp437

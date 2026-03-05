@@ -46,7 +46,6 @@
 216.136.9.21 1085 gbk
 216.136.9.8 4919
 216.226.128.180 4443
-216.226.128.180 4444
 216.226.128.180 6663
 216.252.162.30 2683
 217.10.10.195 9000
@@ -73,8 +72,8 @@
 51.15.222.121 4000
 52.90.102.82 4000
 54.238.179.235 5555 big5
-61.160.23.27 66 gbk 90
 61.160.23.27 2006 gbk 90
+61.160.23.27 66 gbk 90
 63.142.253.253 4001
 64.182.46.8 4445
 67.205.140.34 2020
@@ -167,7 +166,6 @@ batmud.bat.org 23
 baymoo.org 8888
 bc.kelotz.net 2018
 biyg.org 1801 utf-8 90
-bl.mud.at 5679 ssl
 blackfire.online 4000
 blackmud.com 2000
 bod.westeros.org 3000
@@ -282,8 +280,8 @@ ds.enyc.org.uk 8688
 dsl-mud.org 4000
 dsmush.com 4000 utf-8 180
 dum.acc.umu.se 2001
-dunemud.net 6789
 dunemud.net 6788 ssl
+dunemud.net 6789
 dungeon.name 20022 utf-8 80
 dw.kicks-ass.org 1111
 dynamix.fansi.org 4200
@@ -431,8 +429,8 @@ hot-mess.net 9900
 hyperborea.net 2000
 ianshirm.genesismuds.com 2250
 ianshirm.genesismuds.com 2251
-iberia.jdai.pt 5900
 iberia.jdai.pt 5899 ssl
+iberia.jdai.pt 5900
 icesus.org 23
 icesus.org 4000
 icewindmud.org 2021
@@ -498,7 +496,6 @@ medievia.com 4000
 medinamud.tk 3232
 megamanmush.com 1997
 mf.deepfire.net 4242
-mg.mud.de 23
 midgardmud.de 4711
 midnight.horse 7777
 midnightsun2.org 3000
@@ -598,7 +595,6 @@ mud.rod.org 3000
 mud.rohonline.net 3333
 mud.seattle2064.net 4000
 mud.shatteredkingdoms.org 1996
-mud.silberland.at 4711
 mud.simauria.org 23
 mud.spin.de 6666
 mud.stack.nl 3333
@@ -611,8 +607,8 @@ mud.tempusmud.com 2020 utf-8 100
 mud.tempusmud.com 2023 ssl
 mud.tgchan.org 5555
 mud.tgchan.org 5585
-mud.theforestsedge.com 4000
 mud.theforestsedge.com 3999 ssl
+mud.theforestsedge.com 4000
 mud.theghostbox.com 4000
 mud.theghostbox.com 4001
 mud.timetoplaythegame.com 3333
@@ -858,7 +854,6 @@ typotown.net 6666
 tzone.nxly.org 5000
 uberworld.org 2020
 unitedheroesmush.com 1999
-unitopia.de 23 utf-8
 uossmud.sandwich.net 9000
 us.muds.net 4000 big5
 valhalla.com 4242

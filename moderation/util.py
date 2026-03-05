@@ -49,6 +49,8 @@ def _banner_hash(text):
 
 def _normalize_mssp_name(name):
     """Normalize MSSP NAME for comparison."""
+    if isinstance(name, list):
+        name = name[0] if name else ""
     return name.strip().lower()
 
 
