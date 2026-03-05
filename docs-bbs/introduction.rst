@@ -147,7 +147,7 @@ Another BBS, this time **Amiga**:
 
 The Amiga encoding is `latin1
 <https://blog.glyphdrawing.club/amiga-ascii-art/#233-what-is-amiga-ascii-art>`_ and can similarly be
-fixed by `Telix`_ by setting the ``encoding=latin1::
+fixed by `Telix`_ by setting the ``encoding=latin1``::
 
    telix --encoding=latin1 absinthebbs.net 1940
 
