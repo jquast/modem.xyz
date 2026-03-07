@@ -365,17 +365,44 @@
   },
   "dns": {},
   "dupes": {
+    "1.157.7.224:6880|amibbs.amigaretro.com:6880": {
+      "action": "remove",
+      "remove": [
+        "1.157.7.224:6880"
+      ]
+    },
     "100.34.239.193:23|67.230.158.234:23|silentnode.ddns.net:6400|thedigitalpost.freeddns.org:23": {
       "action": "skip"
     },
+    "100.34.239.193:23|thedigitalpost.freeddns.org:23": {
+      "action": "remove",
+      "remove": [
+        "100.34.239.193:23"
+      ]
+    },
     "100.36.165.206:62323|192.243.111.121:2323|bbs.twixed.net:62323": {
       "action": "skip"
+    },
+    "100.36.165.206:62323|bbs.twixed.net:62323": {
+      "action": "remove",
+      "remove": [
+        "100.36.165.206:62323"
+      ]
+    },
+    "100.6.29.103:2323|bbs.phantombbs.info:2323": {
+      "action": "remove",
+      "remove": [
+        "100.6.29.103:2323"
+      ]
     },
     "104.13.125.171:23|irc.s3tg5z.com:23": {
       "action": "remove",
       "remove": [
         "104.13.125.171:23"
       ]
+    },
+    "104.173.38.226:6502|borderlinebbs.dyndns.org:6400|cottonwoodbbs.dyndns.org:6502|otherworldbbs.dyndns.org:6502": {
+      "action": "skip"
     },
     "104.57.170.70:6840|45.72.180.214:23|adibbs.sytes.net:6800|lv426bbs.hopto.org:6464|wn3.wrgnbr.com:6400": {
       "action": "skip"
@@ -399,6 +426,15 @@
       "action": "skip"
     },
     "107.172.21.36:4000|130.61.212.175:4000|155.138.231.112:4000|158.69.222.152:4000|162.250.189.123:4000|185.25.151.230:4000|191.252.194.206:4000|212.227.230.119:4000|23.254.128.113:4000|23.95.67.109:4000|35.85.221.31:4000|35.88.139.46:4000|4.222.184.103:4000|45.90.220.35:4000|5.182.18.140:4000|51.38.48.187:4000|52.90.102.82:4000|71.94.107.83:4000|77.169.172.37:4000|elaramud.com:4000|empiremush.org:4000|floodmoo.com:4000|mnm.glassdragon.xyz:4444|mud.emeraldvalley.net:4000|songofavaria.com:4000|summerlands.undo.it:4000|trekmud.com:1701": {
+      "action": "skip"
+    },
+    "107.218.189.71:5983|bbs.sfhqbbs.org:5983": {
+      "action": "remove",
+      "remove": [
+        "107.218.189.71:5983"
+      ]
+    },
+    "108.210.207.115:6401|bay.jayscafe.net:6401|bbs.jayscafe.net:6402|bpc.jayscafe.net:6402": {
       "action": "skip"
     },
     "108.233.175.10:2002|bbs.shift-bits.com:2000": {
@@ -453,6 +489,12 @@
         "108.54.84.59:2323"
       ]
     },
+    "109.158.161.177:1338|subhuman.ddns.net:1338": {
+      "action": "remove",
+      "remove": [
+        "109.158.161.177:1338"
+      ]
+    },
     "109.231.120.114:23|bbs.nuageinfo.com:23": {
       "action": "remove",
       "remove": [
@@ -471,8 +513,20 @@
         "kk.muds.idv.tw:4000"
       ]
     },
+    "115.70.188.112:23|alterant.bbs.dege.au:23": {
+      "action": "remove",
+      "remove": [
+        "115.70.188.112:23"
+      ]
+    },
     "120.92.212.76:23|newsmth.org:23": {
       "action": "skip"
+    },
+    "121.200.29.194:24|bbs.mozysswamp.org:24": {
+      "action": "remove",
+      "remove": [
+        "121.200.29.194:24"
+      ]
     },
     "122.199.12.99:8888|134.209.40.1:31337|bbs.lowcrash.dev:8888|kernelfortress.org:23|manalejandro.com:23": {
       "action": "skip"
@@ -498,6 +552,21 @@
         "129.153.57.237:513"
       ]
     },
+    "134.185.84.52:2323|167.86.109.250:23|34.162.43.84:23|bbs.theiguru.au:2323|funtopia.synchro.net:3023|techrono.synchro.net:23": {
+      "action": "skip"
+    },
+    "134.209.5.91:2323|bbs.digilogbbs.com:2323": {
+      "action": "remove",
+      "remove": [
+        "134.209.5.91:2323"
+      ]
+    },
+    "134.22.249.120:23|kia.synchro.net:23": {
+      "action": "remove",
+      "remove": [
+        "134.22.249.120:23"
+      ]
+    },
     "136.144.155.250:2000|136.144.155.250:8888": {
       "action": "skip"
     },
@@ -505,6 +574,12 @@
       "action": "remove",
       "remove": [
         "136.144.155.250:2000"
+      ]
+    },
+    "137.184.144.158:23|bbs.interlinked.us:23": {
+      "action": "remove",
+      "remove": [
+        "137.184.144.158:23"
       ]
     },
     "138.197.134.82:4242|dunemud.net:6789": {
@@ -525,10 +600,22 @@
     "13leader.net:8023|bbs.starbase11.de:2323|sotanomsxbbs.org:23": {
       "action": "skip"
     },
+    "140.114.87.5:23|bbs.cs.nthu.edu.tw:23": {
+      "action": "remove",
+      "remove": [
+        "140.114.87.5:23"
+      ]
+    },
     "140.116.249.140:23|bbs.ccns.ncku.edu.tw:3456": {
       "action": "remove",
       "remove": [
         "140.116.249.140:23"
+      ]
+    },
+    "140.116.249.140:3456|bbs.ccns.ncku.edu.tw:3456": {
+      "action": "remove",
+      "remove": [
+        "140.116.249.140:3456"
       ]
     },
     "142.11.212.221:23|192.95.118.156:2002|47.6.104.218:24000|5.9.58.175:2002|76.242.166.61:2002|amigaunderground.com:2002|interzone.annexia.xyz:2002|microblaster.net:2002|storm-mountain.ddns.net:24000|sursum-corda.com:2002|tw.internetking.us:23|tw2002.briancmoses.com:23": {
@@ -540,10 +627,25 @@
     "142.11.212.221:23|5.9.58.175:2002|76.242.166.61:2002|amigaunderground.com:2002|interzone.annexia.xyz:2002|microblaster.net:2002|storm-mountain.ddns.net:24000|sursum-corda.com:2002|tw.internetking.us:23|tw2002.briancmoses.com:23": {
       "action": "skip"
     },
+    "142.11.212.221:23|5.9.58.175:2002|76.242.166.61:2002|interzone.annexia.xyz:2002|microblaster.net:2002|sursum-corda.com:2002|tw.internetking.us:23|tw2002.briancmoses.com:23": {
+      "action": "skip"
+    },
     "143.198.117.233:1280|mushhaven.com:1280": {
       "action": "remove",
       "remove": [
         "143.198.117.233:1280"
+      ]
+    },
+    "146.0.33.231:64128|the-hidden.hopto.org:64128": {
+      "action": "remove",
+      "remove": [
+        "146.0.33.231:64128"
+      ]
+    },
+    "148.170.167.4:23|centralontarioremote.net:23": {
+      "action": "remove",
+      "remove": [
+        "148.170.167.4:23"
       ]
     },
     "149.200.66.97:1222|81.182.77.35:1222": {
@@ -554,6 +656,24 @@
     },
     "150.221.218.212:23|44.31.91.213:23|71.237.240.26:23|80.189.184.12:23|conchaos.synchro.net:23|diskhopp.synchro.net:23|localyocalbbs.com:23": {
       "action": "skip"
+    },
+    "152.53.142.77:2323|futureland.today:2323": {
+      "action": "remove",
+      "remove": [
+        "152.53.142.77:2323"
+      ]
+    },
+    "153.100.181.222:23|globalchaosbbs.com:23": {
+      "action": "remove",
+      "remove": [
+        "153.100.181.222:23"
+      ]
+    },
+    "158.248.112.65:45023|bbs.orreli.net:45023": {
+      "action": "remove",
+      "remove": [
+        "158.248.112.65:45023"
+      ]
     },
     "162.118.68.104:23|50.110.169.17:23|ccbbs.zapto.org:3143": {
       "action": "skip"
@@ -574,6 +694,9 @@
       ]
     },
     "172.111.168.176:23|172.111.168.90:23|173.72.199.77:24|174.58.81.72:2323|50.104.161.62:23|66.168.116.58:23|70.19.64.120:23|73.219.250.223:2424|74.75.213.5:23|74.98.223.74:23233|97.247.163.174:23|98.235.15.14:23": {
+      "action": "skip"
+    },
+    "172.111.168.176:23|172.111.168.90:23|192.82.254.205:8888|50.104.161.62:23|74.75.213.5:23|97.247.163.174:23|98.235.15.14:23|bbs.kd8hfx.net:23|bbs.venerandi.it:23|casper.homeip.net:23|rns.risenshinebbs.com:23|teehill.adirondackpc.com:2020": {
       "action": "skip"
     },
     "172.111.168.176:23|173.72.199.77:24|174.58.81.72:2323|50.104.161.62:23|66.168.116.58:23|70.19.64.120:23|73.219.250.223:2424|74.75.213.5:23|74.98.223.74:23233|97.247.163.174:23|98.235.15.14:23": {
@@ -618,6 +741,9 @@
     "173.230.135.147:4000|3.211.118.17:6001|37.59.41.114:3001": {
       "action": "skip"
     },
+    "173.230.135.147:4000|3.211.118.17:6001|37.59.41.114:3001|aoh.genesismuds.com:6969": {
+      "action": "skip"
+    },
     "173.230.135.147:4000|3.211.118.17:6001|37.59.41.114:3001|atbmud.dune.net:4000": {
       "action": "skip"
     },
@@ -633,6 +759,15 @@
     "173.255.220.187:443|45.33.40.193:443": {
       "action": "skip"
     },
+    "173.72.199.77:24|sbbs.dmine.net:24": {
+      "action": "remove",
+      "remove": [
+        "173.72.199.77:24"
+      ]
+    },
+    "173.75.131.40:4000|174.64.125.29:4000|3.132.134.107:4000": {
+      "action": "skip"
+    },
     "173.75.131.40:4000|174.64.125.29:4000|3.132.134.107:4000|69.9.131.124:4000": {
       "action": "skip"
     },
@@ -642,10 +777,46 @@
     "173.88.200.16:23|71.204.139.119:23": {
       "action": "skip"
     },
+    "173.88.200.16:23|conchaos.synchro.net:23": {
+      "action": "remove",
+      "remove": [
+        "173.88.200.16:23"
+      ]
+    },
+    "173.90.50.17:23|portal.wanderingmad.com:23": {
+      "action": "remove",
+      "remove": [
+        "173.90.50.17:23"
+      ]
+    },
     "173.90.63.34:23|portal.wanderingmad.com:23": {
       "action": "remove",
       "remove": [
         "173.90.63.34:23"
+      ]
+    },
+    "174.130.99.64:23|sestar.synchro.net:23": {
+      "action": "remove",
+      "remove": [
+        "174.130.99.64:23"
+      ]
+    },
+    "174.24.70.35:23|45.93.239.212:1337|ccbbs.zapto.org:3143|pyroto.mysticmountain.us:8086": {
+      "action": "skip"
+    },
+    "174.27.213.174:23|shsbbs.net:23": {
+      "action": "remove",
+      "remove": [
+        "174.27.213.174:23"
+      ]
+    },
+    "174.54.53.254:8000|174.60.31.119:8000": {
+      "action": "skip"
+    },
+    "174.58.81.72:2323|pocbbs.duckdns.org:2323": {
+      "action": "remove",
+      "remove": [
+        "174.58.81.72:2323"
       ]
     },
     "174.58.81.72:23|pocbbs.duckdns.org:23|pocbbs.duckdns.org:6400": {
@@ -690,6 +861,18 @@
     "178.232.208.156:23|concreteroots.servebbs.org:23": {
       "action": "skip"
     },
+    "178.254.24.248:2424|herbies-bbs.ddns.net:2424": {
+      "action": "remove",
+      "remove": [
+        "178.254.24.248:2424"
+      ]
+    },
+    "180.150.61.50:23|tqps.ddns.net:23": {
+      "action": "remove",
+      "remove": [
+        "180.150.61.50:23"
+      ]
+    },
     "181.23.100.186:2323|ferchobbs.ddns.net:2323": {
       "action": "remove",
       "remove": [
@@ -720,13 +903,40 @@
     "188.128.39.239:4000|mud.kharkov.org:3000": {
       "action": "skip"
     },
+    "188.67.201.84:32|rbb.fidonet.fi:32": {
+      "action": "remove",
+      "remove": [
+        "188.67.201.84:32"
+      ]
+    },
+    "189.124.192.53:23|linuxdoc.no-ip.org:23": {
+      "action": "remove",
+      "remove": [
+        "189.124.192.53:23"
+      ]
+    },
     "192.243.111.121:2323|bbs.twixed.net:62323": {
       "action": "skip"
+    },
+    "192.3.80.52:6523|freeway.vkradio.com:23": {
+      "action": "skip"
+    },
+    "192.95.118.156:2002|amigaunderground.com:2002": {
+      "action": "remove",
+      "remove": [
+        "192.95.118.156:2002"
+      ]
     },
     "195.43.155.90:23|the.alienmindbenders.net:23": {
       "action": "remove",
       "remove": [
         "195.43.155.90:23"
+      ]
+    },
+    "198.16.195.252:57323|paradoxbbs.qc.to:57323": {
+      "action": "remove",
+      "remove": [
+        "198.16.195.252:57323"
       ]
     },
     "1stchoicecore.co.nz:1030|2ndchoicecore.ddns.net:1024": {
@@ -742,6 +952,9 @@
       "action": "skip"
     },
     "1stchoicecore.co.nz:1030|95.217.22.142:2323|bbs.g00r00.com:23|bbs.greektimes.ca:23|bbs.korenblom.nl:23|bbs.tabakov.net:13023|mail.hohimer.org:1336|nottinghambbs.com:2323|undernet.uy:23|zen.kawasu.wtf:23": {
+      "action": "skip"
+    },
+    "1stchoicecore.co.nz:1030|95.217.22.142:2323|bbs.g00r00.com:23|bbs.korenblom.nl:23|bbs.tabakov.net:13023|mail.hohimer.org:1336|nottinghambbs.com:2323|region15.net:23|undernet.uy:23|zen.kawasu.wtf:23": {
       "action": "skip"
     },
     "1stchoicecore.co.nz:1030|bbs.androidsdungeon.co.uk:23|bbs.g00r00.com:23|bbs.greektimes.ca:23|bbs.korenblom.nl:23|bbs.tabakov.net:13023|mail.hohimer.org:1336|nottinghambbs.com:2323|undernet.uy:23|zen.kawasu.wtf:23": {
@@ -771,6 +984,18 @@
         "2.87.208.228:6502"
       ]
     },
+    "2.87.214.237:6502|flashbackbbs.sytes.net:6502": {
+      "action": "remove",
+      "remove": [
+        "2.87.214.237:6502"
+      ]
+    },
+    "20.121.15.153:4489|phantasm.bbs.io:4489|scenewall.bbs.io:4000": {
+      "action": "remove",
+      "remove": [
+        "20.121.15.153:4489"
+      ]
+    },
     "20.51.113.176:8086|pyroto.mysticmountain.us:8086": {
       "action": "remove",
       "remove": [
@@ -791,6 +1016,18 @@
     },
     "203.191.173.168:23|203.191.174.46:23": {
       "action": "skip"
+    },
+    "203.191.173.168:23|bbs.digitalrainbow.info:23": {
+      "action": "remove",
+      "remove": [
+        "203.191.173.168:23"
+      ]
+    },
+    "203.96.209.7:2323|familybbs.ddns.net:23|swatsbbs.ddns.net:2323": {
+      "action": "remove",
+      "remove": [
+        "203.96.209.7:2323"
+      ]
     },
     "203.96.209.7:23|swatsbbs.ddns.net:2323": {
       "action": "remove",
@@ -826,6 +1063,18 @@
       "action": "remove",
       "remove": [
         "207.148.108.123:443"
+      ]
+    },
+    "207.38.87.97:23|bbs.soc4ever.com:23": {
+      "action": "remove",
+      "remove": [
+        "207.38.87.97:23"
+      ]
+    },
+    "207.58.151.67:8888|TheDen.Angel-Hare.com:8888|ft.furtoonia.net:9999": {
+      "action": "remove",
+      "remove": [
+        "207.58.151.67:8888"
       ]
     },
     "207.90.251.241:2323|217.198.137.127:23|47.223.173.180:23|73.242.209.94:23|bbs.8bitboyz.com:6502|bbs.demigoth.com:23|bbs.error200.tech:1337|bbs.idbbs.ca:59|bbs.riddells.net:10023|excelsiorbbs.ddns.net:2000|joesbbs.com:23|nerdragebbs.ddns.net:23|neverneverlandbbs.com:2323|pulsebbs.hopto.org:1984|splatter.haus:666|swatsbbs.ddns.net:2323|tgr.freeddns.org:23|the.alienmindbenders.net:23|tnabbs.org:2323|www.amigaretro.com:23": {
@@ -879,16 +1128,34 @@
     "213.166.5.201:23|games.world.co.uk:23": {
       "action": "skip"
     },
+    "216.117.130.175:2523|quazarbbs.dynu.net:2523": {
+      "action": "remove",
+      "remove": [
+        "216.117.130.175:2523"
+      ]
+    },
     "216.136.9.5:1809|omen.digital-genesis.com:1806": {
       "action": "skip"
     },
     "216.136.9.8:4919|dawnbe.genesismuds.com:3448": {
       "action": "skip"
     },
+    "216.136.9.8:4919|dawnbe.genesismuds.com:3448|eternaldarkness.net:9700|kallindor.com:5800|mud.kallindor.org:5800|potp-mud.com:6400": {
+      "action": "skip"
+    },
     "216.136.9.8:4919|dawnbe.genesismuds.com:3448|potp-mud.com:6400": {
       "action": "skip"
     },
+    "216.137.246.169:23|www.exciter.ws:23": {
+      "action": "remove",
+      "remove": [
+        "216.137.246.169:23"
+      ]
+    },
     "216.226.128.180:4443|216.226.128.180:4444|216.226.128.180:6663|mucks.cyberleo.net:6660|mucks.cyberleo.net:7878": {
+      "action": "skip"
+    },
+    "216.226.128.180:4443|216.226.128.180:6663|mucks.cyberleo.net:6660": {
       "action": "skip"
     },
     "216.226.128.180:4443|216.226.128.180:6663|mucks.cyberleo.net:6660|mucks.cyberleo.net:7878": {
@@ -900,11 +1167,41 @@
     "216.226.128.180:4444|216.226.128.180:6663|mucks.cyberleo.net:6660|mucks.cyberleo.net:7878": {
       "action": "skip"
     },
+    "216.226.144.124:9000|ataribbs.ddns.net:6502|nitelite.ddns.net:9000": {
+      "action": "remove",
+      "remove": [
+        "216.226.144.124:9000"
+      ]
+    },
+    "217.180.211.228:23999|hexedbbs.com:23999": {
+      "action": "remove",
+      "remove": [
+        "217.180.211.228:23999"
+      ]
+    },
     "217.81.85.246:23|79.224.46.195:23": {
       "action": "skip"
     },
     "221.226.96.186:5555|mud.ren:5555|zhyx.xguo.top:8888": {
       "action": "skip"
+    },
+    "23.239.23.228:513|nuke.club:513": {
+      "action": "remove",
+      "remove": [
+        "23.239.23.228:513"
+      ]
+    },
+    "23.245.128.9:23|zonebbs.net:23": {
+      "action": "remove",
+      "remove": [
+        "23.245.128.9:23"
+      ]
+    },
+    "23.253.235.38:1764|javatrek.org:1764": {
+      "action": "remove",
+      "remove": [
+        "23.253.235.38:1764"
+      ]
     },
     "24.116.102.13:6502|bbs.8bitboyz.com:6502": {
       "action": "remove",
@@ -933,6 +1230,9 @@
     "24.209.50.108:2332|98.45.212.129:23|bbs.wz5bbs.com:23|crackintimebbs.ddns.net:2323|intranet.fites.net:23|multinube.net:23|shenks.dyndns.org:23": {
       "action": "skip"
     },
+    "24.245.105.161:64738|itchybutt.org:6502|westwoodbbs.net:64738": {
+      "action": "skip"
+    },
     "24.245.105.161:6502|westwoodbbs.net:64738": {
       "action": "skip"
     },
@@ -945,6 +1245,12 @@
     "24.30.241.107:23|bbs.dsbbs.ca:23|fido.alltsk.ru:23|pyroto.mysticmountain.us:8086": {
       "action": "skip"
     },
+    "24.36.201.89:59|bbs.idbbs.ca:59": {
+      "action": "remove",
+      "remove": [
+        "24.36.201.89:59"
+      ]
+    },
     "24.57.49.124:23000|itcbbs.ddns.net:23000": {
       "action": "remove",
       "remove": [
@@ -954,11 +1260,32 @@
     "24.57.53.43:23000|itcbbs.ddns.net:23000": {
       "action": "skip"
     },
+    "24.57.61.15:23000|itcbbs.ddns.net:23000": {
+      "action": "remove",
+      "remove": [
+        "24.57.61.15:23000"
+      ]
+    },
+    "24.62.218.205:23|phoenix.bnbbbs.net:23": {
+      "action": "remove",
+      "remove": [
+        "24.62.218.205:23"
+      ]
+    },
+    "24.96.157.17:23|50.110.169.17:23|bbs.dsbbs.ca:23|fido.alltsk.ru:23": {
+      "action": "skip"
+    },
     "24.96.157.17:23|fido.alltsk.ru:23": {
       "action": "skip"
     },
     "300baud.dynu.net:2525|pofobbs.ddns.net:992": {
       "action": "skip"
+    },
+    "31.208.229.250:23|pepzi.se:23": {
+      "action": "remove",
+      "remove": [
+        "31.208.229.250:23"
+      ]
     },
     "31.220.75.168:23|bbs.photik.org:23": {
       "action": "remove",
@@ -968,6 +1295,18 @@
     },
     "31.220.94.14:6000|leu.mclink.it:6000": {
       "action": "skip"
+    },
+    "32.216.242.85:2323|fmrl.throwbackbbs.com:2324|reality.throwbackbbs.com:2323": {
+      "action": "remove",
+      "remove": [
+        "32.216.242.85:2323"
+      ]
+    },
+    "35.201.128.35:88|bbs.gamer.com.tw:23": {
+      "action": "remove",
+      "remove": [
+        "35.201.128.35:88"
+      ]
     },
     "35.212.169.241:4000|groundzero2.duckdns.org:4000": {
       "action": "skip"
@@ -981,8 +1320,17 @@
     "37.59.41.114:4000|adventmud.vineyard.haus:8310|kombatmud.com:6969": {
       "action": "skip"
     },
+    "38.179.43.181:1202|Error1202bbs.DDns.net:1202|error404bbs.ddns.net:404|sysopsolaris.ddns.net:2323": {
+      "action": "skip"
+    },
     "3k.org:3000|3scapes.org:3200": {
       "action": "skip"
+    },
+    "3m.vineyard.haus:3000|phoenixmud.net:4000|wotl.vineyard.haus:3000": {
+      "action": "remove",
+      "remove": [
+        "3m.vineyard.haus:3000"
+      ]
     },
     "3m.vineyard.haus:3000|timesmud.com:8500|wotl.vineyard.haus:3000": {
       "action": "skip"
@@ -1011,11 +1359,35 @@
         "45.46.150.7:6809"
       ]
     },
+    "45.48.10.136:23|bbs.techware2k.com:23": {
+      "action": "remove",
+      "remove": [
+        "45.48.10.136:23"
+      ]
+    },
+    "45.55.35.48:2332|bbs.pwecksretreat.com:2332": {
+      "action": "remove",
+      "remove": [
+        "45.55.35.48:2332"
+      ]
+    },
     "45.79.37.227:513|45.79.69.172:513|bbs.4wheelham.com:513|bbs.abon.us:513|bbs.decafbad.com:6513|c3bbs.retronetworking.org:513|dynamite.synchronetbbs.org:513|guardian.synchro.net:513|macos.retro-os.live:513|mtlgeek.synchro.net:513|oldschool.synchronetbbs.org:513|paradoxbbs.synchronetbbs.org:513|sestar.synchro.net:513|technoanarchy.synchronetbbs.org:513|threeblindmice.synchronetbbs.org:513|tmz.synchronetbbs.org:513": {
       "action": "skip"
     },
     "45.79.37.227:513|45.79.69.172:513|bbs.abon.us:513|bbs.decafbad.com:6513|c3bbs.retronetworking.org:513|dynamite.synchronetbbs.org:513|guardian.synchro.net:513|lovelybits.org:513|macos.retro-os.live:513|mtlgeek.synchro.net:513|oldschool.synchronetbbs.org:513|paradoxbbs.synchronetbbs.org:513|sestar.synchro.net:513|technoanarchy.synchronetbbs.org:513|threeblindmice.synchronetbbs.org:513|tmz.synchronetbbs.org:513": {
       "action": "skip"
+    },
+    "46.110.227.9:23|bbs.sunspothq.dyndns.org:23": {
+      "action": "remove",
+      "remove": [
+        "46.110.227.9:23"
+      ]
+    },
+    "46.59.44.50:23|bbs.retrohack.se:23": {
+      "action": "remove",
+      "remove": [
+        "46.59.44.50:23"
+      ]
     },
     "47.16.224.18:2323|bbs.jerseyjam.com:2323": {
       "action": "remove",
@@ -1035,6 +1407,12 @@
         "47.49.255.8:23"
       ]
     },
+    "47.6.104.218:24000|storm-mountain.ddns.net:24000": {
+      "action": "remove",
+      "remove": [
+        "47.6.104.218:24000"
+      ]
+    },
     "5.150.254.12:31337|blackflag.acid.org:23|blackflag.acid.org:26|blackflag.acid.org:27": {
       "action": "skip"
     },
@@ -1043,6 +1421,12 @@
     },
     "5.150.254.12:31337|blackflag.acid.org:27": {
       "action": "skip"
+    },
+    "50.107.162.117:23|tiabbs.synchro.net:23": {
+      "action": "remove",
+      "remove": [
+        "50.107.162.117:23"
+      ]
     },
     "50.109.246.46:2112|x-bit.org:2112": {
       "action": "remove",
@@ -1055,6 +1439,18 @@
       "remove": [
         "50.109.246.46:23"
       ]
+    },
+    "50.116.29.47:3640|cyberiabbs.zapto.org:23|echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
+      "action": "skip"
+    },
+    "50.120.60.120:23|bbs.ccxbbs.net:23": {
+      "action": "remove",
+      "remove": [
+        "50.120.60.120:23"
+      ]
+    },
+    "50.214.28.50:8888|px4.kitsunet.net:2069": {
+      "action": "skip"
     },
     "50.46.171.101:23|bbs.digitaldistortionbbs.com:23": {
       "action": "remove",
@@ -1078,6 +1474,12 @@
       "action": "remove",
       "remove": [
         "51.75.174.224:2323"
+      ]
+    },
+    "51.81.209.251:6502|bbs.telnix.com:6502": {
+      "action": "remove",
+      "remove": [
+        "51.81.209.251:6502"
       ]
     },
     "52.2.244.77:1998|euts.org:1998": {
@@ -1104,6 +1506,15 @@
     "63.142.253.253:4001|empiremud.net:4000": {
       "action": "skip"
     },
+    "63.230.156.110:2424|cedarvalleybbs.com:2424|cedarvalleybbs.com:2525": {
+      "action": "skip"
+    },
+    "64.121.87.67:9000|alcatrazbbs.ddns.net:9000|foremxebbs.ddns.net:9999": {
+      "action": "remove",
+      "remove": [
+        "64.121.87.67:9000"
+      ]
+    },
     "64vintageremixbbs.dyndns.org:6400|willowcreekbbs.dynu.net:6400": {
       "action": "skip"
     },
@@ -1115,6 +1526,12 @@
     },
     "65.35.103.40:6404|cib.dyndns.org:6400|cib.dyndns.org:6402|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
       "action": "skip"
+    },
+    "66.102.151.98:23|wastelands-bbs.net:23": {
+      "action": "remove",
+      "remove": [
+        "66.102.151.98:23"
+      ]
     },
     "66.228.38.196:8679|ansalon.net:8662": {
       "action": "remove",
@@ -1132,6 +1549,9 @@
       "action": "skip"
     },
     "67.205.168.255:2323|bbs.wretchedbeagle.com:23|bbs1.tardisbbs.com:8023": {
+      "action": "skip"
+    },
+    "67.230.158.234:23|thedigitalpost.freeddns.org:23": {
       "action": "skip"
     },
     "68.134.179.115:2023|bbs.outpost9.co:2023": {
@@ -1152,11 +1572,41 @@
     "68.185.215.194:8888|bbs.dragons-server.com:8888": {
       "action": "skip"
     },
+    "68.197.140.28:6400|wn3.wrgnbr.com:6400": {
+      "action": "remove",
+      "remove": [
+        "68.197.140.28:6400"
+      ]
+    },
     "69.8.81.127:23|bbs.mynameisgabe.com:23": {
       "action": "remove",
       "remove": [
         "69.8.81.127:23"
       ]
+    },
+    "70.19.64.120:23|geniv.dyndns.org:23": {
+      "action": "remove",
+      "remove": [
+        "70.19.64.120:23"
+      ]
+    },
+    "70.53.253.249:23|mtlgeek.synchro.net:23": {
+      "action": "remove",
+      "remove": [
+        "70.53.253.249:23"
+      ]
+    },
+    "71.194.107.158:6401|decades.freeddns.org:6401|willowcreekbbs.dynu.net:6400": {
+      "action": "skip"
+    },
+    "71.204.139.119:23|realitycheckbbs.org:23": {
+      "action": "remove",
+      "remove": [
+        "71.204.139.119:23"
+      ]
+    },
+    "71.225.82.6:6464|altarofwaresbbs.hopto.org:6464|dzbbs.hopto.org:64128": {
+      "action": "skip"
     },
     "71.95.196.34:513|bbs.jacobcat.app:513|rns.risenshinebbs.com:513|thunder.synchro.net:513|tiabbs.synchro.net:513": {
       "action": "skip"
@@ -1169,6 +1619,63 @@
     },
     "72.12.252.162:31810|bbs.twixed.net:62323": {
       "action": "skip"
+    },
+    "72.167.227.17:23|bbs.maidensrealm.com:23": {
+      "action": "remove",
+      "remove": [
+        "72.167.227.17:23"
+      ]
+    },
+    "72.180.37.67:6423|bbs.uncomfortable.business:6423": {
+      "action": "remove",
+      "remove": [
+        "72.180.37.67:6423"
+      ]
+    },
+    "72.215.52.60:23|bbs.kd3.us:23": {
+      "action": "remove",
+      "remove": [
+        "72.215.52.60:23"
+      ]
+    },
+    "73.112.196.135:6400|lexiconbbs.com:6400": {
+      "action": "remove",
+      "remove": [
+        "73.112.196.135:6400"
+      ]
+    },
+    "73.173.9.157:23|capitolshrill.com:23": {
+      "action": "remove",
+      "remove": [
+        "73.173.9.157:23"
+      ]
+    },
+    "73.178.46.44:1701|enterprisebbs.ddns.net:1701": {
+      "action": "remove",
+      "remove": [
+        "73.178.46.44:1701"
+      ]
+    },
+    "73.219.250.223:2424|acentauribbs.no-ip.org:2424": {
+      "action": "remove",
+      "remove": [
+        "73.219.250.223:2424"
+      ]
+    },
+    "73.96.188.76:2424|bbs.wccastle.net:2424": {
+      "action": "remove",
+      "remove": [
+        "73.96.188.76:2424"
+      ]
+    },
+    "74.196.38.185:6510|ssbbs.ddns.net:6502|ssbbs.ddns.net:6510": {
+      "action": "skip"
+    },
+    "74.207.233.40:23|cavebbs.homeip.net:23": {
+      "action": "remove",
+      "remove": [
+        "74.207.233.40:23"
+      ]
     },
     "74.208.126.44:3100|krynn.d20mud.com:4300": {
       "action": "skip"
@@ -1215,7 +1722,28 @@
         "75.8.224.32:6401"
       ]
     },
+    "76.120.211.86:8888|bfbbs.no-ip.com:8888": {
+      "action": "remove",
+      "remove": [
+        "76.120.211.86:8888"
+      ]
+    },
+    "76.132.157.214:2323|palace.brokedownpalace.online:2323": {
+      "action": "remove",
+      "remove": [
+        "76.132.157.214:2323"
+      ]
+    },
     "76.179.0.166:2002|seabreeze.servegame.com:23": {
+      "action": "skip"
+    },
+    "76.53.35.202:23|www.ems-bbs.com:23": {
+      "action": "remove",
+      "remove": [
+        "76.53.35.202:23"
+      ]
+    },
+    "76.91.152.209:31337|bcrgames.com:31337|wizardsrainbow.com:23": {
       "action": "skip"
     },
     "78.131.8.20:4444|brutalia2.avantek.hu:4444": {
@@ -1225,6 +1753,18 @@
       "action": "remove",
       "remove": [
         "79.210.34.76:23"
+      ]
+    },
+    "79.224.46.195:23|box.imzadi.de:23": {
+      "action": "remove",
+      "remove": [
+        "79.224.46.195:23"
+      ]
+    },
+    "79.41.22.132:2323|bbs.gglab.cloud:2323": {
+      "action": "remove",
+      "remove": [
+        "79.41.22.132:2323"
       ]
     },
     "80.211.167.123:23|bbs.demigoth.com:23|bbs.greektimes.ca:23|bbs.riddells.net:10023|bbs.swissirc.net:2323|mysticrealms.ddns.net:11000|netpoint.webhop.me:513|tbrasilis.ddns.net:23000|whodareswinsbbs.uk:23": {
@@ -1248,6 +1788,12 @@
         "81.151.59.40:23"
       ]
     },
+    "81.187.167.178:8688|haven.enyc.org.uk:7777": {
+      "action": "remove",
+      "remove": [
+        "81.187.167.178:8688"
+      ]
+    },
     "81.197.224.234:23|bitwoods.duckdns.org:23": {
       "action": "remove",
       "remove": [
@@ -1269,10 +1815,19 @@
     "83.135.0.174:5745|83.135.7.11:5745": {
       "action": "skip"
     },
+    "83.135.0.174:5745|83.135.7.11:5745|euklid.ddns.net:5745": {
+      "action": "skip"
+    },
     "83.36.30.179:23|bbs.hispamsx.org:23": {
       "action": "remove",
       "remove": [
         "83.36.30.179:23"
+      ]
+    },
+    "85.74.7.40:9999|andr01d.zapto.org:9999": {
+      "action": "remove",
+      "remove": [
+        "85.74.7.40:9999"
       ]
     },
     "86.155.224.168:23|sparx.bbs.io:23": {
@@ -1281,14 +1836,41 @@
         "86.155.224.168:23"
       ]
     },
+    "86.163.18.33:8088|djdave.uk:8088": {
+      "action": "remove",
+      "remove": [
+        "86.163.18.33:8088"
+      ]
+    },
     "86.174.173.51:6400|nightowlbbs.ddns.net:6400": {
       "action": "remove",
       "remove": [
         "86.174.173.51:6400"
       ]
     },
+    "86.175.149.135:23|doozy.thruhere.net:23": {
+      "action": "remove",
+      "remove": [
+        "86.175.149.135:23"
+      ]
+    },
+    "87.148.30.207:8888|atari-bbs.zapto.org:8888|bbs-mousenet.dynip.online:8889": {
+      "action": "skip"
+    },
+    "87.161.36.36:64128|rapidfire.hopto.org:64128": {
+      "action": "remove",
+      "remove": [
+        "87.161.36.36:64128"
+      ]
+    },
     "88.0.196.111:23|bbs.digitaldistortionbbs.com:23|coconet.ddns.net:6809": {
       "action": "skip"
+    },
+    "88.0.196.111:23|bbs.hispamsx.org:23": {
+      "action": "remove",
+      "remove": [
+        "88.0.196.111:23"
+      ]
     },
     "88.0.196.111:23|entropybbs.zapto.org:23": {
       "action": "skip"
@@ -1297,6 +1879,18 @@
       "action": "remove",
       "remove": [
         "88.152.228.228:23"
+      ]
+    },
+    "88.8.105.93:2300|wilco.ydns.eu:2300": {
+      "action": "remove",
+      "remove": [
+        "88.8.105.93:2300"
+      ]
+    },
+    "89.168.114.235:23|bbs.miyanet.moe:23": {
+      "action": "remove",
+      "remove": [
+        "89.168.114.235:23"
       ]
     },
     "8bit.hoyvision.com:6400|8bit.hoyvision.com:6502": {
@@ -1308,12 +1902,24 @@
     "91.205.173.162:4455|91.205.173.162:9000|aranylaz.mud.hu:4321|bastard.mud.hu:2222|csillagkod.themuds.org:7777": {
       "action": "skip"
     },
+    "91.48.226.1:2323|cpbbs.de:2323": {
+      "action": "remove",
+      "remove": [
+        "91.48.226.1:2323"
+      ]
+    },
     "91.56.160.152:8888|91.56.160.152:8889|atari-bbs.zapto.org:8888|bbs-mousenet.dynip.online:8889": {
       "action": "remove",
       "remove": [
         "91.56.160.152:8888",
         "91.56.160.152:8889",
         "bbs-mousenet.dynip.online:8889"
+      ]
+    },
+    "92.117.15.94:64128|raveolution.hopto.org:64128": {
+      "action": "remove",
+      "remove": [
+        "92.117.15.94:64128"
       ]
     },
     "92.220.71.106:23|cloud.kanskje.com:23": {
@@ -1334,6 +1940,12 @@
         "95.120.64.50:23"
       ]
     },
+    "95.235.183.48:2323|react-bbs.nikoh.it:2323": {
+      "action": "remove",
+      "remove": [
+        "95.235.183.48:2323"
+      ]
+    },
     "95.94.255.112:6969|portugal-virtual.org:6969": {
       "action": "skip"
     },
@@ -1342,6 +1954,12 @@
     },
     "97.107.133.86:8000|dead-souls.net:6666": {
       "action": "skip"
+    },
+    "97.113.163.85:6359|dura-bbs.net:6359": {
+      "action": "remove",
+      "remove": [
+        "97.113.163.85:6359"
+      ]
     },
     "97.116.8.184:2323|cyberspacebbs.net:2323": {
       "action": "remove",
@@ -1364,13 +1982,25 @@
     "98.45.212.129:23|bbs.wz5bbs.com:23|shenks.dyndns.org:23": {
       "action": "skip"
     },
+    "98.50.23.19:23|tdod.org:2002|tdod.org:23": {
+      "action": "skip"
+    },
     "99.106.75.128:95|bbs.ramifications.ca:5128|tfcbbs.com:6400": {
+      "action": "skip"
+    },
+    "99.184.243.231:23|bbs.duensing.digital:23|palantirbbs.ddns.net:23|sb-discovery.com:23": {
       "action": "skip"
     },
     "99.79.31.192:23|mouthofhell.duckdns.org:23": {
       "action": "remove",
       "remove": [
         "99.79.31.192:23"
+      ]
+    },
+    "99.89.65.1:23|adeptbbs.com:23": {
+      "action": "remove",
+      "remove": [
+        "99.89.65.1:23"
       ]
     },
     "ANOTHERMUX.ORG:2860|anothermux.org:2860": {
@@ -1464,6 +2094,9 @@
         "Tdome.NukeFire.org:4000"
       ]
     },
+    "TheDen.Angel-Hare.com:8888|ft.furtoonia.net:9999": {
+      "action": "skip"
+    },
     "TheDen.Angel-Hare.com:8888|ft.furtoonia.net:9999|theden.angel-hare.com:8888": {
       "action": "skip"
     },
@@ -1494,6 +2127,9 @@
     "adventmud.vineyard.haus:8310|phoenixmud.net:4000": {
       "action": "skip"
     },
+    "adventmud.vineyard.haus:8310|timesmud.com:8500": {
+      "action": "skip"
+    },
     "ageofdragonsmud.com:4000|starwars.d20mud.com:5500": {
       "action": "skip"
     },
@@ -1501,6 +2137,9 @@
       "action": "skip"
     },
     "altarofwaresbbs.hopto.org:6464|darkendlessbbs.hopto.org:6510|dzbbs.hopto.org:64128": {
+      "action": "skip"
+    },
+    "altarofwaresbbs.hopto.org:6464|dzbbs.hopto.org:64128": {
       "action": "skip"
     },
     "alteraeon.com:23|alteraeon.com:3000": {
@@ -1546,6 +2185,9 @@
       ]
     },
     "ansiblemoo.org:6000|foomoo.org:4500": {
+      "action": "skip"
+    },
+    "aod.genesismuds.com:23|twilitdreams.genesismuds.com:23": {
       "action": "skip"
     },
     "aod.genesismuds.com:23|twilitdreams.genesismuds.com:23|vanity.genesismuds.com:23": {
@@ -1635,6 +2277,9 @@
     "bbs.8bitboyz.com:6502|tka.8bitboyz.com:6400": {
       "action": "skip"
     },
+    "bbs.alcatrash.org:23|bbs.emeraldvalley.net:23|bbs.retroarchive.org:23|bbs.thebrokenbubble.com:23|brazi.net:23|msmacbbs.maletazul.pt:23|vague.ddns.net:23": {
+      "action": "skip"
+    },
     "bbs.c64.pub:23|bbs.circl.lu:23|halcyonbbs.scisweb.org:23|lunarout.synchro.net:8023": {
       "action": "skip"
     },
@@ -1643,6 +2288,12 @@
     },
     "bbs.deepskies.com:6400|bbs.ramifications.ca:5128": {
       "action": "skip"
+    },
+    "bbs.digitaldistortionbbs.com:23|digdist.synchro.net:23": {
+      "action": "remove",
+      "remove": [
+        "digdist.synchro.net:23"
+      ]
     },
     "bbs.dosnetz.de:3232|bbs.f4fbbs.com:2323|netasylum.com:2323": {
       "action": "skip"
@@ -1660,6 +2311,9 @@
       "action": "skip"
     },
     "bbs.furryrefuge.com:23|freeway.vkradio.com:23|kneesurgery.moe:23|tdod.org:5000|vern.cc:23": {
+      "action": "skip"
+    },
+    "bbs.furryrefuge.com:23|guardian.synchro.net:23|kneesurgery.moe:23|vern.cc:23": {
       "action": "skip"
     },
     "bbs.interlinked.us:23|krion.io:1337": {
@@ -1680,7 +2334,16 @@
     "bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|jamesmauler.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|teehill.adirondackpc.com:2020|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "bbs.lostcrypt.com:23|tiabbs.synchro.net:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
+    "bbs.lostcrypt.com:23|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "bbs.memphistw.org:23|greywolf.synchro.net:23": {
+      "action": "skip"
+    },
+    "bbs.ninthchevron.com.au:23|bookworm.synchro.net:2323|jamesmauler.net:23|technotron.asuscomm.com:23|tmzbbs01.synchro.net:23": {
       "action": "skip"
     },
     "bbs.ptt.cc:23|ptt.cc:23": {
@@ -1701,6 +2364,9 @@
         "microbur.synchro.net:2002"
       ]
     },
+    "bbs.silverhawk.no:6400|southcentral.se:1023": {
+      "action": "skip"
+    },
     "bbs.silverhawk.no:6400|southcentral.se:1023|stokmarknes.org:24": {
       "action": "skip"
     },
@@ -1713,10 +2379,16 @@
         "bbs.thisoldcabin.net:6464"
       ]
     },
+    "bbs.ultimatebbs.net:23|bbs1.tardisbbs.com:8023|rg1.retrogoldbbs.com:6411": {
+      "action": "skip"
+    },
     "bbs.ultimatebbs.net:23|riverstyx.ddns.net:2323": {
       "action": "skip"
     },
     "bbs.weather-station.org:23|violetyggdrasil.live:1144": {
+      "action": "skip"
+    },
+    "bbs.zerotwo.tech:23|retroconnect.org:23|sbbs.kingdomsendbbs.net:23|zenolab.synchro.net:23": {
       "action": "skip"
     },
     "bcrgames.com:31337|wizardsrainbow.com:23": {
@@ -1782,6 +2454,9 @@
     "centralontarioremote.net:1123|quazarbbs.dynu.net:2523": {
       "action": "skip"
     },
+    "championsmush.com:6363|omen.genesismuds.com:1100": {
+      "action": "skip"
+    },
     "chaos.caile.org:4201|chaos.caile.org:4444|chaos.caile.org:5555": {
       "action": "skip"
     },
@@ -1817,6 +2492,9 @@
       "action": "skip"
     },
     "coffeemud.net:23|coffeemud.net:2327": {
+      "action": "skip"
+    },
+    "colossus.vineyard.haus:10000|dibrovamud.com:9000|kotl.org:2221|mud.darkrisings.org:1313|www.darkrisings.org:1313": {
       "action": "skip"
     },
     "colossus.vineyard.haus:10000|dibrovamud.com:9000|mud.darkrisings.org:1313|www.darkrisings.org:1313": {
@@ -1922,6 +2600,9 @@
     "dolba.net:4000|dolba.net:5200": {
       "action": "skip"
     },
+    "dreamland.rocks:9000|mud.kiev.ua:9000": {
+      "action": "skip"
+    },
     "ds.enyc.org.uk:8688|haven.enyc.org.uk:7777": {
       "action": "skip"
     },
@@ -1938,6 +2619,9 @@
       "action": "skip"
     },
     "echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
+      "action": "skip"
+    },
+    "elusive.genesismuds.com:8800|ianshirm.genesismuds.com:2251|newage.genesismuds.com:9010|play.exodusmud.com:9000|rom.genesismuds.com:4422": {
       "action": "skip"
     },
     "elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|rom.genesismuds.com:4422": {
@@ -2038,6 +2722,9 @@
         "www.godwars.net:4888"
       ]
     },
+    "godwars.net:5353|godwars.net:6100": {
+      "action": "skip"
+    },
     "guardian.synchro.net:23|guardian.synchro.net:513": {
       "action": "remove",
       "remove": [
@@ -2068,6 +2755,9 @@
         "lusternia.com:23",
         "starmourn.com:23"
       ]
+    },
+    "imperian.com:4000|lusternia.com:5000": {
+      "action": "skip"
     },
     "imperian.com:4000|lusternia.com:5000|starmourn.com:3000": {
       "action": "skip"
@@ -2258,6 +2948,9 @@
         "portugal-virtual.org:6969"
       ]
     },
+    "realitycheckbbs.org:23|vert.synchro.net:23": {
+      "action": "skip"
+    },
     "realmofmagic.org:4000|rom.mud.de:4000": {
       "action": "remove",
       "remove": [
@@ -2334,6 +3027,9 @@
     "tgmud.net:9010|tirradyn.com:9010": {
       "action": "skip"
     },
+    "themegabbs.com:6400|themegabbs.ddns.net:6400": {
+      "action": "skip"
+    },
     "tiabbs.synchro.net:513|vert.synchro.net:513": {
       "action": "skip"
     },
@@ -2344,6 +3040,9 @@
       "action": "skip"
     },
     "toastsoft.net:1234|toastsoft.net:1443": {
+      "action": "skip"
+    },
+    "toox.co.kr:4000|toox.co.kr:5800|toox.co.kr:6000|toox.co.kr:6025|toox.co.kr:6123|toox.co.kr:6255": {
       "action": "skip"
     },
     "toox.co.kr:4000|toox.co.kr:5800|toox.co.kr:6000|toox.co.kr:6255": {
@@ -2395,6 +3094,7 @@
   "rejected": {
     "bbs": {
       "1.156.134.32:23": "dead",
+      "1.157.7.224:6880": "duplicate",
       "1.157.72.132:6880": "dns",
       "1.34.164.14:23": "dns",
       "1.34.84.27:443": "dead",
@@ -2416,16 +3116,21 @@
       "100.24.206.238:23": "dead",
       "100.24.223.222:4000": "dead",
       "100.26.20.14:23": "dead",
+      "100.34.239.193:23": "duplicate",
       "100.34.59.214:1024": "dns",
       "100.34.59.214:2002": "dead",
       "100.34.59.214:2200": "dead",
       "100.34.59.214:23": "dead",
+      "100.34.59.214:2323": "dead",
       "100.36.165.206:513": "dead",
+      "100.36.165.206:62323": "duplicate",
       "100.6.29.103:23": "dead",
+      "100.6.29.103:2323": "duplicate",
       "100.65.215.108:23": "dns",
       "101.34.232.65:5555": "dead",
       "102.129.145.93:23": "dead",
       "102.130.110.212:23": "dns",
+      "102.132.183.211:23": "dead",
       "102.132.222.143:23": "dead",
       "102.140.164.19:1977": "dead",
       "102.212.247.220:23": "dns",
@@ -2458,6 +3163,7 @@
       "104.129.196.80:2323": "dns",
       "104.13.125.171:23": "duplicate",
       "104.131.109.59:2050": "dns",
+      "104.131.109.59:2052": "dns",
       "104.131.119.237:4000": "dns",
       "104.131.12.64:1701": "dns",
       "104.131.160.15:6666": "dead",
@@ -2496,6 +3202,7 @@
       "104.17.125.66:23": "dead",
       "104.17.126.66:23": "dns",
       "104.173.38.226:6400": "dns",
+      "104.173.38.226:6502": "dns",
       "104.174.3.6:23": "dead",
       "104.178.162.141:23": "dns",
       "104.183.105.157:25565": "dead",
@@ -2553,6 +3260,7 @@
       "104.21.74.138:2511": "dns",
       "104.21.77.153:23": "dead",
       "104.21.77.221:4000": "dead",
+      "104.21.79.195:4100": "dead",
       "104.21.79.6:1220": "dead",
       "104.21.79.6:2345": "dns",
       "104.21.79.6:9009": "dead",
@@ -2609,6 +3317,7 @@
       "104.254.221.199:1717": "dead",
       "104.254.221.199:9707": "dead",
       "104.26.0.61:23": "dns",
+      "104.26.1.61:23": "dead",
       "104.26.4.251:23": "dead",
       "104.26.5.251:23": "dns",
       "104.32.175.7:23": "dns",
@@ -2624,6 +3333,7 @@
       "104.56.105.11:23": "dead",
       "104.6.22.115:23": "dns",
       "104.9.144.110:4242": "dns",
+      "104.9.144.110:5864": "dns",
       "106.156.186.15:23": "dns",
       "106.225.138.11:2223": "dead",
       "107.10.68.224:23": "dead",
@@ -2663,6 +3373,7 @@
       "107.196.92.80:23": "dead",
       "107.20.249.139:23": "dead",
       "107.200.207.176:2002": "dns",
+      "107.200.207.176:23": "dns",
       "107.209.84.153:23": "dead",
       "107.210.120.173:23": "dead",
       "107.212.39.248:23": "dns",
@@ -2674,6 +3385,7 @@
       "107.217.127.35:23": "dead",
       "107.217.154.237:23": "dns",
       "107.218.189.71:3523": "dead",
+      "107.218.189.71:5983": "duplicate",
       "107.221.175.140:23": "dns",
       "107.221.175.140:513": "dead",
       "107.23.142.180:2000": "dns",
@@ -2696,6 +3408,7 @@
       "108.186.57.75:6969": "dead",
       "108.207.40.50:23": "dns",
       "108.210.207.115:2002": "dead",
+      "108.210.207.115:6401": "dns",
       "108.215.44.207:2323": "dead",
       "108.217.238.59:2323": "dead",
       "108.217.26.59:6400": "dns",
@@ -2723,6 +3436,7 @@
       "108.78.137.230:4800": "dead",
       "108.78.137.230:6400": "dead",
       "108.78.137.230:6502": "dead",
+      "108.78.137.230:6900": "dead",
       "108.82.48.118:23": "dead",
       "108.84.210.172:23": "dns",
       "108.85.254.39:5150": "dead",
@@ -2733,6 +3447,7 @@
       "109.136.189.16:4000": "dead",
       "109.144.0.22:6666": "dead",
       "109.157.166.161:108": "dns",
+      "109.158.161.177:1338": "duplicate",
       "109.159.6.14:8888": "dead",
       "109.169.85.13:4500": "dns",
       "109.195.131.235:23": "dns",
@@ -2778,6 +3493,7 @@
       "114.35.225.208:23": "dns",
       "115.29.160.207:6666": "dead",
       "115.70.188.112:10023": "dead",
+      "115.70.188.112:23": "duplicate",
       "115.70.19.47:64128": "dns",
       "116-116.dynu.net:23": "dead",
       "116.124.116.116:5000": "dead",
@@ -2812,6 +3528,7 @@
       "120.92.124.35:23": "dead",
       "120.92.51.118:23": "dead",
       "121.200.29.194:23": "dns",
+      "121.200.29.194:24": "duplicate",
       "121.223.197.248:23": "dead",
       "121.237.44.225:4000": "dead",
       "121.37.202.194:2000": "dead",
@@ -2821,6 +3538,7 @@
       "121.5.231.166:5555": "dead",
       "121.74.250.10:2323": "dead",
       "121.84.96.245:23": "dead",
+      "121.99.249.4:23": "dns",
       "122.106.198.61:23": "dead",
       "122.108.12.1:23": "dns",
       "122.112.172.162:23": "dead",
@@ -2844,6 +3562,7 @@
       "125.229.82.226:23": "dns",
       "125.239.187.200:2323": "dead",
       "125.71.31.7:6666": "dead",
+      "127.0.0.1:23": "dead",
       "128.0.135.116:23": "dead",
       "128.130.95.62:5678": "dns",
       "128.138.140.44:13": "dns",
@@ -2874,6 +3593,7 @@
       "13.248.213.45:1880": "dead",
       "13.248.213.45:23": "dead",
       "13.248.213.45:513": "dead",
+      "13.248.243.5:23": "dead",
       "13.251.165.162:9999": "cross",
       "13.48.234.216:3000": "dns",
       "13.49.36.168:1111": "dead",
@@ -2885,6 +3605,7 @@
       "13.58.37.207:23": "dead",
       "13.58.57.10:5555": "dns",
       "13.59.15.185:17595": "dead",
+      "13.59.222.135:20098": "dead",
       "13.59.47.153:9999": "dns",
       "13.59.81.235:23": "dead",
       "13.64.71.136:12346": "dead",
@@ -2927,11 +3648,14 @@
       "134.208.10.240:23": "dns",
       "134.209.143.125:23": "dns",
       "134.209.162.238:7410": "dns",
+      "134.209.162.238:7423": "dns",
       "134.209.188.58:8888": "dns",
       "134.209.206.22:23": "dns",
       "134.209.33.144:4201": "dns",
       "134.209.48.237:1616": "dead",
+      "134.209.5.91:2323": "duplicate",
       "134.215.74.87:23": "dead",
+      "134.22.249.120:23": "duplicate",
       "134.22.30.47:23": "dns",
       "134.3.124.176:64128": "dns",
       "134.3.60.152:23": "dns",
@@ -2945,6 +3669,7 @@
       "135.148.148.109:4000": "dns",
       "135.148.148.72:4000": "dns",
       "135.148.33.10:2000": "dns",
+      "135.148.33.10:2569": "dns",
       "135.181.17.116:8888": "dns",
       "135.181.195.70:3011": "dns",
       "135.181.197.219:6789": "dns",
@@ -2972,6 +3697,7 @@
       "136.62.154.58:23": "dns",
       "137.119.198.8:23": "dead",
       "137.184.144.158:2223": "dns",
+      "137.184.144.158:23": "duplicate",
       "137.184.151.211:2022": "dns",
       "137.184.179.225:2222": "dns",
       "137.184.181.34:8888": "dead",
@@ -2988,15 +3714,18 @@
       "138.128.240.245:6666": "dead",
       "138.197.120.188:7206": "dns",
       "138.197.134.82:4242": "dns",
+      "138.197.134.82:6789": "dns",
       "138.197.15.166:5011": "dns",
       "138.197.167.124:2222": "dns",
       "138.197.193.89:4444": "dns",
+      "138.197.193.89:7777": "dns",
       "138.197.204.42:23": "dns",
       "138.197.218.105:8888": "dead",
       "138.197.30.160:5555": "dead",
       "138.197.57.129:4500": "dead",
       "138.197.57.219:2030": "dns",
       "138.197.57.47:3333": "dns",
+      "138.197.57.47:4300": "dns",
       "138.197.70.206:4545": "dns",
       "138.197.94.70:4201": "dns",
       "138.199.222.197:6400": "dns",
@@ -3041,10 +3770,12 @@
       "140.112.172.3:23": "dns",
       "140.112.172.5:23": "dns",
       "140.112.66.43:23": "dns",
+      "140.114.87.5:23": "duplicate",
       "140.114.87.5:443": "dead",
       "140.115.25.20:23": "dead",
       "140.115.50.50:23": "dead",
       "140.116.249.140:23": "duplicate",
+      "140.116.249.140:3456": "duplicate",
       "140.116.250.4:23": "dead",
       "140.116.49.3:23": "dns",
       "140.116.60.29:23": "dead",
@@ -3152,6 +3883,7 @@
       "145.239.7.54:4000": "dead",
       "145.239.7.54:5555": "dead",
       "146.0.33.231:1541": "dns",
+      "146.0.33.231:64128": "duplicate",
       "146.115.94.230:8888": "dns",
       "146.120.73.67:23": "dns",
       "146.168.137.126:6767": "cross",
@@ -3176,14 +3908,18 @@
       "148.113.216.152:8888": "dns",
       "148.170.167.4:1123": "dns",
       "148.170.167.4:2002": "dead",
+      "148.170.167.4:23": "duplicate",
       "148.170.182.234:4000": "dns",
       "148.251.127.189:3333": "dns",
+      "148.252.85.88:4000": "dns",
       "149.129.97.22:10023": "dead",
       "149.129.97.22:10223": "dead",
       "149.154.10.33:4000": "dns",
       "149.154.42.83:4000": "dns",
       "149.200.119.169:1222": "dns",
+      "149.200.66.97:1222": "dns",
       "149.202.59.89:5000": "dead",
+      "149.202.59.89:5002": "dns",
       "149.22.78.60:23": "dns",
       "149.22.87.20:2002": "dns",
       "149.248.6.135:2323": "dead",
@@ -3209,6 +3945,7 @@
       "15.197.212.58:1234": "dead",
       "15.197.212.58:2002": "dead",
       "15.197.212.58:2012": "dead",
+      "15.197.212.58:2121": "dead",
       "15.197.225.128:1023": "dns",
       "15.197.225.128:5190": "dead",
       "15.197.240.20:2002": "dead",
@@ -3228,6 +3965,7 @@
       "150.221.218.212:23": "duplicate",
       "150.228.9.163:23": "dead",
       "150.228.9.211:23": "dead",
+      "150.228.9.92:23": "dead",
       "150.230.64.191:23": "dead",
       "151.101.65.91:23": "dead",
       "151.198.54.56:1984": "dns",
@@ -3238,9 +3976,11 @@
       "152.237.55.12:2323": "dead",
       "152.44.44.247:4000": "dead",
       "152.53.142.77:23": "dns",
+      "152.53.142.77:2323": "duplicate",
       "152.70.61.7:28381": "dead",
       "152.97.163.46:23": "dns",
       "152.97.202.59:23": "dns",
+      "153.100.181.222:23": "duplicate",
       "153.100.182.97:23": "dns",
       "153.92.127.40:6969": "dead",
       "154.12.241.161:23": "dns",
@@ -3254,6 +3994,7 @@
       "155.138.132.193:5000": "dns",
       "155.138.160.97:23": "dns",
       "155.138.164.96:3065": "dns",
+      "155.138.164.96:5555": "dns",
       "155.138.203.199:23": "dead",
       "155.138.231.112:4000": "cross",
       "155.138.242.153:23": "dns",
@@ -3301,6 +4042,7 @@
       "158.179.201.234:8888": "dead",
       "158.220.122.223:1337": "dns",
       "158.248.112.65:2002": "dns",
+      "158.248.112.65:45023": "duplicate",
       "158.69.118.143:23": "dns",
       "158.69.200.232:23": "dns",
       "158.69.200.72:5555": "dns",
@@ -3378,6 +4120,7 @@
       "162.243.111.198:4000": "dead",
       "162.243.111.198:6666": "dead",
       "162.243.208.108:4200": "dns",
+      "162.243.208.108:4201": "dns",
       "162.243.211.46:2300": "dead",
       "162.243.249.242:5678": "dns",
       "162.245.20.194:8888": "dns",
@@ -3547,6 +4290,7 @@
       "172.111.11.171:47477": "dead",
       "172.111.139.148:6401": "dead",
       "172.111.139.97:6800": "dead",
+      "172.111.168.10:23": "dead",
       "172.116.68.9:2002": "dead",
       "172.126.21.138:2323": "dns",
       "172.126.21.138:6423": "dead",
@@ -3574,6 +4318,7 @@
       "172.234.25.151:2323": "dead",
       "172.234.25.151:26": "dead",
       "172.234.25.151:4000": "dead",
+      "172.234.25.151:513": "dead",
       "172.234.26.236:23": "dead",
       "172.234.29.219:6666": "dns",
       "172.235.133.24:513": "dns",
@@ -3589,6 +4334,7 @@
       "172.237.146.8:23": "dead",
       "172.239.57.117:1111": "dns",
       "172.239.57.117:23": "dead",
+      "172.239.57.117:4000": "dead",
       "172.239.57.117:4201": "dead",
       "172.239.57.117:8789": "dead",
       "172.245.119.44:23": "dns",
@@ -3607,6 +4353,7 @@
       "172.67.133.117:513": "dead",
       "172.67.134.231:26": "dead",
       "172.67.139.77:1220": "dns",
+      "172.67.139.77:2345": "dead",
       "172.67.139.77:9009": "dead",
       "172.67.140.51:4201": "dead",
       "172.67.143.148:23": "dead",
@@ -3657,6 +4404,7 @@
       "173.11.101.154:1338": "dead",
       "173.11.101.154:1421": "dead",
       "173.11.101.154:1510": "dead",
+      "173.11.101.154:3020": "dead",
       "173.160.76.205:9901": "dns",
       "173.163.86.194:2002": "dead",
       "173.163.86.198:23": "dead",
@@ -3687,6 +4435,7 @@
       "173.236.192.132:5757": "dead",
       "173.236.193.61:2002": "dns",
       "173.236.196.67:1536": "dns",
+      "173.237.117.4:6789": "dns",
       "173.238.87.46:23": "dns",
       "173.24.230.237:6666": "dead",
       "173.241.167.235:23": "dead",
@@ -3702,6 +4451,7 @@
       "173.255.197.121:1111": "dns",
       "173.255.199.200:4200": "dns",
       "173.255.201.173:4060": "dead",
+      "173.255.201.173:4080": "dns",
       "173.255.201.75:6666": "dead",
       "173.255.206.148:2222": "dns",
       "173.255.206.39:7777": "dns",
@@ -3716,6 +4466,7 @@
       "173.255.223.237:6730": "dns",
       "173.255.225.234:5555": "dead",
       "173.255.226.43:3000": "dns",
+      "173.255.226.43:4000": "dns",
       "173.255.227.103:4000": "dns",
       "173.255.235.187:23": "dns",
       "173.255.241.77:23": "dns",
@@ -3729,6 +4480,7 @@
       "173.63.126.200:23": "dns",
       "173.68.134.208:1997": "dead",
       "173.72.199.77:2323": "dns",
+      "173.72.199.77:24": "duplicate",
       "173.72.200.82:2222": "dead",
       "173.75.140.162:2002": "dead",
       "173.75.140.162:23": "dead",
@@ -3738,7 +4490,9 @@
       "173.87.229.49:23": "dns",
       "173.88.167.44:2323": "dns",
       "173.88.200.16:2002": "dns",
+      "173.88.200.16:23": "duplicate",
       "173.88.24.81:23": "dead",
+      "173.90.50.17:23": "duplicate",
       "173.90.55.126:23": "dns",
       "173.90.63.34:23": "duplicate",
       "173.91.203.27:23": "dead",
@@ -3748,6 +4502,7 @@
       "174.118.142.89:23": "dead",
       "174.126.99.237:23": "dead",
       "174.128.180.89:6400": "dead",
+      "174.130.99.64:23": "duplicate",
       "174.134.58.54:3000": "dns",
       "174.136.111.235:23": "dns",
       "174.136.111.235:513": "dead",
@@ -3761,8 +4516,10 @@
       "174.138.9.12:3000": "dead",
       "174.163.71.44:23": "dns",
       "174.169.232.58:23": "dns",
+      "174.24.70.35:23": "dns",
       "174.27.153.85:2112": "dns",
       "174.27.213.174:2112": "dead",
+      "174.27.213.174:23": "duplicate",
       "174.27.39.183:5559": "dns",
       "174.52.213.92:8888": "dns",
       "174.54.188.87:23": "dns",
@@ -3770,7 +4527,9 @@
       "174.57.141.95:23": "dead",
       "174.57.212.118:4201": "dns",
       "174.58.81.72:23": "dns",
+      "174.58.81.72:2323": "duplicate",
       "174.60.10.106:2002": "dead",
+      "174.60.31.119:8000": "dns",
       "174.60.48.239:23": "dead",
       "174.62.12.65:7500": "dns",
       "174.70.227.224:23": "duplicate",
@@ -3818,6 +4577,7 @@
       "178.235.53.139:2020": "dead",
       "178.254.24.248:23": "dns",
       "178.254.24.248:2323": "dead",
+      "178.254.24.248:2424": "duplicate",
       "178.255.144.212:24": "dns",
       "178.255.175.152:2323": "dead",
       "178.32.139.68:2301": "dns",
@@ -3847,6 +4607,7 @@
       "18.136.220.141:5000": "dns",
       "18.188.15.73:23": "dead",
       "18.191.128.248:23": "dead",
+      "18.191.141.122:4000": "dns",
       "18.191.209.224:50600": "dead",
       "18.191.211.141:23": "dead",
       "18.191.24.189:4201": "dns",
@@ -3877,6 +4638,7 @@
       "18.236.8.90:28375": "dead",
       "180.150.105.245:6300": "dns",
       "180.150.49.179:230": "dead",
+      "180.150.61.50:23": "duplicate",
       "180.150.99.174:23": "dns",
       "180.74.70.171:2323": "dead",
       "181.12.71.180:7020": "dead",
@@ -3933,6 +4695,7 @@
       "185.199.108.153:23": "dead",
       "185.199.108.153:4201": "dead",
       "185.199.109.153:1066": "dead",
+      "185.199.109.153:4201": "dead",
       "185.199.109.153:6565": "dead",
       "185.199.109.153:7000": "dead",
       "185.199.110.153:1066": "dead",
@@ -3987,12 +4750,15 @@
       "188.226.155.155:3131": "dns",
       "188.227.59.16:2323": "dead",
       "188.246.205.174:2004": "dns",
+      "188.246.205.174:6969": "dns",
       "188.246.233.70:2323": "dead",
       "188.60.225.121:23": "dns",
       "188.67.156.146:32": "dns",
+      "188.67.201.84:32": "duplicate",
       "188.68.59.244:4000": "dead",
       "188.81.240.121:23": "dns",
       "189.124.192.23:23": "dns",
+      "189.124.192.53:23": "duplicate",
       "189.153.217.157:23": "dead",
       "189.206.15.205:23": "dead",
       "189.51.223.172:2323": "dead",
@@ -4070,10 +4836,12 @@
       "192.53.172.115:5555": "dead",
       "192.64.119.178:8888": "dns",
       "192.65.239.147:27723": "dns",
+      "192.65.239.147:27750": "dns",
       "192.80.150.91:1985": "dns",
       "192.80.150.91:9023": "dead",
       "192.81.129.7:23": "dns",
       "192.81.132.253:2069": "dns",
+      "192.81.132.253:7765": "dns",
       "192.81.133.184:5555": "dead",
       "192.81.133.76:23": "dns",
       "192.81.133.76:513": "dead",
@@ -4082,6 +4850,7 @@
       "192.81.216.155:4201": "dns",
       "192.91.139.190:8888": "dns",
       "192.95.118.156:1985": "dns",
+      "192.95.118.156:2002": "duplicate",
       "192.95.57.6:2300": "dead",
       "192.99.0.124:23": "dead",
       "192.99.0.124:513": "dead",
@@ -4137,6 +4906,7 @@
       "195.20.55.95:23": "dead",
       "195.201.128.179:23": "dead",
       "195.201.166.132:7000": "dead",
+      "195.201.166.132:8000": "dns",
       "195.201.241.105:23": "dns",
       "195.22.75.126:3011": "dns",
       "195.231.61.180:4000": "dead",
@@ -4155,6 +4925,7 @@
       "198.12.92.168:6666": "dns",
       "198.144.184.44:23": "dead",
       "198.15.76.140:5665": "dead",
+      "198.16.195.252:57323": "duplicate",
       "198.160.26.29:23": "dns",
       "198.185.159.144:23": "dead",
       "198.185.159.145:23": "dead",
@@ -4200,6 +4971,7 @@
       "1984bbs.net:23": "dead",
       "199.101.100.114:4000": "dns",
       "199.15.238.183:666": "dead",
+      "199.166.252.65:27723": "dns",
       "199.166.252.65:27750": "dns",
       "199.168.103.123:23": "dns",
       "199.175.54.142:23": "dead",
@@ -4228,6 +5000,7 @@
       "199.59.243.226:2860": "dead",
       "199.59.243.226:4000": "dead",
       "199.59.243.226:4201": "dead",
+      "199.59.243.226:55123": "dead",
       "199.59.243.227:2222": "dead",
       "199.59.243.227:23": "dead",
       "199.59.243.227:513": "dead",
@@ -4236,6 +5009,7 @@
       "199.59.243.228:2112": "dead",
       "199.59.243.228:23": "dead",
       "199.59.243.228:23000": "dead",
+      "199.59.243.228:2323": "dead",
       "199.66.67.64:23": "dead",
       "199.66.67.64:513": "dead",
       "2.221.73.138:23": "dns",
@@ -4248,9 +5022,11 @@
       "2.57.91.91:23": "dead",
       "2.87.208.228:6502": "duplicate",
       "2.87.214.102:6502": "dns",
+      "2.87.214.237:6502": "duplicate",
       "2.tcp.ngrok.io:11892": "dead",
       "2.tcp.ngrok.io:17595": "dead",
       "20.121.15.153:4000": "dns",
+      "20.121.15.153:4489": "duplicate",
       "20.185.225.234:2002": "dead",
       "20.214.168.142:30023": "dead",
       "20.223.238.107:7878": "cross",
@@ -4286,6 +5062,7 @@
       "203.134.137.47:23": "dns",
       "203.161.43.150:23": "dns",
       "203.17.177.197:7000": "dns",
+      "203.191.173.168:23": "duplicate",
       "203.191.174.253:23": "dns",
       "203.206.17.119:23": "dead",
       "203.206.223.155:23000": "dns",
@@ -4295,6 +5072,7 @@
       "203.64.52.131:23": "dns",
       "203.94.34.126:23": "dns",
       "203.96.209.7:23": "dns",
+      "203.96.209.7:2323": "duplicate",
       "204.10.160.1:4000": "dns",
       "204.10.255.79:23": "dns",
       "204.10.255.79:6023": "dead",
@@ -4307,12 +5085,15 @@
       "204.12.211.19:1848": "dns",
       "204.140.17.55:23": "dns",
       "204.144.162.156:2002": "dns",
+      "204.144.162.156:23": "duplicate",
       "204.15.193.211:1862": "cross",
       "204.15.193.213:9000": "dns",
       "204.15.193.222:4201": "dns",
       "204.16.247.101:23": "dead",
       "204.209.44.23:1960": "dns",
+      "204.209.44.23:9000": "dns",
       "204.209.44.3:2020": "dns",
+      "204.209.44.3:8000": "dns",
       "204.209.44.91:5000": "dns",
       "204.216.111.205:5000": "dns",
       "204.27.182.235:23": "dead",
@@ -4357,6 +5138,7 @@
       "207.135.97.187:7777": "dns",
       "207.135.98.5:5050": "dns",
       "207.148.108.123:23": "dns",
+      "207.148.108.123:443": "duplicate",
       "207.148.13.57:23": "dead",
       "207.148.13.57:513": "dead",
       "207.148.14.13:2323": "dead",
@@ -4375,7 +5157,10 @@
       "207.246.74.70:23": "dns",
       "207.253.168.132:2023": "dns",
       "207.38.87.97:2002": "dns",
+      "207.38.87.97:23": "duplicate",
       "207.47.192.67:2003": "dns",
+      "207.47.192.67:2018": "dns",
+      "207.58.151.67:8888": "duplicate",
       "207.58.151.67:9999": "dns",
       "207.60.51.149:7000": "dead",
       "207.81.67.157:23": "dead",
@@ -4431,6 +5216,7 @@
       "209.161.6.234:223": "dead",
       "209.171.131.213:2424": "dead",
       "209.181.94.35:8888": "dns",
+      "209.198.129.1:23": "dead",
       "209.204.207.27:25000": "dead",
       "209.222.21.55:23": "dead",
       "209.222.30.172:23": "dead",
@@ -4503,12 +5289,16 @@
       "213.95.46.25:513": "dns",
       "213.95.79.14:6666": "dns",
       "216.117.130.175:1337": "dns",
+      "216.117.130.175:2523": "duplicate",
       "216.127.185.178:4000": "dead",
       "216.128.145.218:6666": "dead",
       "216.136.9.21:1085": "cross",
       "216.136.9.8:23": "dns",
       "216.137.246.169:2002": "dns",
+      "216.137.246.169:23": "duplicate",
+      "216.14.251.122:2323": "dns",
       "216.167.189.34:1771": "dns",
+      "216.167.189.34:2000": "dns",
       "216.181.107.173:2100": "dead",
       "216.181.107.173:7117": "dead",
       "216.195.204.118:23": "dead",
@@ -4519,11 +5309,13 @@
       "216.226.128.180:4443": "cross",
       "216.226.131.99:9000": "dns",
       "216.226.144.124:6502": "dns",
+      "216.226.144.124:9000": "duplicate",
       "216.235.233.181:9999": "dead",
       "216.238.186.58:4201": "dns",
       "216.239.32.21:23": "dead",
       "216.239.32.21:7777": "dead",
       "216.239.34.21:1234": "dead",
+      "216.239.34.21:7777": "dead",
       "216.239.34.21:8023": "dead",
       "216.239.36.21:23": "dead",
       "216.239.38.21:23": "dead",
@@ -4538,8 +5330,10 @@
       "216.250.126.202:23230": "dead",
       "216.250.248.74:6227": "dead",
       "216.251.47.10:2289": "dns",
+      "216.251.47.10:4000": "dns",
       "216.252.162.133:9999": "dead",
       "216.252.162.218:4000": "dns",
+      "216.252.162.218:5002": "dns",
       "216.252.162.30:2683": "cross",
       "216.40.34.41:4000": "dns",
       "216.40.34.41:5555": "dead",
@@ -4566,6 +5360,7 @@
       "217.180.196.241:2427": "dead",
       "217.180.203.58:23": "dead",
       "217.180.211.228:1337": "dns",
+      "217.180.211.228:23999": "duplicate",
       "217.180.212.89:23": "dns",
       "217.182.47.165:23": "dns",
       "217.182.78.179:5555": "dead",
@@ -4616,11 +5411,14 @@
       "23.236.56.48:23": "dns",
       "23.239.21.174:6666": "dns",
       "23.239.23.228:23": "dead",
+      "23.239.23.228:513": "duplicate",
       "23.239.24.96:5555": "dead",
       "23.239.25.183:8888": "dns",
       "23.239.4.251:23": "dns",
       "23.243.239.181:6400": "dns",
+      "23.245.128.9:23": "duplicate",
       "23.253.235.38:1701": "dns",
+      "23.253.235.38:1764": "duplicate",
       "23.254.128.113:4000": "cross",
       "23.254.165.176:23020": "dead",
       "23.254.203.193:2000": "dns",
@@ -4704,12 +5502,14 @@
       "24.224.194.149:230": "dead",
       "24.224.194.149:2323": "dead",
       "24.224.194.149:2324": "dead",
+      "24.224.194.149:513": "dead",
       "24.229.138.222:23": "dead",
       "24.237.111.171:8888": "dns",
       "24.237.16.152:23": "dead",
       "24.240.181.107:23": "dns",
       "24.245.105.161:23": "dead",
       "24.245.105.161:6400": "dead",
+      "24.245.105.161:64738": "dns",
       "24.246.11.252:3999": "dns",
       "24.246.8.187:23": "dns",
       "24.246.9.241:2002": "dns",
@@ -4726,6 +5526,7 @@
       "24.31.162.85:23": "dns",
       "24.36.201.89:1581": "dns",
       "24.36.201.89:2023": "dead",
+      "24.36.201.89:59": "duplicate",
       "24.36.255.99:8023": "dns",
       "24.40.107.129:2009": "dead",
       "24.53.103.202:2323": "dead",
@@ -4735,8 +5536,10 @@
       "24.56.211.61:5555": "dead",
       "24.57.49.124:23000": "duplicate",
       "24.57.50.94:23000": "dns",
+      "24.57.61.15:23000": "duplicate",
       "24.60.175.131:23": "dns",
       "24.62.218.205:2023": "dns",
+      "24.62.218.205:23": "duplicate",
       "24.62.220.203:23": "dead",
       "24.62.220.203:513": "dead",
       "24.64.192.132:9999": "dns",
@@ -4825,6 +5628,7 @@
       "31.193.168.246:23": "dns",
       "31.208.228.77:50023": "dns",
       "31.208.229.218:23": "dns",
+      "31.208.229.250:23": "duplicate",
       "31.220.4.180:4000": "dns",
       "31.220.51.181:5555": "dead",
       "31.220.63.158:23": "dead",
@@ -4837,6 +5641,7 @@
       "32.216.225.135:23": "dead",
       "32.216.225.135:7777": "dead",
       "32.216.242.85:23": "dns",
+      "32.216.242.85:2323": "duplicate",
       "32.217.19.66:23": "dns",
       "32.217.68.154:23": "dns",
       "32.220.222.252:5050": "dead",
@@ -4883,9 +5688,11 @@
       "34.98.99.30:1975": "dead",
       "34.98.99.30:1984": "dead",
       "34.98.99.30:1987": "dead",
+      "34.98.99.30:2002": "dead",
       "34.98.99.30:443": "dead",
       "35.137.16.241:2569": "dead",
       "35.138.222.251:23": "dns",
+      "35.157.111.131:19468": "dead",
       "35.160.129.187:3333": "dns",
       "35.160.169.47:23": "dead",
       "35.160.170.34:23": "dns",
@@ -4905,10 +5712,12 @@
       "35.185.12.150:23": "dns",
       "35.186.223.180:23": "dead",
       "35.192.18.87:4500": "dns",
+      "35.192.18.87:6000": "dns",
       "35.192.80.53:5555": "dns",
       "35.196.138.252:23": "dead",
       "35.198.6.23:8888": "dead",
       "35.201.128.35:23": "dns",
+      "35.201.128.35:88": "duplicate",
       "35.201.248.32:4000": "dead",
       "35.208.111.163:4999": "dns",
       "35.208.163.161:8888": "dead",
@@ -4959,6 +5768,7 @@
       "38.141.4.132:23": "dead",
       "38.15.41.119:23": "dns",
       "38.175.137.98:1990": "dns",
+      "38.179.43.181:1202": "dns",
       "38.179.43.181:2323": "dead",
       "38.179.43.245:1202": "dns",
       "38.189.78.37:2323": "dns",
@@ -5001,6 +5811,7 @@
       "44.224.50.189:3000": "dns",
       "44.227.65.245:1337": "dead",
       "44.227.65.245:23": "dead",
+      "44.227.65.245:8888": "dead",
       "44.227.76.166:23": "dns",
       "44.227.76.166:8888": "dead",
       "44.230.15.218:5000": "dns",
@@ -5091,8 +5902,11 @@
       "45.42.217.168:5500": "dns",
       "45.43.14.195:23": "dns",
       "45.46.150.7:6809": "duplicate",
+      "45.48.10.136:23": "duplicate",
       "45.55.233.218:4201": "dead",
       "45.55.253.83:2025": "dns",
+      "45.55.253.83:6250": "dns",
+      "45.55.35.48:2332": "duplicate",
       "45.55.35.48:52146": "dns",
       "45.55.38.136:4000": "dead",
       "45.55.52.229:5555": "dead",
@@ -5207,12 +6021,14 @@
       "46.101.154.109:2323": "dead",
       "46.102.205.219:464": "dns",
       "46.110.227.9:2002": "dead",
+      "46.110.227.9:23": "duplicate",
       "46.140.111.54:23": "dead",
       "46.165.252.108:4000": "dead",
       "46.212.177.208:6400": "dns",
       "46.224.31.40:23": "dns",
       "46.233.45.70:23": "dns",
       "46.235.224.142:3000": "dns",
+      "46.235.224.142:7777": "dns",
       "46.238.101.107:23": "dns",
       "46.238.101.107:443": "dead",
       "46.251.35.104:8111": "dns",
@@ -5223,6 +6039,7 @@
       "46.38.239.95:23": "dns",
       "46.4.246.148:23": "dead",
       "46.57.113.153:2023": "dns",
+      "46.59.44.50:23": "duplicate",
       "46.62.237.138:23": "dns",
       "46.8.69.169:2323": "dead",
       "47.104.177.248:6666": "dead",
@@ -5237,6 +6054,7 @@
       "47.16.224.18:2323": "duplicate",
       "47.165.89.29:11123": "dns",
       "47.176.57.117:2323": "dns",
+      "47.176.57.117:4567": "dns",
       "47.181.149.218:23": "dns",
       "47.185.76.199:2002": "dns",
       "47.187.84.134:2002": "dns",
@@ -5286,6 +6104,7 @@
       "47.54.126.138:23": "dead",
       "47.55.184.200:23": "dead",
       "47.6.104.218:23": "dead",
+      "47.6.104.218:24000": "duplicate",
       "47.91.170.222:23": "dead",
       "47.93.19.51:6666": "dead",
       "47.97.249.185:8080": "dns",
@@ -5310,6 +6129,7 @@
       "5.161.132.157:2003": "dns",
       "5.161.20.161:7777": "dns",
       "5.161.228.92:23": "dns",
+      "5.161.47.86:23": "dead",
       "5.161.78.92:2020": "dns",
       "5.161.79.79:4000": "dead",
       "5.178.113.217:6715": "dns",
@@ -5332,8 +6152,10 @@
       "5.9.151.151:7676": "dns",
       "50.102.201.231:23": "dead",
       "50.105.99.103:5555": "dead",
+      "50.107.162.117:23": "duplicate",
       "50.109.246.46:1336": "dns",
       "50.109.246.46:2112": "duplicate",
+      "50.109.246.46:23": "duplicate",
       "50.115.170.113:23": "dns",
       "50.116.10.59:23": "dns",
       "50.116.10.59:5555": "dead",
@@ -5347,6 +6169,7 @@
       "50.116.26.151:23": "dead",
       "50.116.26.151:513": "dead",
       "50.116.29.47:23": "dns",
+      "50.116.29.47:3640": "dns",
       "50.116.33.203:3791": "dns",
       "50.116.41.212:9339": "dns",
       "50.116.46.154:23": "dead",
@@ -5359,6 +6182,7 @@
       "50.117.249.196:23": "dns",
       "50.117.253.214:23": "dns",
       "50.120.59.100:23": "dns",
+      "50.120.60.120:23": "duplicate",
       "50.159.126.168:23": "dead",
       "50.16.123.54:6969": "cross",
       "50.16.220.199:3250": "dns",
@@ -5413,6 +6237,7 @@
       "50.80.149.252:6400": "dns",
       "50.80.149.252:6502": "dead",
       "50.80.149.252:6800": "duplicate",
+      "50.80.149.252:6801": "dns",
       "50.80.225.70:42002": "dead",
       "50.80.52.168:23": "dead",
       "50.82.113.41:148": "dns",
@@ -5440,18 +6265,21 @@
       "51.159.93.74:23": "dns",
       "51.161.21.1:4201": "dead",
       "51.161.5.210:4000": "dns",
+      "51.161.5.210:4001": "dns",
       "51.161.52.180:6666": "dead",
       "51.161.59.10:1995": "dead",
       "51.161.59.12:1976": "dead",
       "51.161.59.12:4000": "dead",
       "51.161.59.12:4500": "dead",
       "51.161.59.12:5555": "dead",
+      "51.161.59.12:7778": "dead",
       "51.161.59.14:4321": "dead",
       "51.161.59.14:5555": "dead",
       "51.161.59.8:1234": "dead",
       "51.161.59.8:1337": "dead",
       "51.161.59.8:1874": "dead",
       "51.161.59.8:2500": "dead",
+      "51.161.59.8:4201": "dead",
       "51.161.59.9:3017": "dead",
       "51.175.21.191:23": "dns",
       "51.195.103.230:2323": "dead",
@@ -5480,6 +6308,7 @@
       "51.81.173.3:23": "dns",
       "51.81.187.128:3458": "dns",
       "51.81.209.251:513": "dns",
+      "51.81.209.251:6502": "duplicate",
       "51.81.223.87:4444": "dns",
       "51.81.28.220:23": "dead",
       "51.81.35.250:23": "dns",
@@ -5494,12 +6323,14 @@
       "52.10.207.247:7007": "dns",
       "52.12.24.16:2323": "dead",
       "52.14.16.93:2323": "dead",
+      "52.14.18.129:17595": "dead",
       "52.14.208.177:23": "dns",
       "52.151.62.237:7900": "dead",
       "52.19.37.158:5000": "dns",
       "52.2.244.77:1234": "dns",
       "52.2.244.77:1998": "duplicate",
       "52.2.244.77:2001": "dead",
+      "52.2.244.77:4000": "dns",
       "52.20.21.231:4000": "dns",
       "52.200.209.46:23": "dns",
       "52.201.53.166:23": "dns",
@@ -5513,17 +6344,20 @@
       "52.223.13.41:2323": "dead",
       "52.223.13.41:4455": "dead",
       "52.223.13.41:513": "dead",
+      "52.223.13.41:8888": "dead",
       "52.26.109.54:3000": "dead",
       "52.28.187.130:23": "dns",
       "52.28.82.0:1234": "dns",
       "52.33.202.92:2860": "dns",
       "52.35.137.231:1313": "dns",
+      "52.35.137.231:1972": "dns",
       "52.36.103.143:4201": "dns",
       "52.36.77.149:23": "dead",
       "52.4.41.44:2323": "dns",
       "52.40.128.16:8887": "dns",
       "52.43.146.225:2700": "dns",
       "52.43.252.207:1138": "dns",
+      "52.44.244.98:23": "dead",
       "52.45.213.9:23": "dead",
       "52.53.200.236:2323": "dead",
       "52.54.110.246:2323": "dead",
@@ -5605,6 +6439,7 @@
       "62.201.166.169:23": "dns",
       "62.209.166.26:23": "dns",
       "62.63.249.218:1987": "dead",
+      "62.93.30.131:23": "dead",
       "62.93.31.101:23": "dead",
       "63.112.139.214:23": "dns",
       "63.112.139.215:23": "dns",
@@ -5617,12 +6452,14 @@
       "63.204.0.198:23": "dead",
       "63.225.86.82:23": "dns",
       "63.230.156.110:2323": "dns",
+      "63.230.156.110:2424": "dns",
       "63.231.43.186:3000": "dns",
       "63.245.150.8:23": "dead",
       "64.110.213.90:2002": "dead",
       "64.111.98.94:4000": "dead",
       "64.121.67.27:8023": "dns",
       "64.121.82.225:9000": "dns",
+      "64.121.87.67:9000": "duplicate",
       "64.126.37.253:2400": "dead",
       "64.127.144.48:23": "dead",
       "64.127.90.6:9023": "dead",
@@ -5635,6 +6472,7 @@
       "64.180.219.165:23": "dead",
       "64.181.182.128:23000": "dns",
       "64.182.46.5:4000": "dns",
+      "64.182.46.5:5000": "dns",
       "64.182.46.8:4445": "cross",
       "64.185.54.8:4321": "dns",
       "64.186.22.195:23": "dead",
@@ -5664,6 +6502,7 @@
       "65.103.243.66:23": "dead",
       "65.108.245.243:23": "dead",
       "65.109.224.243:23": "dns",
+      "65.129.149.202:5559": "dns",
       "65.129.154.210:5959": "dead",
       "65.181.15.124:23": "dead",
       "65.183.166.196:23": "dead",
@@ -5677,6 +6516,7 @@
       "65.29.77.135:2323": "dead",
       "65.29.91.30:4000": "dead",
       "65.32.142.239:2002": "dns",
+      "65.32.142.239:23": "dns",
       "65.35.103.40:6404": "duplicate",
       "65.38.97.60:23": "dns",
       "65.51.108.152:23": "dead",
@@ -5684,6 +6524,7 @@
       "65.51.108.174:23": "dead",
       "65.99.219.5:5555": "dns",
       "66.102.151.98:2002": "dead",
+      "66.102.151.98:23": "duplicate",
       "66.113.165.14:4108": "dns",
       "66.113.179.125:4002": "dns",
       "66.135.5.203:5353": "dead",
@@ -5754,6 +6595,7 @@
       "66.94.120.186:2321": "dns",
       "66.94.120.186:2323": "dead",
       "66.94.120.186:2360": "dead",
+      "66.94.120.186:513": "dns",
       "67.131.59.192:23": "dns",
       "67.140.43.139:23": "dead",
       "67.147.83.100:23": "dns",
@@ -5817,6 +6659,7 @@
       "68.148.191.58:23": "dead",
       "68.15.100.221:1984": "dead",
       "68.162.111.216:23": "dead",
+      "68.168.184.229:23": "dns",
       "68.168.211.242:23": "dead",
       "68.169.145.190:2300": "dns",
       "68.169.145.190:6400": "duplicate",
@@ -5832,6 +6675,7 @@
       "68.195.140.207:2323": "dns",
       "68.196.53.144:6400": "dns",
       "68.197.140.28:3000": "dns",
+      "68.197.140.28:6400": "duplicate",
       "68.197.141.206:6428": "dead",
       "68.200.15.219:3333": "dead",
       "68.202.101.57:23": "dead",
@@ -5860,6 +6704,7 @@
       "68.69.161.178:2004": "dead",
       "68.72.133.63:23": "dns",
       "68.75.195.9:4000": "dns",
+      "68.75.195.9:4208": "dns",
       "68.82.251.129:2525": "dns",
       "68.9.134.245:23": "dead",
       "68.92.232.230:7000": "dead",
@@ -5871,6 +6716,7 @@
       "69.116.59.93:23": "dead",
       "69.121.230.228:23": "dead",
       "69.128.114.51:2323": "dead",
+      "69.128.114.51:24": "dns",
       "69.128.156.33:4000": "dead",
       "69.129.206.181:23": "dns",
       "69.143.39.58:23": "dead",
@@ -5916,12 +6762,14 @@
       "69.43.38.172:23": "dns",
       "69.43.38.172:625": "dead",
       "69.46.7.242:5400": "dns",
+      "69.46.7.242:5454": "dns",
       "69.51.83.193:1691": "dead",
       "69.55.75.30:7777": "dns",
       "69.63.3.153:23": "dead",
       "69.67.161.186:4000": "dns",
       "69.8.81.127:23": "duplicate",
       "69.9.131.124:23": "dns",
+      "69.9.131.124:4000": "dns",
       "69.9.132.72:4000": "dns",
       "69.9.139.14:23": "dns",
       "69.92.116.218:23": "dead",
@@ -5951,6 +6799,7 @@
       "70.18.236.31:23": "dead",
       "70.185.111.131:23": "dead",
       "70.19.64.120:150": "dns",
+      "70.19.64.120:23": "duplicate",
       "70.191.121.190:23": "dns",
       "70.22.168.204:223": "dns",
       "70.22.168.205:419": "dns",
@@ -5970,6 +6819,7 @@
       "70.44.90.115:6400": "dns",
       "70.51.122.55:23": "dns",
       "70.53.253.249:2002": "dns",
+      "70.53.253.249:23": "duplicate",
       "70.54.14.75:9000": "dead",
       "70.71.32.52:2323": "dns",
       "70.74.208.31:23": "dead",
@@ -5991,6 +6841,7 @@
       "71.158.88.146:23": "dns",
       "71.171.93.80:1510": "dns",
       "71.171.93.80:1689": "dead",
+      "71.171.93.80:1959": "dns",
       "71.174.60.28:7777": "dead",
       "71.182.140.92:1337": "dead",
       "71.183.53.234:6400": "dead",
@@ -6008,6 +6859,7 @@
       "71.191.163.217:2323": "dns",
       "71.193.203.232:8000": "dns",
       "71.194.107.158:6400": "dns",
+      "71.194.107.158:6401": "dns",
       "71.194.242.246:2323": "dead",
       "71.195.32.174:2323": "dns",
       "71.195.66.222:2000": "dead",
@@ -6015,6 +6867,7 @@
       "71.198.210.30:23": "dns",
       "71.201.83.24:2020": "dead",
       "71.203.86.96:23": "dead",
+      "71.204.139.119:23": "duplicate",
       "71.206.143.89:1144": "dns",
       "71.208.62.250:23": "dns",
       "71.208.62.250:513": "dead",
@@ -6025,6 +6878,7 @@
       "71.218.241.62:23": "dead",
       "71.223.99.52:23": "dns",
       "71.225.82.6:64128": "dns",
+      "71.225.82.6:6464": "dns",
       "71.226.34.228:6860": "dns",
       "71.229.226.79:5555": "dead",
       "71.233.200.238:23": "dns",
@@ -6038,6 +6892,7 @@
       "71.38.56.109:2300": "dns",
       "71.39.209.17:23": "dns",
       "71.56.69.213:1212": "dns",
+      "71.56.69.213:2002": "dns",
       "71.57.12.228:8888": "dns",
       "71.63.243.155:6502": "dns",
       "71.66.244.188:4000": "dns",
@@ -6080,6 +6935,7 @@
       "72.14.186.68:9999": "dns",
       "72.14.190.93:1313": "dns",
       "72.167.227.17:2002": "dns",
+      "72.167.227.17:23": "duplicate",
       "72.167.227.99:5128": "dns",
       "72.176.195.152:23230": "dns",
       "72.176.195.152:31415": "dead",
@@ -6087,6 +6943,7 @@
       "72.178.2.58:2600": "dns",
       "72.180.130.187:23": "dns",
       "72.180.37.67:2323": "dead",
+      "72.180.37.67:6423": "duplicate",
       "72.182.20.77:6000": "dns",
       "72.185.52.20:23": "dns",
       "72.186.91.147:23": "dead",
@@ -6100,6 +6957,7 @@
       "72.209.154.95:23": "dead",
       "72.210.127.48:6666": "dead",
       "72.213.216.201:23": "dead",
+      "72.215.52.60:23": "duplicate",
       "72.224.233.72:23": "dns",
       "72.228.57.6:2323": "dead",
       "72.23.105.179:6400": "dead",
@@ -6142,6 +7000,7 @@
       "73.11.56.74:5023": "dead",
       "73.110.190.175:8080": "dead",
       "73.112.196.135:5400": "dns",
+      "73.112.196.135:6400": "duplicate",
       "73.114.186.225:2423": "dead",
       "73.116.123.179:23": "dead",
       "73.118.85.38:23": "dead",
@@ -6163,10 +7022,12 @@
       "73.168.194.32:23": "dead",
       "73.170.192.62:23": "dns",
       "73.173.147.141:8010": "dns",
+      "73.173.9.157:23": "duplicate",
       "73.174.168.108:2323": "dead",
       "73.175.17.205:23": "dead",
       "73.178.46.44:1017": "dead",
       "73.178.46.44:1227": "dead",
+      "73.178.46.44:1701": "duplicate",
       "73.180.14.18:1337": "dns",
       "73.180.55.233:9999": "dns",
       "73.183.87.123:23": "dead",
@@ -6182,6 +7043,7 @@
       "73.216.61.154:23": "dead",
       "73.218.6.225:23": "dead",
       "73.219.250.223:1955": "dns",
+      "73.219.250.223:2424": "duplicate",
       "73.223.120.146:23": "dns",
       "73.228.134.240:23": "dead",
       "73.228.5.166:23": "dns",
@@ -6196,6 +7058,7 @@
       "73.25.26.80:23": "dns",
       "73.255.35.190:6023": "dead",
       "73.29.10.98:23": "dead",
+      "73.29.102.205:4201": "dns",
       "73.3.109.108:23232": "dead",
       "73.38.245.82:23": "dead",
       "73.38.245.82:24": "dead",
@@ -6228,6 +7091,7 @@
       "73.92.193.183:23": "dns",
       "73.96.179.238:23": "dead",
       "73.96.188.76:24": "dns",
+      "73.96.188.76:2424": "duplicate",
       "74.104.122.212:23": "dns",
       "74.109.126.27:2222": "dns",
       "74.111.163.227:10001": "dead",
@@ -6240,15 +7104,18 @@
       "74.141.130.242:2333": "dead",
       "74.141.130.242:26": "dead",
       "74.141.130.242:3333": "dead",
+      "74.141.130.242:8888": "dead",
       "74.141.173.166:23": "dead",
       "74.15.155.221:6300": "dns",
       "74.196.38.185:64128": "dead",
       "74.196.38.185:6502": "dead",
+      "74.196.38.185:6510": "dns",
       "74.204.178.138:9999": "dns",
       "74.207.225.135:23": "dns",
       "74.207.226.164:5555": "dead",
       "74.207.226.61:9100": "dead",
       "74.207.233.129:1269": "dns",
+      "74.207.233.40:23": "duplicate",
       "74.207.233.40:6116": "dns",
       "74.207.233.43:8500": "dns",
       "74.207.241.103:513": "dns",
@@ -6265,6 +7132,7 @@
       "74.208.104.151:23": "dead",
       "74.208.122.190:9999": "dns",
       "74.208.126.44:3100": "dns",
+      "74.208.126.44:4100": "dns",
       "74.208.152.94:4000": "dead",
       "74.208.17.136:23": "dead",
       "74.208.214.165:5555": "dns",
@@ -6273,6 +7141,7 @@
       "74.208.44.202:23": "dns",
       "74.208.44.202:513": "dead",
       "74.208.46.242:2005": "dns",
+      "74.208.46.242:2020": "dns",
       "74.208.46.56:23": "dns",
       "74.208.78.19:2323": "dns",
       "74.208.78.19:513": "dead",
@@ -6369,10 +7238,12 @@
       "76.115.96.245:23": "dns",
       "76.119.199.154:2300": "dead",
       "76.120.211.86:8880": "dns",
+      "76.120.211.86:8888": "duplicate",
       "76.122.137.134:23": "dns",
       "76.122.169.229:23": "dead",
       "76.123.37.96:23": "dns",
       "76.124.211.17:23": "dead",
+      "76.132.157.214:2323": "duplicate",
       "76.134.10.188:49815": "dns",
       "76.134.25.116:49815": "dead",
       "76.135.4.191:7680": "dns",
@@ -6420,6 +7291,7 @@
       "76.223.67.189:2323": "dead",
       "76.223.67.189:2523": "dead",
       "76.223.67.189:4000": "dead",
+      "76.223.67.189:4201": "dead",
       "76.223.91.20:4000": "dead",
       "76.237.109.225:23": "dns",
       "76.237.109.226:6400": "dns",
@@ -6429,9 +7301,11 @@
       "76.253.15.3:23": "dead",
       "76.34.216.129:23": "dns",
       "76.53.35.202:2002": "dns",
+      "76.53.35.202:23": "duplicate",
       "76.70.81.143:6502": "dns",
       "76.89.236.120:6502": "dns",
       "76.91.152.209:23": "dns",
+      "76.91.152.209:31337": "dns",
       "76.93.136.165:8888": "dns",
       "76.98.105.143:6400": "dns",
       "77.101.163.62:23": "dead",
@@ -6444,6 +7318,7 @@
       "77.243.226.169:23": "dead",
       "77.243.226.185:23": "dead",
       "77.27.56.76:6666": "dns",
+      "77.3.205.42:23": "dead",
       "77.33.203.188:1541": "dns",
       "77.33.29.130:4000": "cross",
       "77.43.79.186:6000": "dns",
@@ -6481,10 +7356,14 @@
       "79.18.194.205:2323": "dns",
       "79.190.252.182:23": "dead",
       "79.202.55.216:3023": "dead",
+      "79.202.58.167:3023": "dead",
       "79.210.34.76:23": "duplicate",
+      "79.224.46.195:23": "duplicate",
       "79.239.95.52:8888": "dead",
+      "79.26.239.107:2323": "dead",
       "79.40.163.223:2320": "dns",
       "79.40.163.223:2323": "dead",
+      "79.41.22.132:2323": "duplicate",
       "79.44.93.99:8823": "dead",
       "79.46.205.88:2323": "dead",
       "79.46.237.27:23": "dead",
@@ -6516,6 +7395,7 @@
       "80.73.239.218:2380": "dns",
       "80.79.52.3:23": "dns",
       "80.80.140.38:13023": "dns",
+      "80.95.82.122:1212": "dns",
       "80bbs.mooo.com:2380": "dead",
       "81.101.131.188:2323": "dns",
       "81.103.51.248:23": "dead",
@@ -6532,10 +7412,12 @@
       "81.175.146.217:8888": "dead",
       "81.18.129.6:9000": "dns",
       "81.187.167.178:7777": "dns",
+      "81.187.167.178:8688": "duplicate",
       "81.187.167.179:8682": "dns",
       "81.187.32.67:4000": "dead",
       "81.197.224.234:23": "duplicate",
       "81.201.49.14:443": "duplicate",
+      "81.201.49.14:7680": "dns",
       "81.204.192.87:23": "dns",
       "81.226.13.247:2323": "dead",
       "81.226.94.41:2323": "dns",
@@ -6599,6 +7481,7 @@
       "84.22.99.64:8888": "dns",
       "84.231.157.112:23": "dead",
       "84.231.160.114:23": "dead",
+      "84.231.178.21:23": "dead",
       "84.231.82.104:23": "dns",
       "84.245.8.150:6717": "dead",
       "84.246.91.66:23": "dns",
@@ -6642,6 +7525,7 @@
       "85.27.45.135:4000": "dead",
       "85.3.216.226:5555": "dns",
       "85.54.48.47:2323": "dns",
+      "85.74.7.40:9999": "duplicate",
       "85.90.246.152:6660": "dns",
       "86.110.194.3:4000": "dns",
       "86.110.43.195:5555": "dns",
@@ -6653,13 +7537,16 @@
       "86.151.16.142:23": "dead",
       "86.155.224.168:23": "duplicate",
       "86.157.109.179:23": "dns",
+      "86.163.18.33:8088": "duplicate",
       "86.163.2.171:23": "dead",
       "86.163.97.200:1338": "dns",
       "86.164.117.235:5555": "dead",
+      "86.164.45.36:6400": "dns",
       "86.168.75.101:23": "dead",
       "86.169.245.76:5555": "dead",
       "86.174.173.51:6400": "duplicate",
       "86.174.242.190:23": "dead",
+      "86.175.149.135:23": "duplicate",
       "86.176.167.20:23": "dns",
       "86.182.185.60:6400": "dns",
       "86.190.11.35:24": "dead",
@@ -6681,6 +7568,8 @@
       "87.106.99.186:23": "dns",
       "87.148.18.226:8889": "dns",
       "87.148.29.93:8888": "dead",
+      "87.148.30.207:8888": "dns",
+      "87.161.36.36:64128": "duplicate",
       "87.162.13.56:23": "dns",
       "87.203.71.176:9999": "dns",
       "87.208.226.162:4000": "dead",
@@ -6689,16 +7578,19 @@
       "87.229.53.104:5555": "dns",
       "87.238.75.102:23": "dns",
       "87.245.12.46:23": "dns",
+      "87.245.13.109:23": "dead",
       "87.245.14.169:23": "dead",
       "87.249.132.67:23": "dns",
       "87.93.152.225:1025": "dead",
       "87.97.24.97:6666": "dns",
       "87.98.248.19:4242": "dns",
+      "88.0.196.111:23": "duplicate",
       "88.134.145.7:23": "dead",
       "88.152.228.228:2014": "dns",
       "88.152.228.228:23": "duplicate",
       "88.202.156.116:23": "dead",
       "88.214.46.92:23": "dns",
+      "88.8.105.93:2300": "duplicate",
       "88.8.215.90:2300": "dns",
       "88.80.184.207:23": "dead",
       "88.80.185.171:23": "dead",
@@ -6708,13 +7600,17 @@
       "88.99.254.53:5555": "dns",
       "88.99.254.53:5585": "dead",
       "89.168.114.235:2223": "dead",
+      "89.168.114.235:23": "duplicate",
       "89.169.36.168:23": "dead",
       "89.216.101.71:2323": "dns",
+      "89.216.101.71:3777": "dns",
       "89.233.181.130:23": "dns",
       "89.238.84.18:31415": "dns",
       "89.244.216.67:23": "dead",
       "89.244.216.97:23": "dns",
       "89.244.217.126:23": "dead",
+      "89.244.217.32:23": "dead",
+      "89.247.173.230:5745": "dead",
       "89.247.173.243:5745": "dns",
       "89.247.52.196:64128": "dead",
       "89.247.53.126:64128": "dns",
@@ -6722,6 +7618,7 @@
       "89.58.11.82:23": "dns",
       "89.58.39.36:23": "dns",
       "89.58.51.248:3333": "dns",
+      "89.58.51.248:3334": "dns",
       "89.58.56.146:23": "dns",
       "89.7.184.191:23": "dns",
       "8bit.fansi.org:4201": "cross",
@@ -6748,6 +7645,7 @@
       "91.195.240.87:4000": "dead",
       "91.195.240.87:513": "dead",
       "91.195.240.87:8000": "dead",
+      "91.195.240.87:9002": "dead",
       "91.195.240.94:23": "dead",
       "91.195.240.94:513": "dead",
       "91.195.240.94:6800": "dead",
@@ -6766,11 +7664,13 @@
       "91.35.153.207:23": "dns",
       "91.35.158.65:23": "dead",
       "91.48.225.182:2323": "dns",
+      "91.48.226.1:2323": "duplicate",
       "91.67.76.215:23": "dead",
       "91.98.112.117:4000": "dead",
       "91.99.31.171:23": "dns",
       "91.99.63.188:23": "dns",
       "92.117.14.183:64128": "dead",
+      "92.117.15.94:64128": "duplicate",
       "92.177.36.79:5555": "dns",
       "92.205.179.40:2222": "dns",
       "92.220.71.106:23": "duplicate",
@@ -6830,13 +7730,17 @@
       "95.217.157.136:3000": "dns",
       "95.217.157.136:3500": "dead",
       "95.217.157.136:4000": "dead",
+      "95.217.157.136:5000": "dns",
       "95.217.204.212:2323": "dns",
       "95.235.129.240:2323": "dead",
+      "95.235.183.48:2323": "duplicate",
       "95.33.17.106:2323": "dead",
+      "95.33.88.63:2323": "dead",
       "95.33.90.38:2323": "dns",
       "95.81.28.55:2003": "dead",
       "95.85.50.124:4000": "dns",
       "95.85.50.124:5555": "dead",
+      "95.94.255.112:6969": "dns",
       "95.95.134.25:5900": "dns",
       "96.126.100.155:5555": "dead",
       "96.126.100.171:23": "dns",
@@ -6883,6 +7787,7 @@
       "97.107.138.126:4000": "dns",
       "97.107.142.168:23": "dns",
       "97.113.142.45:23": "dns",
+      "97.113.163.85:6359": "duplicate",
       "97.113.166.236:6359": "dns",
       "97.115.144.60:2323": "dead",
       "97.116.8.184:23": "dns",
@@ -6961,9 +7866,11 @@
       "98.38.199.179:6666": "dead",
       "98.40.101.90:9100": "dead",
       "98.40.215.83:2002": "dead",
+      "98.48.66.57:5555": "dns",
       "98.5.235.199:2020": "dns",
       "98.5.245.186:23": "dns",
       "98.50.23.19:2002": "dns",
+      "98.50.23.19:23": "dns",
       "98.52.14.117:23": "dead",
       "98.52.75.5:23": "duplicate",
       "98.54.166.128:4000": "dead",
@@ -7008,8 +7915,11 @@
       "99.83.154.118:2002": "dead",
       "99.83.154.118:23": "dead",
       "99.83.154.118:4000": "dead",
+      "99.83.154.118:4201": "dead",
       "99.88.247.49:23": "dns",
+      "99.88.247.49:2324": "dns",
       "99.89.65.1:2002": "dead",
+      "99.89.65.1:23": "duplicate",
       "99.98.69.67:23": "dead",
       "ANOTHERMUX.ORG:2860": "duplicate",
       "Actofwarmud.com:4000": "dead",
@@ -7448,6 +8358,7 @@
       "bbs.innercirclebbs.com:64000": "dead",
       "bbs.inspiring.ninja:23": "dead",
       "bbs.intaa.net:23": "dead",
+      "bbs.ipingthereforeiam.com:2324": "dead",
       "bbs.isurf.ca:23": "dead",
       "bbs.italktomachines.com:23": "dead",
       "bbs.itbnet.eu:23": "dead",
@@ -7917,6 +8828,7 @@
       "dial-up:6400": "dead",
       "dibz.synchro.net:1023": "dead",
       "diesiraemu.com:4201": "dead",
+      "digdist.synchro.net:23": "duplicate",
       "digiaqua.synchro.net:23": "dead",
       "digitalabyss.fsxnet.nz:23": "dead",
       "digitalatoll.ddns.net:23": "dead",
@@ -8101,6 +9013,7 @@
       "frontierbbs.net:2333": "dead",
       "frontierbbs.net:26": "dead",
       "frontierbbs.net:3333": "dead",
+      "frontierbbs.net:8888": "dead",
       "frontiers.dotoran.com:9892": "dead",
       "frugalbbs.com:513": "dead",
       "fruity.turbit.eu:23": "dead",
@@ -8519,6 +9432,7 @@
       "mud.morchronium.com:1979": "dead",
       "mud.morchronium.com:5321": "dead",
       "mud.morchronium.com:7171": "dead",
+      "mud.morchronium.com:7770": "dead",
       "mud.mysteria.dk:3000": "dead",
       "mud.mysteria.dk:4242": "dead",
       "mud.nnov.net:9000": "dead",
@@ -8808,6 +9722,7 @@
       "rhostmush.com:1066": "dead",
       "rhostmush.com:4201": "dead",
       "rhostmush.com:6565": "dead",
+      "rhostmush.com:7000": "dead",
       "rhun.co.nz:23": "dead",
       "richardf.synchro.net:23": "dead",
       "richardf.synchro.net:513": "dead",
@@ -9383,6 +10298,7 @@
       "216.226.128.180:4444": "http_banner",
       "31.220.94.14:6000": "dns",
       "37.59.41.114:4000": "dns",
+      "3m.vineyard.haus:3000": "duplicate",
       "4tmu.aresmush.com:1930": "dead",
       "56kmajormud.servegame.com:23": "dead",
       "6Dragons.themuds.org:4100": "dead",
@@ -9638,6 +10554,7 @@
       "mongoose.moo.mud.org:7777": "duplicate",
       "moo.asi.org:7777": "dead",
       "moo.ca:7777": "dead",
+      "moo.demetro.nl:8888": "http_banner",
       "moo.ghostmoo.org:6969": "dead",
       "moo.marshome.org:7777": "dead",
       "moo.neon-moo.space:7777": "duplicate",

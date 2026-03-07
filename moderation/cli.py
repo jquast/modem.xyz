@@ -234,7 +234,7 @@ def main():
     do_prune = args.only_prune or not any_only
     do_dupes = args.only_dupes or not any_only
     do_cross = args.only_cross or not any_only
-    do_dns = args.only_dns
+    do_dns = args.only_dns or not any_only
     do_rlogin = args.only_rlogin or not any_only
     do_encodings = args.only_encodings or not any_only
     do_columns = args.only_columns

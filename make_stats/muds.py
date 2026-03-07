@@ -17,7 +17,7 @@ from make_stats.common import (
     PLOT_FG, PLOT_GREEN, PLOT_CYAN,
     _listify, _first_str, _parse_int, _format_scan_time,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
-    _load_ssl_overrides, _load_no_ambig_overrides,
+    _load_ssl_overrides, _load_no_ambig_overrides, _load_ssh_overrides,
     _load_base_records, _generate_rst,
     _render_banner_section, _render_json_section,
     _render_log_section, _render_fingerprint_section,
@@ -393,7 +393,7 @@ def _detect_protocols(record):
 
 def load_server_data(data_dir, encoding_overrides=None,
                      column_overrides=None, no_ambig_overrides=None,
-                     ssl_overrides=None):
+                     ssl_overrides=None, ssh_overrides=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
@@ -401,10 +401,13 @@ def load_server_data(data_dir, encoding_overrides=None,
     :param column_overrides: dict mapping (host, port) to column width
     :param no_ambig_overrides: dict mapping (host, port) to True
     :param ssl_overrides: set of (host, port) tuples that use SSL
+    :param ssh_overrides: dict mapping host_lower to ssh_port int
     :returns: list of parsed server record dicts
     """
     if ssl_overrides is None:
         ssl_overrides = set()
+    if ssh_overrides is None:
+        ssh_overrides = {}
     base_records = _load_base_records(
         data_dir, encoding_overrides, column_overrides,
         no_ambig_overrides=no_ambig_overrides)
@@ -480,6 +483,7 @@ def load_server_data(data_dir, encoding_overrides=None,
         record['protocols'] = _detect_protocols(record)
         record['adult'] = _is_adult(record)
         record['pay_to_play'] = _is_pay_to_play(record)
+        record['ssh_port'] = ssh_overrides.get(record['host'].lower())
 
         records.append(record)
 
@@ -1614,6 +1618,18 @@ def _write_mud_server_urls(server, sec_char):
               f' aria-hidden="true">'
               f'&#x1F4CB;</span>')
         print(f'   </button></li>')
+    if server.get('ssh_port'):
+        ssh_port = server['ssh_port']
+        ssh_url = f"ssh://{host}:{ssh_port}"
+        print(f'   <li><strong>SSH</strong>: '
+              f'<a href="{ssh_url}">{host}:{ssh_port}</a>')
+        print(f'   <button class="copy-btn"'
+              f' data-host="{host}" data-port="{ssh_port}"'
+              f' title="Copy SSH host and port"'
+              f' aria-label="Copy {host} port {ssh_port} to clipboard">')
+        print(f'   <span class="copy-icon"'
+              f' aria-hidden="true">&#x1F4CB;</span>')
+        print(f'   </button></li>')
     print(f'   </ul>')
     print()
 
@@ -2035,11 +2051,16 @@ def run(args):
         print(f"Loaded {len(ssl_overrides)} SSL/TLS"
               f" overrides from {server_list}", file=sys.stderr)
 
+    ssh_overrides = _load_ssh_overrides(server_list)
+    if ssh_overrides:
+        print(f"Loaded {len(ssh_overrides)} SSH"
+              f" overrides from {server_list}", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
 
     records = load_server_data(data_dir, encoding_overrides,
                                column_overrides, no_ambig_overrides,
-                               ssl_overrides)
+                               ssl_overrides, ssh_overrides)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 

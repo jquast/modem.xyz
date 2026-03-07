@@ -59,7 +59,6 @@
 38.210.209.169 4000 latin-1 90
 39.152.42.32 7777 gbk
 3k.org 3000
-3m.vineyard.haus 3000
 4.222.184.103 4000
 40.115.76.212 4040
 44.204.35.120 4400
@@ -126,6 +125,7 @@ animud.net 6667 utf-8
 ansalon.net 8662
 ansiblemoo.org 6000
 aod.genesismuds.com 23
+aod.genesismuds.com ssh
 aoh.genesismuds.com 6969
 aoh.zitz.dk 2345
 aoh.zitz.dk 2348
@@ -504,7 +504,6 @@ mirkwoodmud.org 4000
 mirrorsmud.net 2222
 mnm.glassdragon.xyz 4444
 mo.mushpark.com 2012
-moo.demetro.nl 8888
 moo.di.uminho.pt 7777
 moo.harpers-tale.com 7007 utf-8 100
 moo.hellyeah.com 7777
@@ -847,6 +846,7 @@ tsunami.thebigwave.net 23
 tubmud.de 7680
 turf.org 4000 utf-8 90
 twilitdreams.genesismuds.com 23
+twilitdreams.genesismuds.com ssh
 twyst.org 3333
 twyst.org 6666
 tx.sjever.net 6666 gbk

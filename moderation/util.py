@@ -115,10 +115,10 @@ def _is_ip_address(host):
         return False
 
 
-def _resolve_hostnames(hostnames, workers=8):
+def _resolve_hostnames(hostnames, workers=32):
     """Resolve a collection of hostnames to their IP addresses.
 
-    Uses a thread pool with a small worker count to be gentle on DNS.
+    Uses a thread pool to resolve hostnames in parallel.
 
     :param hostnames: iterable of hostname strings
     :param workers: number of parallel resolver threads
