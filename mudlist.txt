@@ -576,6 +576,7 @@ mud.kallindor.org 5800
 mud.kharkov.org 3000 koi8-r
 mud.kharkov.org 4000 koi8-r
 mud.kharkov.org 7000 koi8-r 90
+mud.kiev.ua 9000
 mud.killerpcs.com 8888
 mud.landsofstone.org 4801
 mud.legendmud.org 9999 utf-8 80

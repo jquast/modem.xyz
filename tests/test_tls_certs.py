@@ -422,6 +422,7 @@ def _make_server(host, port, tls_port='', tls_cert_status='',
         'tls_port': tls_port,
         '_tls_cert_status': tls_cert_status,
         '_country_name': 'Unknown',
+        'display_encoding': 'utf-8',
     }
 
 

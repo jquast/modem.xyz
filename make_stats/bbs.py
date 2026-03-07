@@ -13,7 +13,7 @@ import tabulate as tabulate_mod
 from make_stats.common import (
     _PROJECT_ROOT, _URL_RE,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
-    _load_row_overrides, _load_no_ambig_overrides,
+    _load_row_overrides, _load_no_ambig_overrides, _load_ssh_overrides,
     _load_base_records, _generate_rst,
     _render_banner_section, _render_json_section,
     _render_log_section, _render_fingerprint_section,
@@ -160,9 +160,38 @@ def load_bbslist_encodings(bbslist_path):
 # Data loading
 # ---------------------------------------------------------------------------
 
+def _load_ibbs_metadata(csv_path):
+    """Load ibbs BBS metadata from cached bbslist.csv.
+
+    :param csv_path: path to ibbs_bbslist.csv
+    :returns: dict {host_lower: {'name', 'sysop', 'website', 'software', 'location'}}
+    """
+    import csv as _csv
+    result = {}
+    if not os.path.isfile(csv_path):
+        return result
+    with open(csv_path, encoding='utf-8', errors='replace') as f:
+        reader = _csv.DictReader(f)
+        for row in reader:
+            row = {k.strip(): (v.strip() if v else '')
+                   for k, v in row.items()}
+            host = row.get('TelnetAddress', '').strip().lower()
+            if not host:
+                continue
+            result[host] = {
+                'name': row.get('bbsName', ''),
+                'sysop': row.get('bbsSysop', ''),
+                'website': row.get('WebAddress', ''),
+                'software': row.get('software', ''),
+                'location': row.get('location', ''),
+            }
+    return result
+
+
 def load_server_data(data_dir, encoding_overrides=None,
                      column_overrides=None, row_overrides=None,
-                     no_ambig_overrides=None):
+                     no_ambig_overrides=None,
+                     ssh_overrides=None, ibbs_meta=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
@@ -170,8 +199,15 @@ def load_server_data(data_dir, encoding_overrides=None,
     :param column_overrides: dict mapping (host, port) to column width
     :param row_overrides: dict mapping (host, port) to row height
     :param no_ambig_overrides: dict mapping (host, port) to True
+    :param ssh_overrides: dict mapping host_lower to ssh_port int
+    :param ibbs_meta: dict mapping host_lower to ibbs metadata dict
     :returns: list of parsed server record dicts
     """
+    if ssh_overrides is None:
+        ssh_overrides = {}
+    if ibbs_meta is None:
+        ibbs_meta = {}
+
     base_records = _load_base_records(
         data_dir, encoding_overrides, column_overrides, row_overrides,
         no_ambig_overrides)
@@ -183,6 +219,8 @@ def load_server_data(data_dir, encoding_overrides=None,
         banner = _combine_banners(
             record, default_encoding=DEFAULT_ENCODING)
         record['bbs_software'] = detect_bbs_software(banner)
+        record['bbs_software_source'] = (
+            'detected' if record['bbs_software'] else '')
 
         stripped = _strip_ansi(banner) if banner else ''
         has_replacement = (
@@ -212,6 +250,19 @@ def load_server_data(data_dir, encoding_overrides=None,
         requested = set(record['requested'])
         record['tls_support'] = (
             'TLS' in offered or 'TLS' in requested)
+
+        host_lower = record['host'].lower()
+        record['ssh_port'] = ssh_overrides.get(host_lower)
+        meta = ibbs_meta.get(host_lower, {})
+        if not record['website']:
+            record['website'] = meta.get('website', '')
+        if not record['bbs_software']:
+            record['bbs_software'] = meta.get('software', '')
+            if record['bbs_software']:
+                record['bbs_software_source'] = 'reported'
+        record['ibbs_name'] = meta.get('name', '')
+        record['ibbs_sysop'] = meta.get('sysop', '')
+        record['ibbs_location'] = meta.get('location', '')
 
         records.append(record)
 
@@ -829,6 +880,18 @@ def _write_bbs_server_urls(server, sec_char):
               f' aria-hidden="true">'
               f'&#x1F4CB;</span>')
         print(f'   </button></li>')
+    if server.get('ssh_port'):
+        ssh_port = server['ssh_port']
+        ssh_url = f"ssh://{host}:{ssh_port}"
+        print(f'   <li><strong>SSH</strong>: '
+              f'<a href="{ssh_url}">{host}:{ssh_port}</a>')
+        print(f'   <button class="copy-btn"'
+              f' data-host="{host}" data-port="{ssh_port}"'
+              f' title="Copy SSH host and port"'
+              f' aria-label="Copy {host} port {ssh_port} to clipboard">')
+        print(f'   <span class="copy-icon"'
+              f' aria-hidden="true">&#x1F4CB;</span>')
+        print(f'   </button></li>')
     if server['website']:
         href = server['website']
         if not href.startswith(('http://', 'https://')):
@@ -857,9 +920,23 @@ def _write_bbs_server_info(server, sec_char):
         print(f"**Server Location**: {loc_display} (GeoIP)")
         print()
 
+    if server.get('ibbs_name') or server.get('ibbs_sysop') or server.get('ibbs_location'):
+        _rst_heading("Listing", sec_char)
+        if server.get('ibbs_name'):
+            print(f"- **BBS Name**: {_rst_escape(server['ibbs_name'])}"
+                  f" (from listing)")
+        if server.get('ibbs_sysop'):
+            print(f"- **Sysop**: {_rst_escape(server['ibbs_sysop'])}")
+        if server.get('ibbs_location'):
+            print(f"- **Listed Location**:"
+                  f" {_rst_escape(server['ibbs_location'])}")
+        print()
+
     if server['bbs_software']:
         _rst_heading("BBS Software", sec_char)
-        print(f"**Detected**:"
+        source = server.get('bbs_software_source', 'detected')
+        label = 'Reported' if source == 'reported' else 'Detected'
+        print(f"**{label}**:"
               f" {_rst_escape(server['bbs_software'])}")
         print()
 
@@ -1203,10 +1280,18 @@ def run(args):
         print(f"Loaded {len(no_ambig_overrides)} no_ambig"
               f" overrides from {bbslist}", file=sys.stderr)
 
+    ssh_overrides = _load_ssh_overrides(bbslist)
+    ibbs_csv = os.path.join(os.path.dirname(bbslist), 'ibbs_bbslist.csv')
+    ibbs_meta = _load_ibbs_metadata(ibbs_csv) if os.path.isfile(ibbs_csv) else {}
+    print(f"  {len(ssh_overrides)} SSH overrides,"
+          f" {len(ibbs_meta)} ibbs entries", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
     records = load_server_data(data_dir, encoding_overrides,
                                column_overrides, row_overrides,
-                               no_ambig_overrides)
+                               no_ambig_overrides,
+                               ssh_overrides=ssh_overrides,
+                               ibbs_meta=ibbs_meta)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 

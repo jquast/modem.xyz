@@ -1,5 +1,6 @@
 """MUD-specific statistics generation."""
 
+import codecs
 import contextlib
 import json
 import os
@@ -569,6 +570,16 @@ def compute_statistics(servers):
         country_counts[s.get('_country_name', 'Unknown')] += 1
     stats['country_counts'] = dict(country_counts)
 
+    encoding_counts = Counter()
+    for s in servers:
+        enc = s['display_encoding']
+        try:
+            enc = codecs.lookup(enc).name
+        except LookupError:
+            pass
+        encoding_counts[enc] += 1
+    stats['encoding_counts'] = dict(encoding_counts)
+
     tls_enabled = sum(
         1 for s in servers
         if s.get('tls_port')
@@ -785,11 +796,23 @@ def create_tls_by_codebase_plot(stats, output_path, top_n=15):
     plt.close()
 
 
+def create_encoding_plot(stats, output_path):
+    """Create pie chart of encoding distribution."""
+    encoding_counts = stats['encoding_counts']
+    if not encoding_counts:
+        return
+    sorted_items = sorted(encoding_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path)
+
+
 def create_all_plots(stats):
     """Generate all matplotlib plots."""
     os.makedirs(PLOTS_PATH, exist_ok=True)
     _setup_plot_style()
 
+    create_encoding_plot(
+        stats, os.path.join(PLOTS_PATH, 'encoding_distribution.png'))
     create_protocol_support_plot(
         stats, os.path.join(PLOTS_PATH, 'protocol_support.png'))
     create_codebases_plot(
@@ -959,6 +982,20 @@ def display_plots(stats, servers):
     print()
     print("   Telnet options offered vs requested by servers"
           " during negotiation.")
+    print()
+
+    print("Encoding Distribution")
+    print("----------------------")
+    print()
+    print(".. figure:: _static/plots/encoding_distribution.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the distribution of"
+          " character"
+          " encodings across all servers.")
+    print()
+    print("   Character encoding distribution"
+          " (default: UTF-8).")
     print()
 
     _display_charset_section(servers)

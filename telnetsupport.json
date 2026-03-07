@@ -84,13 +84,6 @@
     "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
   },
   {
-    "host": "awakemud.com",
-    "port": 4000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
-  },
-  {
     "host": "www.mudbar.cn",
     "port": 3333,
     "ssl": 0,
@@ -166,6 +159,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
+  },
+  {
+    "host": "awakemud.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
   },
   {
     "host": "pdragon.org",
@@ -413,6 +413,13 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
   },
   {
+    "host": "mud.kiev.ua",
+    "port": 9000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP1\",\"MCCP2\",\"UNKNOWN-123\",\"GMCP\"]"
+  },
+  {
     "host": "bbs.c64.pub",
     "port": 23,
     "ssl": 0,
@@ -460,13 +467,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MCCP1\",\"MCCP2\",\"AARDWOLF MUSHCLIENT\",\"ATCP\",\"GMCP\"]"
-  },
-  {
-    "host": "isharmud.com",
-    "port": 23,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"GMCP\"]"
   },
   {
     "host": "thewalkingdead.apocalypto.org.uk",
@@ -854,6 +854,13 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"NAWS\",\"MCCP1\"]"
   },
   {
+    "host": "flexiblesurvival.com",
+    "port": 2222,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\"]"
+  },
+  {
     "host": "warlock.pl",
     "port": 23,
     "ssl": 0,
@@ -1015,6 +1022,13 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\"]"
   },
   {
+    "host": "darkmists.org",
+    "port": 2222,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"GMCP\"]"
+  },
+  {
     "host": "wildsofpern.aresmush.com",
     "port": 2021,
     "ssl": 0,
@@ -1113,6 +1127,13 @@
     "options": "[\"MSSP\"]"
   },
   {
+    "host": "batmud.bat.org",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\"]"
+  },
+  {
     "host": "3k.org",
     "port": 3000,
     "ssl": 0,
@@ -1132,13 +1153,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"CHARSET\"]"
-  },
-  {
-    "host": "darkmists.org",
-    "port": 2222,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"MSSP\"]"
   },
   {
     "host": "toastsoft.net",

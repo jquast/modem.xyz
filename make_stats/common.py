@@ -257,6 +257,35 @@ def _load_no_ambig_overrides(path):
     return overrides
 
 
+def _load_ssh_overrides(path):
+    """Load SSH port overrides from a server list file.
+
+    Looks for lines with format ``host ssh [port]``.
+
+    :param path: path to server list file
+    :returns: dict mapping host_lower to ssh_port int (default 22)
+    """
+    overrides = {}
+    if not os.path.isfile(path):
+        return overrides
+    with open(path) as f:
+        for line in f:
+            line = line.split('#', 1)[0].strip()
+            if not line:
+                continue
+            parts = line.split()
+            if len(parts) >= 2 and parts[1] == 'ssh':
+                host = parts[0].lower()
+                ssh_port = 22
+                if len(parts) >= 3:
+                    try:
+                        ssh_port = int(parts[2])
+                    except ValueError:
+                        continue
+                overrides[host] = ssh_port
+    return overrides
+
+
 def _load_base_records(data_dir, encoding_overrides=None,
                        column_overrides=None, row_overrides=None,
                        no_ambig_overrides=None):

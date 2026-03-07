@@ -1,14 +1,19 @@
 """Tests for fetch_lists.py list fetching and merging."""
 
+import io
 import json
+import zipfile
 
+from make_stats.common import _load_ssh_overrides
 from fetch_lists import (
     _load_list,
     _load_rejected,
     _merge_entries,
+    _merge_ssh_entries,
     _remove_rlogin_dupes,
     _write_merged_list,
     fetch_commodorebbs,
+    fetch_ibbs_csv,
     fetch_relay_cfg,
     fetch_telnetsupport,
 )
@@ -75,6 +80,21 @@ class TestLoadList:
         _, entries = _load_list(str(p))
         assert len(entries) == 1
         assert ('valid.com', 23) in entries
+
+    def test_ssh_line_preserved(self, tmp_path):
+        p = tmp_path / 'list.txt'
+        p.write_text('example.com 23 cp437\nexample.com ssh 2222\n')
+        _, entries = _load_list(str(p))
+        assert ('example.com', 23) in entries
+        assert ('example.com', 'ssh') in entries
+        assert entries[('example.com', 'ssh')] == 'example.com ssh 2222'
+
+    def test_ssh_line_default_port(self, tmp_path):
+        p = tmp_path / 'list.txt'
+        p.write_text('example.com 23\nexample.com ssh\n')
+        _, entries = _load_list(str(p))
+        assert ('example.com', 'ssh') in entries
+        assert entries[('example.com', 'ssh')] == 'example.com ssh'
 
 
 class TestWriteMergedList:
@@ -426,6 +446,222 @@ class TestRemoveRloginDupes:
         assert removed == 0
 
 
+class TestMergeSshEntries:
+
+    def test_adds_ssh_for_known_host(self):
+        existing = {('example.com', 23): 'example.com 23'}
+        ssh_map = {'example.com': ('example.com', 2222)}
+        added = _merge_ssh_entries(existing, ssh_map)
+        assert added == 1
+        assert ('example.com', 'ssh') in existing
+        assert existing[('example.com', 'ssh')] == 'example.com ssh 2222'
+
+    def test_skips_unknown_host(self):
+        existing = {('known.com', 23): 'known.com 23'}
+        ssh_map = {'unknown.com': ('unknown.com', 22)}
+        added = _merge_ssh_entries(existing, ssh_map)
+        assert added == 0
+        assert ('unknown.com', 'ssh') not in existing
+
+    def test_skips_existing_ssh_entry(self):
+        existing = {
+            ('example.com', 23): 'example.com 23',
+            ('example.com', 'ssh'): 'example.com ssh 22',
+        }
+        ssh_map = {'example.com': ('example.com', 9922)}
+        added = _merge_ssh_entries(existing, ssh_map)
+        assert added == 0
+        assert existing[('example.com', 'ssh')] == 'example.com ssh 22'
+
+    def test_case_insensitive_host_match(self):
+        existing = {('example.com', 23): 'Example.COM 23'}
+        ssh_map = {'example.com': ('Example.COM', 2222)}
+        added = _merge_ssh_entries(existing, ssh_map)
+        assert added == 1
+        assert ('example.com', 'ssh') in existing
+
+    def test_multiple_hosts(self):
+        existing = {
+            ('a.com', 23): 'a.com 23',
+            ('b.com', 4000): 'b.com 4000',
+        }
+        ssh_map = {
+            'a.com': ('a.com', 2222),
+            'b.com': ('b.com', 22),
+            'c.com': ('c.com', 22),
+        }
+        added = _merge_ssh_entries(existing, ssh_map)
+        assert added == 2
+        assert ('a.com', 'ssh') in existing
+        assert ('b.com', 'ssh') in existing
+        assert ('c.com', 'ssh') not in existing
+
+
+def _make_ibbs_zip(csv_content):
+    """Return bytes of a zip containing bbslist.csv with csv_content."""
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, 'w') as zf:
+        zf.writestr('bbslist.csv', csv_content)
+    return buf.getvalue()
+
+
+class TestFetchIbbsCsv:
+
+    def test_parses_telnet_entries(self, tmp_path, monkeypatch):
+        csv_content = (
+            'bbsName,TelnetAddress,TelnetPort,SSHPort,WebAddress,'
+            'software,bbsSysop,location\n'
+            'Test BBS,testbbs.com,23,,http://testbbs.com,'
+            'Synchronet,SysopA,USA\n'
+        )
+        zip_bytes = _make_ibbs_zip(csv_content)
+        csv_out = str(tmp_path / 'ibbs.csv')
+
+        def fake_urlopen(req, timeout=30):
+            class Resp:
+                def read(self):
+                    return zip_bytes
+                def __enter__(self):
+                    return self
+                def __exit__(self, *a):
+                    pass
+            return Resp()
+
+        monkeypatch.setattr('urllib.request.urlopen', fake_urlopen)
+        telnet, ssh = fetch_ibbs_csv(
+            daily_url='http://fake/ibbs.zip',
+            monthly_url='http://fake/ibbs2.zip',
+            csv_out=csv_out)
+        assert ('testbbs.com', 23) in telnet
+        assert 'testbbs.com' not in ssh
+
+    def test_parses_ssh_entries(self, tmp_path, monkeypatch):
+        csv_content = (
+            'bbsName,TelnetAddress,TelnetPort,SSHPort,WebAddress,'
+            'software,bbsSysop,location\n'
+            'SSH BBS,sshbbs.com,23,2222,,Mystic BBS,SysopB,CA\n'
+        )
+        zip_bytes = _make_ibbs_zip(csv_content)
+        csv_out = str(tmp_path / 'ibbs.csv')
+
+        def fake_urlopen(req, timeout=30):
+            class Resp:
+                def read(self):
+                    return zip_bytes
+                def __enter__(self):
+                    return self
+                def __exit__(self, *a):
+                    pass
+            return Resp()
+
+        monkeypatch.setattr('urllib.request.urlopen', fake_urlopen)
+        telnet, ssh = fetch_ibbs_csv(
+            daily_url='http://fake/ibbs.zip',
+            monthly_url='http://fake/ibbs2.zip',
+            csv_out=csv_out)
+        assert ('sshbbs.com', 23) in telnet
+        assert ssh['sshbbs.com'] == ('sshbbs.com', 2222)
+
+    def test_saves_csv_atomically(self, tmp_path, monkeypatch):
+        csv_content = (
+            'bbsName,TelnetAddress,TelnetPort,SSHPort\n'
+            'A BBS,a.com,23,\n'
+        )
+        zip_bytes = _make_ibbs_zip(csv_content)
+        csv_out = str(tmp_path / 'ibbs.csv')
+
+        def fake_urlopen(req, timeout=30):
+            class Resp:
+                def read(self):
+                    return zip_bytes
+                def __enter__(self):
+                    return self
+                def __exit__(self, *a):
+                    pass
+            return Resp()
+
+        monkeypatch.setattr('urllib.request.urlopen', fake_urlopen)
+        fetch_ibbs_csv(
+            daily_url='http://fake/ibbs.zip',
+            monthly_url='http://fake/ibbs2.zip',
+            csv_out=csv_out)
+        assert not (tmp_path / 'ibbs.csv.new').exists()
+        import os
+        assert os.path.isfile(csv_out)
+
+    def test_falls_back_to_monthly(self, tmp_path, monkeypatch):
+        csv_content = (
+            'bbsName,TelnetAddress,TelnetPort,SSHPort\n'
+            'B BBS,b.com,4000,\n'
+        )
+        zip_bytes = _make_ibbs_zip(csv_content)
+        csv_out = str(tmp_path / 'ibbs.csv')
+        call_count = [0]
+
+        def fake_urlopen(req, timeout=30):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                raise OSError('daily not found')
+
+            class Resp:
+                def read(self):
+                    return zip_bytes
+                def __enter__(self):
+                    return self
+                def __exit__(self, *a):
+                    pass
+            return Resp()
+
+        monkeypatch.setattr('urllib.request.urlopen', fake_urlopen)
+        telnet, ssh = fetch_ibbs_csv(
+            daily_url='http://fake/daily.zip',
+            monthly_url='http://fake/monthly.zip',
+            csv_out=csv_out)
+        assert call_count[0] == 2
+        assert ('b.com', 4000) in telnet
+
+    def test_raises_when_all_fail(self, tmp_path, monkeypatch):
+        import pytest
+        csv_out = str(tmp_path / 'ibbs.csv')
+
+        def fake_urlopen(req, timeout=30):
+            raise OSError('not found')
+
+        monkeypatch.setattr('urllib.request.urlopen', fake_urlopen)
+        with pytest.raises(OSError):
+            fetch_ibbs_csv(
+                daily_url='http://fake/daily.zip',
+                monthly_url='http://fake/monthly.zip',
+                csv_out=csv_out)
+
+    def test_skips_missing_host(self, tmp_path, monkeypatch):
+        csv_content = (
+            'bbsName,TelnetAddress,TelnetPort,SSHPort\n'
+            'No Host BBS,,23,22\n'
+            'A BBS,valid.com,23,\n'
+        )
+        zip_bytes = _make_ibbs_zip(csv_content)
+        csv_out = str(tmp_path / 'ibbs.csv')
+
+        def fake_urlopen(req, timeout=30):
+            class Resp:
+                def read(self):
+                    return zip_bytes
+                def __enter__(self):
+                    return self
+                def __exit__(self, *a):
+                    pass
+            return Resp()
+
+        monkeypatch.setattr('urllib.request.urlopen', fake_urlopen)
+        telnet, ssh = fetch_ibbs_csv(
+            daily_url='http://fake/ibbs.zip',
+            monthly_url='http://fake/ibbs2.zip',
+            csv_out=csv_out)
+        assert len(telnet) == 1
+        assert telnet[0][0] == 'valid.com'
+
+
 class TestEndToEnd:
 
     def test_full_merge_cycle(self, tmp_path):
@@ -471,3 +707,48 @@ class TestEndToEnd:
         assert rej == 1
         assert ('new.com', 443) in entries
         assert ('dead.com', 80) not in entries
+
+
+class TestLoadSshOverrides:
+
+    def test_missing_file(self, tmp_path):
+        result = _load_ssh_overrides(str(tmp_path / 'missing.txt'))
+        assert result == {}
+
+    def test_parses_ssh_with_port(self, tmp_path):
+        p = tmp_path / 'bbslist.txt'
+        p.write_text('example.com 23\nexample.com ssh 2222\n')
+        result = _load_ssh_overrides(str(p))
+        assert result == {'example.com': 2222}
+
+    def test_parses_ssh_default_port(self, tmp_path):
+        p = tmp_path / 'bbslist.txt'
+        p.write_text('example.com 23\nexample.com ssh\n')
+        result = _load_ssh_overrides(str(p))
+        assert result == {'example.com': 22}
+
+    def test_ignores_comments(self, tmp_path):
+        p = tmp_path / 'bbslist.txt'
+        p.write_text('# example.com ssh 999\nexample.com ssh 2222\n')
+        result = _load_ssh_overrides(str(p))
+        assert result == {'example.com': 2222}
+
+    def test_ignores_telnet_lines(self, tmp_path):
+        p = tmp_path / 'bbslist.txt'
+        p.write_text('example.com 23 cp437\nother.com 4000\n')
+        result = _load_ssh_overrides(str(p))
+        assert result == {}
+
+    def test_invalid_ssh_port_skipped(self, tmp_path):
+        p = tmp_path / 'bbslist.txt'
+        p.write_text('example.com ssh badport\nvalid.com ssh 22\n')
+        result = _load_ssh_overrides(str(p))
+        assert 'example.com' not in result
+        assert result == {'valid.com': 22}
+
+    def test_lowercase_host_key(self, tmp_path):
+        p = tmp_path / 'bbslist.txt'
+        p.write_text('Example.COM ssh 2222\n')
+        result = _load_ssh_overrides(str(p))
+        assert 'example.com' in result
+        assert result['example.com'] == 2222

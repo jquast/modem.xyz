@@ -12,20 +12,25 @@ Sources:
 """
 
 import argparse
+import csv
+import io
 import json
 import os
 import sys
 import urllib.request
+import zipfile
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_BBSLIST = os.path.join(_HERE, 'bbslist.txt')
 DEFAULT_MUDLIST = os.path.join(_HERE, 'mudlist.txt')
 DEFAULT_TELNETSUPPORT = os.path.join(_HERE, 'telnetsupport.json')
 DEFAULT_DECISIONS = os.path.join(_HERE, 'moderation_decisions.json')
+DEFAULT_IBBS_CSV = os.path.join(_HERE, 'ibbs_bbslist.csv')
 
 RELAY_CFG_URL = 'https://www.ipingthereforeiam.com/bbs/dir/relay.cfg'
 COMMODOREBBS_URL = 'https://www.commodorebbs.com/api/bbs'
 TELNETSUPPORT_URL = 'https://lociterm.com/telnetsupport.json'
+IBBS_BASE_URL = 'https://www.telnetbbsguide.com/bbslist/'
 
 USER_AGENT = 'modem.xyz/0.1 (telnet census)'
 
@@ -60,11 +65,14 @@ def _load_list(path):
             parts = stripped.split()
             if len(parts) >= 2:
                 host = parts[0]
-                try:
-                    port = int(parts[1])
-                except ValueError:
-                    continue
-                entries[(host.lower(), port)] = stripped
+                if parts[1] == 'ssh':
+                    entries[(host.lower(), 'ssh')] = stripped
+                else:
+                    try:
+                        port = int(parts[1])
+                    except ValueError:
+                        continue
+                    entries[(host.lower(), port)] = stripped
     return header_lines, entries
 
 
@@ -214,6 +222,106 @@ def fetch_telnetsupport(url=TELNETSUPPORT_URL, local_path=DEFAULT_TELNETSUPPORT)
     return entries
 
 
+def _ibbs_urls():
+    """Return (daily_url, monthly_url) with daily = yesterday.
+
+    :returns: tuple of (daily_url, monthly_url)
+    """
+    from datetime import date, timedelta
+    yesterday = date.today() - timedelta(days=1)
+    return (
+        IBBS_BASE_URL + f"ibbs{yesterday:%m%d%y}.zip",
+        IBBS_BASE_URL + f"ibbs{yesterday:%m%y}.zip",
+    )
+
+
+def fetch_ibbs_csv(daily_url=None, monthly_url=None,
+                   csv_out=DEFAULT_IBBS_CSV):
+    """Fetch BBS entries from telnetbbsguide.com ibbs zip.
+
+    Tries the daily URL (yesterday) first, falls back to monthly.
+    Saves the extracted bbslist.csv to csv_out for later use by make_stats.
+
+    :param daily_url: URL for yesterday's daily zip (or None to compute)
+    :param monthly_url: URL for monthly zip (or None to compute)
+    :param csv_out: path to save extracted bbslist.csv
+    :returns: tuple of (telnet_entries, ssh_map) where telnet_entries is a
+              list of (host, port) and ssh_map is {host_lower: (host, ssh_port)}
+    """
+    if daily_url is None or monthly_url is None:
+        daily_url, monthly_url = _ibbs_urls()
+
+    zip_data = None
+    for url in (daily_url, monthly_url):
+        try:
+            print(f'  downloading {url} ...', file=sys.stderr)
+            req = urllib.request.Request(
+                url, headers={'User-Agent': USER_AGENT})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                zip_data = resp.read()
+            break
+        except OSError:
+            continue
+    if zip_data is None:
+        raise OSError('ibbs: all URLs failed')
+
+    with zipfile.ZipFile(io.BytesIO(zip_data)) as zf:
+        csv_bytes = zf.read('bbslist.csv')
+
+    output = csv_out + '.new'
+    with open(output, 'wb') as f:
+        f.write(csv_bytes)
+    os.replace(output, csv_out)
+    print(f'  saved {csv_out}', file=sys.stderr)
+
+    telnet_entries = []
+    ssh_map = {}
+    seen = set()
+    reader = csv.DictReader(
+        io.StringIO(csv_bytes.decode('utf-8', errors='replace')))
+    for row in reader:
+        row = {k.strip(): (v.strip() if v else '') for k, v in row.items()}
+        host = row.get('TelnetAddress', '').strip()
+        port_str = row.get('TelnetPort', '').strip()
+        ssh_port_str = row.get('SSHPort', '').strip()
+        if not host:
+            continue
+        if port_str:
+            try:
+                port = int(port_str)
+            except ValueError:
+                port = None
+            if port and port > 0:
+                key = (host.lower(), port)
+                if key not in seen:
+                    seen.add(key)
+                    telnet_entries.append((host, port))
+        if ssh_port_str:
+            try:
+                ssh_port = int(ssh_port_str)
+            except ValueError:
+                ssh_port = None
+            if ssh_port and ssh_port > 0:
+                ssh_map[host.lower()] = (host, ssh_port)
+    return telnet_entries, ssh_map
+
+
+def _merge_ssh_entries(existing, ssh_map):
+    """Add SSH lines for hosts already tracked as telnet entries.
+
+    :param existing: dict {(host_lower, port_or_'ssh'): line} — modified in place
+    :param ssh_map: {host_lower: (host, ssh_port)} from fetch_ibbs_csv
+    :returns: number of SSH lines added
+    """
+    known_hosts = {host for host, _ in existing}
+    added = 0
+    for host_lower, (host, ssh_port) in ssh_map.items():
+        if host_lower in known_hosts and (host_lower, 'ssh') not in existing:
+            existing[(host_lower, 'ssh')] = f'{host} ssh {ssh_port}'
+            added += 1
+    return added
+
+
 # ---------------------------------------------------------------------------
 # Merge logic
 # ---------------------------------------------------------------------------
@@ -347,6 +455,12 @@ def main(argv=None):
     parser.add_argument(
         '--decisions', default=DEFAULT_DECISIONS,
         help='path to moderation_decisions.json')
+    parser.add_argument(
+        '--no-ibbs', action='store_true',
+        help='skip telnetbbsguide.com ibbs source')
+    parser.add_argument(
+        '--ibbs-csv', default=DEFAULT_IBBS_CSV,
+        help='path to save ibbs_bbslist.csv')
     args = parser.parse_args(argv)
 
     do_bbs = args.bbs or not (args.bbs or args.muds)
@@ -406,6 +520,19 @@ def main(argv=None):
             except (OSError, ValueError) as exc:
                 print(f'  commodorebbs.com: fetch failed ({exc})',
                       file=sys.stderr)
+
+        if not args.no_ibbs:
+            try:
+                ibbs_t, ibbs_ssh = fetch_ibbs_csv(csv_out=args.ibbs_csv)
+                n, rej, alt, cross = _merge_entries(
+                    entries, ibbs_t, rejected=rejected,
+                    exclude_hosts=mud_hosts)
+                n_ssh = _merge_ssh_entries(entries, ibbs_ssh)
+                print(f'  ibbs: {len(ibbs_t)} fetched,'
+                      f' {n} new telnet, {n_ssh} new SSH',
+                      file=sys.stderr)
+            except (OSError, ValueError, KeyError) as exc:
+                print(f'  ibbs: fetch failed ({exc})', file=sys.stderr)
 
         rlogin_removed = _remove_rlogin_dupes(entries)
         if rlogin_removed:
