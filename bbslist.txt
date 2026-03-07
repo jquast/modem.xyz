@@ -171,7 +171,7 @@
 207.58.151.67 8888
 207.90.251.241 2323
 208.97.60.219 2300
-20forbeers.com 1337 utf-8
+20forbeers.com 1337 cp437
 211.68.71.66 23 gbk
 213.166.5.201 23
 213.95.46.21 513
@@ -266,7 +266,7 @@
 52.212.238.182 2323
 52.35.137.231 1972
 52.40.49.152 23 latin-1
-54.238.90.108 23 big5
+54.238.90.108 23 big5bbs
 59.167.142.49 12800 petscii 80
 63.230.156.110 2424
 64.121.82.225 9999
@@ -429,7 +429,7 @@ absinthebbs.net 1940 topaz
 acentauribbs.no-ip.org 2424 utf-8
 adeptbbs.com 23
 adibbs.sytes.net 6800
-aeug.asuscomm.com 8888 big5
+aeug.asuscomm.com 8888 big5bbs
 agency.bbs.nz 23
 alamobbs.mywire.org 6400
 alcatrazbbs.ddns.net 9000
@@ -449,7 +449,7 @@ amis86.ddns.net 9000 atascii 40 tall
 amnesiabbs.duckdns.org 23 utf-8
 amstrad.simulant.uk 464
 ancientmists.vineyard.haus 1538
-andcycle.idv.tw 23 big5
+andcycle.idv.tw 23 big5bbs
 andr01d.zapto.org 9999
 angstridden.net 1337
 ansalon.net 8679
@@ -495,7 +495,7 @@ bbs.anduin.net 23
 bbs.apostols.org 23 utf-8
 bbs.archaicbinary.net 23
 bbs.arcticzonebbs.net 23
-bbs.as.ntu.edu.tw 23 big5 tall
+bbs.as.ntu.edu.tw 23 big5bbs tall
 bbs.at2k.org 23
 bbs.b-wells.us 23 utf-8 80 tall
 bbs.bajer.cz 32
@@ -511,7 +511,7 @@ bbs.bytebarn.de 2300
 bbs.c64.pub 23 utf-8
 bbs.cabanabar.net 11123 utf-8
 bbs.canerduh.com 23905
-bbs.ccns.ncku.edu.tw 3456 big5 no_ambig
+bbs.ccns.ncku.edu.tw 3456 big5bbs no_ambig
 bbs.ccxbbs.net 23
 bbs.centronian.ca 6400
 bbs.circl.lu 23 utf-8
@@ -524,7 +524,7 @@ bbs.cooldavid.org 23 big5 no_ambig
 bbs.cortex-media.info 23
 bbs.crazyerics.com 23
 bbs.crnet.net 2323
-bbs.cs.nthu.edu.tw 23 big5 no_ambig
+bbs.cs.nthu.edu.tw 23 big5bbs no_ambig
 bbs.cyrellia.com 23 utf-8
 bbs.darkcarnival.org 23
 bbs.darkrealms.ca 23
@@ -548,7 +548,7 @@ bbs.echo-mirage.net 1989
 bbs.efectolinux.com 23 utf-8 80 tall
 bbs.emeraldhill.org 23
 bbs.emeraldvalley.net 23 utf-8 80 tall
-bbs.emu486.net 23 big5
+bbs.emu486.net 23 big5bbs
 bbs.eotd.com 23
 bbs.erb.pw 23
 bbs.error200.tech 1337 utf-8
@@ -589,7 +589,7 @@ bbs.kd8hfx.net 23
 bbs.kiwi.net 23
 bbs.kn6q.org 2002
 bbs.korenblom.nl 23
-bbs.kry.pt 2323 big5
+bbs.kry.pt 2323 utf-8
 bbs.lightly-salted.com 8023 utf-8
 bbs.lizardmaster.com 23 utf-8
 bbs.lizsugar.me 6000 utf-8
@@ -738,7 +738,7 @@ casper.homeip.net 23
 cavebbs.homeip.net 23 utf-8 80 tall
 cbbs.mitsaltair.com 8800
 ccbbs.zapto.org 3143
-cd.csie.io 23 big5 no_ambig
+cd.csie.io 23 big5bbs no_ambig
 cebbs.costakis.org 23 utf-8
 cedarvalleybbs.com 2424
 cedarvalleybbs.com 2525
@@ -961,7 +961,7 @@ lastrangers.com 23 utf-8
 latenight.diversidial.com 313
 lensmoor.org 3500
 lexiconbbs.com 6400
-libido.cx 23 big5 no_ambig
+libido.cx 23 big5bbs no_ambig
 lilacbbs.com 23 gbk
 linuxdoc.no-ip.org 23
 lisdude.com 8888

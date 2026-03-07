@@ -181,7 +181,7 @@ With the 8-bit Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atar
 Atari-Classic.ttf`` font installed, `Telix`_ can perform bi-directional translation of
 :ref:`ATASCII <atascii>` encoding and their control codes::
 
-        telix --force-binary --encoding=ATASCII area52.tk 5200
+        telix --encoding=ATASCII area52.tk 5200
 
 .. figure:: /_static/ghostty-atascii-telnetlib3.png
    :width: 408px
