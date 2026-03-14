@@ -128,7 +128,7 @@ The BBS Software pictured above advertised itself as `MajorBBS
 (:ref:`CP437 <cp437>`) encoding, and can use the `Telix`_ option ``encoding=cp437`` to correct for
 it::
 
-   telix --encoding=cp437 bbs.ccxbbs.net
+   telix --bbs --encoding=cp437 bbs.ccxbbs.net
 
 .. figure:: /_static/ghostty-cp437-telnetlib3.png
    :width: 672px
@@ -149,7 +149,7 @@ The Amiga encoding is `latin1
 <https://blog.glyphdrawing.club/amiga-ascii-art/#233-what-is-amiga-ascii-art>`_ and can similarly be
 fixed by `Telix`_ by setting the ``encoding=latin1``::
 
-   telix --encoding=latin1 absinthebbs.net 1940
+   telix --bbs --encoding=latin1 absinthebbs.net 1940
 
 .. figure:: /_static/konsole-amiga-telnetlib3.png
    :width: 475px
@@ -163,7 +163,7 @@ With the 8-bit Commodore `PETSCII <https://github.com/damianvila/font-bescii/rel
 ``Bescii-Mono.ttf`` font installed, `Telix`_ can perform bi-directional translation of PETSCII
 :ref:`PETSCII <petscii>` encoding and their control control codes::
 
-        telix --encoding=PETSCII valley64.com 6400
+        telix --bbs --encoding=PETSCII valley64.com 6400
 
 .. figure:: /_static/ghostty-petscii-telnetlib3.png
    :width: 450px
@@ -181,7 +181,7 @@ With the 8-bit Atari ASCII `ATASCII <https://atari8bit.net/projects/artwork/atar
 Atari-Classic.ttf`` font installed, `Telix`_ can perform bi-directional translation of
 :ref:`ATASCII <atascii>` encoding and their control codes::
 
-        telix --encoding=ATASCII area52.tk 5200
+        telix --bbs --encoding=ATASCII area52.tk 5200
 
 .. figure:: /_static/ghostty-atascii-telnetlib3.png
    :width: 408px
@@ -233,11 +233,10 @@ It provides a fast web interface to
 - Preview login banners,
 - and examine their Telnet protocol details
 
-It was created by the author of the Telix_ Telnet TUI Client and its supporting Python telnetlib3_,
-blessed_, and wcwidth_ libraries, and this data is used to supply the software with a list of
-available connections.
+This site is created by the author of Telix_, A modern telnet client for BBSs and MUDs. This data is
+used to supply Telix_ with a default directory of available servers.
 
-It uses the `telnetlib3-fingerprint
+The data is gathered by the `telnetlib3-fingerprint
 <https://telnetlib3.readthedocs.io/en/latest/guidebook.html#fingerprinting-client>`_ CLI to gather
 the results shown here.
 
@@ -257,8 +256,6 @@ as fallback for other codepoints, especially east-asian (CJK).  Banner data is s
 applied.
 
 .. _telnetlib3: https://telnetlib3.readthedocs.org/
-.. _blessed: https://blessed.readthedocs.org/
-.. _wcwidth: https://wcwidth.readthedocs.org/
 
 Better Sites
 ------------

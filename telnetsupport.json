@@ -56,13 +56,6 @@
     "options": "[\"BINARY\",\"ECHO\",\"STATUS\",\"TERMINAL TYPE\",\"NAWS\",\"TSPEED\",\"LINEMODE\",\"XDISPLOC\",\"OLD-ENVIRON\",\"NEW-ENVIRON\",\"MCCP1\",\"MCCP2\"]"
   },
   {
-    "host": "cryosphere.uk",
-    "port": 6666,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP1\",\"MCCP2\",\"MCCPX\",\"UNKNOWN-96\",\"UNKNOWN-112\",\"GMCP\"]"
-  },
-  {
     "host": "vitaliamud.com.br",
     "port": 8242,
     "ssl": 0,
@@ -82,13 +75,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
-  },
-  {
-    "host": "www.mudbar.cn",
-    "port": 3333,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
   },
   {
     "host": "www.fengyunmud.top",
@@ -166,6 +152,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "dsmush.com",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
   },
   {
     "host": "pdragon.org",
@@ -413,13 +406,6 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\"]"
   },
   {
-    "host": "mud.kiev.ua",
-    "port": 9000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP1\",\"MCCP2\",\"UNKNOWN-123\",\"GMCP\"]"
-  },
-  {
     "host": "bbs.c64.pub",
     "port": 23,
     "ssl": 0,
@@ -467,6 +453,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MCCP1\",\"MCCP2\",\"AARDWOLF MUSHCLIENT\",\"ATCP\",\"GMCP\"]"
+  },
+  {
+    "host": "isharmud.com",
+    "port": 23,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"BINARY\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"GMCP\"]"
   },
   {
     "host": "thewalkingdead.apocalypto.org.uk",
@@ -553,15 +546,22 @@
     "options": "[\"BINARY\",\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"OLD-ENVIRON\",\"NEW-ENVIRON\"]"
   },
   {
-    "host": "paxrepublica.net",
-    "port": 9999,
+    "host": "jointhesaga.com",
+    "port": 1790,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "toobis.org",
-    "port": 4420,
+    "host": "mud.kiev.ua",
+    "port": 9000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"END OF RECORD\",\"MCCP1\",\"MCCP2\",\"UNKNOWN-123\",\"GMCP\"]"
+  },
+  {
+    "host": "paxrepublica.net",
+    "port": 9999,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
@@ -677,13 +677,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"MSSP\",\"MCCP2\",\"MXP\",\"GMCP\"]"
-  },
-  {
-    "host": "teenymush.dynu.net",
-    "port": 4096,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"MSSP\"]"
   },
   {
     "host": "cthulhumud.com",
@@ -917,6 +910,20 @@
     "options": "[\"TERMINAL TYPE\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "kk.muds.idv.tw",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "new.vampire-wars.com",
+    "port": 6666,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MCCP1\",\"MCCP2\"]"
+  },
+  {
     "host": "www.alteraeon.com",
     "port": 3000,
     "ssl": 0,
@@ -985,6 +992,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
+    "host": "moo.squidsoft.net",
+    "port": 7777,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"NEW-ENVIRON\"]"
   },
   {
     "host": "alteraeon.com",
@@ -1127,13 +1141,6 @@
     "options": "[\"MSSP\"]"
   },
   {
-    "host": "batmud.bat.org",
-    "port": 23,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\"]"
-  },
-  {
     "host": "3k.org",
     "port": 3000,
     "ssl": 0,
@@ -1174,5 +1181,12 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"LINEMODE\"]"
+  },
+  {
+    "host": "swordhammer.net",
+    "port": 4000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\"]"
   }
 ]
