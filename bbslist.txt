@@ -704,7 +704,7 @@ fatcatsbbs.com 23 utf-8
 fdd.one 23
 fedapoc.tel 2301
 fenglin.info 2323 utf-8
-ferchobbs.ddns.net 2323 latin-1
+ferchobbs.ddns.net 2323 utf-8
 ff.mud.de 7600
 fibs.com 4321
 fido.alltsk.ru 23

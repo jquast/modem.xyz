@@ -492,7 +492,7 @@ mare.hoardersheaven.net 4201
 materiamagica.com 23
 mdhavian.net 7500
 mearth.mushpark.com 9376
-medievia.com 4000
+medievia.com 4000 cp1252
 medinamud.tk 3232
 megamanmush.com 1997
 mf.deepfire.net 4242
