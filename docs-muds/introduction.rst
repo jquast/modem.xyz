@@ -151,7 +151,7 @@ applied.
 .. _telnetlib3: https://telnetlib3.readthedocs.org/
 .. _blessed: https://blessed.readthedocs.org/
 .. _wcwidth: https://wcwidth.readthedocs.org/
-.. _Telix: https://telix.readthedocs.org/
+.. _Telix: https://telix.readthedocs.io/en/latest/intro.html
 
 Better Sites
 ------------

@@ -292,4 +292,4 @@ Exercises for the reader!
 - What kind of systems did BBSs run on? What do they run on now?
 - Why are so few BBSs on the IANA_designated port 23?
 
-.. _Telix: https://telix.readthedocs.org/
+.. _Telix: https://telix.readthedocs.io/en/latest/intro.html
