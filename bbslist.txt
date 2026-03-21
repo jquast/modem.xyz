@@ -1157,8 +1157,8 @@ x-bit.org 23230
 x.a-net.online 2323 utf-8
 x22.ddns.net 9000
 xibalba.l33t.codes 44510 utf-8
-zahrl.ddns.net 2023
-zen.kawasu.wtf 23
+zahrl.ddns.net 2023 cp437
+zen.kawasu.wtf 23 cp437
 zenolab.synchro.net 23 utf-8
 zeus.cybercitizen.net 3337
 zl4kj.nz 23

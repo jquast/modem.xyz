@@ -186,7 +186,7 @@ Atari-Classic.ttf`` font installed, `Telix`_ can perform bi-directional translat
 .. figure:: /_static/ghostty-atascii-telnetlib3.png
    :width: 408px
 
-   ghostty and Telix is used to connect to an Atari BS.
+   ghostty and Telix is used to connect to an Atari BBS.
 
 .. hint::
 
