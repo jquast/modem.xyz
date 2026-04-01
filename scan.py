@@ -178,7 +178,7 @@ def main():
         description='Scan telnet servers in parallel using'
                     ' telnetlib3-fingerprint.')
     parser.add_argument(
-        '--list', required=True,
+        '--list', default=None,
         help='Path to server list file (host port [encoding])')
     parser.add_argument(
         '--data-dir', default=None,
@@ -205,8 +205,51 @@ def main():
     parser.add_argument(
         '--connect-delay', type=float, default=0.05,
         help='Seconds between launching each scan')
+    parser.add_argument(
+        '--shodan-bbs', action='store_true',
+        help='Search Shodan for new BBS servers and save discoveries')
+    parser.add_argument(
+        '--shodan-muds', action='store_true',
+        help='Search Shodan for new MUD servers and save discoveries')
     args = parser.parse_args()
 
+    # Shodan discovery mode — runs searches and exits.
+    if args.shodan_bbs or args.shodan_muds:
+        from moderation.shodan_discover import (
+            BBS_QUERIES, MUD_QUERIES, discover, save_discoveries,
+        )
+        if args.shodan_bbs:
+            list_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), 'bbslist.txt')
+            print("Discovering new BBS servers via Shodan ...",
+                  file=sys.stderr)
+            found, stats = discover(BBS_QUERIES, list_path, 'bbs')
+            print(f"  {stats['total_results']} total results,"
+                  f" {stats['unique_ips']} unique IPs,"
+                  f" {stats['already_known']} already known,"
+                  f" {stats['new']} new", file=sys.stderr)
+            if found:
+                path = save_discoveries(found, 'bbs')
+                print(f"  Saved {len(found)} discoveries to {path}",
+                      file=sys.stderr)
+        if args.shodan_muds:
+            list_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), 'mudlist.txt')
+            print("Discovering new MUD servers via Shodan ...",
+                  file=sys.stderr)
+            found, stats = discover(MUD_QUERIES, list_path, 'mud')
+            print(f"  {stats['total_results']} total results,"
+                  f" {stats['unique_ips']} unique IPs,"
+                  f" {stats['already_known']} already known,"
+                  f" {stats['new']} new", file=sys.stderr)
+            if found:
+                path = save_discoveries(found, 'mud')
+                print(f"  Saved {len(found)} discoveries to {path}",
+                      file=sys.stderr)
+        return
+
+    if not args.list:
+        parser.error("--list is required for scanning")
     if not os.path.isfile(args.list):
         print(f"Error: {args.list} not found", file=sys.stderr)
         sys.exit(1)

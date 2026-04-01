@@ -120,6 +120,11 @@ def _get_argument_parser():
         help=("only discover MSSP-advertised TLS ports"
               " not in the server list"),
     )
+    mode_mx.add_argument(
+        "--only-shodan", action="store_true",
+        help="review pending Shodan discoveries and add"
+             " to server lists",
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -219,6 +224,72 @@ def main():
             expunge_all_logs(
                 args.bbs_list, args.logs, args.expunge_all,
                 data_dir=args.bbs_data)
+        return
+
+    if args.only_shodan:
+        from .shodan_discover import list_pending, load_discovery_file
+        from .util import _prompt
+        pending = list_pending()
+        if not pending:
+            print("No pending Shodan discoveries.")
+            return
+        print(f"\n{len(pending)} pending discovery file(s):\n")
+        for path, list_type, count, date in pending:
+            print(f"  [{list_type.upper()}] {os.path.basename(path)}"
+                  f" — {count} entries ({date})")
+        print()
+
+        for path, list_type, count, date in pending:
+            entries = load_discovery_file(path)
+            if not entries:
+                continue
+            target_list = (args.bbs_list if list_type == 'bbs'
+                           else args.mud_list)
+            print(f"\n{'='*60}")
+            print(f"  {os.path.basename(path)} — {list_type.upper()}"
+                  f" — {len(entries)} entries")
+            print(f"  Target: {target_list}")
+            print(f"{'='*60}")
+
+            if args.report_only:
+                for host, port, comment in entries:
+                    c = f"  # {comment}" if comment else ''
+                    print(f"  {host} {port}{c}")
+                continue
+
+            accepted = []
+            for host, port, comment in entries:
+                c = f"  ({comment})" if comment else ''
+                ans = _prompt(
+                    f"  Add {host} {port}{c}? [y/n/a(ll)/s(kip file)] ",
+                    "ynas")
+                if ans == 's':
+                    print("  Skipping rest of file.")
+                    break
+                if ans == 'a':
+                    accepted.append((host, port))
+                    accepted.extend(
+                        (h, p) for h, p, _ in entries[
+                            entries.index((host, port, comment)) + 1:])
+                    print(f"  Accepting all remaining"
+                          f" ({len(accepted)} total).")
+                    break
+                if ans == 'y':
+                    accepted.append((host, port))
+
+            if accepted and not args.dry_run:
+                with open(target_list, 'a') as f:
+                    for host, port in accepted:
+                        f.write(f"{host} {port}\n")
+                print(f"  Appended {len(accepted)} entries"
+                      f" to {target_list}")
+                # Archive processed file.
+                archive = path + '.done'
+                os.rename(path, archive)
+                print(f"  Archived → {os.path.basename(archive)}")
+            elif accepted:
+                print(f"  Dry run: would append {len(accepted)}"
+                      f" entries to {target_list}")
         return
 
     only_flags = (
