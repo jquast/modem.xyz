@@ -913,3 +913,15 @@ zhyx.xguo.top 8888 gbk
 zmc-place.enyc.org.uk 8682
 zombiemud.net 2150
 zombiemud.org 3000
+115.190.115.114 4000
+129.212.147.24 4000
+149.248.36.254.vultrusercontent.com 23
+159.223.136.75 4000
+159.65.45.88 4000
+20.237.45.25 4000
+27.102.207.232 4000
+45.32.79.24.vultrusercontent.com 4000
+bigip-test-secure-ausomxlea-crmondemand.oracle.com 4000
+ip209-46-125-36.pbiaas.com 4000
+ip98-177-226-108.ph.ph.cox.net 4000
+modemcable082.78-37-24.static.videotron.ca 4000

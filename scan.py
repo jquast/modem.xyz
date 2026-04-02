@@ -211,12 +211,16 @@ def main():
     parser.add_argument(
         '--shodan-muds', action='store_true',
         help='Search Shodan for new MUD servers and save discoveries')
+    parser.add_argument(
+        '--shodan-general', action='store_true',
+        help='Search Shodan for ANSI terminal services (BBS/MUD/other)')
     args = parser.parse_args()
 
     # Shodan discovery mode — runs searches and exits.
-    if args.shodan_bbs or args.shodan_muds:
+    if args.shodan_bbs or args.shodan_muds or args.shodan_general:
         from moderation.shodan_discover import (
-            BBS_QUERIES, MUD_QUERIES, discover, save_discoveries,
+            BBS_QUERIES, MUD_QUERIES, GENERAL_QUERIES,
+            discover, save_discoveries,
         )
         if args.shodan_bbs:
             list_path = os.path.join(
@@ -246,6 +250,38 @@ def main():
                 path = save_discoveries(found, 'mud')
                 print(f"  Saved {len(found)} discoveries to {path}",
                       file=sys.stderr)
+        if args.shodan_general:
+            # Dedup against both lists.
+            bbs_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), 'bbslist.txt')
+            mud_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), 'mudlist.txt')
+            # Combine both lists for dedup.
+            from moderation.shodan_discover import _parse_server_list
+            bbs_hosts, bbs_ips = _parse_server_list(bbs_path)
+            mud_hosts, mud_ips = _parse_server_list(mud_path)
+            # Write a temp combined list.
+            import tempfile
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.txt',
+                                            delete=False) as tmp:
+                for h in sorted(bbs_hosts | mud_hosts):
+                    tmp.write(f"{h} 23\n")
+                combined_path = tmp.name
+            try:
+                print("Discovering ANSI terminal services via Shodan ...",
+                      file=sys.stderr)
+                found, stats = discover(
+                    GENERAL_QUERIES, combined_path, 'general')
+                print(f"  {stats['total_results']} total results,"
+                      f" {stats['unique_ips']} unique IPs,"
+                      f" {stats['already_known']} already known,"
+                      f" {stats['new']} new", file=sys.stderr)
+                if found:
+                    path = save_discoveries(found, 'general')
+                    print(f"  Saved {len(found)} discoveries to {path}",
+                          file=sys.stderr)
+            finally:
+                os.unlink(combined_path)
         return
 
     if not args.list:
