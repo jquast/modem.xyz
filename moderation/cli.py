@@ -125,6 +125,11 @@ def _get_argument_parser():
         help="review pending Shodan discoveries and add"
              " to server lists",
     )
+    mode_mx.add_argument(
+        "--only-nmap", action="store_true",
+        help="discover new telnet/rlogin services from nmap"
+             " banner-scan data",
+    )
 
     parser.add_argument(
         "--report-only", action="store_true",
@@ -259,9 +264,11 @@ def main():
 
             accepted = []
             for host, port, comment in entries:
-                c = f"  ({comment})" if comment else ''
+                c = comment.replace('\x00', '') if comment else ''
+                c = f"\n    {c}" if c else ''
                 ans = _prompt(
-                    f"  Add {host} {port}{c}? [y/n/a(ll)/s(kip file)] ",
+                    f"\n  {host} {port}{c}"
+                    f"\n  Add? [y/n/a(ll)/s(kip file)] ",
                     "ynas")
                 if ans == 's':
                     print("  Skipping rest of file.")
@@ -290,6 +297,106 @@ def main():
             elif accepted:
                 print(f"  Dry run: would append {len(accepted)}"
                       f" entries to {target_list}")
+        return
+
+    if args.only_nmap:
+        from .nmap_discover import discover_from_nmap
+        from .util import _prompt
+
+        discoveries = discover_from_nmap(args.bbs_list, args.mud_list)
+        if not discoveries:
+            print("No new telnet services found in nmap data.")
+            return
+
+        muds = [d for d in discoveries if d['category'] == 'mud']
+        bbs = [d for d in discoveries
+               if d['category'] in ('bbs', 'other')]
+        new_hosts = [d for d in discoveries if d.get('is_new_host')]
+        new_ports = [d for d in discoveries if not d.get('is_new_host')]
+
+        print(f"\nFound {len(discoveries)} new telnet services:"
+              f" {len(muds)} MUD, {len(bbs)} BBS/other"
+              f" ({len(new_hosts)} new hosts,"
+              f" {len(new_ports)} new ports on known hosts)\n")
+
+        if args.report_only:
+            if muds:
+                print(f"  === MUD ({len(muds)}) → {args.mud_list} ===")
+                for d in muds:
+                    print(f"  {d['host']} {d['port']}"
+                          f"  # {d['banner'][:70]}")
+            if bbs:
+                print(f"\n  === BBS/other ({len(bbs)})"
+                      f" → {args.bbs_list} ===")
+                for d in bbs:
+                    print(f"  {d['host']} {d['port']}"
+                          f"  # {d['banner'][:70]}")
+            return
+
+        def _entry_line(d):
+            enc = d.get('encoding', '')
+            if enc:
+                return f"{d['host']} {d['port']} {enc}"
+            return f"{d['host']} {d['port']}"
+
+        def _review(label, items, target):
+            accepted = []
+            print(f"  === {label} ({len(items)})"
+                  f" → {target} ===")
+            for d in items:
+                banner = d['banner'][:60].replace('\n', ' ')
+                new_tag = ' [NEW]' if d.get('is_new_host') else ''
+                enc_tag = (f' [{d["encoding"]}]'
+                           if d.get('encoding') else '')
+                ans = _prompt(
+                    f"\n  {d['host']} {d['port']}"
+                    f"{enc_tag}{new_tag}"
+                    f"\n    {banner}"
+                    f"\n  Add? [y/n/a(ll)/s(kip)] ", "ynas")
+                if ans == 's':
+                    break
+                if ans == 'a':
+                    accepted.append(d)
+                    idx = items.index(d)
+                    accepted.extend(items[idx + 1:])
+                    print(f"  Accepting all remaining"
+                          f" ({len(accepted)} total).")
+                    break
+                if ans == 'y':
+                    accepted.append(d)
+            return accepted
+
+        mud_accepted = []
+        bbs_accepted = []
+
+        if muds:
+            mud_accepted = _review(
+                'MUD candidates', muds, args.mud_list)
+
+        if bbs:
+            bbs_accepted = _review(
+                'BBS/other candidates', bbs, args.bbs_list)
+
+        if not args.dry_run:
+            if mud_accepted:
+                with open(args.mud_list, 'a') as f:
+                    for d in mud_accepted:
+                        f.write(_entry_line(d) + '\n')
+                print(f"  Appended {len(mud_accepted)} to"
+                      f" {args.mud_list}")
+            if bbs_accepted:
+                with open(args.bbs_list, 'a') as f:
+                    for d in bbs_accepted:
+                        f.write(_entry_line(d) + '\n')
+                print(f"  Appended {len(bbs_accepted)} to"
+                      f" {args.bbs_list}")
+        else:
+            if mud_accepted:
+                print(f"  Dry run: would append"
+                      f" {len(mud_accepted)} to {args.mud_list}")
+            if bbs_accepted:
+                print(f"  Dry run: would append"
+                      f" {len(bbs_accepted)} to {args.bbs_list}")
         return
 
     only_flags = (

@@ -92,14 +92,14 @@ def _prompt(message, choices="ynq"):
     :param choices: string of valid characters
     :returns: lowercase character, or None on EOF/interrupt
     """
-    try:
-        answer = input(message).strip().lower()
-    except (EOFError, KeyboardInterrupt):
-        print()
-        return None
-    if answer and answer[0] in choices:
-        return answer[0]
-    return answer
+    while True:
+        try:
+            answer = input(message).strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            return None
+        if answer and answer[0] in choices:
+            return answer[0]
 
 
 def _is_ip_address(host):
