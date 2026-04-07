@@ -5,14 +5,20 @@ import os
 from pathlib import Path
 
 from .banner_analysis import (
+    _BBS_IN_BANNER_RE,
+    _MUD_IN_BANNER_RE,
     discover_column_width_issues,
     discover_empty_banners,
     discover_http_banners,
+    discover_misplaced_servers,
+    discover_nontelnet_banners,
     discover_renders_empty,
     discover_renders_small,
     review_column_width_issues,
     review_empty_banners,
     review_http_banners,
+    review_misplaced_servers,
+    review_nontelnet_banners,
     review_renders_empty,
     review_renders_small,
 )
@@ -29,6 +35,12 @@ from .encoding import (
     expunge_all_logs,
     review_encoding_issues,
     show_all_banners,
+)
+from .rlogin import (
+    discover_codepage_prompts,
+    discover_rlogin_banners,
+    review_codepage_prompts,
+    review_rlogin_banners,
 )
 from .tls import discover_tls_ports, review_tls_ports
 from .util import (
@@ -88,6 +100,18 @@ def _get_argument_parser():
              " duplicate another port for the same host",
     )
     mode_mx.add_argument(
+        "--only-rlogin-tags", action="store_true",
+        help="scan fingerprint banners for RLogin rejection messages"
+             " and add 'rlogin' keyword to matching list entries,"
+             " then delete their log files for re-scan",
+    )
+    mode_mx.add_argument(
+        "--only-codepage", action="store_true",
+        help="find servers whose banners contain an unanswered codepage"
+             " selection prompt (e.g. '[ENTER]=CP437') and delete their"
+             " log files so they are re-scanned with the updated client",
+    )
+    mode_mx.add_argument(
         "--only-encodings", action="store_true",
         help="only discover and fix encoding issues in banners",
     )
@@ -116,6 +140,11 @@ def _get_argument_parser():
               " instead of telnet"),
     )
     mode_mx.add_argument(
+        "--only-nontelnet", action="store_true",
+        help=("only find servers with MySQL, RTSP, or IRC protocol"
+              " banners that should be removed from the lists"),
+    )
+    mode_mx.add_argument(
         "--only-tls", action="store_true",
         help=("only discover MSSP-advertised TLS ports"
               " not in the server list"),
@@ -129,6 +158,11 @@ def _get_argument_parser():
         "--only-nmap", action="store_true",
         help="discover new telnet/rlogin services from nmap"
              " banner-scan data",
+    )
+    mode_mx.add_argument(
+        "--only-misplaced", action="store_true",
+        help="find BBS-list servers whose banners mention MUD"
+             " (and vice-versa) and offer to move them",
     )
 
     parser.add_argument(
@@ -402,25 +436,30 @@ def main():
     only_flags = (
         args.only_prune, args.only_dupes,
         args.only_cross, args.only_dns,
-        args.only_rlogin,
+        args.only_rlogin, args.only_rlogin_tags, args.only_codepage,
         args.only_encodings, args.only_columns,
         args.only_empty, args.only_renders_empty,
         args.only_renders_small, args.only_http,
-        args.only_tls,
+        args.only_nontelnet, args.only_tls,
+        args.only_misplaced,
     )
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
-    do_dupes = args.only_dupes or not any_only
-    do_cross = args.only_cross or not any_only
-    do_dns = args.only_dns or not any_only
+    do_dupes = args.only_dupes
+    do_cross = args.only_cross
+    do_dns = args.only_dns
     do_rlogin = args.only_rlogin or not any_only
+    do_rlogin_tags = args.only_rlogin_tags
+    do_codepage = args.only_codepage
     do_encodings = args.only_encodings or not any_only
     do_columns = args.only_columns
     do_empty = args.only_empty or not any_only
     do_renders_empty = args.only_renders_empty
     do_renders_small = args.only_renders_small
     do_http = args.only_http or not any_only
+    do_nontelnet = args.only_nontelnet
     do_tls = args.only_tls
+    do_misplaced = args.only_misplaced
 
     if do_cross and (args.mud or args.bbs):
         do_cross = False
@@ -461,6 +500,43 @@ def main():
             if decisions and not args.dry_run:
                 record_rejections(
                     decisions, "bbs", removed, "rlogin")
+
+    if do_rlogin_tags:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_rlogin_banners(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_rlogin_banners(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            review_rlogin_banners(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No untagged RLogin rejection banners found.")
+
+    if do_codepage:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_codepage_prompts(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_codepage_prompts(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            review_codepage_prompts(
+                mud_issues, bbs_issues, args.logs,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No unanswered codepage selection prompts found.")
 
     if do_prune:
         if do_mud and os.path.isfile(args.mud_list):
@@ -660,6 +736,32 @@ def main():
         else:
             print("No HTTP response banners detected.")
 
+    if do_nontelnet:
+        mud_issues = []
+        bbs_issues = []
+        if do_mud and os.path.isfile(args.mud_list):
+            mud_issues = discover_nontelnet_banners(
+                args.mud_data, args.mud_list)
+        if do_bbs and os.path.isfile(args.bbs_list):
+            bbs_issues = discover_nontelnet_banners(
+                args.bbs_data, args.bbs_list)
+
+        if mud_issues or bbs_issues:
+            mud_rm, bbs_rm = review_nontelnet_banners(
+                mud_issues, bbs_issues,
+                args.mud_list, args.bbs_list, args.logs,
+                mud_data=args.mud_data,
+                bbs_data=args.bbs_data,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "mud", mud_rm, "nontelnet_banner")
+                record_rejections(
+                    decisions, "bbs", bbs_rm, "nontelnet_banner")
+        else:
+            print("No non-Telnet protocol banners detected.")
+
     if do_tls:
         mud_issues = []
         bbs_issues = []
@@ -704,6 +806,25 @@ def main():
                               f" stale decision(s)")
         else:
             print("No MSSP-advertised TLS ports to add.")
+
+    if do_misplaced:
+        bbs_issues = []
+        mud_issues = []
+        if os.path.isfile(args.bbs_list):
+            bbs_issues = discover_misplaced_servers(
+                args.bbs_data, args.bbs_list, _MUD_IN_BANNER_RE)
+        if os.path.isfile(args.mud_list):
+            mud_issues = discover_misplaced_servers(
+                args.mud_data, args.mud_list, _BBS_IN_BANNER_RE)
+
+        if bbs_issues or mud_issues:
+            review_misplaced_servers(
+                bbs_issues, mud_issues,
+                args.bbs_list, args.mud_list,
+                report_only=args.report_only,
+                dry_run=args.dry_run)
+        else:
+            print("No misplaced servers detected.")
 
     if decisions is not None:
         save_decisions(args.decisions, decisions)

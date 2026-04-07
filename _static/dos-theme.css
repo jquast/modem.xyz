@@ -182,7 +182,7 @@ pre.ansi-banner {
 .copy-btn {
   display: inline-block;
   background: none;
-  border: 1px solid #555;
+  border: none;
   color: #888;
   cursor: pointer;
   padding: 1px 5px;
@@ -251,6 +251,11 @@ button.tls-lock:hover {
   border-color: #333 !important;
   color: #ccc !important;
   background: #111 !important;
+}
+
+.rst-content table.docutils thead,
+.rst-content table.field-list thead {
+  color: #e0e0e0 !important;
 }
 
 .rst-content table.docutils thead th,

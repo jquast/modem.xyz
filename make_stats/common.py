@@ -18,11 +18,15 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import tabulate as tabulate_mod  # noqa: E402
 import wcwidth  # noqa: E402
+from telix.color_filter import ColorConfig, ColorFilter  # noqa: E402
 
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 LINK_REGEX = re.compile(r'[^a-zA-Z0-9]')
 _URL_RE = re.compile(r'https?://[^\s<>"\']+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:/[^\s<>"\']*)?')
+# Domains that must never be reported as a server's website — they appear in
+# banners because the scanner's reverse-DNS hostname resolves to this domain.
+_URL_SCANNER_DOMAINS = frozenset({'modem.xyz', 'syncterm.bbsdev.net'})
 _RST_SECTION_RE = re.compile(r'([=\-~#+^"._]{4,})')
 _SURROGATES_RE = re.compile(r'[\udc80-\udcff]')
 
@@ -664,7 +668,7 @@ def _png_display_width(path):
 
 
 def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
-                   rows=None, no_ambig=False):
+                   rows=None, no_ambig=False, ice_colors=False):
     """Render ANSI banner text to a deduplicated PNG file.
 
     Preprocesses the banner text, hashes it with the encoding and
@@ -678,6 +682,7 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     :param columns: optional terminal column width override
     :param rows: optional terminal row height override
     :param no_ambig: if True, disable ambiguous-width-as-wide for CJK
+    :param ice_colors: if True, treat SGR 5 (blink) as bright background
     :returns: ``(filename, display_width)`` tuple, or ``(None, None)``
         on failure.  *display_width* is the intended CSS pixel width
         for HiDPI rendering (half the actual PNG pixel width).
@@ -704,6 +709,15 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     # blank image and waste renderer cycles.
     if not _strip_ansi(text).strip():
         return None, None
+
+    # Apply VGA color matching: translate 16-color SGR codes to 24-bit
+    # RGB from the VGA palette.  For BBS banners, also enable iCE colors
+    # (SGR 5 blink repurposed as bright background).  Skip encodings
+    # that use their own control codes rather than ANSI SGR.
+    if encoding not in ('petscii', 'atascii', 'atarist'):
+        color_cfg = ColorConfig(palette_name='vga', ice_colors=ice_colors)
+        color_filter = ColorFilter(color_cfg)
+        text = color_filter.filter(text) + color_filter.flush()
 
     # Cap at 512 KiB to avoid overwhelming the terminal renderer with
     # giant pixel-art banners (e.g. 21 MB truecolor block-character art).
@@ -837,6 +851,125 @@ def _render_template(template_name, **context):
     env = _jinja_env()
     template = env.get_template(template_name)
     return template.render(**context)
+
+
+# ---------------------------------------------------------------------------
+# Escape sequence analysis
+# ---------------------------------------------------------------------------
+
+# Friendly names for common escape sequences.
+_SEQ_NAMES = {
+    '\x1b[0m': 'SGR Reset',
+    '\x1b[m': 'SGR Reset (short)',
+    '\x1b[2J': 'Erase Display',
+    '\x1b[H': 'Cursor Home',
+    '\x1b[0;0H': 'Cursor Home (0,0)',
+    '\x1b[1;1H': 'Cursor Home (1,1)',
+    '\x1b[?25h': 'Show Cursor',
+    '\x1b[?25l': 'Hide Cursor',
+    '\x1b[?7h': 'Autowrap On',
+    '\x1b[?7l': 'Autowrap Off',
+    '\x1b[s': 'Save Cursor',
+    '\x1b[u': 'Restore Cursor',
+    '\x1b[K': 'Erase to EOL',
+    '\x1b[0K': 'Erase to EOL',
+    '\x1b[1K': 'Erase to BOL',
+    '\x1b[2K': 'Erase Line',
+    '\x1b(B': 'ASCII Charset',
+    '\x1b(0': 'Line Drawing',
+    '\x1b)0': 'Line Drawing G1',
+    '\x1b[?1h': 'App Cursor Keys',
+    '\x1b[?1l': 'Normal Cursor Keys',
+    '\x1b[?1049h': 'Alt Screen On',
+    '\x1b[?1049l': 'Alt Screen Off',
+    '\x1b[6n': 'DSR (cursor pos)',
+}
+
+_SGR_RE = re.compile(r'\x1b\[([\d;]*)m$')
+_CUP_RE = re.compile(r'\x1b\[(\d+);(\d+)H$')
+_CUR_MOVE_RE = re.compile(r'\x1b\[(\d*)([ABCD])$')
+_SCROLL_RE = re.compile(r'\x1b\[(\d+);(\d+)r$')
+_DEC_RE = re.compile(r'\x1b\[\?(\d+)([hl])$')
+_CUR_DIRS = {'A': 'Up', 'B': 'Down', 'C': 'Right', 'D': 'Left'}
+_IAC_CMDS = {0xfb: 'WILL', 0xfc: 'WONT', 0xfd: 'DO', 0xfe: 'DONT', 0xfa: 'SB'}
+
+
+def _classify_seq(seq):
+    """Classify an escape sequence into a human-readable category.
+
+    :param seq: raw sequence string
+    :returns: friendly name string
+    """
+    if seq in _SEQ_NAMES:
+        return _SEQ_NAMES[seq]
+
+    m = _SGR_RE.match(seq)
+    if m:
+        return f'SGR ({m.group(1)})'
+
+    m = _CUP_RE.match(seq)
+    if m:
+        return f'CUP ({m.group(1)},{m.group(2)})'
+
+    m = _CUR_MOVE_RE.match(seq)
+    if m:
+        n = m.group(1) or '1'
+        return f'Cursor {_CUR_DIRS[m.group(2)]} {n}'
+
+    m = _SCROLL_RE.match(seq)
+    if m:
+        return f'Scroll Region ({m.group(1)},{m.group(2)})'
+
+    m = _DEC_RE.match(seq)
+    if m:
+        mode = 'Set' if m.group(2) == 'h' else 'Reset'
+        return f'DEC {mode} ?{m.group(1)}'
+
+    if seq.startswith('\x1b]'):
+        return 'OSC'
+
+    if seq.startswith('\xff'):
+        if len(seq) >= 2:
+            cmd = ord(seq[1])
+            name = _IAC_CMDS.get(cmd, f'0x{cmd:02x}')
+            if len(seq) >= 3:
+                opt = ord(seq[2])
+                return f'IAC {name} {opt}'
+            return f'IAC {name}'
+        return 'IAC'
+
+    return repr(seq)
+
+
+def analyze_escape_sequences(servers):
+    """Count unique servers using each escape sequence category.
+
+    Iterates over all server banners (before + after), classifies each
+    escape sequence found via :func:`_classify_seq`, and counts how
+    many distinct servers use each category.
+
+    :param servers: list of server record dicts
+    :returns: Counter mapping category name to number of servers
+    """
+    category_servers = Counter()
+    total_with_banner = 0
+
+    for s in servers:
+        banner = (s.get('banner_before') or '') + (s.get('banner_after') or '')
+        if not banner:
+            continue
+        total_with_banner += 1
+
+        seen_categories = set()
+        for segment, is_seq in wcwidth.iter_sequences(banner):
+            if is_seq:
+                category = _classify_seq(segment)
+                seen_categories.add(category)
+
+        for cat in seen_categories:
+            category_servers[cat] += 1
+
+    return category_servers, total_with_banner
 
 
 # ---------------------------------------------------------------------------
@@ -1069,7 +1202,7 @@ def _setup_plot_style():
     })
 
 
-def _group_small_slices(labels, counts, threshold=0.01,
+def _group_small_slices(labels, counts, threshold=0.02,
                         min_count=None):
     """Group pie slices into 'Other'.
 
@@ -1138,7 +1271,7 @@ def _create_pie_chart(sorted_items, output_path, min_count=None, top_n=None):
     counts = [c for _, c in sorted_items]
     labels, counts = _group_small_slices(
         labels, counts,
-        min_count=min_count if min_count is not None else 1)
+        min_count=min_count)
     colors = _pie_colors(len(labels), labels)
 
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -1490,7 +1623,7 @@ def generate_banner_gallery(servers, docs_path, page_size=100,
 
     sorted_groups = sorted(
         groups.values(),
-        key=lambda g: (-len(g['servers']), server_sort_key(g)))
+        key=server_sort_key)
 
     total_groups = len(sorted_groups)
     total_servers = sum(len(g['servers']) for g in sorted_groups)
@@ -1746,7 +1879,8 @@ def display_charset_section(servers):
 # Unified detail page helpers
 # ---------------------------------------------------------------------------
 
-def _render_banner_section(server, banners_path, default_encoding=None):
+def _render_banner_section(server, banners_path, default_encoding=None,
+                           ice_colors=False):
     """Render banner and return RST text.
 
     Also sets ``server['_banner_png']`` and
@@ -1755,6 +1889,7 @@ def _render_banner_section(server, banners_path, default_encoding=None):
     :param server: server record dict
     :param banners_path: directory for banner PNGs
     :param default_encoding: default encoding for banner combining
+    :param ice_colors: if True, treat SGR 5 (blink) as bright background
     :returns: RST string (may be empty)
     """
     banner = _combine_banners(
@@ -1766,7 +1901,8 @@ def _render_banner_section(server, banners_path, default_encoding=None):
             banner, banners_path, effective_enc,
             columns=server.get('column_override'),
             rows=server.get('row_override'),
-            no_ambig=server.get('no_ambig_override', False))
+            no_ambig=server.get('no_ambig_override', False),
+            ice_colors=ice_colors)
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:

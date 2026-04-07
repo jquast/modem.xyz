@@ -28,10 +28,10 @@ _running_procs_lock = threading.Lock()
 
 
 def parse_server_list(path):
-    """Parse a server list into a list of (host, port, encoding, ssl) tuples.
+    """Parse a server list into a list of (host, port, encoding, ssl, rlogin) tuples.
 
     :param path: path to server list file
-    :returns: list of (host, port_str, encoding_or_None, ssl_bool) tuples
+    :returns: list of (host, port_str, encoding_or_None, ssl_bool, rlogin_bool) tuples
     """
     entries = []
     with open(path) as f:
@@ -45,9 +45,10 @@ def parse_server_list(path):
             host = parts[0]
             port = parts[1]
             ssl_flag = 'ssl' in parts[2:]
-            remaining = [p for p in parts[2:] if p != 'ssl']
+            rlogin_flag = 'rlogin' in parts[2:]
+            remaining = [p for p in parts[2:] if p not in ('ssl', 'rlogin')]
             encoding = remaining[0] if remaining else None
-            entries.append((host, port, encoding, ssl_flag))
+            entries.append((host, port, encoding, ssl_flag, rlogin_flag))
     return entries
 
 
@@ -71,7 +72,7 @@ def _kill_process_group(proc):
 
 
 def scan_host(host, port, data_dir, logs_dir, encoding=None,
-              ssl=False, banner_max_wait=20, connect_timeout=60):
+              ssl=False, rlogin=False, banner_max_wait=20, connect_timeout=60):
     """Scan a single server.
 
     :param host: server hostname
@@ -81,6 +82,7 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
     :param encoding: optional encoding argument for telnetlib3-fingerprint
     :param ssl: use TLS for connection (tries verified first, falls back
         to unverified)
+    :param rlogin: use RLogin protocol instead of Telnet
     :param banner_max_wait: seconds to wait for banner data
     :param connect_timeout: seconds to wait for TCP connection
     :returns: (host, port, status_message)
@@ -113,6 +115,8 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
     _RENDER_ONLY_ENCODINGS = {'topaz'}
     if encoding and encoding not in _RENDER_ONLY_ENCODINGS:
         cmd.extend(["--encoding", encoding])
+    if rlogin:
+        cmd.append("--rlogin")
     if ssl:
         cmd.append("--ssl")
 
@@ -305,7 +309,7 @@ def main():
     # that will be skipped, so --connect-delay only affects real scans.
     to_scan = []
     skipped = 0
-    for host, port, encoding, ssl_flag in entries:
+    for host, port, encoding, ssl_flag, rlogin_flag in entries:
         if not host or not port:
             print(f"{host}:{port} -- skip: empty host or port")
             skipped += 1
@@ -316,7 +320,7 @@ def main():
         else:
             if not encoding and args.default_encoding:
                 encoding = args.default_encoding
-            to_scan.append((host, port, encoding, ssl_flag))
+            to_scan.append((host, port, encoding, ssl_flag, rlogin_flag))
 
     print(f"Scanning {len(to_scan)} servers with"
           f" {args.num_workers} workers"
@@ -360,12 +364,12 @@ def main():
     try:
         with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
             futures = set()
-            for host, port, encoding, ssl_flag in to_scan:
+            for host, port, encoding, ssl_flag, rlogin_flag in to_scan:
                 if _shutdown:
                     break
                 future = pool.submit(
                     scan_host, host, port, args.data_dir, args.logs_dir,
-                    encoding, ssl_flag, args.banner_max_wait,
+                    encoding, ssl_flag, rlogin_flag, args.banner_max_wait,
                     args.connect_timeout)
                 future_to_server[future] = (host, port)
                 futures.add(future)

@@ -5,13 +5,13 @@ import contextlib
 import os
 import re
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime
 
 import tabulate as tabulate_mod
 
 from make_stats.common import (
-    _PROJECT_ROOT, _URL_RE,
+    _PROJECT_ROOT, _URL_RE, _URL_SCANNER_DOMAINS,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
     _load_row_overrides, _load_no_ambig_overrides, _load_ssh_overrides,
     _load_base_records, _generate_rst,
@@ -22,7 +22,7 @@ from make_stats.common import (
     _has_encoding_issues, _truncate,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer, purge_failed_banners,
-    _rst_heading, print_datatable,
+    _rst_heading, print_datatable, analyze_escape_sequences,
     _group_shared_ip, _most_common_hostname,
     _clean_dir, _remove_stale_rst, _needs_rebuild,
     _rst_references_missing_images,
@@ -50,6 +50,34 @@ BANNERS_PATH = os.path.join(DOCS_PATH, "_static", "banners")
 # Default encoding assumed for all BBSes unless overridden
 DEFAULT_ENCODING = 'cp437'
 
+# nmap banner-scan chunk directory.
+_NMAP_CHUNK_DIR = os.path.join(
+    _PROJECT_ROOT, 'nmap', 'data', 'banner-scan', 'chunks')
+
+# Well-known BBS-adjacent service ports: (display_name, url_scheme).
+# url_scheme=None means no standard clickable URL — just label + host:port.
+# Telnet/RLogin ports are intentionally excluded; those are handled separately.
+_EXTRA_SERVICE_PORTS = {
+    21:    ('FTP',       'ftp'),
+    70:    ('Gopher',    'gopher'),
+    79:    ('Finger',    'finger'),
+    80:    ('HTTP',      'http'),
+    119:   ('NNTP',      'nntp'),
+    443:   ('HTTPS',     'https'),
+    1123:  ('WebSocket',        'ws'),
+    6667:  ('IRC',              'irc'),
+    11235: ('Secure WebSocket', 'wss'),
+    24553: ('BINKP',     None),
+    24554: ('BINKP',     None),
+}
+
+# Default ports for each URL scheme (omit port from URL when it matches).
+_SCHEME_DEFAULT_PORTS = {
+    'ftp': 21, 'gopher': 70, 'finger': 79,
+    'http': 80, 'nntp': 119, 'https': 443, 'irc': 6667,
+    'ws': 1123, 'wss': 11235,
+}
+
 
 def _ensure_banner(server):
     """Generate the banner PNG for a server without writing RST.
@@ -65,7 +93,8 @@ def _ensure_banner(server):
             banner, BANNERS_PATH, effective_enc,
             columns=server.get('column_override'),
             rows=server.get('row_override'),
-            no_ambig=server.get('no_ambig_override', False))
+            no_ambig=server.get('no_ambig_override', False),
+            ice_colors=True)
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:
@@ -126,6 +155,91 @@ def detect_fidonet(banner_before, banner_after):
         'fidonet_addresses': addresses,
         'emsi_mailer': mailer,
     }
+
+
+# ---------------------------------------------------------------------------
+# nmap service data
+# ---------------------------------------------------------------------------
+
+def _load_nmap_host_services(chunk_dir=None):
+    """Load non-telnet open service ports per host IP from nmap banner-scan XMLs.
+
+    Reads all chunk XML files and returns a mapping of IP address to the
+    extra (non-telnet/rlogin) services detected, restricted to the ports
+    listed in :data:`_EXTRA_SERVICE_PORTS`.
+
+    :param chunk_dir: path to nmap banner-scan chunks directory
+    :returns: dict mapping IP string to dict {service_name: [port, ...]}
+    """
+    import glob as _glob
+    import xml.etree.ElementTree as ET
+
+    if chunk_dir is None:
+        chunk_dir = _NMAP_CHUNK_DIR
+    result = {}
+    if not os.path.isdir(chunk_dir):
+        return result
+    for xml_path in sorted(_glob.glob(os.path.join(chunk_dir, '*.xml'))):
+        try:
+            tree = ET.parse(xml_path)
+        except ET.ParseError:
+            continue
+        for host_el in tree.getroot().findall('host'):
+            ip = None
+            for addr in host_el.findall('address'):
+                if addr.get('addrtype') == 'ipv4':
+                    ip = addr.get('addr')
+                    break
+            if not ip:
+                continue
+            ports_el = host_el.find('ports')
+            if ports_el is None:
+                continue
+            services = result.setdefault(ip, {})
+            for port_el in ports_el.findall('port'):
+                portid = int(port_el.get('portid'))
+                info = _EXTRA_SERVICE_PORTS.get(portid)
+                if info is None:
+                    continue
+                state = port_el.find('state')
+                if state is None or state.get('state') != 'open':
+                    continue
+                svc_name, _ = info
+                port_list = services.setdefault(svc_name, [])
+                if portid not in port_list:
+                    port_list.append(portid)
+    return result
+
+
+def _is_rlogin(server):
+    """Return True if the server connection is RLogin rather than Telnet.
+
+    Port 513 is definitively RLogin.  For other ports, absence of any
+    telnet option negotiation during the scan is used as the signal —
+    the scanner connected but no IAC exchange occurred.
+
+    :param server: server record dict
+    :returns: bool
+    """
+    if server['port'] == 513:
+        return True
+    return not server.get('offered') and not server.get('requested')
+
+
+def _extra_service_url(host, svc_name, port):
+    """Build a URL string for a non-telnet BBS service.
+
+    :param host: hostname
+    :param svc_name: display service name (e.g. ``'FTP'``)
+    :param port: port number
+    :returns: URL string, or None if the service has no standard URL scheme
+    """
+    _, scheme = _EXTRA_SERVICE_PORTS.get(port, (svc_name, None))
+    if not scheme:
+        return None
+    if _SCHEME_DEFAULT_PORTS.get(scheme) == port:
+        return f"{scheme}://{host}"
+    return f"{scheme}://{host}:{port}"
 
 
 # ---------------------------------------------------------------------------
@@ -191,7 +305,8 @@ def _load_ibbs_metadata(csv_path):
 def load_server_data(data_dir, encoding_overrides=None,
                      column_overrides=None, row_overrides=None,
                      no_ambig_overrides=None,
-                     ssh_overrides=None, ibbs_meta=None):
+                     ssh_overrides=None, ibbs_meta=None,
+                     nmap_services=None):
     """Load all server fingerprint JSON files from the data directory.
 
     :param data_dir: path to telnetlib3 data directory
@@ -201,12 +316,15 @@ def load_server_data(data_dir, encoding_overrides=None,
     :param no_ambig_overrides: dict mapping (host, port) to True
     :param ssh_overrides: dict mapping host_lower to ssh_port int
     :param ibbs_meta: dict mapping host_lower to ibbs metadata dict
+    :param nmap_services: dict from :func:`_load_nmap_host_services`
     :returns: list of parsed server record dicts
     """
     if ssh_overrides is None:
         ssh_overrides = {}
     if ibbs_meta is None:
         ibbs_meta = {}
+    if nmap_services is None:
+        nmap_services = {}
 
     base_records = _load_base_records(
         data_dir, encoding_overrides, column_overrides, row_overrides,
@@ -243,8 +361,11 @@ def load_server_data(data_dir, encoding_overrides=None,
                 match = _URL_RE.search(
                     _strip_ansi(banner_text))
                 if match:
-                    record['website'] = match.group(0)
-                    break
+                    url = match.group(0)
+                    domain = url.split('/')[ 0].lower().lstrip('.')
+                    if domain not in _URL_SCANNER_DOMAINS:
+                        record['website'] = url
+                        break
 
         offered = set(record['offered'])
         requested = set(record['requested'])
@@ -263,6 +384,17 @@ def load_server_data(data_dir, encoding_overrides=None,
         record['ibbs_name'] = meta.get('name', '')
         record['ibbs_sysop'] = meta.get('sysop', '')
         record['ibbs_location'] = meta.get('location', '')
+
+        # Extra (non-telnet) services from nmap, keyed by the server's IP.
+        record['extra_services'] = nmap_services.get(
+            record.get('ip', ''), {})
+
+        # Whether the connection is RLogin rather than Telnet.
+        record['is_rlogin'] = _is_rlogin(record)
+
+        # Peer telnet/rlogin ports — populated later in main() once the
+        # full filtered server list is known.
+        record['_peer_servers'] = []
 
         records.append(record)
 
@@ -283,6 +415,7 @@ def compute_statistics(servers):
         s['connected'] for s in servers if s['connected'])
     stats = {
         'total_servers': len(servers),
+        'unique_hosts': len(set(s['host'] for s in servers)),
         'unique_fingerprints': len(
             set(s['fingerprint'] for s in servers)),
         'scan_time_first': (connected_times[0]
@@ -312,6 +445,14 @@ def compute_statistics(servers):
     for s in servers:
         country_counts[s.get('_country_name', 'Unknown')] += 1
     stats['country_counts'] = dict(country_counts)
+
+    protocol_counts = Counter()
+    for s in servers:
+        proto = 'RLogin' if s.get('is_rlogin') else 'Telnet'
+        protocol_counts[proto] += 1
+        for svc_name in s.get('extra_services', {}):
+            protocol_counts[svc_name] += 1
+    stats['protocol_counts'] = dict(protocol_counts)
 
     stats['emsi_count'] = sum(1 for s in servers if s['has_emsi'])
 
@@ -352,6 +493,16 @@ def create_bbs_software_plot(stats, output_path):
     _create_pie_chart(sorted_items, output_path)
 
 
+def create_bbs_protocol_plot(stats, output_path):
+    """Create pie chart of BBS connection protocol distribution."""
+    protocol_counts = stats.get('protocol_counts', {})
+    if not protocol_counts:
+        return
+    sorted_items = sorted(protocol_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path)
+
+
 def create_encoding_plot(stats, output_path):
     """Create pie chart of encoding distribution."""
     encoding_counts = stats['encoding_counts']
@@ -369,6 +520,8 @@ def create_all_plots(stats):
 
     create_bbs_software_plot(
         stats, os.path.join(PLOTS_PATH, 'bbs_software.png'))
+    create_bbs_protocol_plot(
+        stats, os.path.join(PLOTS_PATH, 'bbs_protocols.png'))
     create_encoding_plot(
         stats, os.path.join(PLOTS_PATH, 'encoding_distribution.png'))
     create_telnet_options_plot(
@@ -412,7 +565,7 @@ def display_summary_stats(stats):
     scan_date = datetime.now().strftime('%Y-%m-%d')
     print(f"*Data collected {scan_date}*")
     print()
-    print(f"- **BBSes responding**: {stats['total_servers']}")
+    print(f"- **BBSes responding**: {stats['unique_hosts']}")
     print(f"- **Unique protocol fingerprints**:"
           f" {stats['unique_fingerprints']}")
     if stats['bbs_software_detected']:
@@ -692,10 +845,13 @@ def display_fidonet_servers(servers):
             sw_mailer = f"{software}/{mailer}"
         else:
             sw_mailer = software or mailer
+        binkp_ports = s.get('extra_services', {}).get('BINKP', [])
+        binkp_str = ', '.join(str(p) for p in sorted(binkp_ports))
         rows.append({
             'Host': host_cell,
             'FidoNet Address': addrs,
             'Software/Mailer': _rst_escape(sw_mailer),
+            'BINKP': binkp_str,
         })
 
     table_str = tabulate_mod.tabulate(
@@ -758,6 +914,122 @@ def generate_fidonet_rst(servers):
     _generate_rst(
         os.path.join(DOCS_PATH, "fidonet.rst"),
         display_fidonet_servers, servers)
+
+
+def display_protocols(servers):
+    """Print the protocol index page."""
+    _rst_heading("Protocols", '=')
+    print("BBSes grouped by detected connection protocol.")
+    print("A BBS may appear in multiple groups.")
+    print()
+    print(".. figure:: _static/plots/bbs_protocols.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the distribution of"
+          " connection protocols across all BBSes.")
+    print()
+    print("   Primary connection protocols detected across all BBSes.")
+    print()
+
+    # Build protocol → server list.  Order: Telnet, RLogin, then alpha.
+    proto_servers = defaultdict(list)
+    for s in servers:
+        if s.get('is_rlogin'):
+            proto_servers['RLogin'].append(s)
+        else:
+            proto_servers['Telnet'].append(s)
+        for svc_name in s.get('extra_services', {}):
+            proto_servers[svc_name].append(s)
+
+    ordered = ['Telnet', 'RLogin']
+    for name in sorted(proto_servers):
+        if name not in ordered:
+            ordered.append(name)
+
+    rows = []
+    for proto in ordered:
+        srvs = proto_servers.get(proto, [])
+        if srvs:
+            rows.append({
+                'Protocol': proto,
+                'Servers': str(len(srvs)),
+            })
+    table_str = tabulate_mod.tabulate(
+        rows, headers='keys', tablefmt='rst')
+    print_datatable(table_str, caption="Protocol Distribution")
+
+    for proto in ordered:
+        srvs = proto_servers.get(proto, [])
+        if not srvs:
+            continue
+        _rst_heading(f"{proto} ({len(srvs)})", '-')
+        rows = []
+        seen = set()
+        for s in sorted(srvs, key=lambda x: x['host'].lower()):
+            key = (s['host'], s['port'])
+            if key in seen:
+                continue
+            seen.add(key)
+            bbs_file = s['_bbs_file']
+            label = f"{s['host']}:{s['port']}"
+            host_cell = (f":doc:`{_rst_escape(label)}"
+                         f" <bbs_detail/{bbs_file}>`")
+            software = _rst_escape(s.get('bbs_software', ''))
+            rows.append({
+                'Host': host_cell,
+                'Software': software,
+            })
+        table_str = tabulate_mod.tabulate(
+            rows, headers='keys', tablefmt='rst')
+        print_datatable(table_str, caption=f"{proto} Servers")
+        print()
+
+
+def generate_protocols_rst(servers):
+    """Generate the protocols.rst index page."""
+    _generate_rst(
+        os.path.join(DOCS_PATH, "protocols.rst"),
+        display_protocols, servers)
+
+
+def display_sequences(servers):
+    """Print the escape sequence frequency page.
+
+    Shows which terminal escape sequences appear across BBS banners,
+    ranked by how many unique servers use each sequence category.
+
+    :param servers: list of server record dicts
+    """
+    _rst_heading("Escape Sequences", '=')
+    print("Terminal escape sequences detected in BBS banners,")
+    print("ranked by number of unique servers using each sequence.")
+    print()
+
+    category_counts, total_with_banner = analyze_escape_sequences(servers)
+    if not category_counts:
+        print("No escape sequences found in banners.")
+        print()
+        return
+
+    rows = []
+    for category, count in category_counts.most_common():
+        pct = f'{count / total_with_banner * 100:.1f}%' if total_with_banner else '0%'
+        rows.append({
+            'Sequence': category,
+            'Servers': str(count),
+            '% Banners': pct,
+        })
+
+    table_str = tabulate_mod.tabulate(
+        rows, headers='keys', tablefmt='rst')
+    print_datatable(table_str, caption="Escape Sequences")
+
+
+def generate_sequences_rst(servers):
+    """Generate the sequences.rst file."""
+    _generate_rst(
+        os.path.join(DOCS_PATH, "sequences.rst"),
+        display_sequences, servers)
 
 
 def generate_bbs_software_rst(servers):
@@ -840,67 +1112,116 @@ def generate_details_rst(servers):
 # Detail pages
 # ---------------------------------------------------------------------------
 
-def _write_bbs_server_urls(server, sec_char):
-    """Write server URLs section for a BBS server.
+def _copy_button(host, port):
+    """Emit HTML for a clipboard copy button for host:port.
 
-    :param server: server record dict
-    :param sec_char: RST underline character
+    :param host: hostname
+    :param port: port number
     """
-    host = server['host']
-    port = server['port']
-    url = _telnet_url(host, port)
-    _rst_heading("Server URLs", sec_char)
-    print(f".. raw:: html")
-    print()
-    print(f'   <ul class="mud-connect">')
-    print(f'   <li><a href="{url}" class="telnet-link">'
-          f'{host}:{port}</a>')
     print(f'   <button class="copy-btn"'
           f' data-host="{host}"'
           f' data-port="{port}"'
           f' title="Copy host and port"'
-          f' aria-label="Copy {host} port {port}'
-          f' to clipboard">')
-    print(f'   <span class="copy-icon"'
-          f' aria-hidden="true">'
+          f' aria-label="Copy {host} port {port} to clipboard">')
+    print(f'   <span class="copy-icon" aria-hidden="true">'
           f'&#x1F4CB;</span>')
     print(f'   </button>')
-    print(f'   </li>')
+
+
+def _write_bbs_server_urls(server, sec_char, show_peers=True):
+    """Write server URLs section for a BBS server.
+
+    Shows the primary telnet/rlogin connection, any peer connections at
+    the same host, non-interactive service links from nmap (FTP, Gopher,
+    NNTP, IRC, …), and the BBS website if known.
+
+    :param server: server record dict
+    :param sec_char: RST underline character
+    :param show_peers: if False, suppress peer server links
+    """
+    host = server['host']
+    port = server['port']
+    is_rl = server.get('is_rlogin', False)
+    proto_label = 'RLogin' if is_rl else 'Telnet'
+    conn_url = (f"rlogin://{host}:{port}"
+                if is_rl else _telnet_url(host, port))
+
+    _rst_heading("Server URLs", sec_char)
+    print(".. raw:: html")
+    print()
+    print('   <ul class="mud-connect">')
+
+    # Primary connection.
+    print(f'   <li><strong>{proto_label}</strong>:'
+          f' <a href="{conn_url}" class="telnet-link">'
+          f'{host}:{port}</a>')
+    _copy_button(host, port)
+    print('   </li>')
+
+    # Peer telnet/rlogin ports at the same host (other entries in
+    # bbslist.txt that resolve to the same IP).
+    for peer in (server.get('_peer_servers', []) if show_peers else []):
+        peer_host = peer['host']
+        peer_port = peer['port']
+        peer_rl = peer.get('is_rlogin', False)
+        peer_label = 'RLogin' if peer_rl else 'Telnet'
+        peer_url = (f"rlogin://{peer_host}:{peer_port}"
+                    if peer_rl else _telnet_url(peer_host, peer_port))
+        print(f'   <li><strong>{peer_label}</strong>:'
+              f' <a href="{peer_url}" class="telnet-link">'
+              f'{peer_host}:{peer_port}</a>')
+        _copy_button(peer_host, peer_port)
+        print('   </li>')
+
+    # TLS/SSL.
     if server['tls_support']:
         tls_url = f"telnets://{host}:{port}"
-        print(f'   <li><strong>TLS/SSL</strong>: '
-              f'<a href="{tls_url}">{tls_url}</a>')
-        print(f'   <button class="copy-btn"'
-              f' data-host="{host}"'
-              f' data-port="{port}"'
-              f' title="Copy host and port"'
-              f' aria-label="Copy {host} port {port}'
-              f' to clipboard">')
-        print(f'   <span class="copy-icon"'
-              f' aria-hidden="true">'
-              f'&#x1F4CB;</span>')
-        print(f'   </button></li>')
+        print(f'   <li><strong>TLS/SSL</strong>:'
+              f' <a href="{tls_url}">{tls_url}</a>')
+        _copy_button(host, port)
+        print('   </li>')
+
+    # SSH.
     if server.get('ssh_port'):
         ssh_port = server['ssh_port']
         ssh_url = f"ssh://{host}:{ssh_port}"
-        print(f'   <li><strong>SSH</strong>: '
-              f'<a href="{ssh_url}">{host}:{ssh_port}</a>')
-        print(f'   <button class="copy-btn"'
-              f' data-host="{host}" data-port="{ssh_port}"'
-              f' title="Copy SSH host and port"'
-              f' aria-label="Copy {host} port {ssh_port} to clipboard">')
-        print(f'   <span class="copy-icon"'
-              f' aria-hidden="true">&#x1F4CB;</span>')
-        print(f'   </button></li>')
-    if server['website']:
-        href = server['website']
+        print(f'   <li><strong>SSH</strong>:'
+              f' <a href="{ssh_url}">{host}:{ssh_port}</a>')
+        _copy_button(host, ssh_port)
+        print('   </li>')
+
+    # Extra services from nmap (FTP, Gopher, NNTP, IRC, BINKP, …).
+    # HTTP/HTTPS are shown as Website if no other website is known.
+    extra = server.get('extra_services', {})
+    website_from_nmap = ''
+    for svc_name in sorted(extra):
+        for svc_port in sorted(extra[svc_name]):
+            if svc_name in ('HTTP', 'HTTPS'):
+                if not server['website'] and not website_from_nmap:
+                    website_from_nmap = _extra_service_url(
+                        host, svc_name, svc_port)
+                continue
+            url_str = _extra_service_url(host, svc_name, svc_port)
+            if url_str:
+                print(f'   <li><strong>{svc_name}</strong>:'
+                      f' <a href="{url_str}">'
+                      f'{url_str}</a></li>')
+            else:
+                print(f'   <li><strong>{svc_name}</strong>:'
+                      f' {host}:{svc_port}</li>')
+
+    # Website (from banner/IBBS metadata, or inferred from HTTP/HTTPS).
+    website = server['website'] or website_from_nmap
+    if website:
+        href = website
         if not href.startswith(('http://', 'https://')):
             href = f'http://{href}'
-        print(f'   <li><strong>Website</strong>: '
-              f'<a href="{href}">'
-              f'{_rst_escape(server["website"])}'
+        print(f'   <li><strong>Website</strong>:'
+              f' <a href="{href}">'
+              f'{_rst_escape(website)}'
               f'</a></li>')
-    print(f'   </ul>')
+
+    print('   </ul>')
     print()
 
 
@@ -975,7 +1296,8 @@ def _write_bbs_server_info(server, sec_char):
 
 
 def _write_bbs_port_section(server, sec_char, logs_dir=None,
-                             data_dir=None, fp_counts=None):
+                             data_dir=None, fp_counts=None,
+                             show_peers=True):
     """Write detail content sections for one BBS port.
 
     :param server: server record dict
@@ -983,14 +1305,17 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     :param logs_dir: path to log directory
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
+    :param show_peers: if False, suppress peer server links (used on IP-group
+        pages where all peers are already shown as sibling sections)
     """
     banner_rst = _render_banner_section(
         server, BANNERS_PATH,
-        default_encoding=DEFAULT_ENCODING)
+        default_encoding=DEFAULT_ENCODING,
+        ice_colors=True)
     if banner_rst:
         print(banner_rst)
 
-    _write_bbs_server_urls(server, sec_char)
+    _write_bbs_server_urls(server, sec_char, show_peers=show_peers)
 
     _write_bbs_server_info(server, sec_char)
 
@@ -1087,7 +1412,8 @@ def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
 
             _write_bbs_port_section(
                 server, '~', logs_dir=logs_dir,
-                data_dir=data_dir, fp_counts=fp_counts)
+                data_dir=data_dir, fp_counts=fp_counts,
+                show_peers=False)
 
 
 def generate_bbs_details(servers, logs_dir=None, force=False,
@@ -1286,12 +1612,17 @@ def run(args):
     print(f"  {len(ssh_overrides)} SSH overrides,"
           f" {len(ibbs_meta)} ibbs entries", file=sys.stderr)
 
+    nmap_services = _load_nmap_host_services()
+    print(f"  nmap extra-service data for"
+          f" {len(nmap_services)} hosts", file=sys.stderr)
+
     print(f"Loading data from {data_dir} ...", file=sys.stderr)
     records = load_server_data(data_dir, encoding_overrides,
                                column_overrides, row_overrides,
                                no_ambig_overrides,
                                ssh_overrides=ssh_overrides,
-                               ibbs_meta=ibbs_meta)
+                               ibbs_meta=ibbs_meta,
+                               nmap_services=nmap_services)
     print(f"  loaded {len(records)} session records",
           file=sys.stderr)
 
@@ -1304,6 +1635,18 @@ def run(args):
                if (s['host'], s['port']) in listed]
     print(f"  {len(servers)} servers after filtering"
           f" by {bbslist}", file=sys.stderr)
+
+    # Attach peer telnet/rlogin ports: other bbslist.txt entries that
+    # resolve to the same IP, so the URL section can show all of them.
+    _ip_to_servers = defaultdict(list)
+    for s in servers:
+        if s.get('ip'):
+            _ip_to_servers[s['ip']].append(s)
+    for s in servers:
+        s['_peer_servers'] = [
+            p for p in _ip_to_servers.get(s.get('ip', ''), [])
+            if p is not s
+        ]
 
     ip_groups = _group_shared_ip(servers)
     _assign_bbs_filenames(servers, ip_groups)
@@ -1342,6 +1685,8 @@ def run(args):
         generate_encoding_rst(servers)
         generate_locations_rst(servers)
         generate_fidonet_rst(servers)
+        generate_protocols_rst(servers)
+        generate_sequences_rst(servers)
         generate_bbs_details(servers, logs_dir=logs_dir,
                               force=force, data_dir=data_dir,
                               ip_groups=ip_groups)

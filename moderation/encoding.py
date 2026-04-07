@@ -137,6 +137,51 @@ def _detect_utf8_native(banner, stored_encoding, list_encoding,
     return 'utf-8'
 
 
+def _detect_cp437_as_petscii(banner, list_encoding):
+    """Detect banners tagged as petscii that are actually ANSI/cp437.
+
+    Two cases are caught:
+
+    1. The banner contains ANSI escape sequences (``ESC[``), which
+       PETSCII does not use — these are regular VT100/cp437 BBS systems
+       that ended up tagged petscii due to port-number heuristics.
+
+    2. The banner contains cp437 double-line box-drawing characters
+       (╔╗╚╝═║ etc.) but none of the glyphs that are distinctive to
+       genuine PETSCII art: suit symbols (♥♦♣♠) and the Commodore
+       circle (○).  Synchronet's PETSCII banner reliably contains suit
+       symbols; cp437-only art does not.
+
+    :param banner: banner text as stored (decoded with petscii encoding)
+    :param list_encoding: encoding keyword from the server list
+    :returns: ``'cp437'`` if cp437/ANSI content detected, else ``None``
+    """
+    if list_encoding != 'petscii' or not banner:
+        return None
+
+    if '\x1b[' in banner:
+        return 'cp437'
+
+    # Double-line box-drawing chars produced by cp437 bytes 0xC9/0xBB/
+    # 0xC8/0xBC/0xCC/0xB9/0xCB/0xCA/0xCE/0xCD/0xBA.
+    _DOUBLE_LINE = frozenset('\u2554\u2557\u255a\u255d\u2560'
+                             '\u2563\u2566\u2569\u256c\u2550\u2551')
+    # Glyphs unique to genuine PETSCII art: card suits and C64 circle.
+    _PETSCII_DISTINCT = frozenset('\u2665\u2666\u2663\u2660\u25cb')
+
+    non_ascii = [c for c in banner if ord(c) > 0x7f]
+    if not non_ascii:
+        return None
+
+    has_double_line = any(c in _DOUBLE_LINE for c in non_ascii)
+    has_petscii_glyphs = any(c in _PETSCII_DISTINCT for c in non_ascii)
+
+    if has_double_line and not has_petscii_glyphs:
+        return 'cp437'
+
+    return None
+
+
 def discover_encoding_issues(data_dir='.', list_path=None,
                              default_encoding=None):
     """Scan JSON fingerprint data to find servers with encoding issues.
@@ -212,6 +257,19 @@ def discover_encoding_issues(data_dir='.', list_path=None,
                 banner = banner_before or banner_after
 
             max_width, _ = _measure_banner_columns(banner)
+
+            cp437_petscii = _detect_cp437_as_petscii(banner, list_enc)
+            if cp437_petscii:
+                ansi_count = banner.count('\x1b[')
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'suggested_encoding': cp437_petscii,
+                    'replacement_count': ansi_count,
+                    'reason': 'cp437_as_petscii',
+                    'list_already_correct': False,
+                })
+                continue
 
             utf8_suggest = _detect_utf8_as_cp437(
                 banner, stored_enc)
@@ -547,10 +605,14 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list,
             i for i in issues
             if i.get('reason') == 'utf8_native'
         ]
+        cp437_petscii = [
+            i for i in issues
+            if i.get('reason') == 'cp437_as_petscii'
+        ]
         other = [
             i for i in issues
             if i.get('reason') not in (
-                'utf8_mojibake', 'utf8_native')
+                'utf8_mojibake', 'utf8_native', 'cp437_as_petscii')
         ]
 
         print(f"\n{mode.upper()} encoding issues found:"
@@ -563,6 +625,36 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list,
             if result == -1:
                 return applied_count
             applied_count += max(result, 0)
+
+        if cp437_petscii:
+            print(f"\n  cp437/ANSI banners incorrectly tagged"
+                  f" petscii: {len(cp437_petscii)}")
+            for issue in cp437_petscii:
+                host = issue['host']
+                port = issue['port']
+                ansi_count = issue['replacement_count']
+                reason_detail = (
+                    f"{ansi_count} ANSI escape(s)" if ansi_count
+                    else "double-line box-drawing, no PETSCII glyphs"
+                )
+                print(f"    {host}:{port}  ({reason_detail})")
+            if not report_only:
+                choice = _prompt(
+                    f"    Change all {len(cp437_petscii)}"
+                    f" to cp437? (y/n/q) ", "ynq")
+                if choice == 'q':
+                    return applied_count
+                if choice == 'y':
+                    fixes = {(i['host'], i['port']): 'cp437'
+                             for i in cp437_petscii}
+                    result = _apply_encoding_fixes_bulk(
+                        list_path, fixes, dry_run=dry_run)
+                    if not dry_run:
+                        servers = list(fixes.keys())
+                        deleted = _expunge_logs(logs_dir, servers)
+                        print(f"  Expunged {deleted} log files"
+                              f" (will re-scan as cp437)")
+                    applied_count += result
 
         if utf8_native:
             print(f"\n  UTF-8 native banners needing list"

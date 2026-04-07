@@ -1,4 +1,4 @@
-"""Column width, empty banners, renders-empty, and renders-small analysis."""
+"""Column width, empty banners, renders-empty, renders-small, and misplaced-server analysis."""
 
 import hashlib
 import json
@@ -18,7 +18,7 @@ from .data import (
     detect_failure_reason,
 )
 from .encoding import _expunge_server_json
-from .util import _prompt
+from .util import _display_banner, _prompt
 
 
 def _measure_banner_columns(text):
@@ -900,6 +900,52 @@ def review_renders_small(mud_issues, bbs_issues, mud_list, bbs_list,
                   f" from {list_path}")
 
 
+def _is_nontelnet_banner(text):
+    """Check whether banner text indicates a non-Telnet, non-RLogin protocol.
+
+    Detects MySQL handshakes, RTSP responses, and IRC bot greetings
+    (Eggdrop and similar) that have been accidentally listed as telnet
+    servers.
+
+    :param text: raw banner text (decoded, may contain surrogate chars)
+    :returns: tuple of ``(True, protocol_name)`` or ``(False, None)``
+    """
+    if not text:
+        return False, None
+
+    # MySQL Initial Handshake Packet: 4-byte packet header (length + seq=0)
+    # followed by protocol version byte 0x0a (10), then server version string.
+    # In decoded form the first bytes are low-value control characters.
+    # The second common variant starts \x05\x00\x00\x00\x0b (capability packet).
+    # Reliable heuristic: starts with 1–3 non-printable bytes, then \x0a,
+    # then a version string like "5.7" / "8.0" / "10.x" / "mariadb".
+    if len(text) >= 5:
+        raw = text.encode('utf-8', errors='surrogateescape')
+        # MySQL Initial Handshake Packet: 4-byte header (3-byte length
+        # little-endian + 1-byte sequence number always 0x00), followed by
+        # protocol version byte 0x0a (10).
+        if raw[3] == 0x00 and raw[4] == 0x0a:
+            return True, 'MySQL'
+        # MySQL capability packet (MariaDB / alternate greeting)
+        if raw[:4] == b'\x05\x00\x00\x00':
+            return True, 'MySQL'
+
+    # RTSP/2.0 or RTSP/1.0 streaming protocol
+    if re.match(r'RTSP/\d', text.lstrip()):
+        return True, 'RTSP'
+
+    # IRC: Eggdrop bot greeting or generic NOTICE handshake
+    if 'Eggdrop v' in text:
+        return True, 'IRC/Eggdrop'
+    if re.search(r':[\w.]+\s+NOTICE\s+\*\s+:', text):
+        return True, 'IRC'
+    # Standard IRC server welcome sequence
+    if re.search(r':\S+\s+001\s+\S+\s+:Welcome', text):
+        return True, 'IRC'
+
+    return False, None
+
+
 def _is_http_banner(text):
     """Check whether banner text is an HTTP response.
 
@@ -1077,3 +1123,333 @@ def review_http_banners(mud_issues, bbs_issues, mud_list, bbs_list,
         result[mode] = removals
 
     return result['mud'], result['bbs']
+
+
+def discover_nontelnet_banners(data_dir, list_path):
+    """Find servers whose banners indicate non-Telnet protocols.
+
+    Scans fingerprint JSON data for MySQL handshakes, RTSP responses,
+    and IRC bot greetings.  Only servers present in *list_path* are
+    returned.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param list_path: path to server list file
+    :returns: list of dicts with host, port, data_path, raw_banner, protocol
+    """
+    issues = []
+    seen = set()
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed = {(h, p) for h, p, _ in list_entries if h and p}
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            probe = data.get('server-probe', {})
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+            if isinstance(banner_before, dict):
+                banner_before = banner_before.get('text', '')
+            if isinstance(banner_after, dict):
+                banner_after = banner_after.get('text', '')
+
+            combined = (banner_before or '') + (banner_after or '')
+            matched, protocol = _is_nontelnet_banner(combined)
+            if not matched:
+                matched, protocol = _is_nontelnet_banner(banner_before)
+            if not matched:
+                matched, protocol = _is_nontelnet_banner(banner_after)
+            if not matched:
+                continue
+
+            for session in data.get('sessions', []):
+                host = session.get('host', '')
+                port = session.get('port', 0)
+                if not host or not port:
+                    continue
+                if (host, port) not in allowed:
+                    continue
+                if (host, port) in seen:
+                    continue
+                seen.add((host, port))
+
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'data_path': fpath,
+                    'raw_banner': combined,
+                    'protocol': protocol,
+                })
+    return issues
+
+
+def review_nontelnet_banners(mud_issues, bbs_issues, mud_list, bbs_list,
+                             logs_dir, mud_data=None, bbs_data=None,
+                             report_only=False, dry_run=False):
+    """Interactively review servers with non-Telnet protocol banners.
+
+    Presents each detected server and its protocol classification.
+    Options:
+
+    - ``y`` to remove the entry from the server list
+    - ``x`` to expunge log and data files for rescan
+    - ``n`` to skip
+    - ``q`` to quit
+
+    :param mud_issues: list of non-Telnet issues from MUD data
+    :param bbs_issues: list of non-Telnet issues from BBS data
+    :param mud_list: path to MUD server list
+    :param bbs_list: path to BBS server list
+    :param logs_dir: path to logs directory
+    :param mud_data: path to MUD data directory (for JSON expunge)
+    :param bbs_data: path to BBS data directory (for JSON expunge)
+    :param report_only: if True, don't prompt or modify files
+    :param dry_run: if True, show changes without writing
+    :returns: tuple of ``(mud_removals, bbs_removals)`` sets of
+        ``(host, port)`` tuples removed from the lists
+    """
+    all_issues = [('mud', mud_issues, mud_list, mud_data),
+                  ('bbs', bbs_issues, bbs_list, bbs_data)]
+    result = {'mud': set(), 'bbs': set()}
+
+    for mode, issues, list_path, data_dir in all_issues:
+        if not issues or not os.path.isfile(list_path):
+            continue
+
+        print(f"\n--- {mode.upper()} servers with non-Telnet"
+              f" protocol banners: {len(issues)} ---")
+        removals = set()
+        rescans = 0
+
+        for issue in issues:
+            host = issue['host']
+            port = issue['port']
+            protocol = issue['protocol']
+            raw = issue['raw_banner']
+            print(f"\n  {host}:{port}  [{protocol}]")
+            first_line = raw.lstrip().split('\n', 1)[0].strip()
+            print(f"    {repr(first_line[:120])}")
+
+            if report_only:
+                continue
+
+            choice = _prompt(
+                "    [Y]remove from list / [x]expunge for rescan"
+                " / [n]skip / [q]uit? ",
+                "xynq")
+            if choice == 'q':
+                break
+            if choice == 'n':
+                continue
+            if choice == 'x':
+                log_file = Path(logs_dir) / f"{host}:{port}.log"
+                if log_file.is_file() and not dry_run:
+                    log_file.unlink()
+                    print(f"    deleted {log_file}")
+                elif log_file.is_file():
+                    print(f"    [dry-run] would delete {log_file}")
+                else:
+                    print(f"    no log file to delete")
+                if data_dir and not dry_run:
+                    nj = _expunge_server_json(data_dir, [(host, port)])
+                    if nj:
+                        print(f"    deleted {nj} data file(s)")
+                rescans += 1
+            else:
+                removals.add((host, port))
+
+        if removals:
+            entries = load_server_list(list_path)
+            write_filtered_list(list_path, entries, removals, dry_run=dry_run)
+        if rescans:
+            print(f"  {rescans} server(s) queued for rescan")
+        if removals:
+            print(f"  {len(removals)} server(s) removed from {list_path}")
+        result[mode] = removals
+
+    return result['mud'], result['bbs']
+
+
+# ---------------------------------------------------------------------------
+# Misplaced-server detection (MUD in BBS list, BBS in MUD list)
+# ---------------------------------------------------------------------------
+
+_MUD_IN_BANNER_RE = re.compile(r'MUD', re.IGNORECASE)
+_BBS_IN_BANNER_RE = re.compile(r'\bBBS\b', re.IGNORECASE)
+
+
+def discover_misplaced_servers(data_dir, list_path, keyword_re):
+    """Find servers whose banners match *keyword_re* but are in the wrong list.
+
+    :param data_dir: path to data directory (containing ``server/``)
+    :param list_path: path to server list file
+    :param keyword_re: compiled regex to search banner text
+    :returns: list of dicts with host, port, banner, original_line
+    """
+    issues = []
+    seen = set()
+    server_dir = os.path.join(data_dir, 'server')
+    if not os.path.isdir(server_dir):
+        return issues
+
+    list_entries = load_server_list(list_path)
+    allowed = {(h, p): line for h, p, line in list_entries if h and p}
+
+    for fp_dir in sorted(os.listdir(server_dir)):
+        fp_path = os.path.join(server_dir, fp_dir)
+        if not os.path.isdir(fp_path):
+            continue
+        for fname in sorted(os.listdir(fp_path)):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(fp_path, fname)
+            try:
+                with open(fpath, encoding='utf-8',
+                          errors='surrogateescape') as f:
+                    data = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            probe = data.get('server-probe', {})
+            session_data = probe.get('session_data', {})
+            banner_before = session_data.get('banner_before_return', '')
+            banner_after = session_data.get('banner_after_return', '')
+            if isinstance(banner_before, dict):
+                banner_before = banner_before.get('text', '')
+            if isinstance(banner_after, dict):
+                banner_after = banner_after.get('text', '')
+            combined = (banner_before or '') + (banner_after or '')
+
+            if not keyword_re.search(combined):
+                continue
+
+            for session in data.get('sessions', []):
+                host = session.get('host', '')
+                port = session.get('port', 0)
+                if not host or not port:
+                    continue
+                if (host, port) not in allowed:
+                    continue
+                if (host, port) in seen:
+                    continue
+                seen.add((host, port))
+                issues.append({
+                    'host': host,
+                    'port': port,
+                    'banner': combined,
+                    'original_line': allowed[(host, port)],
+                })
+    return issues
+
+
+def review_misplaced_servers(bbs_issues, mud_issues,
+                              bbs_list, mud_list,
+                              report_only=False, dry_run=False):
+    """Interactively review and move misplaced servers between lists.
+
+    *bbs_issues* are BBS-list entries whose banners mention MUD (candidates
+    to move to mudlist).  *mud_issues* are MUD-list entries whose banners
+    mention BBS (candidates to move to bbslist).
+
+    :param bbs_issues: list from :func:`discover_misplaced_servers` for BBS list
+    :param mud_issues: list from :func:`discover_misplaced_servers` for MUD list
+    :param bbs_list: path to bbslist.txt
+    :param mud_list: path to mudlist.txt
+    :param report_only: if True, only print without prompting
+    :param dry_run: if True, don't write files
+    :returns: (bbs_to_mud, mud_to_bbs) sets of (host, port) moved
+    """
+    bbs_to_mud = set()
+    mud_to_bbs = set()
+    stopped = False
+
+    def _review_batch(issues, src_label, dst_label):
+        """Prompt for each issue; returns (to_move set, quit_early bool)."""
+        to_move = set()
+        print(f"\n--- {src_label} entries with {dst_label} banners"
+              f" ({len(issues)}) ---")
+        for i, issue in enumerate(issues):
+            host = issue['host']
+            port = issue['port']
+            banner = _display_banner(issue['banner'])
+            print(f"\n  {host}:{port}")
+            print(f"  Banner:\n{banner}")
+            if report_only:
+                continue
+            ans = _prompt(
+                f"  Move from {src_label} to {dst_label}?"
+                f" [y/n/a(ll)/q] ",
+                "ynaq")
+            if ans == 'q':
+                print("  Stopped.")
+                return to_move, True
+            if ans == 'a':
+                remaining = {(iss['host'], iss['port'])
+                             for iss in issues[i:]}
+                to_move.update(remaining)
+                print(f"  Accepting all remaining"
+                      f" ({len(remaining)} server(s)).")
+                break
+            if ans == 'y':
+                to_move.add((host, port))
+                print(f"    \u2192 will move to {dst_label} list")
+        return to_move, False
+
+    if bbs_issues:
+        moved, stopped = _review_batch(bbs_issues, 'BBS', 'MUD')
+        bbs_to_mud.update(moved)
+
+    if mud_issues and not stopped:
+        moved, _stopped = _review_batch(mud_issues, 'MUD', 'BBS')
+        mud_to_bbs.update(moved)
+
+    if report_only or dry_run:
+        if bbs_to_mud or mud_to_bbs:
+            print(f"\n  [dry-run] would move"
+                  f" {len(bbs_to_mud)} BBS\u2192MUD,"
+                  f" {len(mud_to_bbs)} MUD\u2192BBS")
+        return bbs_to_mud, mud_to_bbs
+
+    if bbs_to_mud:
+        src_entries = load_server_list(bbs_list)
+        lines_to_add = [
+            line for h, p, line in src_entries
+            if h and p and (h, p) in bbs_to_mud
+        ]
+        write_filtered_list(bbs_list, src_entries, bbs_to_mud)
+        with open(mud_list, 'a', encoding='utf-8') as f:
+            for line in lines_to_add:
+                f.write(line + '\n')
+        print(f"  Moved {len(bbs_to_mud)} server(s)"
+              f" from bbslist to mudlist")
+
+    if mud_to_bbs:
+        src_entries = load_server_list(mud_list)
+        lines_to_add = [
+            line for h, p, line in src_entries
+            if h and p and (h, p) in mud_to_bbs
+        ]
+        write_filtered_list(mud_list, src_entries, mud_to_bbs)
+        with open(bbs_list, 'a', encoding='utf-8') as f:
+            for line in lines_to_add:
+                f.write(line + '\n')
+        print(f"  Moved {len(mud_to_bbs)} server(s)"
+              f" from mudlist to bbslist")
+
+    return bbs_to_mud, mud_to_bbs

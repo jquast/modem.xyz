@@ -399,6 +399,12 @@
         "100.6.29.103:2323"
       ]
     },
+    "101.101.168.34.bc.googleusercontent.com:23|lofac.mintyfresh.love:23": {
+      "action": "skip"
+    },
+    "104-2-125-12.lightspeed.iplsin.sbcglobal.net:23|bwrbbs.ddns.net:23": {
+      "action": "skip"
+    },
     "104.13.125.171:23|irc.s3tg5z.com:23": {
       "action": "remove",
       "remove": [
@@ -423,6 +429,12 @@
     "104.57.170.70:6840|adibbs.sytes.net:6800|wn3.wrgnbr.com:6400": {
       "action": "skip"
     },
+    "107-200-207-176.lightspeed.mmphtn.sbcglobal.net:23|bbs.memphistw.org:23": {
+      "action": "skip"
+    },
+    "107-217-127-33.lightspeed.nsvltn.sbcglobal.net:23|107-217-127-34.lightspeed.nsvltn.sbcglobal.net:23|122-58-239-220-vdsl.sparkbb.co.nz:23|192.82.254.205:8888|66.168.116.58:23|71.237.240.26:23|bbs.bbses.info:2323|bbs.kd8hfx.net:23|c-98-52-75-5.hsd1.il.comcast.net:23|casper.homeip.net:23|localyocalbbs.com:23|teehill.adirondackpc.com:2020|thunder.synchro.net:23": {
+      "action": "skip"
+    },
     "107.172.21.36:4000|130.61.212.175:4000|155.138.231.112:4000|158.69.222.152:4000|162.250.189.123:4000|185.25.151.230:4000|191.252.194.206:4000|212.227.230.119:4000|23.254.128.113:4000|23.95.67.109:4000|3.132.134.107:4000|35.85.221.31:4000|35.88.139.46:4000|4.222.184.103:4000|44.204.35.120:4400|45.90.220.35:4000|5.182.18.140:4000|52.90.102.82:4000|71.94.107.83:4000|77.169.172.37:4000|95.179.176.16:4000|mnm.glassdragon.xyz:4444|summerlands.undo.it:4000": {
       "action": "skip"
     },
@@ -438,6 +450,12 @@
         "107.218.189.71:5983"
       ]
     },
+    "108-210-207-115.lightspeed.sntcca.sbcglobal.net:23|bbs.furryrefuge.com:23|kneesurgery.moe:23|pool-74-104-122-212.bstnma.fios.verizon.net:23|syn-047-049-255-014.biz.spectrum.com:23|vern.cc:23": {
+      "action": "skip"
+    },
+    "108-84-210-172.lightspeed.hstntx.sbcglobal.net:23|bbs.b-wells.us:23": {
+      "action": "skip"
+    },
     "108.210.207.115:6401|bay.jayscafe.net:6401|bbs.jayscafe.net:6402|bpc.jayscafe.net:6402": {
       "action": "skip"
     },
@@ -446,6 +464,9 @@
       "remove": [
         "108.233.175.10:2002"
       ]
+    },
+    "108.242.55.251:23|142.44.247.204:23|34.162.43.84:23|bbs.lizardmaster.com:23|bbs.zruspas.org:23|hovalbbs.com:2333|techrono.synchro.net:23|x-bit.org:1336": {
+      "action": "skip"
     },
     "108.242.55.251:513|bbs.tfsi.dev:513|datgsguy.com:513|endofthelinebbs.com:513|magnumbbs.net:513": {
       "action": "skip"
@@ -511,6 +532,12 @@
     "112.124.8.59:6666|118.195.237.158:6666": {
       "action": "skip"
     },
+    "112.188.70.115.static.exetel.com.au:23|alterant.bbs.dege.au:123|alterant.bbs.dege.au:23": {
+      "action": "skip"
+    },
+    "114-34-31-241.hinet-ip.hinet.net:23|bbs.cooldavid.org:23": {
+      "action": "skip"
+    },
     "114.32.122.32:4002|kk.muds.idv.tw:4000": {
       "action": "remove",
       "remove": [
@@ -523,7 +550,22 @@
         "115.70.188.112:23"
       ]
     },
+    "117.72.176.63:6666|117.72.176.63:7777": {
+      "action": "skip"
+    },
+    "118.195.195.76:4001|118.195.195.76:9001": {
+      "action": "skip"
+    },
+    "118.195.195.76:6000|118.195.195.76:6002": {
+      "action": "skip"
+    },
+    "120-88-120-83.785878.bne.static.aussiebb.net:23|bbs.starshipjunkyard.com:23": {
+      "action": "skip"
+    },
     "120.92.212.76:23|newsmth.org:23": {
+      "action": "skip"
+    },
+    "121-200-29-194.79c81d.mel.nbn.aussiebb.net:23|bbs.mozysswamp.org:23": {
       "action": "skip"
     },
     "121.200.29.194:24|bbs.mozysswamp.org:24": {
@@ -556,6 +598,9 @@
         "129.153.57.237:513"
       ]
     },
+    "132.145.210.148:3000|bbs.mythicalkingdom.com:3001|bbs.mythicalkingdom.com:3002": {
+      "action": "skip"
+    },
     "134.185.84.52:2323|167.86.109.250:23|34.162.43.84:23|bbs.theiguru.au:2323|funtopia.synchro.net:3023|techrono.synchro.net:23": {
       "action": "skip"
     },
@@ -580,6 +625,9 @@
         "136.144.155.250:2000"
       ]
     },
+    "136.144.155.250:8888|airport.bartsplace.net:23": {
+      "action": "skip"
+    },
     "137.184.144.158:23|bbs.interlinked.us:23": {
       "action": "remove",
       "remove": [
@@ -597,6 +645,9 @@
       "remove": [
         "dev.dunemud.net:4242"
       ]
+    },
+    "13leader.net:8013|13leader.net:8023": {
+      "action": "skip"
     },
     "13leader.net:8023|bbs.starbase11.de:2323": {
       "action": "skip"
@@ -634,6 +685,9 @@
     "142.11.212.221:23|5.9.58.175:2002|76.242.166.61:2002|interzone.annexia.xyz:2002|microblaster.net:2002|sursum-corda.com:2002|tw.internetking.us:23|tw2002.briancmoses.com:23": {
       "action": "skip"
     },
+    "142.11.212.221:23|hwsrv-1289162.hostwindsdns.com:2003": {
+      "action": "skip"
+    },
     "143.198.117.233:1280|mushhaven.com:1280": {
       "action": "remove",
       "remove": [
@@ -645,6 +699,15 @@
       "remove": [
         "146.0.33.231:64128"
       ]
+    },
+    "146.190.15.104:10185|146.190.15.104:12185|146.190.15.104:12222": {
+      "action": "skip"
+    },
+    "146.190.52.128:10185|146.190.52.128:12185|146.190.52.128:12222": {
+      "action": "skip"
+    },
+    "146.59.45.33:4004|vps-0b7eb5b4.vps.ovh.net:3003": {
+      "action": "skip"
     },
     "148.170.167.4:23|centralontarioremote.net:23": {
       "action": "remove",
@@ -673,11 +736,32 @@
         "153.100.181.222:23"
       ]
     },
+    "155.138.203.199.vultrusercontent.com:23|207.246.74.70.vultrusercontent.com:23|45.76.236.169.vultrusercontent.com:23|96.30.192.92.vultrusercontent.com:23": {
+      "action": "remove",
+      "remove": [
+        "155.138.203.199.vultrusercontent.com:23",
+        "207.246.74.70.vultrusercontent.com:23",
+        "45.76.236.169.vultrusercontent.com:23",
+        "96.30.192.92.vultrusercontent.com:23"
+      ]
+    },
+    "157.230.136.41:2323|bbs.digitaldistortionbbs.com:23|bbs.duensing.digital:23|coconet.ddns.net:6809|leo.gnx.com.br:23|lunarout.synchro.net:8023|sb-discovery.com:23|vps-223b2b1c.vps.ovh.us:23": {
+      "action": "skip"
+    },
+    "157.230.152.152:23|bbs.deadparrotbbs.com:2324": {
+      "action": "skip"
+    },
     "158.248.112.65:45023|bbs.orreli.net:45023": {
       "action": "remove",
       "remove": [
         "158.248.112.65:45023"
       ]
+    },
+    "158.69.212.139:1234|158.69.212.139:1235|158.69.212.139:1236|158.69.212.139:1237|158.69.212.139:4321": {
+      "action": "skip"
+    },
+    "160-2-35-236.cpe.sparklight.net:223|47-188-56-111.fdr04.plan.tx.ip.frontiernet.net:23|bbs.eob-bbs.com:23|bbs.lostcrypt.com:23|c-76-134-25-116.hsd1.ar.comcast.net:49815|gemenon.org:2323": {
+      "action": "skip"
     },
     "162.118.68.104:23|50.110.169.17:23|ccbbs.zapto.org:3143": {
       "action": "skip"
@@ -687,6 +771,12 @@
       "remove": [
         "164.92.74.163:2323"
       ]
+    },
+    "165.239.226.35.bc.googleusercontent.com:31337|165.239.226.35.bc.googleusercontent.com:47145|165.239.226.35.bc.googleusercontent.com:6767": {
+      "action": "skip"
+    },
+    "17.227.167.72.host.secureserver.net:23|bbs.maidensrealm.com:23": {
+      "action": "skip"
     },
     "170.187.150.187:1111|ianshirm.genesismuds.com:2250": {
       "action": "skip"
@@ -701,6 +791,9 @@
       "action": "skip"
     },
     "172.111.168.176:23|172.111.168.90:23|192.82.254.205:8888|50.104.161.62:23|74.75.213.5:23|97.247.163.174:23|98.235.15.14:23|bbs.kd8hfx.net:23|bbs.venerandi.it:23|casper.homeip.net:23|rns.risenshinebbs.com:23|teehill.adirondackpc.com:2020": {
+      "action": "skip"
+    },
+    "172.111.168.176:23|172.111.168.90:23|97.247.163.174:23|bbs.venerandi.it:23": {
       "action": "skip"
     },
     "172.111.168.176:23|173.72.199.77:24|174.58.81.72:2323|50.104.161.62:23|66.168.116.58:23|70.19.64.120:23|73.219.250.223:2424|74.75.213.5:23|74.98.223.74:23233|97.247.163.174:23|98.235.15.14:23": {
@@ -773,6 +866,9 @@
       "action": "skip"
     },
     "173.75.131.40:4000|174.64.125.29:4000|3.132.134.107:4000|69.9.131.124:4000": {
+      "action": "skip"
+    },
+    "173.75.131.40:4000|174.64.125.29:4000|3.132.134.107:4000|bbs.emeraldvalley.net:4000": {
       "action": "skip"
     },
     "173.88.200.16:23|50.109.246.46:23|71.204.139.119:23": {
@@ -901,6 +997,9 @@
         "188.128.39.239:110"
       ]
     },
+    "188.128.39.239:110|bylins.su:143|bylins.su:3128|bylins.su:3389|bylins.su:4000|bylins.su:443|bylins.su:463|bylins.su:5190|bylins.su:543|bylins.su:563|bylins.su:7000|bylins.su:8080": {
+      "action": "skip"
+    },
     "188.128.39.239:110|bylins.su:4000": {
       "action": "skip"
     },
@@ -942,6 +1041,21 @@
       "remove": [
         "198.16.195.252:57323"
       ]
+    },
+    "1984.ws:23|1984.ws:666": {
+      "action": "skip"
+    },
+    "1987846-static.wsfdindl.metronetinc.net:23|24.96.157.17:23|50.110.169.17:23|bbs.dsbbs.ca:23|connect.rayzer.net:2323|siliconu.com:23|tlcbbs.synchro.net:6023": {
+      "action": "skip"
+    },
+    "1987846-static.wsfdindl.metronetinc.net:23|24.96.157.17:23|bbs.dsbbs.ca:23|connect.rayzer.net:2323|siliconu.com:23|tlcbbs.synchro.net:6023": {
+      "action": "skip"
+    },
+    "199.180.250.22:3074|biyg.org:1901|biyg.org:20000|biyg.org:4001|biyg.org:4010|biyg.org:4020": {
+      "action": "skip"
+    },
+    "1stchoicecore.co.nz:1024|1stchoicecore.co.nz:1030": {
+      "action": "skip"
     },
     "1stchoicecore.co.nz:1030|2ndchoicecore.ddns.net:1024": {
       "action": "remove",
@@ -1096,6 +1210,12 @@
         "208.72.84.141:8600"
       ]
     },
+    "209.38.6.175:23|freeway.vkradio.com:23|mysticalrealmbbs.com:23|ohb.synchronetbbs.org:23|zl4kj.nz:23": {
+      "action": "skip"
+    },
+    "209.38.6.175:23|freeway.vkradio.com:23|mysticalrealmbbs.com:23|zl4kj.nz:23": {
+      "action": "skip"
+    },
     "210.59.236.38:3000|210.59.236.38:3001|210.59.236.38:3002|210.59.236.38:3003": {
       "action": "skip"
     },
@@ -1137,6 +1257,9 @@
       "remove": [
         "216.117.130.175:2523"
       ]
+    },
+    "216.136.9.5:1809|dragonballrevolt.genesismuds.com:1030|omen.digital-genesis.com:1806|vormud.genesismuds.com:1030": {
+      "action": "skip"
     },
     "216.136.9.5:1809|omen.digital-genesis.com:1806": {
       "action": "skip"
@@ -1182,6 +1305,12 @@
       "remove": [
         "217.180.211.228:23999"
       ]
+    },
+    "217.180.212.89:2323|jupiter.bbs.io:23": {
+      "action": "skip"
+    },
+    "217.180.212.89:23|bbs.aghy.net:23": {
+      "action": "skip"
     },
     "217.81.85.246:23|79.224.46.195:23": {
       "action": "skip"
@@ -1282,6 +1411,18 @@
     "24.96.157.17:23|fido.alltsk.ru:23": {
       "action": "skip"
     },
+    "254.sub-75-215-45.myvzw.com:23|bayoublog.ddns.net:23": {
+      "action": "skip"
+    },
+    "300baud.dynu.net:1123|pofobbs.ddns.net:1123|pofobbs.ddns.net:992|quazarbbs.dynu.net:1123": {
+      "action": "skip"
+    },
+    "300baud.dynu.net:1337|pofobbs.ddns.net:1337|quazarbbs.dynu.net:1337": {
+      "action": "skip"
+    },
+    "300baud.dynu.net:2523|pofobbs.ddns.net:2523|quazarbbs.dynu.net:2523": {
+      "action": "skip"
+    },
     "300baud.dynu.net:2525|pofobbs.ddns.net:992": {
       "action": "skip"
     },
@@ -1298,6 +1439,9 @@
       ]
     },
     "31.220.94.14:6000|leu.mclink.it:6000": {
+      "action": "skip"
+    },
+    "32-217-68-154.bng02.wtrb.ct.frontiernet.net:23|bbs.thebrokenbubble.com:23": {
       "action": "skip"
     },
     "32.216.242.85:2323|fmrl.throwbackbbs.com:2324|reality.throwbackbbs.com:2323": {
@@ -1345,6 +1489,15 @@
     "44.204.35.120:4400|95.179.176.16:4000": {
       "action": "skip"
     },
+    "45-24-186-194.lightspeed.tukrga.sbcglobal.net:23|mystic-anet.online:23": {
+      "action": "skip"
+    },
+    "45-24-186-196.lightspeed.tukrga.sbcglobal.net:2323|x.a-net.online:2323": {
+      "action": "skip"
+    },
+    "45-24-186-198.lightspeed.tukrga.sbcglobal.net:23|a-net.online:23": {
+      "action": "skip"
+    },
     "45.24.186.194:513|mystic-anet.online:513": {
       "action": "remove",
       "remove": [
@@ -1356,6 +1509,9 @@
       "remove": [
         "45.24.186.195:2112"
       ]
+    },
+    "45.4.217.182:30023|45.4.219.29:30023": {
+      "action": "skip"
     },
     "45.46.150.7:6809|coconet.ddns.net:6809": {
       "action": "remove",
@@ -1379,6 +1535,9 @@
       "action": "skip"
     },
     "45.79.37.227:513|45.79.69.172:513|bbs.abon.us:513|bbs.decafbad.com:6513|c3bbs.retronetworking.org:513|dynamite.synchronetbbs.org:513|guardian.synchro.net:513|lovelybits.org:513|macos.retro-os.live:513|mtlgeek.synchro.net:513|oldschool.synchronetbbs.org:513|paradoxbbs.synchronetbbs.org:513|sestar.synchro.net:513|technoanarchy.synchronetbbs.org:513|threeblindmice.synchronetbbs.org:513|tmz.synchronetbbs.org:513": {
+      "action": "skip"
+    },
+    "45.86.125.202:6666|45.86.125.203:6666": {
       "action": "skip"
     },
     "46.110.227.9:23|bbs.sunspothq.dyndns.org:23": {
@@ -1417,6 +1576,12 @@
         "47.6.104.218:24000"
       ]
     },
+    "47.pool85-54-48.dynamic.orange.es:2323|news.belchi.org:2323": {
+      "action": "skip"
+    },
+    "48.56.236.23.bc.googleusercontent.com:23|bbs.wretchedbeagle.com:23": {
+      "action": "skip"
+    },
     "5.150.254.12:31337|blackflag.acid.org:23|blackflag.acid.org:26|blackflag.acid.org:27": {
       "action": "skip"
     },
@@ -1424,6 +1589,12 @@
       "action": "skip"
     },
     "5.150.254.12:31337|blackflag.acid.org:27": {
+      "action": "skip"
+    },
+    "5.9.58.175:2002|76.242.166.61:2002|amigaunderground.com:2002|diskhopp.synchro.net:2002|microblaster.net:2002|storm-mountain.ddns.net:24000|sursum-corda.com:2002|tw.internetking.us:23|tw2002.briancmoses.com:23": {
+      "action": "skip"
+    },
+    "50-107-162-117.dlls.pa.frontiernet.net:23|tiabbs.synchro.net:23": {
       "action": "skip"
     },
     "50.107.162.117:23|tiabbs.synchro.net:23": {
@@ -1486,6 +1657,9 @@
         "51.81.209.251:6502"
       ]
     },
+    "52.19.37.158:7465|ec2-52-19-37-158.eu-west-1.compute.amazonaws.com:5000|ec2-52-19-37-158.eu-west-1.compute.amazonaws.com:7000|ec2-52-19-37-158.eu-west-1.compute.amazonaws.com:8080|ec2-52-19-37-158.eu-west-1.compute.amazonaws.com:9956": {
+      "action": "skip"
+    },
     "52.2.244.77:1998|euts.org:1998": {
       "action": "remove",
       "remove": [
@@ -1498,6 +1672,12 @@
     "52.212.238.182:2323|88.0.196.111:23|bbs.digitaldistortionbbs.com:23": {
       "action": "skip"
     },
+    "52.212.238.182:2323|ec2-52-212-238-182.eu-west-1.compute.amazonaws.com:6697": {
+      "action": "skip"
+    },
+    "54.238.90.108:23|ec2-54-238-90-108.ap-northeast-1.compute.amazonaws.com:3456|ec2-54-238-90-108.ap-northeast-1.compute.amazonaws.com:888": {
+      "action": "skip"
+    },
     "58.174.2.12:23|avastbbs.servegame.com:23": {
       "action": "remove",
       "remove": [
@@ -1507,10 +1687,16 @@
     "59.167.142.49:12800|dungeon.synchro.net:23": {
       "action": "skip"
     },
+    "59.167.142.49:12800|dungeon.synchro.net:23|dungeon.synchro.net:64000": {
+      "action": "skip"
+    },
     "63.142.253.253:4001|empiremud.net:4000": {
       "action": "skip"
     },
     "63.230.156.110:2424|cedarvalleybbs.com:2424|cedarvalleybbs.com:2525": {
+      "action": "skip"
+    },
+    "64-121-67-27.s1049.c3-0.tlg-cbr2.atw-tlg.pa.cable.rcncustomer.com:8023|bbs.lightly-salted.com:8023": {
       "action": "skip"
     },
     "64.121.87.67:9000|alcatrazbbs.ddns.net:9000|foremxebbs.ddns.net:9999": {
@@ -1558,6 +1744,9 @@
     "67.230.158.234:23|thedigitalpost.freeddns.org:23": {
       "action": "skip"
     },
+    "68-168-184-229.fttp.usinternet.com:23|amnesiabbs.duckdns.org:23": {
+      "action": "skip"
+    },
     "68.134.179.115:2023|bbs.outpost9.co:2023": {
       "action": "skip"
     },
@@ -1581,6 +1770,12 @@
       "remove": [
         "68.197.140.28:6400"
       ]
+    },
+    "69-4-62-151.dsl.ingr.hctcnetworks.net:2003|69.4.62.151:23": {
+      "action": "skip"
+    },
+    "69.28.93.15.static.cyrellia.com:23|bbs.cyrellia.com:23": {
+      "action": "skip"
     },
     "69.8.81.127:23|bbs.mynameisgabe.com:23": {
       "action": "remove",
@@ -1662,6 +1857,9 @@
       "remove": [
         "73.178.46.44:1701"
       ]
+    },
+    "73.183.161.134:8887|bbs.pixelgrounds.net:8887": {
+      "action": "skip"
     },
     "73.219.250.223:2424|acentauribbs.no-ip.org:2424": {
       "action": "remove",
@@ -1813,6 +2011,9 @@
         "81.201.49.14:443"
       ]
     },
+    "82-65-188-127.subs.proxad.net:1337|gw-2.mp.inet.t0x.net:1337": {
+      "action": "skip"
+    },
     "82.68.167.68:4242|discworld.starturtle.net:4242": {
       "action": "remove",
       "remove": [
@@ -1830,6 +2031,12 @@
       "remove": [
         "83.36.30.179:23"
       ]
+    },
+    "84-217-62-182.customers.ownit.se:2323|bbs.millhill.org:2323": {
+      "action": "skip"
+    },
+    "84-87-244-28.fixed.kpn.net:2323|bbs.alcatrash.org:23": {
+      "action": "skip"
     },
     "85.74.7.40:9999|andr01d.zapto.org:9999": {
       "action": "remove",
@@ -1903,6 +2110,9 @@
     "8bit.hoyvision.com:6400|8bit.hoyvision.com:6502": {
       "action": "skip"
     },
+    "91-119-62-15.dsl.dynamic.surfer.at:23|bbs.disconnected-by-peer.at:23": {
+      "action": "skip"
+    },
     "91.205.173.162:4455|91.205.173.162:9000|CsillagKod.themuds.org:7777|aranylaz.mud.hu:4321|bastard.mud.hu:2222|csillagkod.themuds.org:7777": {
       "action": "skip"
     },
@@ -1946,6 +2156,9 @@
       "remove": [
         "95.120.64.50:23"
       ]
+    },
+    "95.217.22.142:2323|bbs.g00r00.com:23|bbs.korenblom.nl:23|bbs.tabakov.net:13023|mail.hohimer.org:1336|nottinghambbs.com:2323|undernet.uy:23": {
+      "action": "skip"
     },
     "95.235.183.48:2323|react-bbs.nikoh.it:2323": {
       "action": "remove",
@@ -1991,6 +2204,15 @@
     },
     "98.50.23.19:23|tdod.org:2002|tdod.org:23": {
       "action": "skip"
+    },
+    "99.106.75.128:95|bbs.ramifications.ca:5128|fmrl.throwbackbbs.com:2324|tfcbbs.com:6400": {
+      "action": "remove",
+      "remove": [
+        "99.106.75.128:95",
+        "fmrl.throwbackbbs.com:2324",
+        "bbs.ramifications.ca:5128",
+        "tfcbbs.com:6400"
+      ]
     },
     "99.106.75.128:95|bbs.ramifications.ca:5128|tfcbbs.com:6400": {
       "action": "skip"
@@ -2119,14 +2341,36 @@
         "WowMUD.themuds.org:5555"
       ]
     },
+    "aardmud.org:23|aardmud.org:4010|aardmud.org:4444|aardmud.org:7777": {
+      "action": "skip"
+    },
     "aardmud.org:23|aardwolf.org:23": {
       "action": "remove",
       "remove": [
         "aardmud.org:23"
       ]
     },
+    "abandonedstardock.ddns.net:2002|abandonedstardock.ddns.net:2003": {
+      "action": "skip"
+    },
     "absinthebbs.net:1940|strangeplanet.org:6800": {
       "action": "skip"
+    },
+    "acentauribbs.no-ip.org:1955|acentauribbs.no-ip.org:2002|majicka.at2k.org:1955|majicka.at2k.org:2002": {
+      "action": "skip"
+    },
+    "acentauribbs.no-ip.org:2424|majicka.at2k.org:2424": {
+      "action": "skip"
+    },
+    "adhd.ninjaneering.net:1857|adhd.ninjaneering.net:33060": {
+      "action": "skip"
+    },
+    "adibbs.sytes.net:6800|bbs.silverhawk.no:6400": {
+      "action": "remove",
+      "remove": [
+        "bbs.silverhawk.no:6400",
+        "adibbs.sytes.net:6800"
+      ]
     },
     "adults.mushpark.com:6969|labmush.mushpark.com:3939|mearth.mushpark.com:9376|mo.mushpark.com:2012|mushpark.com:1972|mushpark.com:6000|passion.mushpark.com:1313|puggy.mushpark.com:9033|shangrilamux.com:9999|winter.mushpark.com:3000": {
       "action": "skip"
@@ -2161,6 +2405,12 @@
         "www.alteraeon.com:3000"
       ]
     },
+    "alteraeon.com:3000|alteraeon.com:3002": {
+      "action": "skip"
+    },
+    "alteraeon.com:4002|alteraeon.com:4010|alteraeon.com:4224": {
+      "action": "skip"
+    },
     "amn.biyg.org:20000|biyg.org:1801": {
       "action": "skip"
     },
@@ -2179,10 +2429,49 @@
     "amstrad.simulant.uk:464|freeway.vkradio.com:23|guardian.synchro.net:23|kneesurgery.moe:23|lunarout.synchro.net:8023|mysticalrealmbbs.com:23|palantirbbs.ddns.net:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
+    "anancy-653-1-49-170.w86-204.abo.wanadoo.fr:23|lfbn-tou-1-1036-63.w90-76.abo.wanadoo.fr:23": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:1119|reaux.vineyard.haus:1119": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:1538|ancientmists.vineyard.haus:4500|ancientmists.vineyard.haus:5000|ancientmists.vineyard.haus:8008|reaux.vineyard.haus:3033|reaux.vineyard.haus:4500|reaux.vineyard.haus:5000|reaux.vineyard.haus:8008": {
+      "action": "skip"
+    },
     "ancientmists.vineyard.haus:1538|colossus.vineyard.haus:10000|reaux.vineyard.haus:3033": {
       "action": "skip"
     },
     "ancientmists.vineyard.haus:1538|reaux.vineyard.haus:3033": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:1701|ancientmists.vineyard.haus:4598|ancientmists.vineyard.haus:6998|ancientmists.vineyard.haus:7778|reaux.vineyard.haus:1701|reaux.vineyard.haus:4598|reaux.vineyard.haus:6998|reaux.vineyard.haus:7778|zeus.cybercitizen.net:3337": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:2024|ancientmists.vineyard.haus:5678|ancientmists.vineyard.haus:6666|reaux.vineyard.haus:2024|reaux.vineyard.haus:5678|reaux.vineyard.haus:6666": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:2221|ancientmists.vineyard.haus:4200|ancientmists.vineyard.haus:6100|reaux.vineyard.haus:2221|reaux.vineyard.haus:4200|reaux.vineyard.haus:6100": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:4106|reaux.vineyard.haus:4106": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:4545|ancientmists.vineyard.haus:6000|ancientmists.vineyard.haus:6060|ancientmists.vineyard.haus:8000|ancientmists.vineyard.haus:9091|reaux.vineyard.haus:4545|reaux.vineyard.haus:6000|reaux.vineyard.haus:6060|reaux.vineyard.haus:8000|reaux.vineyard.haus:9091": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:7000|reaux.vineyard.haus:7000": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:7800|reaux.vineyard.haus:7800": {
+      "action": "skip"
+    },
+    "ancientmists.vineyard.haus:9876|reaux.vineyard.haus:9876": {
+      "action": "skip"
+    },
+    "ansalon.net:2001|ansalon.net:6942": {
+      "action": "skip"
+    },
+    "ansalon.net:8650|ansalon.net:8679": {
       "action": "skip"
     },
     "ansiblemoo.org:6000|ansiblemoo.org:8888|foomoo.org:4500": {
@@ -2239,6 +2528,9 @@
     "area52.tk:5200|penisys.online:6502": {
       "action": "skip"
     },
+    "argentumage.com:23|landover.synchronetbbs.org:23": {
+      "action": "skip"
+    },
     "atari-bbs.zapto.org:8888|bbs-mousenet.dynip.online:8889": {
       "action": "skip"
     },
@@ -2263,6 +2555,9 @@
         "play.awakemud.com:4000"
       ]
     },
+    "ayce.fozztexx.com:23|bbs.fozztexx.com:1701|bbs.fozztexx.com:23|bbs.fozztexx.com:6502|bbs.fozztexx.com:9600": {
+      "action": "skip"
+    },
     "azereth.vineyard.haus:8000|timeslost.duckdns.org:4000": {
       "action": "skip"
     },
@@ -2281,13 +2576,55 @@
     "bay.jayscafe.net:6401|bbs.jayscafe.net:6402|bpc.jayscafe.net:6402": {
       "action": "skip"
     },
+    "bbs.4d2.org:128|bbs.4d2.org:23|bbs.4d2.org:64": {
+      "action": "skip"
+    },
+    "bbs.8bitboyz.com:23|bbs.8bitboyz.com:6502": {
+      "action": "skip"
+    },
     "bbs.8bitboyz.com:6502|tka.8bitboyz.com:6400": {
+      "action": "skip"
+    },
+    "bbs.abon.us:2321|wh2bbs.us:2321": {
       "action": "skip"
     },
     "bbs.alcatrash.org:23|bbs.emeraldvalley.net:23|bbs.retroarchive.org:23|bbs.thebrokenbubble.com:23|brazi.net:23|msmacbbs.maletazul.pt:23|vague.ddns.net:23": {
       "action": "skip"
     },
+    "bbs.bnbbbs.net:2023|mbsedev.bnbbbs.net:2023|phoenix.bnbbbs.net:2023": {
+      "action": "skip"
+    },
+    "bbs.bnbbbs.net:2323|mbsedev.bnbbbs.net:2323|phoenix.bnbbbs.net:2323": {
+      "action": "skip"
+    },
+    "bbs.bnbbbs.net:3023|c-174-169-111-227.hsd1.ct.comcast.net:23|mbsedev.bnbbbs.net:3023|phoenix.bnbbbs.net:23|phoenix.bnbbbs.net:3023": {
+      "action": "skip"
+    },
+    "bbs.bnbbbs.net:60177|bbs.bnbbbs.net:60277|bbs.bnbbbs.net:60377|mbsedev.bnbbbs.net:60177|mbsedev.bnbbbs.net:60277|mbsedev.bnbbbs.net:60377|phoenix.bnbbbs.net:60177|phoenix.bnbbbs.net:60277|phoenix.bnbbbs.net:60377": {
+      "action": "skip"
+    },
+    "bbs.bnbbbs.net:60179|bbs.bnbbbs.net:60279|bbs.bnbbbs.net:60379|mbsedev.bnbbbs.net:60179|mbsedev.bnbbbs.net:60279|mbsedev.bnbbbs.net:60379|phoenix.bnbbbs.net:60179|phoenix.bnbbbs.net:60279|phoenix.bnbbbs.net:60379": {
+      "action": "skip"
+    },
+    "bbs.c64.pub:128|bbs.c64.pub:23|bbs.c64.pub:64": {
+      "action": "skip"
+    },
     "bbs.c64.pub:23|bbs.circl.lu:23|halcyonbbs.scisweb.org:23|lunarout.synchro.net:8023": {
+      "action": "skip"
+    },
+    "bbs.canerduh.com:23056|s010600e067264634.mh.shawcable.net:23056|void.canerduh.com:23056": {
+      "action": "skip"
+    },
+    "bbs.canerduh.com:23905|s010600e067264634.mh.shawcable.net:23905|void.canerduh.com:23905": {
+      "action": "skip"
+    },
+    "bbs.ccns.ncku.edu.tw:23|bbs.ccns.ncku.edu.tw:3456": {
+      "action": "skip"
+    },
+    "bbs.centronian.ca:6400|d154-5-231-24.bchsia.telus.net:6400": {
+      "action": "skip"
+    },
+    "bbs.circl.lu:128|bbs.circl.lu:23|bbs.circl.lu:64": {
       "action": "skip"
     },
     "bbs.darkrealms.ca:23|bbs.ramifications.ca:5128|tfcbbs.com:6400": {
@@ -2296,16 +2633,37 @@
     "bbs.deepskies.com:6400|bbs.ramifications.ca:5128": {
       "action": "skip"
     },
+    "bbs.demigoth.com:2002|cjsplace.thruhere.net:2002": {
+      "action": "skip"
+    },
     "bbs.digitaldistortionbbs.com:23|digdist.synchro.net:23": {
       "action": "remove",
       "remove": [
         "digdist.synchro.net:23"
       ]
     },
+    "bbs.digitalrainbow.info:128|bbs.digitalrainbow.info:23|bbs.digitalrainbow.info:64": {
+      "action": "skip"
+    },
     "bbs.dosnetz.de:3232|bbs.f4fbbs.com:2323|netasylum.com:2323": {
       "action": "skip"
     },
     "bbs.dosnetz.de:3232|netasylum.com:2323": {
+      "action": "skip"
+    },
+    "bbs.dragonsweb.org:60177|bbs.dragonsweb.org:60179|bbs.trod.org:60177|bbs.trod.org:60179|fido.bajtek.org:60177|fido.bajtek.org:60179": {
+      "action": "skip"
+    },
+    "bbs.emeraldvalley.net:23|brazi.net:23|outwest.synchro.net:23": {
+      "action": "skip"
+    },
+    "bbs.endofthelinebbs.com:128|bbs.endofthelinebbs.com:23|bbs.endofthelinebbs.com:64|endofthelinebbs.com:128|endofthelinebbs.com:23|endofthelinebbs.com:64": {
+      "action": "skip"
+    },
+    "bbs.endofthelinebbs.com:17|endofthelinebbs.com:17": {
+      "action": "skip"
+    },
+    "bbs.excalibursheath.com:23|server3.camelothost.com:23": {
       "action": "skip"
     },
     "bbs.f4fbbs.com:2323|netasylum.com:2323": {
@@ -2323,6 +2681,18 @@
     "bbs.furryrefuge.com:23|guardian.synchro.net:23|kneesurgery.moe:23|vern.cc:23": {
       "action": "skip"
     },
+    "bbs.gamer.com.tw:23|bbs.gamer.com.tw:443|bbs.gamer.com.tw:88|bbs.gamer.com.tw:888|bbs.gamer.com.tw:8888": {
+      "action": "skip"
+    },
+    "bbs.hackerforce.de:2323|bbs.hackerforce.de:2324": {
+      "action": "skip"
+    },
+    "bbs.hispamsx.org:128|bbs.hispamsx.org:23": {
+      "action": "skip"
+    },
+    "bbs.ibbs.be:23|mx2.ibbbs.be:23": {
+      "action": "skip"
+    },
     "bbs.interlinked.us:23|krion.io:1337": {
       "action": "skip"
     },
@@ -2333,6 +2703,15 @@
       "action": "skip"
     },
     "bbs.jacobcat.app:513|rns.risenshinebbs.com:513|tiabbs.synchro.net:513|vert.synchro.net:513": {
+      "action": "skip"
+    },
+    "bbs.jerseyjam.com:23|bbs.jerseyjam.com:2323|jerseyjam.com:23|jerseyjam.com:2323": {
+      "action": "skip"
+    },
+    "bbs.kd3.us:23|wsip-72-215-52-60.ri.ri.cox.net:23": {
+      "action": "skip"
+    },
+    "bbs.kd3.us:4001|wsip-72-215-52-60.ri.ri.cox.net:4001": {
       "action": "skip"
     },
     "bbs.kd8hfx.net:23|bbs.lostcrypt.com:23|bbs.mozysswamp.org:23|bbs.ninthchevron.com.au:23|bbs.starshipjunkyard.com:23|bbs.sunspothq.dyndns.org:23|bbs.venerandi.it:23|bookworm.synchro.net:2323|capitolshrill.com:23|casper.homeip.net:23|connect.serionbbs.com:23|diskhopp.synchro.net:23|jamesmauler.net:23|localyocalbbs.com:23|partybowlbbs.ddns.net:2323|ricksbbs.synchro.net:23|rns.risenshinebbs.com:23|sbbs.dmine.net:24|t0kerz.synchro.net:23|technotron.asuscomm.com:23|teehill.adirondackpc.com:2020|thunder.synchro.net:23|tiabbs.synchro.net:23|tmzbbs01.synchro.net:23|vert.synchro.net:23|wastelands-bbs.net:2323": {
@@ -2347,13 +2726,46 @@
     "bbs.lostcrypt.com:23|wastelands-bbs.net:2323": {
       "action": "skip"
     },
+    "bbs.maidensrealm.com:2002|bbs.maidensrealm.com:2003|bestbudgetmanager.com:2002|bestbudgetmanager.com:2003": {
+      "action": "skip"
+    },
+    "bbs.maidensrealm.com:33069|bestbudgetmanager.com:33069": {
+      "action": "skip"
+    },
     "bbs.memphistw.org:23|greywolf.synchro.net:23": {
+      "action": "skip"
+    },
+    "bbs.mynameisgabe.com:23|bbs.mynameisgabe.com:2323": {
       "action": "skip"
     },
     "bbs.ninthchevron.com.au:23|bookworm.synchro.net:2323|jamesmauler.net:23|technotron.asuscomm.com:23|tmzbbs01.synchro.net:23": {
       "action": "skip"
     },
+    "bbs.ninthchevron.com.au:23|bookworm.synchro.net:2323|jamesmauler.net:23|tmzbbs01.synchro.net:23": {
+      "action": "skip"
+    },
+    "bbs.nykz.net:23|bbs.nykz.net:2323": {
+      "action": "skip"
+    },
+    "bbs.orreli.net:32223|bbs.orreli.net:45023": {
+      "action": "skip"
+    },
+    "bbs.pathunknown.net:23|pathunknown.net:23": {
+      "action": "skip"
+    },
+    "bbs.photik.org:23|vmi3080475.contaboserver.net:23": {
+      "action": "skip"
+    },
     "bbs.ptt.cc:23|ptt.cc:23": {
+      "action": "skip"
+    },
+    "bbs.pwecksretreat.com:1245|bbs.pwecksretreat.com:1246|bbs.pwecksretreat.com:1247|bbs.pwecksretreat.com:1248|bbs.pwecksretreat.com:2377|www.madworldbbs.com:1246|www.madworldbbs.com:1247|www.madworldbbs.com:1248|www.madworldbbs.com:2377": {
+      "action": "skip"
+    },
+    "bbs.pwecksretreat.com:2332|www.madworldbbs.com:2332": {
+      "action": "skip"
+    },
+    "bbs.pwecksretreat.com:8010|www.madworldbbs.com:8010": {
       "action": "skip"
     },
     "bbs.ramifications.ca:5128|sacrebase.mywire.org:486|tfcbbs.com:6400": {
@@ -2362,7 +2774,22 @@
     "bbs.ramifications.ca:5128|tfcbbs.com:6400": {
       "action": "skip"
     },
+    "bbs.retroarchive.org:23|gateway.deltasoft.com:23": {
+      "action": "skip"
+    },
+    "bbs.retroboardbbs.com:2323|bbs.retroboardbbs.com:2324": {
+      "action": "skip"
+    },
+    "bbs.retrocampus.com:23|li271-19.members.linode.com:23": {
+      "action": "skip"
+    },
+    "bbs.retrocampus.com:8000|bbs.retrocampus.com:8001|bbs.retrocampus.com:8086|bbs.retrocampus.com:8088|bbs.retrocampus.com:8089": {
+      "action": "skip"
+    },
     "bbs.sbbsystems.com:8888|dydo.erb.pw:1337": {
+      "action": "skip"
+    },
+    "bbs.shift-bits.com:2000|bbs.shift-bits.com:2001|bbs.shift-bits.com:2002|bbs.shift-bits.com:2003": {
       "action": "skip"
     },
     "bbs.shift-bits.com:2000|microbur.synchro.net:2002": {
@@ -2377,7 +2804,22 @@
     "bbs.silverhawk.no:6400|southcentral.se:1023|stokmarknes.org:24": {
       "action": "skip"
     },
+    "bbs.soc4ever.com:2002|tw.worldsapart.net:2002": {
+      "action": "skip"
+    },
+    "bbs.soc4ever.com:23|tw.worldsapart.net:23": {
+      "action": "skip"
+    },
     "bbs.stardoc134.com:513|cjsplace.thruhere.net:2002": {
+      "action": "skip"
+    },
+    "bbs.swissirc.net:23|bbs.swissirc.net:2323": {
+      "action": "skip"
+    },
+    "bbs.tabakov.net:8010|workstation.ddmcomputers.com.au:8010": {
+      "action": "skip"
+    },
+    "bbs.telnix.com:6502|datgsguy.com:6502": {
       "action": "skip"
     },
     "bbs.thisoldcabin.net:2323|bbs.thisoldcabin.net:6464": {
@@ -2386,19 +2828,61 @@
         "bbs.thisoldcabin.net:6464"
       ]
     },
+    "bbs.throwbackbbs.com:2323|fmrl.throwbackbbs.com:2323|reality.throwbackbbs.com:2323": {
+      "action": "skip"
+    },
+    "bbs.ultimatebbs.net:23|bbs1.tardisbbs.com:8023|ip174-70-227-224.fv.ks.cox.net:23|rg1.retrogoldbbs.com:6411": {
+      "action": "skip"
+    },
     "bbs.ultimatebbs.net:23|bbs1.tardisbbs.com:8023|rg1.retrogoldbbs.com:6411": {
       "action": "skip"
     },
     "bbs.ultimatebbs.net:23|riverstyx.ddns.net:2323": {
       "action": "skip"
     },
+    "bbs.vcgsa.co.za:23|bbs.vcgsa.co.za:6400": {
+      "action": "skip"
+    },
+    "bbs.venerandi.it:17|vmi1242065.contaboserver.net:17": {
+      "action": "skip"
+    },
+    "bbs.wantit.net:23|c-75-71-52-212.hsd1.co.comcast.net:23": {
+      "action": "skip"
+    },
     "bbs.weather-station.org:23|violetyggdrasil.live:1144": {
+      "action": "skip"
+    },
+    "bbs.x65.zone:2323|bbs.x65.zone:8888": {
+      "action": "skip"
+    },
+    "bbs.zerotwo.tech:23|retroconnect.org:23": {
       "action": "skip"
     },
     "bbs.zerotwo.tech:23|retroconnect.org:23|sbbs.kingdomsendbbs.net:23|zenolab.synchro.net:23": {
       "action": "skip"
     },
+    "bbsdoors.com:23|frad.org:23": {
+      "action": "skip"
+    },
+    "bcrgames.com:23|bcrgames.com:31337|wizardsrainbow.com:23|wizardsrainbow.com:31337": {
+      "action": "skip"
+    },
     "bcrgames.com:31337|wizardsrainbow.com:23": {
+      "action": "skip"
+    },
+    "bcrgames.com:8787|bcrgames.com:9898|wizardsrainbow.com:8787|wizardsrainbow.com:9898": {
+      "action": "skip"
+    },
+    "beta.sb-discovery.com:23|syn-047-049-255-012.biz.spectrum.com:23": {
+      "action": "skip"
+    },
+    "bfbbs.no-ip.com:8880|bfbbs.no-ip.com:8881|bfbbs.no-ip.com:8882|retrorunning.ddns.net:8880|retrorunning.ddns.net:8881|retrorunning.ddns.net:8882": {
+      "action": "skip"
+    },
+    "bigtimebbs.net:2323|magnumbbs.net:2323": {
+      "action": "skip"
+    },
+    "bigtimebbs.net:64|magnumbbs.net:128|magnumbbs.net:23": {
       "action": "skip"
     },
     "bl.mud.at:5678|bl.mud.at:5679": {
@@ -2407,7 +2891,13 @@
         "bl.mud.at:5678"
       ]
     },
+    "bl16-240-121.dsl.telepac.pt:23|msmacbbs.maletazul.pt:23": {
+      "action": "skip"
+    },
     "blackflag.acid.org:23|blackflag.acid.org:26|blackflag.acid.org:27": {
+      "action": "skip"
+    },
+    "blackice.bbsindex.de:23|ip-134-003-060-152.um41.pools.vodafone-ip.de:23": {
       "action": "skip"
     },
     "bookworm.synchro.net:2323|predikhe.synchro.net:2323": {
@@ -2416,10 +2906,16 @@
         "predikhe.synchro.net:2323"
       ]
     },
+    "borderlinebbs.dyndns.org:6400|cottonwoodbbs.dyndns.org:6400": {
+      "action": "skip"
+    },
     "borderlinebbs.dyndns.org:6400|cottonwoodbbs.dyndns.org:6502": {
       "action": "skip"
     },
     "borderlinebbs.dyndns.org:6400|cottonwoodbbs.dyndns.org:6502|otherworldbbs.dyndns.org:6502": {
+      "action": "skip"
+    },
+    "borderlinebbs.dyndns.org:6502|cottonwoodbbs.dyndns.org:6502|otherworldbbs.dyndns.org:6400|otherworldbbs.dyndns.org:6502": {
       "action": "skip"
     },
     "breakworld.themuds.org:4000|hopto.mud.ren:4000": {
@@ -2431,22 +2927,70 @@
     "btvos.wolfpaw.net:9000|oim.wolfpaw.net:1960": {
       "action": "skip"
     },
+    "c-174-58-81-72.hsd1.fl.comcast.net:2323|pocbbs.duckdns.org:2323": {
+      "action": "skip"
+    },
+    "c-68-41-66-48.hsd1.mi.comcast.net:23|mojo.synchro.net:23": {
+      "action": "skip"
+    },
+    "c-69-181-118-30.hsd1.ca.comcast.net:23|ddreams.synchro.net:23": {
+      "action": "skip"
+    },
+    "c-71-204-139-119.hsd1.ca.comcast.net:23|realitycheckbbs.org:23": {
+      "action": "skip"
+    },
+    "c-73-124-42-198.hsd1.fl.comcast.net:23|diskhopp.synchro.net:23": {
+      "action": "skip"
+    },
+    "c-73-96-188-76.hsd1.or.comcast.net:24|wccastle.synchro.net:24": {
+      "action": "skip"
+    },
+    "c-76-115-96-245.hsd1.or.comcast.net:23|fqbbs.synchro.net:23": {
+      "action": "skip"
+    },
+    "c-98-214-156-85.hsd1.il.comcast.net:23|www.unleashedinet.org:23": {
+      "action": "skip"
+    },
+    "c3bbs.retronetworking.org:128|c3bbs.retronetworking.org:23|c3bbs.retronetworking.org:64": {
+      "action": "skip"
+    },
     "cajunnights.com:7373|galaxy.silvren.com:1959|galaxy.silvren.com:1976|galaxy.silvren.com:1984|galaxy.silvren.com:1986|galaxy.silvren.com:1993|galaxy.silvren.com:2005|galaxy.silvren.com:2020|galaxy.silvren.com:2024|galaxy.silvren.com:2112|galaxy.silvren.com:2215|galaxy.silvren.com:2222|galaxy.silvren.com:2451|galaxy.silvren.com:2816|galaxy.silvren.com:2900|galaxy.silvren.com:3200|galaxy.silvren.com:3333|galaxy.silvren.com:4225|galaxy.silvren.com:4444|galaxy.silvren.com:5050|galaxy.silvren.com:5555|galaxy.silvren.com:6400|galaxy.silvren.com:6666|galaxy.silvren.com:7248|galaxy.silvren.com:7373|galaxy.silvren.com:7801|galaxy.silvren.com:8888|galaxy.silvren.com:9718|galaxy.silvren.com:9999|game.tempestmux.com:5555|paradise.muxnexus.com:5555|prs.muxnexus.com:5555|riva.silvren.com:7777|silvren.com:6006|teod.dyndns.org:7410": {
       "action": "skip"
     },
     "cajunnights.com:7373|teod.dyndns.org:7410": {
       "action": "skip"
     },
+    "call.rofbbs.com:2300|rofbbs.ddns.net:2300": {
+      "action": "skip"
+    },
+    "call.rofbbs.com:6400|rofbbs.ddns.net:6400": {
+      "action": "skip"
+    },
     "call.rofbbs.com:6800|call.rofbbs.com:8502": {
+      "action": "skip"
+    },
+    "call.rofbbs.com:6800|rofbbs.ddns.net:6800": {
       "action": "skip"
     },
     "capitolcityonline.net:23|capitolcityonline.net:513": {
       "action": "skip"
     },
+    "capitolcityonline.net:24|capitolcityonline.net:26|host-067-131-059-192.dhcp.fewpb.net:23|host-067-131-059-192.dhcp.fewpb.net:24|host-067-131-059-192.dhcp.fewpb.net:26": {
+      "action": "skip"
+    },
     "capitolcityonline.net:513|moetiki.ddns.net:27": {
       "action": "skip"
     },
+    "capitolshrill.com:23|splatter.haus:23": {
+      "action": "skip"
+    },
+    "capitolshrill.com:666|splatter.haus:666": {
+      "action": "skip"
+    },
     "ccbbs.zapto.org:3143|opinsane.noip.me:23": {
+      "action": "skip"
+    },
+    "cd.csie.io:23|cd.csie.io:3456|cd.csie.io:443": {
       "action": "skip"
     },
     "cedarvalleybbs.com:2424|cedarvalleybbs.com:2525": {
@@ -2461,13 +3005,32 @@
     "centralontarioremote.net:1123|quazarbbs.dynu.net:2523": {
       "action": "skip"
     },
+    "centralontarioremote.net:23|host-148-170-167-4.public.eastlink.ca:23": {
+      "action": "skip"
+    },
     "championsmush.com:6363|omen.genesismuds.com:1100": {
       "action": "skip"
     },
     "chaos.caile.org:4201|chaos.caile.org:4444|chaos.caile.org:5555": {
       "action": "skip"
     },
+    "chaotix.ddns.net:11134|chaotix.ddns.net:11340": {
+      "action": "remove",
+      "remove": [
+        "chaotix.ddns.net:11134",
+        "chaotix.ddns.net:11340"
+      ]
+    },
     "charis.servegame.com:4240|charis.servegame.com:4242|charis.servegame.com:5864": {
+      "action": "skip"
+    },
+    "chrysalisbbs.org:5001|chrysalisbbs.org:5003|chrysalisbbs.org:5004|chrysalisbbs.org:5006|chrysalisbbs.org:5007|chrysalisbbs.org:5008|chrysalisbbs.org:5009|chrysalisbbs.org:5014|chrysalisbbs.org:5017|chrysalisbbs.org:5018|chrysalisbbs.org:5019|chrysalisbbs.org:5020|chrysalisbbs.org:5022|chrysalisbbs.org:5023|chrysalisbbs.org:5024|chrysalisbbs.org:5026|chrysalisbbs.org:5031|chrysalisbbs.org:5032|chrysalisbbs.org:8888": {
+      "action": "skip"
+    },
+    "cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6402|cib.dyndns.org:6403|cib.dyndns.org:6404|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
+      "action": "skip"
+    },
+    "cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6402|cib.dyndns.org:6403|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6491": {
       "action": "skip"
     },
     "cib.dyndns.org:6400|cib.dyndns.org:6401|cib.dyndns.org:6402|cib.dyndns.org:6404|cib.dyndns.org:6405|cib.dyndns.org:6407|cib.dyndns.org:6428|cib.dyndns.org:6491": {
@@ -2492,6 +3055,12 @@
     "cityofhope.genesismuds.com:8888|portent.genesismuds.com:4910": {
       "action": "skip"
     },
+    "claudes.lovelybits.org:23|claudes.lovelybits.org:2323": {
+      "action": "skip"
+    },
+    "cloud.kanskje.com:1373|cloud.kanskje.com:23": {
+      "action": "skip"
+    },
     "coffeemud.net:2324|coffeemud.net:2325": {
       "action": "skip"
     },
@@ -2505,6 +3074,18 @@
       "action": "skip"
     },
     "colossus.vineyard.haus:10000|dibrovamud.com:9000|mud.darkrisings.org:1313|www.darkrisings.org:1313": {
+      "action": "skip"
+    },
+    "conchaos.synchro.net:23|firesidebbs.com:23231|vague.ddns.net:23": {
+      "action": "skip"
+    },
+    "condor.rorscha.ch:33060|condor.rorscha.ch:4001|condor.rorscha.ch:9000": {
+      "action": "skip"
+    },
+    "condor.rorscha.ch:4001|condor.rorscha.ch:9000": {
+      "action": "skip"
+    },
+    "connect.mu-gateway.net:6677|connect.mu-gateway.net:6700": {
       "action": "skip"
     },
     "connect.mu-gateway.net:6700|scrozzle.noderunner.net:6700": {
@@ -2526,6 +3107,21 @@
       ]
     },
     "cpugod.synchro.net:23|kia.synchro.net:23|telnet.unknownrealm.org:23": {
+      "action": "skip"
+    },
+    "cqbbs.ddns.net:6800|crowsnestbbs.ddns.net:6800": {
+      "action": "skip"
+    },
+    "crackintimebbs.ddns.net:2323|ool-44c38ccf.dyn.optonline.net:2323": {
+      "action": "skip"
+    },
+    "crazyworldbbs.com:2002|dott.synchro.net:2002": {
+      "action": "skip"
+    },
+    "crazyworldbbs.com:2003|dott.synchro.net:2003": {
+      "action": "skip"
+    },
+    "crazyworldbbs.com:2323|crazyworldbbs.com:2424|crazyworldbbs.com:888|dott.synchro.net:2323|dott.synchro.net:2424|dott.synchro.net:888": {
       "action": "skip"
     },
     "crazyworldbbs.com:2323|crazyworldbbs.com:888|dott.synchro.net:2424": {
@@ -2550,11 +3146,20 @@
         "mud.kharkov.org:5000"
       ]
     },
+    "cryosphere.net:6666|cryosphere.net:6667|cryosphere.net:9999": {
+      "action": "skip"
+    },
     "cryosphere.net:6666|cryosphere.uk:6666": {
       "action": "remove",
       "remove": [
         "cryosphere.net:6666"
       ]
+    },
+    "cust22-dsl93-89-128.idnet.net:23|nexus.aefinity.io:23": {
+      "action": "skip"
+    },
+    "cyberiabbs.zapto.org:23|cyberiabbs.zapto.org:3640|echochamber.zapto.org:23|echochamber.zapto.org:3640|madmanbbs.ddns.net:23|madmanbbs.ddns.net:3640": {
+      "action": "skip"
     },
     "cyberiabbs.zapto.org:23|echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
       "action": "skip"
@@ -2565,11 +3170,20 @@
         "cyberiabbs.zapto.org:23"
       ]
     },
+    "d205-250-123-117.bchsia.telus.net:23|theattic.v1cd3m1z3r.net:23": {
+      "action": "skip"
+    },
     "darklord.no:5000|darklordmud.duckdns.org:5000": {
       "action": "remove",
       "remove": [
         "darklordmud.duckdns.org:5000"
       ]
+    },
+    "datotal.net:1280|datotal.net:35723|datotal.net:6400": {
+      "action": "skip"
+    },
+    "db.tastyspleen.net:17657|db.tastyspleen.net:17658|db.tastyspleen.net:17659|db.tastyspleen.net:17661|db.tastyspleen.net:17663|db.tastyspleen.net:17665|db.tastyspleen.net:17666|db.tastyspleen.net:17667|db.tastyspleen.net:17988|db.tastyspleen.net:18512|db.tastyspleen.net:18519|db.tastyspleen.net:18520|db.tastyspleen.net:18521|db.tastyspleen.net:18522|db.tastyspleen.net:18529|db.tastyspleen.net:18530|db.tastyspleen.net:18531|db.tastyspleen.net:18536|db.tastyspleen.net:18537|db.tastyspleen.net:18538|db.tastyspleen.net:18539|db.tastyspleen.net:18540|db.tastyspleen.net:18541|db.tastyspleen.net:18543|db.tastyspleen.net:18620|db.tastyspleen.net:18710|db.tastyspleen.net:18711|db.tastyspleen.net:18712|db.tastyspleen.net:18715|db.tastyspleen.net:18716|db.tastyspleen.net:18732|db.tastyspleen.net:18734|db.tastyspleen.net:18735|db.tastyspleen.net:18736|db.tastyspleen.net:18744|db.tastyspleen.net:18750|db.tastyspleen.net:18752|db.tastyspleen.net:18753|db.tastyspleen.net:18788|db.tastyspleen.net:18792|db.tastyspleen.net:18799|db.tastyspleen.net:18801|db.tastyspleen.net:18802|db.tastyspleen.net:18803|db.tastyspleen.net:18804|db.tastyspleen.net:18805|db.tastyspleen.net:18806|db.tastyspleen.net:18807|db.tastyspleen.net:18808|db.tastyspleen.net:18809|db.tastyspleen.net:18811|db.tastyspleen.net:18812|db.tastyspleen.net:18813|db.tastyspleen.net:18814|db.tastyspleen.net:18815|db.tastyspleen.net:18816|db.tastyspleen.net:18817|db.tastyspleen.net:18818|db.tastyspleen.net:18819|db.tastyspleen.net:18823|db.tastyspleen.net:18824|db.tastyspleen.net:18825|db.tastyspleen.net:18826|db.tastyspleen.net:18827|db.tastyspleen.net:18828|db.tastyspleen.net:18829|db.tastyspleen.net:18830|db.tastyspleen.net:18899|db.tastyspleen.net:19410|db.tastyspleen.net:19411|db.tastyspleen.net:19810|db.tastyspleen.net:20910|db.tastyspleen.net:20911|db.tastyspleen.net:20914|db.tastyspleen.net:20919|db.tastyspleen.net:20923|db.tastyspleen.net:20924|db.tastyspleen.net:20926|db.tastyspleen.net:20927|db.tastyspleen.net:20929|db.tastyspleen.net:20932|db.tastyspleen.net:20933|db.tastyspleen.net:20934|db.tastyspleen.net:20945|db.tastyspleen.net:20951|db.tastyspleen.net:21940|db.tastyspleen.net:27666|db.tastyspleen.net:27909|db.tastyspleen.net:27910|db.tastyspleen.net:27911|db.tastyspleen.net:27912|db.tastyspleen.net:27913|db.tastyspleen.net:27914|db.tastyspleen.net:27915|db.tastyspleen.net:27916|db.tastyspleen.net:27917|db.tastyspleen.net:27918|db.tastyspleen.net:27919|db.tastyspleen.net:27920|db.tastyspleen.net:27921|db.tastyspleen.net:27922|db.tastyspleen.net:27924|db.tastyspleen.net:27925|db.tastyspleen.net:27926|db.tastyspleen.net:27927|db.tastyspleen.net:27928|db.tastyspleen.net:27929|db.tastyspleen.net:27930|db.tastyspleen.net:27931|db.tastyspleen.net:27932|db.tastyspleen.net:27933|db.tastyspleen.net:27935|db.tastyspleen.net:27947|db.tastyspleen.net:27948|db.tastyspleen.net:27949|db.tastyspleen.net:27960|db.tastyspleen.net:27969|db.tastyspleen.net:27990|db.tastyspleen.net:27999": {
+      "action": "skip"
     },
     "db.weirdlooking.com:4000|mud.divineblood.org:4000": {
       "action": "remove",
@@ -2604,7 +3218,40 @@
         "dev.dunemud.net:4242"
       ]
     },
+    "din.asciiattic.com:23|din.themajorbbs.com:23": {
+      "action": "skip"
+    },
+    "dl2.net:4000|dl2.net:4001": {
+      "action": "skip"
+    },
     "dolba.net:4000|dolba.net:5200": {
+      "action": "skip"
+    },
+    "doozy.thruhere.net:23|host86-175-149-135.range86-175.btcentralplus.com:23": {
+      "action": "skip"
+    },
+    "dose.0wnz.at:3001|dose.0wnz.at:3002": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:1080|vormud.genesismuds.com:1080": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:1100|dragonballrevolt.genesismuds.com:6363|vormud.genesismuds.com:1100|vormud.genesismuds.com:6363": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:2251|vormud.genesismuds.com:2251": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:23|vormud.genesismuds.com:23": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:3333|dragonballrevolt.genesismuds.com:6969|vormud.genesismuds.com:3333|vormud.genesismuds.com:6969": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:7777|vormud.genesismuds.com:7777": {
+      "action": "skip"
+    },
+    "dragonballrevolt.genesismuds.com:8000|vormud.genesismuds.com:8000": {
       "action": "skip"
     },
     "dreamland.rocks:9000|mud.kiev.ua:9000": {
@@ -2622,7 +3269,13 @@
     "ds.enyc.org.uk:8688|pit.enyc.org.uk:7422|zmc-place.enyc.org.uk:8682": {
       "action": "skip"
     },
+    "dsl-98.a66-102-151.caltel.us:2323|wastelands-bbs.net:2323": {
+      "action": "skip"
+    },
     "dunemud.net:6788|dunemud.net:6789": {
+      "action": "skip"
+    },
+    "dungeon.name:20020|dungeon.name:20028|dungeon.name:22222": {
       "action": "skip"
     },
     "echochamber.zapto.org:3640|madmanbbs.ddns.net:23": {
@@ -2637,6 +3290,9 @@
     "elusive.genesismuds.com:8800|newage.genesismuds.com:9010|play.exodusmud.com:9000|terabithia.genesismuds.com:4700": {
       "action": "skip"
     },
+    "elveszettvilag.hu:23|elveszettvilag.hu:3333|elveszettvilag.hu:6666|elveszettvilag.hu:8080|elveszettvilag.hu:9000": {
+      "action": "skip"
+    },
     "elveszettvilag.hu:6666|mud.elveszettvilag.hu:6666": {
       "action": "remove",
       "remove": [
@@ -2644,6 +3300,9 @@
       ]
     },
     "emperia.org:5002|noreality.org:4000": {
+      "action": "skip"
+    },
+    "ent.synchro.net:23|entropybbs.zapto.org:23": {
       "action": "skip"
     },
     "eotmud.com:4000|stockmud.com:5000": {
@@ -2675,13 +3334,35 @@
         "ethernetgateway.com:23"
       ]
     },
+    "euts.org:1997|euts.org:1998": {
+      "action": "skip"
+    },
+    "exciter.ws:2002|www.exciter.ws:2002": {
+      "action": "skip"
+    },
+    "exoplanetbbs.net:23|pool-108-15-36-45.bltmmd.fios.verizon.net:23": {
+      "action": "skip"
+    },
+    "familybbs.ddns.net:23|familybbs.ddns.net:2323|swatsbbs.ddns.net:23|swatsbbs.ddns.net:2323": {
+      "action": "skip"
+    },
     "familybbs.ddns.net:23|swatsbbs.ddns.net:2323": {
+      "action": "skip"
+    },
+    "familybbs.ddns.net:516|swatsbbs.ddns.net:516": {
       "action": "skip"
     },
     "ff.mud.de:7600|finalfrontier.mud.de:7600": {
       "action": "remove",
       "remove": [
         "ff.mud.de:7600"
+      ]
+    },
+    "fido.alltsk.ru:23|turealm.no-ip.org:2323": {
+      "action": "remove",
+      "remove": [
+        "fido.alltsk.ru:23",
+        "turealm.no-ip.org:2323"
       ]
     },
     "fierymud.org:4000|fierymud.org:9999": {
@@ -2702,10 +3383,25 @@
     "fmrl.throwbackbbs.com:2324|reality.throwbackbbs.com:2323": {
       "action": "skip"
     },
+    "freechess.org:33060|freechess.org:33070": {
+      "action": "skip"
+    },
     "freeway.vkradio.com:23|kneesurgery.moe:23|mysticalrealmbbs.com:23|tdod.org:5000|vern.cc:23": {
       "action": "skip"
     },
     "ft.furtoonia.net:9999|theden.angel-hare.com:8888": {
+      "action": "skip"
+    },
+    "funtopia.synchro.net:3023|funtopia.synchro.net:64": {
+      "action": "skip"
+    },
+    "futureland.today:1513|futureland.today:2323": {
+      "action": "remove",
+      "remove": [
+        "futureland.today:2323"
+      ]
+    },
+    "futureland.today:23|v2202508295374374773.hotsrv.de:23": {
       "action": "skip"
     },
     "galaxy.silvren.com:1959|galaxy.silvren.com:1976|galaxy.silvren.com:1984|galaxy.silvren.com:1986|galaxy.silvren.com:1993|galaxy.silvren.com:2005|galaxy.silvren.com:2020|galaxy.silvren.com:2024|galaxy.silvren.com:2112|galaxy.silvren.com:2215|galaxy.silvren.com:2222|galaxy.silvren.com:2451|galaxy.silvren.com:2816|galaxy.silvren.com:2900|galaxy.silvren.com:3200|galaxy.silvren.com:3333|galaxy.silvren.com:4225|galaxy.silvren.com:4444|galaxy.silvren.com:5050|galaxy.silvren.com:5555|galaxy.silvren.com:6400|galaxy.silvren.com:6666|galaxy.silvren.com:7248|galaxy.silvren.com:7373|galaxy.silvren.com:7801|galaxy.silvren.com:8888|galaxy.silvren.com:9718|galaxy.silvren.com:9999|game.tempestmux.com:5555|paradise.muxnexus.com:5555|prs.muxnexus.com:5555|riva.silvren.com:7777|silvren.com:6006|teod.dyndns.org:7410": {
@@ -2715,6 +3411,12 @@
       "action": "skip"
     },
     "game.a-net-online.lol:2112|game.a-net-online.lol:513": {
+      "action": "skip"
+    },
+    "geas.de:23|geas.de:3333": {
+      "action": "skip"
+    },
+    "geniv.dyndns.org:150|geniv.dyndns.org:24": {
       "action": "skip"
     },
     "godwars.net:1111|godwars.net:2000|godwars.net:3000|godwars.net:4000|godwars.net:4200|godwars.net:6660|godwars.net:7701|godwars.net:7777|godwars.net:8000|godwars.net:8290|godwars.net:9000|godwars.net:9999": {
@@ -2732,13 +3434,31 @@
     "godwars.net:5353|godwars.net:6100": {
       "action": "skip"
     },
+    "grimoirebbs.sytes.net:23|grimoirebbs.sytes.net:99": {
+      "action": "skip"
+    },
     "guardian.synchro.net:23|guardian.synchro.net:513": {
       "action": "remove",
       "remove": [
         "guardian.synchro.net:513"
       ]
     },
+    "h69-128-114-51.lactwa.broadband.dynamic.tds.net:24|time.synchro.net:24": {
+      "action": "skip"
+    },
     "halcyon.bluecows.com:4201|holomuck.org:5757": {
+      "action": "skip"
+    },
+    "haven.enyc.org.uk:6969|haven.enyc.org.uk:7422|haven.enyc.org.uk:7777|haven.enyc.org.uk:8682|haven.enyc.org.uk:8688": {
+      "action": "skip"
+    },
+    "hg8lxl.ham.hu:1194|hg8lxl.ham.hu:23": {
+      "action": "skip"
+    },
+    "hiervard.ru:4000|hiervard.ru:7000": {
+      "action": "skip"
+    },
+    "home.thezen.garden:23|host81-151-56-255.range81-151.btcentralplus.com:23": {
       "action": "skip"
     },
     "ianshirm.genesismuds.com:2251|terabithia.genesismuds.com:4700": {
@@ -2769,10 +3489,37 @@
     "imperian.com:4000|lusternia.com:5000|starmourn.com:3000": {
       "action": "skip"
     },
+    "interzone.annexia.xyz:2002|telnet.holdfastbbs.ca:2002": {
+      "action": "skip"
+    },
+    "interzone.annexia.xyz:2323|telnet.holdfastbbs.ca:2323": {
+      "action": "skip"
+    },
+    "intranet.fites.net:23|pool-96-244-116-76.bltmmd.fios.verizon.net:23": {
+      "action": "skip"
+    },
+    "ip-037-201-034-231.um10.pools.vodafone-ip.de:23|wintermutebbs.ddns.net:23": {
+      "action": "skip"
+    },
+    "ip2.ip-192-99-83.net:23|mail.geomancer.xyz:23": {
+      "action": "skip"
+    },
+    "ip74-208-46-56.pbiaas.com:23|zenolab.synchro.net:23": {
+      "action": "skip"
+    },
+    "ip98-169-12-67.dc.dc.cox.net:6400|themegabbs.ddns.net:6400": {
+      "action": "skip"
+    },
     "itchybutt.org:6502|westwoodbbs.net:64738": {
       "action": "skip"
     },
     "javatrek.org:1764|mtrek.com:1701": {
+      "action": "skip"
+    },
+    "joestavern.ddns.net:2002|joestavern.ddns.net:2003": {
+      "action": "skip"
+    },
+    "kingdomsend.synchronetbbs.org:23|sbbs.kingdomsendbbs.net:23": {
       "action": "skip"
     },
     "lament.ghostglass.net:8181|lament.ghostglass.net:8600": {
@@ -2780,6 +3527,9 @@
       "remove": [
         "lament.ghostglass.net:8181"
       ]
+    },
+    "lament.ghostglass.net:8181|lament.ghostglass.net:8675|lament.ghostglass.net:8676": {
+      "action": "skip"
     },
     "last-outpost.com:4000|www.last-outpost.com:4000": {
       "action": "remove",
@@ -2799,6 +3549,12 @@
         "new-leu.leu.it:6000"
       ]
     },
+    "lfbn-idf1-1-366-193.w86-195.abo.wanadoo.fr:23|lfbn-idf1-1-366-193.w86-195.abo.wanadoo.fr:6300": {
+      "action": "skip"
+    },
+    "lisdude.com:1236|lisdude.com:8888": {
+      "action": "skip"
+    },
     "lisdude.com:8888|toastsoft.net:1234": {
       "action": "skip"
     },
@@ -2814,7 +3570,13 @@
     "lunaticsunleashed.ddns.net:2333|mystic-anet.online:23|mystic-anet.online:513": {
       "action": "skip"
     },
+    "lv426bbs.hopto.org:6464|lv426bbs.hopto.org:9600": {
+      "action": "skip"
+    },
     "lv426bbs.hopto.org:6464|strangeplanet.org:6800": {
+      "action": "skip"
+    },
+    "mail.myretrocomp.com:23|telnet.projectopengate.com:23": {
       "action": "skip"
     },
     "mastodon.uy:23|undernet.uy:23": {
@@ -2822,6 +3584,9 @@
       "remove": [
         "mastodon.uy:23"
       ]
+    },
+    "mba.dnsalias.com:2002|mba.dnsalias.com:2003": {
+      "action": "skip"
     },
     "mbsedev.bnbbbs.net:2323|phoenix.bnbbbs.net:2323": {
       "action": "remove",
@@ -2925,11 +3690,20 @@
     "muds.toccobrator.com:4201|muds.toccobrator.com:9901": {
       "action": "skip"
     },
+    "multinube.net:23|secureconnection.multinube.com:23": {
+      "action": "skip"
+    },
     "mush.aresmush.com:7206|mush.wordsmyth.org:7206": {
       "action": "remove",
       "remove": [
         "mush.wordsmyth.org:7206"
       ]
+    },
+    "mush.elendor.net:1892|mush.elendor.net:1893": {
+      "action": "skip"
+    },
+    "mx.hedron.io:2323|wa7npx.org:2323": {
+      "action": "skip"
     },
     "nanvaent.org:23|nanvaent.org:3000": {
       "action": "skip"
@@ -2937,7 +3711,34 @@
     "netasylum.com:2323|silentnode.ddns.net:6400|thedigitalpost.freeddns.org:23": {
       "action": "skip"
     },
+    "nethack.alt.org:14321|nethack.alt.org:23": {
+      "action": "skip"
+    },
+    "netpoint.webhop.me:2002|netpoint.webhop.me:2003": {
+      "action": "skip"
+    },
     "nightbite.redirectme.net:2323|subhuman.ddns.net:1338": {
+      "action": "skip"
+    },
+    "nix.synchro.net:33060|syn-047-049-255-014.biz.spectrum.com:33060": {
+      "action": "skip"
+    },
+    "ofo.tw:23|ofo.tw:3001|ofo.tw:3002|ofo.tw:3003": {
+      "action": "skip"
+    },
+    "onion.sscc.uos.ac.kr:8881|onion.sscc.uos.ac.kr:8882": {
+      "action": "skip"
+    },
+    "osuny.bell-labs.co:17019|osuny.bell-labs.co:17020|osuny.bell-labs.co:666|osuny.bell-labs.co:7734": {
+      "action": "skip"
+    },
+    "osuny.bell-labs.co:666|osuny.bell-labs.co:7734": {
+      "action": "skip"
+    },
+    "ov-85f53b.infomaniak.ch:6300|ov-85f53b.infomaniak.ch:8023": {
+      "action": "skip"
+    },
+    "partybowlbbs.ddns.net:2323|partybowlbbs.ddns.net:6464": {
       "action": "skip"
     },
     "penultimatemush.com:9500|penultimatemush.com:9501": {
@@ -2949,7 +3750,25 @@
     "phoenixmud.net:4000|wotl.vineyard.haus:3000": {
       "action": "skip"
     },
+    "playpenbbs.com:23|playpenbbs.com:2323": {
+      "action": "skip"
+    },
     "pocbbs.duckdns.org:23|pocbbs.duckdns.org:6400": {
+      "action": "skip"
+    },
+    "pool-108-29-0-206.nycmny.fios.verizon.net:2323|tnabbs.org:2323": {
+      "action": "skip"
+    },
+    "pool-162-83-124-149.norf.east.verizon.net:23|shenks.dyndns.org:23": {
+      "action": "skip"
+    },
+    "pool-173-63-126-200.nwrknj.fios.verizon.net:23|rns.risenshinebbs.com:23": {
+      "action": "skip"
+    },
+    "pool-173-71-222-71.clppva.fios.verizon.net:2323|wwiv.dmine.net:2323": {
+      "action": "skip"
+    },
+    "pool-74-98-223-74.pitbpa.fios.verizon.net:2023|scoobysdoo.ddns.net:2023": {
       "action": "skip"
     },
     "portugal-virtual.org:6969|selva.grogue.org:8888": {
@@ -2957,6 +3776,9 @@
       "remove": [
         "portugal-virtual.org:6969"
       ]
+    },
+    "rc2014.ddns.net:2014|wintermutebbs.ddns.net:2014": {
+      "action": "skip"
     },
     "realitycheckbbs.org:23|vert.synchro.net:23": {
       "action": "skip"
@@ -2973,6 +3795,9 @@
     "realmsofdespair.com:4000|smaug.org:2289": {
       "action": "skip"
     },
+    "retrobbs.sinclair.homepc.it:23|u-2z-88-214-46.4bone.mynet.tn.it:23": {
+      "action": "skip"
+    },
     "rns.risenshinebbs.com:513|thunder.synchro.net:513": {
       "action": "skip"
     },
@@ -2982,7 +3807,19 @@
     "rupert.twyst.org:6666|rupert.twyst.org:7777|rupert.twyst.org:9040|twyst.org:3333|twyst.org:6666": {
       "action": "skip"
     },
+    "s0106244bfe41f828.vs.shawcable.net:23|vintagepi.asuscomm.com:23": {
+      "action": "skip"
+    },
+    "sanctumbbs.com:23|telnet.sanctumbbs.com:23": {
+      "action": "skip"
+    },
     "sanctumbbs.com:6502|telnet.sanctumbbs.com:23": {
+      "action": "skip"
+    },
+    "sanctumbbs.com:6502|telnet.sanctumbbs.com:6502": {
+      "action": "skip"
+    },
+    "scbbs.nsupdate.info:60177|scbbs.nsupdate.info:60179|scbbs.nsupdate.info:61513": {
       "action": "skip"
     },
     "seabreeze.servegame.com:2002|seabreeze.servegame.com:23|seabreeze.servegame.com:32": {
@@ -2998,10 +3835,16 @@
     "silentnode.ddns.net:6400|thedigitalpost.freeddns.org:23": {
       "action": "skip"
     },
+    "sk-twgs.com:2002|sk-twgs.com:2003|sk-twgs.com:2004|sk-twgs.com:23": {
+      "action": "skip"
+    },
     "sky.winds.org:4208|winds.org:4000": {
       "action": "skip"
     },
     "sky.winds.org:4208|winds.org:4000|winds.org:8000": {
+      "action": "skip"
+    },
+    "spaghettihut.amigaretro.net:6800|spaghettihut.amigaretro.net:9600": {
       "action": "skip"
     },
     "ssbbs.ddns.net:6502|ssbbs.ddns.net:6510": {
@@ -3019,13 +3862,37 @@
         "www.swaoa-mush.com:5500"
       ]
     },
+    "sysgod.org:23000|sysgod.org:60177": {
+      "action": "skip"
+    },
     "t2tmud.org:9999|towers.t2tmud.org:9999": {
       "action": "remove",
       "remove": [
         "towers.t2tmud.org:9999"
       ]
     },
+    "tacopronto.bbs.io:2064|tacopronto.bbs.io:2128|tacopronto.bbs.io:23": {
+      "action": "skip"
+    },
+    "tdod.org:2002|tdod.org:2003|tdod.org:23": {
+      "action": "skip"
+    },
     "tdod.org:2002|tdod.org:23": {
+      "action": "skip"
+    },
+    "technotron.asuscomm.com:23|technotron.asuscomm.com:3261": {
+      "action": "skip"
+    },
+    "telehack.com:1337|telehack.com:23|telehack.com:31173|telehack.com:31337|telehack.com:8080": {
+      "action": "skip"
+    },
+    "telnet.harborbbs.com:23|telnet.harborbbs.com:2323": {
+      "action": "skip"
+    },
+    "telnetbible.com:2424|telnetbible.com:6400": {
+      "action": "skip"
+    },
+    "tfb-bbs.org:23|tfb-bbs.org:992": {
       "action": "skip"
     },
     "tfcbbs.com:6400|tfcbbs.com:6464": {
@@ -3040,6 +3907,9 @@
     "themegabbs.com:6400|themegabbs.ddns.net:6400": {
       "action": "skip"
     },
+    "tiabbs.synchro.net:2002|tiabbs.synchro.net:2003": {
+      "action": "skip"
+    },
     "tiabbs.synchro.net:513|vert.synchro.net:513": {
       "action": "skip"
     },
@@ -3049,7 +3919,13 @@
     "tlcbbs.dynu.net:6400|www.madworldbbs.com:52146": {
       "action": "skip"
     },
+    "tlcbbs.synchro.net:23|tlcbbs.synchro.net:64": {
+      "action": "skip"
+    },
     "toastsoft.net:1234|toastsoft.net:1443": {
+      "action": "skip"
+    },
+    "toolazy.synchro.net:2323|vmi1943160.contaboserver.net:2323": {
       "action": "skip"
     },
     "toox.co.kr:4000|toox.co.kr:5800|toox.co.kr:6000|toox.co.kr:6025|toox.co.kr:6123|toox.co.kr:6255": {
@@ -3067,6 +3943,24 @@
         "torilmud.com:9999"
       ]
     },
+    "towers.t2tmud.org:444|towers.t2tmud.org:5050": {
+      "action": "skip"
+    },
+    "towers.t2tmud.org:6667|towers.t2tmud.org:8080|towers.t2tmud.org:9999": {
+      "action": "skip"
+    },
+    "twb.wrgnbr.com:10513|wn2.wrgnbr.com:10513|wn3.wrgnbr.com:10513|wn4.wrgnbr.com:10513|wn6.wrgnbr.com:10513": {
+      "action": "skip"
+    },
+    "twb.wrgnbr.com:23|twb.wrgnbr.com:2300|wn2.wrgnbr.com:23|wn2.wrgnbr.com:2300|wn3.wrgnbr.com:23|wn3.wrgnbr.com:2300|wn4.wrgnbr.com:23|wn4.wrgnbr.com:2300|wn6.wrgnbr.com:23|wn6.wrgnbr.com:2300": {
+      "action": "skip"
+    },
+    "twb.wrgnbr.com:6400|twb.wrgnbr.com:6800|twb.wrgnbr.com:9600|wn2.wrgnbr.com:6400|wn2.wrgnbr.com:6800|wn2.wrgnbr.com:9600|wn3.wrgnbr.com:6400|wn3.wrgnbr.com:6800|wn4.wrgnbr.com:6400|wn4.wrgnbr.com:6800|wn4.wrgnbr.com:9600|wn6.wrgnbr.com:6400|wn6.wrgnbr.com:6800|wn6.wrgnbr.com:9600": {
+      "action": "skip"
+    },
+    "twb.wrgnbr.com:6405|wn2.wrgnbr.com:6405|wn3.wrgnbr.com:6405|wn4.wrgnbr.com:6405|wn6.wrgnbr.com:6405": {
+      "action": "skip"
+    },
     "twb.wrgnbr.com:6896|wn6.wrgnbr.com:6411": {
       "action": "skip"
     },
@@ -3076,11 +3970,23 @@
         "unitopia.de:4444"
       ]
     },
+    "vert.synchro.net:128|vert.synchro.net:23|vert.synchro.net:64": {
+      "action": "skip"
+    },
     "vert.synchro.net:23|vert.synchro.net:513": {
       "action": "remove",
       "remove": [
         "vert.synchro.net:513"
       ]
+    },
+    "vintagecomputing.com:1984|vintagecomputing.com:1990|vintagecomputing.com:6119": {
+      "action": "skip"
+    },
+    "vintagecomputing.com:1984|vintagecomputing.com:6119": {
+      "action": "skip"
+    },
+    "vintagecomputing.com:23|vintagecomputing.com:2323": {
+      "action": "skip"
     },
     "vor.voidofreality.org:7777|vormud.genesismuds.com:7777": {
       "action": "remove",
@@ -3088,7 +3994,19 @@
         "vormud.genesismuds.com:7777"
       ]
     },
+    "vps-7b7cc324.vps.ovh.ca:1347|vps-7b7cc324.vps.ovh.ca:1357|vps-7b7cc324.vps.ovh.ca:1367|vps-7b7cc324.vps.ovh.ca:1377": {
+      "action": "remove",
+      "remove": [
+        "vps-7b7cc324.vps.ovh.ca:1347",
+        "vps-7b7cc324.vps.ovh.ca:1357",
+        "vps-7b7cc324.vps.ovh.ca:1367",
+        "vps-7b7cc324.vps.ovh.ca:1377"
+      ]
+    },
     "warlock.pl:23|warlock.pl:2424": {
+      "action": "skip"
+    },
+    "wizzybbs.win:23|wizzybbs.win:4000": {
       "action": "skip"
     },
     "wl.mud.de:4711|wunderland.mud.de:4711": {
@@ -3097,7 +4015,19 @@
         "wl.mud.de:4711"
       ]
     },
+    "wn3.wrgnbr.com:3000|wn4.wrgnbr.com:3000": {
+      "action": "skip"
+    },
     "www.czaralex.com:7777|www.czaralex.com:8000": {
+      "action": "skip"
+    },
+    "www.ems-bbs.com:2002|www.ems-bbs.com:2003": {
+      "action": "skip"
+    },
+    "www.ems-bbs.com:2513|www.ems-bbs.com:2514": {
+      "action": "skip"
+    },
+    "wyldware.com:2020|wyldware.com:2021": {
       "action": "skip"
     }
   },
@@ -3137,6 +4067,7 @@
       "100.6.29.103:23": "dead",
       "100.6.29.103:2323": "duplicate",
       "100.65.215.108:23": "dns",
+      "101.132.101.53:23": "dead",
       "101.34.232.65:5555": "dead",
       "102.129.145.93:23": "dead",
       "102.130.110.212:23": "dns",
@@ -3144,6 +4075,7 @@
       "102.132.222.143:23": "dead",
       "102.140.164.19:1977": "dead",
       "102.212.247.220:23": "dns",
+      "103.120.89.53:23": "dead",
       "103.133.178.9:513": "dead",
       "103.143.11.188:2323": "dead",
       "103.168.172.52:2400": "dns",
@@ -3165,6 +4097,8 @@
       "103.76.17.46:23": "dead",
       "103.85.20.3:23": "dns",
       "103.95.113.91:2323": "dns",
+      "104-10-253-218.lightspeed.sntcca.sbcglobal.net:23": "dead",
+      "104-246-233-149.cpe.teksavvy.com:23": "dead",
       "104.10.253.218:7878": "dns",
       "104.11.253.251:8888": "dead",
       "104.128.233.15:23": "dead",
@@ -3180,6 +4114,7 @@
       "104.131.161.182:23": "dead",
       "104.131.169.242:4000": "dns",
       "104.131.170.167:8888": "dns",
+      "104.131.8.151:23": "dead",
       "104.131.86.120:7777": "dns",
       "104.131.88.37:6666": "dead",
       "104.136.26.252:23": "dead",
@@ -3296,6 +4231,7 @@
       "104.236.21.34:8888": "dead",
       "104.236.212.17:5555": "dns",
       "104.236.33.131:6666": "dns",
+      "104.236.78.248:513": "rlogin",
       "104.237.128.204:23": "dns",
       "104.237.128.204:5555": "dead",
       "104.237.134.240:7777": "dns",
@@ -3346,6 +4282,9 @@
       "104.9.144.110:5864": "dns",
       "106.156.186.15:23": "dns",
       "106.225.138.11:2223": "dead",
+      "107-137-172-157.lightspeed.livnmi.sbcglobal.net:23": "dead",
+      "107-175-18-24-host.colocrossing.com:23": "dead",
+      "107-175-69-10-host.colocrossing.com:60513": "dead",
       "107.10.68.224:23": "dead",
       "107.11.16.204:2525": "dead",
       "107.11.210.9:23": "dead",
@@ -3402,6 +4341,10 @@
       "107.23.37.111:23": "dns",
       "107.5.218.127:6800": "dead",
       "107.6.16.43:13023": "dead",
+      "108-175-224-52.dsl.teksavvy.com:23": "dead",
+      "108-175-235-224.dsl.teksavvy.com:23": "dead",
+      "108-70-34-3.lightspeed.knvltn.sbcglobal.net:23": "dead",
+      "108-72-230-9.lightspeed.brhmal.sbcglobal.net:23": "dead",
       "108.15.36.45:23": "dns",
       "108.15.36.45:513": "dead",
       "108.160.137.11:23": "dns",
@@ -3464,6 +4407,7 @@
       "109.204.184.25:23": "dns",
       "109.225.40.21:1234": "dns",
       "109.228.160.131:23": "dead",
+      "109.228.35.68:23": "dead",
       "109.228.35.68:8023": "dns",
       "109.228.56.69:3456": "dns",
       "109.231.120.114:23": "duplicate",
@@ -3479,6 +4423,7 @@
       "111.220.120.228:6502": "dead",
       "111.229.178.60:5555": "dead",
       "111.242.58.123:2323": "dead",
+      "112-66-135-63.mtaonline.net:23": "dead",
       "112.104.152.84:4000": "dead",
       "112.121.78.1:23": "dead",
       "112.124.15.134:6666": "dns",
@@ -3501,6 +4446,9 @@
       "114.34.84.100:23": "dns",
       "114.35.172.33:23": "dead",
       "114.35.225.208:23": "dns",
+      "115-129-84-94.tpgi.com.au:23": "dead",
+      "115-64-26-78.static.tpgi.com.au:23": "dead",
+      "115.190.60.13:23": "dead",
       "115.29.160.207:6666": "dead",
       "115.70.188.112:10023": "dead",
       "115.70.188.112:23": "duplicate",
@@ -3513,8 +4461,13 @@
       "116.255.1.22:6666": "dead",
       "116.58.187.123:3123": "dns",
       "117.176.36.68:7777": "dead",
+      "117.72.176.63:23": "dead",
+      "118.122.8.155:23": "nontelnet_banner",
+      "118.122.8.221:23": "http_banner",
+      "118.184.172.166:23": "dead",
       "118.190.104.241:3166": "dns",
       "118.190.104.241:5566": "dead",
+      "118.195.195.76:23": "dead",
       "118.208.18.61:2323": "dead",
       "118.208.5.172:11823": "dead",
       "118.208.89.172:23": "dead",
@@ -3556,6 +4509,7 @@
       "122.116.179.22:6666": "dead",
       "122.117.16.81:23": "dead",
       "122.147.16.29:4000": "dead",
+      "122.174.191.203.sta.onestream.net.au:23": "dead",
       "122.19.181.66:23": "dead",
       "122.199.57.150:23": "dead",
       "122.225.76.218:2222": "dead",
@@ -3565,6 +4519,7 @@
       "124.149.141.246:2023": "dead",
       "124.149.143.120:2023": "dead",
       "124.187.33.37:5632": "dns",
+      "124.217.34.212:23": "dead",
       "124.223.67.13:2023": "dns",
       "125.227.52.214:23": "dead",
       "125.228.109.209:23": "dead",
@@ -3692,6 +4647,9 @@
       "135.224.24.139:23": "dns",
       "135.233.115.198:23": "dns",
       "135.84.10.207:2323": "dns",
+      "136-43-192-117.googlefiber.net:2323": "dead",
+      "136-54-134-119.googlefiber.net:23": "dead",
+      "136-62-154-58.googlefiber.net:23": "dead",
       "136.144.155.250:2000": "duplicate",
       "136.144.237.181:23": "dns",
       "136.24.36.202:23": "dead",
@@ -3748,6 +4706,7 @@
       "138.68.247.72:5555": "cross",
       "138.68.61.160:42069": "dead",
       "138.88.86.185:2002": "dead",
+      "138.sub-75-242-129.myvzw.com:23": "dead",
       "139.102.14.40:2150": "dns",
       "139.162.152.250:5555": "dead",
       "139.162.185.103:23": "dns",
@@ -3767,6 +4726,7 @@
       "139.59.222.14:2323": "dns",
       "139.99.195.240:23": "dead",
       "139.99.200.70:23": "dead",
+      "14-202-47-45.static.tpgi.com.au:23": "dead",
       "14.102.239.211:34123": "dns",
       "14.198.18.44:1000": "dead",
       "14.200.168.186:23": "dns",
@@ -3802,6 +4762,7 @@
       "140.177.188.44:23": "dns",
       "140.238.89.181:8888": "dns",
       "140.83.50.84:23": "dns",
+      "141.148.205.45:23": "dead",
       "141.195.119.149:2323": "dead",
       "141.255.16.235:23": "dns",
       "141.42.206.232:443": "dead",
@@ -3840,6 +4801,7 @@
       "142.93.120.206:4201": "dead",
       "142.93.15.213:8888": "dead",
       "142.93.69.137:8888": "dns",
+      "142.red-83-36-69.dynamicip.rima-tde.net:23": "dead",
       "143.103.56.249:23": "dead",
       "143.109.10.156:1979": "dns",
       "143.110.153.117:23": "dns",
@@ -3861,6 +4823,7 @@
       "143.198.70.243:1338": "dns",
       "143.198.76.187:4201": "dns",
       "143.223.235.160:2002": "dns",
+      "143.223.235.160:513": "rlogin",
       "143.244.148.23:4201": "dead",
       "143.244.212.63:23": "dns",
       "143.244.214.149:23": "dns",
@@ -3885,6 +4848,7 @@
       "144.217.205.179:9900": "dead",
       "144.217.65.168:1234": "dns",
       "144.217.65.168:8888": "dead",
+      "144.24.86.190:23": "dead",
       "144.48.104.213:8888": "dns",
       "144.6.157.162:2323": "dns",
       "144.76.99.107:6666": "dns",
@@ -3900,12 +4864,17 @@
       "146.168.137.126:6767": "cross",
       "146.168.250.157:6666": "dead",
       "146.190.127.161:4201": "dns",
+      "146.190.15.104:23": "dead",
       "146.190.167.34:4201": "dns",
+      "146.190.52.128:23": "dead",
       "146.59.45.33:3003": "dns",
       "146.95.130.7:8888": "dns",
       "147.135.1.116:5555": "dns",
       "147.135.114.200:23": "dns",
       "147.160.225.77:6969": "dns",
+      "147.182.189.53:3270": "dead",
+      "147.182.189.53:3271": "dead",
+      "147.182.189.53:513": "rlogin",
       "147.182.216.202:1870": "dns",
       "147.182.238.109:5555": "dead",
       "147.182.244.89:4201": "dns",
@@ -3981,6 +4950,13 @@
       "151.101.65.91:23": "dead",
       "151.198.54.56:1984": "dns",
       "151.49.102.11:2323": "dead",
+      "151.75.121.3:23": "dead",
+      "151.75.121.3:513": "rlogin",
+      "151.75.29.213:23": "dead",
+      "151.75.4.141:23": "dead",
+      "151.75.97.53:513": "dead",
+      "151.77.15.82:23": "dead",
+      "151.77.99.66:23": "dead",
       "152.117.75.82:2223": "dead",
       "152.117.75.82:513": "dead",
       "152.19.134.132:2895": "dns",
@@ -4006,6 +4982,7 @@
       "155.138.160.97:23": "dns",
       "155.138.164.96:3065": "dns",
       "155.138.164.96:5555": "dns",
+      "155.138.203.199.vultrusercontent.com:23": "duplicate",
       "155.138.203.199:23": "dead",
       "155.138.231.112:4000": "cross",
       "155.138.242.153:23": "dns",
@@ -4023,12 +5000,16 @@
       "157.173.214.158:1685": "dns",
       "157.230.139.143:3000": "dns",
       "157.230.139.143:3001": "dead",
+      "157.230.152.152:2300": "dns",
+      "157.230.152.152:2323": "dns",
+      "157.230.152.152:2324": "dns",
       "157.230.191.82:4201": "dead",
       "157.230.211.162:2650": "dns",
       "157.230.218.106:4201": "dns",
       "157.230.229.153:3366": "dns",
       "157.230.232.3:4000": "dns",
       "157.230.48.227:4201": "dead",
+      "157.230.64.29:7000": "dead",
       "157.230.72.47:8500": "dns",
       "157.245.114.161:8023": "dns",
       "157.245.127.133:2323": "dead",
@@ -4067,6 +5048,7 @@
       "159.196.183.54:23": "dns",
       "159.203.108.35:23": "dead",
       "159.203.14.9:6400": "dns",
+      "159.203.166.11:23": "dead",
       "159.203.166.58:4449": "dns",
       "159.203.189.48:4201": "dns",
       "159.203.19.108:4000": "dns",
@@ -4087,6 +5069,7 @@
       "159.89.33.232:4000": "dns",
       "159.89.87.2:4201": "dead",
       "16.63.123.166:2300": "dns",
+      "160-2-35-236.cpe.sparklight.net:23": "dead",
       "160.114.112.134:3500": "dns",
       "160.124.240.204:2002": "dead",
       "160.153.245.218:2222": "dead",
@@ -4185,6 +5168,7 @@
       "165.227.40.44:4000": "dead",
       "165.227.95.41:6667": "dns",
       "165.232.152.192:4201": "dns",
+      "165.239.226.35.bc.googleusercontent.com:23": "dead",
       "165.73.55.78:23": "dead",
       "166.102.189.61:23": "dns",
       "166.137.17.20:2323": "dead",
@@ -4227,6 +5211,7 @@
       "168.103.193.153:23": "dns",
       "168.119.186.157:23": "dead",
       "168.138.14.214:2324": "dead",
+      "168.167.228.70:23": "dead",
       "168.182.62.125:12112": "dns",
       "168.235.103.252:23": "dns",
       "168.235.71.188:23": "dead",
@@ -4260,6 +5245,7 @@
       "170.64.57.231:6502": "dns",
       "170.75.163.46:23": "dns",
       "171.250.164.177:23": "dead",
+      "172-105-27-143.ip.linodeusercontent.com:513": "rlogin",
       "172.0.79.226:23": "dns",
       "172.1.173.207:23": "dead",
       "172.1.227.44:2323": "dead",
@@ -4302,6 +5288,7 @@
       "172.111.139.148:6401": "dead",
       "172.111.139.97:6800": "dead",
       "172.111.168.10:23": "dead",
+      "172.111.168.128:23": "dead",
       "172.116.68.9:2002": "dead",
       "172.126.21.138:2323": "dns",
       "172.126.21.138:6423": "dead",
@@ -4411,6 +5398,7 @@
       "172.88.204.228:5000": "dns",
       "172.93.51.202:6666": "dead",
       "172.97.167.51:23": "dead",
+      "173-87-225-39.dr04.glvv.ny.frontiernet.net:513": "dead",
       "173.11.101.154:1310": "dead",
       "173.11.101.154:1338": "dead",
       "173.11.101.154:1421": "dead",
@@ -4559,6 +5547,8 @@
       "174.88.28.130:23": "dns",
       "174.95.45.76:8888": "dead",
       "174.99.184.139:23": "dns",
+      "176-149-12-201.abo.bbox.fr:23": "dead",
+      "176-149-13-81.abo.bbox.fr:23": "dead",
       "176.107.156.204:2380": "dead",
       "176.122.177.178:1723": "duplicate",
       "176.122.177.178:9000": "duplicate",
@@ -4573,6 +5563,8 @@
       "176.58.125.191:4000": "dns",
       "176.86.11.214:23": "dns",
       "176.9.151.147:10000": "dns",
+      "176\\032-\\032163-78-224.abo.bbox.fr:23": "dead",
+      "177.173.191.203.sta.onestream.net.au:23": "dead",
       "177.23.233.122:2023": "dns",
       "178.128.144.115:5555": "dns",
       "178.128.151.111:1994": "dns",
@@ -4607,6 +5599,7 @@
       "178.79.173.99:1111": "dns",
       "178.79.180.89:23": "dns",
       "178.79.185.175:8080": "dead",
+      "179-41-23-26.speedy.com.ar:23": "dead",
       "179.14.61.78:20023": "dns",
       "179.222.224.43:23": "dead",
       "179.222.224.43:513": "dead",
@@ -4652,11 +5645,13 @@
       "180.150.61.50:23": "duplicate",
       "180.150.99.174:23": "dns",
       "180.74.70.171:2323": "dead",
+      "181-23-121-251.speedy.com.ar:2323": "dead",
       "181.12.71.180:7020": "dead",
       "181.23.121.251:2323": "dns",
       "182.235.248.218:10321": "dns",
       "182.239.149.15:23": "dns",
       "184.102.111.206:23": "dns",
+      "184.105.224.137:23": "dead",
       "184.106.108.154:3000": "dns",
       "184.106.108.154:5000": "duplicate",
       "184.147.66.187:10023": "dns",
@@ -4691,6 +5686,7 @@
       "185.134.245.114:23": "dead",
       "185.138.197.245:23": "dns",
       "185.139.32.178:23": "dns",
+      "185.139.34.29:23": "dead",
       "185.140.211.94:2112": "dns",
       "185.150.190.20:6666": "dns",
       "185.157.80.91:5567": "dead",
@@ -4730,6 +5726,9 @@
       "185.26.59.68:6047": "cross",
       "185.36.143.125:4000": "dns",
       "185.42.170.217:23": "dns",
+      "185.44.211.120:23": "dead",
+      "185.44.211.121:23": "dead",
+      "185.44.211.122:23": "dead",
       "185.53.179.128:24": "dns",
       "185.53.179.138:23": "dead",
       "185.73.44.33:2323": "dns",
@@ -4737,6 +5736,8 @@
       "185.80.49.249:23": "dns",
       "185.88.141.244:6239": "dns",
       "185.9.7.69:2020": "dns",
+      "186-129-110-212.speedy.com.ar:6400": "dead",
+      "186-129-116-200.speedy.com.ar:6400": "dead",
       "186.12.253.32:23": "dns",
       "186.12.253.32:6400": "dead",
       "186.12.253.32:6401": "dead",
@@ -4755,8 +5756,19 @@
       "186.222.28.93:4000": "dead",
       "187.127.137.250:6400": "dead",
       "188.113.110.11:4000": "dns",
+      "188.128.39.239:143": "dns",
+      "188.128.39.239:3128": "dns",
+      "188.128.39.239:3389": "dns",
+      "188.128.39.239:443": "dns",
+      "188.128.39.239:463": "dns",
+      "188.128.39.239:5190": "dns",
+      "188.128.39.239:543": "dns",
+      "188.128.39.239:563": "dns",
+      "188.128.39.239:7000": "dns",
+      "188.128.39.239:8080": "dns",
       "188.150.81.187:23": "dns",
       "188.165.19.40:23": "dns",
+      "188.166.127.214:513": "rlogin",
       "188.166.170.175:23": "dns",
       "188.226.155.155:3131": "dns",
       "188.227.59.16:2323": "dead",
@@ -4768,6 +5780,7 @@
       "188.67.201.84:32": "duplicate",
       "188.68.59.244:4000": "dead",
       "188.81.240.121:23": "dns",
+      "189-124-192-53.cable.cabotelecom.com.br:23": "dead",
       "189.124.192.23:23": "dns",
       "189.124.192.53:23": "duplicate",
       "189.153.217.157:23": "dead",
@@ -4786,6 +5799,8 @@
       "191.254.150.166:23": "dns",
       "191.254.150.166:513": "dead",
       "191.96.144.36:23": "dead",
+      "192-210-183-181-host.colocrossing.com:23": "dead",
+      "192-227-159-116-host.colocrossing.com:23": "dead",
       "192.0.131.15:2323": "dns",
       "192.0.166.22:1030": "dead",
       "192.0.78.215:6502": "dead",
@@ -4889,6 +5904,7 @@
       "193.40.246.5:4000": "dns",
       "194.106.100.30:2323": "dead",
       "194.113.195.145:23": "dns",
+      "194.126.10.50:23": "dead",
       "194.126.207.20:23": "dead",
       "194.127.206.85:2023": "dns",
       "194.180.12.25:23": "dns",
@@ -4928,6 +5944,7 @@
       "195.68.135.54:9000": "dns",
       "195.68.251.139:1337": "dead",
       "195.70.199.98:23": "dns",
+      "195.8.109.246:23": "dead",
       "195.82.178.30:4000": "dead",
       "195.98.18.66:2323": "dead",
       "198.12.248.173:6670": "dns",
@@ -4980,6 +5997,7 @@
       "198.98.53.247:6623": "dead",
       "198.99.82.53:1989": "dns",
       "1984bbs.net:23": "dead",
+      "1987846-static.wsfdindl.metronetinc.net:2323": "dead",
       "199.101.100.114:4000": "dns",
       "199.15.238.183:666": "dead",
       "199.166.252.65:27723": "dns",
@@ -5051,6 +6069,7 @@
       "20.98.58.193:4321": "dns",
       "200.40.115.74:23": "dns",
       "2002.tw:23": "dead",
+      "201.174.191.203.sta.onestream.net.au:23": "dead",
       "202.114.0.248:23": "dead",
       "202.12.89.162:23": "dns",
       "202.12.89.164:23": "dns",
@@ -5065,6 +6084,7 @@
       "202.193.160.35:23": "dns",
       "202.203.208.87:23": "dead",
       "202.49.71.39:23": "dns",
+      "202.61.24.50.static.zoot.jp:23": "dead",
       "202.73.4.83:5566": "dns",
       "202.75.216.228:23": "dns",
       "202.90.240.159:23": "cross",
@@ -5127,6 +6147,7 @@
       "205.250.123.117:23": "dns",
       "205.250.15.56:23": "dead",
       "205.251.177.12:23": "dns",
+      "206-217-131-27-host.colocrossing.com:23": "dead",
       "206.123.129.162:23": "dns",
       "206.123.241.8:23": "dns",
       "206.130.99.125:9390": "dns",
@@ -5165,6 +6186,7 @@
       "207.244.238.161:2323": "dead",
       "207.246.117.229:7777": "dead",
       "207.246.122.36:23": "dns",
+      "207.246.74.70.vultrusercontent.com:23": "duplicate",
       "207.246.74.70:23": "dns",
       "207.253.168.132:2023": "dns",
       "207.38.87.97:2002": "dns",
@@ -5242,6 +6264,7 @@
       "209.38.69.23:1995": "dns",
       "209.39.146.43:7777": "dns",
       "209.51.188.221:23": "dns",
+      "209.77.168.91:23": "dead",
       "209.87.255.84:1701": "dns",
       "209.99.64.51:4000": "dead",
       "209.99.64.52:2323": "dead",
@@ -5257,6 +6280,7 @@
       "211.133.151.119:23": "dead",
       "211.21.191.123:23": "dns",
       "211.213.200.155:1000": "dead",
+      "211.34.105.88:23": "dead",
       "211.68.71.66:23": "dns",
       "211.78.85.5:23": "dns",
       "212.102.41.19:23": "dead",
@@ -5300,6 +6324,7 @@
       "213.95.46.21:23": "dns",
       "213.95.46.25:513": "dns",
       "213.95.79.14:6666": "dns",
+      "214.sub-97-177-202.myvzw.com:23": "dead",
       "216.117.130.175:1337": "dns",
       "216.117.130.175:2523": "duplicate",
       "216.127.185.178:4000": "dead",
@@ -5389,6 +6414,7 @@
       "218.185.229.122:2323": "dns",
       "219.117.210.140:23": "dns",
       "219.94.254.137:23": "dns",
+      "220-235-184-87.tpgi.com.au:23": "dead",
       "220.132.73.168:23": "dns",
       "220.132.87.196:23": "dead",
       "220.135.157.149:3333": "dead",
@@ -5398,6 +6424,7 @@
       "220.235.184.87:1984": "dns",
       "220.244.217.169:23": "dead",
       "220.244.42.224:6800": "dns",
+      "23-31-96-111-static.hfc.comcastbusiness.net:2323": "dead",
       "23.111.142.226:23": "dns",
       "23.115.249.137:2323": "dead",
       "23.118.36.39:9023": "dns",
@@ -5570,6 +6597,8 @@
       "24.96.16.14:23": "dead",
       "24.96.206.126:23": "dns",
       "24.96.51.127:5000": "dns",
+      "254.sub-75-215-45.myvzw.com:513": "rlogin",
+      "255.red-80-38-223.staticip.rima-tde.net:23": "dead",
       "2apul.cz:23": "dead",
       "2cc.us:23": "dead",
       "2k.synchronetbbs.org:23": "dead",
@@ -5634,6 +6663,7 @@
       "3.93.186.19:23": "dead",
       "3.93.20.66:23": "dead",
       "3.96.121.109:23": "dead",
+      "300baud.dynu.net:513": "rlogin",
       "31.125.20.226:23": "dns",
       "31.133.0.38:23": "dns",
       "31.151.236.215:2023": "dead",
@@ -5777,6 +6807,10 @@
       "38.102.127.227:2860": "dns",
       "38.117.105.33:23": "dead",
       "38.119.115.95:3000": "dns",
+      "38.123.201.128:23": "dead",
+      "38.123.201.142:23": "dead",
+      "38.123.201.186:23": "dead",
+      "38.123.203.241:23": "dead",
       "38.13.105.101:8808": "dead",
       "38.141.4.132:23": "dead",
       "38.15.41.119:23": "dns",
@@ -5794,8 +6828,10 @@
       "38.77.193.146:23": "dead",
       "38.86.32.239:2010": "dns",
       "38.86.95.31:2002": "dead",
+      "38.98.98.115:23": "dead",
       "39.105.182.131:6666": "dead",
       "39.106.76.47:4000": "dns",
+      "39.108.72.91:23": "dead",
       "39.152.42.32:7777": "cross",
       "3corners.us:23": "dead",
       "3corners.us:513": "dead",
@@ -5813,7 +6849,9 @@
       "40.76.9.111:4000": "dns",
       "40.76.9.111:8888": "dead",
       "40.88.127.94:23": "dead",
+      "41-251-137-216.mtaonline.net:23": "dead",
       "42bytes.net:23": "dead",
+      "43.153.252.20:23": "dead",
       "43.224.155.154:2323": "dns",
       "43.231.233.9:23": "dns",
       "43.252.229.138:4000": "dead",
@@ -5836,6 +6874,8 @@
       "44.242.144.163:4000": "dead",
       "44.31.91.213:23": "duplicate",
       "44.32.92.49:8888": "dead",
+      "45-56-66-128.ip.linodeusercontent.com:2323": "dead",
+      "45-79-37-227.ip.linodeusercontent.com:513": "rlogin",
       "45.10.100.96:23": "dns",
       "45.10.160.94:23": "dead",
       "45.13.59.69:4000": "dns",
@@ -5912,6 +6952,8 @@
       "45.34.15.159:23": "dead",
       "45.36.67.158:23": "dead",
       "45.37.52.240:23": "dns",
+      "45.4.217.182:23": "dead",
+      "45.4.219.29:23": "dead",
       "45.42.217.168:5500": "dns",
       "45.43.14.195:23": "dns",
       "45.46.150.7:6809": "duplicate",
@@ -5955,6 +6997,7 @@
       "45.76.21.229:23": "dns",
       "45.76.232.252:23": "dead",
       "45.76.234.228:23": "dns",
+      "45.76.236.169.vultrusercontent.com:23": "duplicate",
       "45.76.236.169:23": "dns",
       "45.76.236.169:513": "dead",
       "45.76.249.132:4000": "dead",
@@ -6025,11 +7068,16 @@
       "45.79.98.221:5555": "dead",
       "45.8.103.244:31000": "dns",
       "45.8.150.29:4000": "dns",
+      "45.86.125.202:23": "dead",
+      "45.86.125.203:23": "dead",
       "45.88.202.115:23": "dead",
       "45.88.202.115:513": "dead",
       "45.89.127.79:5555": "dead",
       "45.90.220.35:4000": "cross",
+      "45.93.239.212:1337": "dead",
       "45.93.250.138:23": "dead",
+      "46-110-227-0-9.metronet.net:23": "dead",
+      "46.101.112.164:23": "dead",
       "46.101.112.164:4001": "dns",
       "46.101.154.109:2323": "dead",
       "46.102.205.219:464": "dns",
@@ -6055,6 +7103,7 @@
       "46.59.44.50:23": "duplicate",
       "46.62.237.138:23": "dns",
       "46.8.69.169:2323": "dead",
+      "47-201-2-12.fdr01.clwr.fl.ip.frontiernet.net:513": "dead",
       "47.104.177.248:6666": "dead",
       "47.110.8.228:5555": "dns",
       "47.119.167.10:1111": "dead",
@@ -6093,6 +7142,9 @@
       "47.206.129.247:2513": "dead",
       "47.21.136.26:2002": "dead",
       "47.221.185.11:1983": "dns",
+      "47.223.173.180:3143": "dns",
+      "47.223.173.180:4513": "dns",
+      "47.223.37.191:23": "dead",
       "47.224.2.193:23": "dns",
       "47.224.68.7:1999": "dns",
       "47.226.249.37:2323": "dead",
@@ -6163,6 +7215,11 @@
       "5.78.81.187:9009": "dns",
       "5.79.93.198:9023": "dead",
       "5.9.151.151:7676": "dns",
+      "50-38-40-79.csby.or.ptr.ziplyfiber.com:23": "dead",
+      "50-39-255-71.bvtn.or.ptr.ziplyfiber.com:23": "dead",
+      "50-46-169-252.evrt.wa.ptr.ziplyfiber.com:23": "dead",
+      "50-46-171-101.evrt.wa.ptr.ziplyfiber.com:23": "dead",
+      "50-47-242-244.evrt.wa.ptr.ziplyfiber.com:23": "dead",
       "50.102.201.231:23": "dead",
       "50.105.99.103:5555": "dead",
       "50.107.162.117:23": "duplicate",
@@ -6350,6 +7407,7 @@
       "52.203.154.23:5656": "dns",
       "52.204.167.0:4000": "dns",
       "52.207.173.89:4203": "dns",
+      "52.212.238.182:2323": "dead",
       "52.212.94.145:23": "dns",
       "52.219.177.72:4000": "dead",
       "52.221.200.37:4000": "dead",
@@ -6358,6 +7416,7 @@
       "52.223.13.41:4455": "dead",
       "52.223.13.41:513": "dead",
       "52.223.13.41:8888": "dead",
+      "52.240.58.168:23": "dead",
       "52.26.109.54:3000": "dead",
       "52.28.187.130:23": "dns",
       "52.28.82.0:1234": "dns",
@@ -6437,11 +7496,14 @@
       "58.6.27.130:1024": "dead",
       "58.7.137.41:2023": "dead",
       "58.96.95.185:23": "dns",
+      "59.106.212.212:23": "dead",
       "59.126.68.235:23": "dns",
       "59.167.119.202:2323": "dead",
+      "60-242-169-17.static.tpgi.com.au:23": "dead",
       "60.234.107.174:23": "dead",
       "60.250.95.251:23": "dns",
       "60.250.95.251:5678": "dead",
+      "61-68-23-159.static.tpgi.com.au:23": "dead",
       "61.120.15.91:23": "dns",
       "61.31.92.42:23": "dns",
       "61.93.197.122:23": "dead",
@@ -6464,10 +7526,12 @@
       "63.142.253.253:4000": "dns",
       "63.204.0.198:23": "dead",
       "63.225.86.82:23": "dns",
+      "63.230.156.110:23": "dead",
       "63.230.156.110:2323": "dns",
       "63.230.156.110:2424": "dns",
       "63.231.43.186:3000": "dns",
       "63.245.150.8:23": "dead",
+      "64-139-66-146-huntington.hfc.comcastbusiness.net:23": "dead",
       "64.110.213.90:2002": "dead",
       "64.111.98.94:4000": "dead",
       "64.121.67.27:8023": "dns",
@@ -6591,6 +7655,7 @@
       "66.41.187.220:513": "dead",
       "66.42.111.27:23": "dns",
       "66.42.77.122:4000": "dns",
+      "66.55.66.25:23": "dead",
       "66.58.200.102:2002": "dead",
       "66.61.112.40:23": "dead",
       "66.61.115.150:23": "dead",
@@ -6768,6 +7833,7 @@
       "69.244.173.57:23": "dead",
       "69.247.80.26:23": "dead",
       "69.28.83.254:23": "dead",
+      "69.28.93.15.static.cyrellia.com:513": "rlogin",
       "69.28.93.15:23": "dns",
       "69.30.243.74:2222": "dns",
       "69.31.30.132:23": "dns",
@@ -6792,6 +7858,7 @@
       "6d.quest:4100": "dead",
       "6ixremains.thecryingbeard.com:4201": "dead",
       "7.tcp.eu.ngrok.io:19468": "dead",
+      "70-161-135-198.mtaonline.net:23": "dead",
       "70.112.250.127:6666": "dead",
       "70.114.158.176:6969": "dns",
       "70.115.195.133:2323": "dead",
@@ -6929,6 +7996,9 @@
       "71.95.196.34:23": "dns",
       "71.95.235.230:23": "dead",
       "71.95.59.122:23": "dead",
+      "71.red-83-50-61.dynamicip.rima-tde.net:23": "dead",
+      "72-11-35-79-dynamic.northstate.net:23": "dead",
+      "72-14-182-219.ip.linodeusercontent.com:23": "dead",
       "72.0.111.23:3003": "dns",
       "72.0.224.254:1337": "dns",
       "72.0.224.98:23": "dns",
@@ -7106,6 +8176,7 @@
       "73.96.179.238:23": "dead",
       "73.96.188.76:24": "dns",
       "73.96.188.76:2424": "duplicate",
+      "74-92-51-117-newengland.hfc.comcastbusiness.net:23": "dead",
       "74.104.122.212:23": "dns",
       "74.109.126.27:2222": "dns",
       "74.111.163.227:10001": "dead",
@@ -7185,6 +8256,7 @@
       "74.98.223.74:2023": "duplicate",
       "74.98.223.74:23": "dead",
       "74.99.65.199:6400": "dns",
+      "75-169-142-209.slkc.qwest.net:23": "dead",
       "75.100.20.176:65023": "dns",
       "75.100.79.62:2323": "dead",
       "75.101.147.27:4000": "dns",
@@ -7269,7 +8341,7 @@
       "76.143.25.220:8068": "dns",
       "76.147.103.179:2002": "dead",
       "76.147.103.179:23": "dead",
-      "76.149.18.31:23": "dead",
+      "76.149.18.31:23": "dns",
       "76.154.26.155:4100": "dead",
       "76.154.89.71:64128": "dns",
       "76.164.77.28:2323": "dns",
@@ -7308,6 +8380,7 @@
       "76.223.67.189:4201": "dead",
       "76.223.91.20:4000": "dead",
       "76.237.109.225:23": "dns",
+      "76.237.109.225:6400": "dead",
       "76.237.109.226:6400": "dns",
       "76.237.109.227:6400": "dns",
       "76.237.109.229:6502": "dns",
@@ -7322,6 +8395,7 @@
       "76.91.152.209:31337": "dns",
       "76.93.136.165:8888": "dns",
       "76.98.105.143:6400": "dns",
+      "77-52-235-88.staticip.vf-ua.net:23": "dead",
       "77.101.163.62:23": "dead",
       "77.124.35.159:23": "dead",
       "77.14.42.231:23": "dns",
@@ -7394,6 +8468,7 @@
       "8.tcp.ngrok.io:11825": "dead",
       "80.100.40.147:23": "dns",
       "80.101.115.111:4000": "dead",
+      "80.122.255.70:23": "dead",
       "80.135.242.84:33": "dead",
       "80.135.253.157:33": "dead",
       "80.147.211.198:2323": "dns",
@@ -7411,6 +8486,7 @@
       "80.80.140.38:13023": "dns",
       "80.95.82.122:1212": "dns",
       "80bbs.mooo.com:2380": "dead",
+      "81-226-94-41-no600.tbcn.telia.com:2323": "dead",
       "81.101.131.188:2323": "dns",
       "81.103.51.248:23": "dead",
       "81.136.6.88:23": "dns",
@@ -7486,6 +8562,7 @@
       "83.85.108.75:6666": "dead",
       "83.96.255.184:7705": "dns",
       "83.98.238.2:23": "dead",
+      "84-113-134-29.cable.dynamic.surfer.at:23": "dead",
       "84.113.106.32:23": "dns",
       "84.113.106.32:513": "dead",
       "84.113.134.29:23": "dns",
@@ -7503,6 +8580,7 @@
       "84.247.3.93:4402": "dns",
       "84.248.158.82:7600": "dead",
       "84.248.158.82:7602": "dead",
+      "84.254.108.189:23": "dead",
       "84.29.190.211:23": "dns",
       "84.29.46.166:23": "dead",
       "84.32.84.32:23": "dns",
@@ -7644,6 +8722,8 @@
       "90.230.116.70:1541": "dns",
       "90.234.72.158:2323": "dead",
       "90.251.255.77:4000": "dead",
+      "90.254.180.156:23": "dead",
+      "91-139-13-241.customers.tmcz.cz:23": "dead",
       "91.119.62.15:23": "dns",
       "91.134.240.216:23": "dns",
       "91.193.18.239:4000": "dns",
@@ -7683,6 +8763,7 @@
       "91.98.112.117:4000": "dead",
       "91.99.31.171:23": "dns",
       "91.99.63.188:23": "dns",
+      "92.101.149.159:23": "dead",
       "92.117.14.183:64128": "dead",
       "92.117.15.94:64128": "duplicate",
       "92.177.36.79:5555": "dns",
@@ -7735,6 +8816,7 @@
       "95.179.183.33:4000": "dead",
       "95.179.233.120:23": "dns",
       "95.208.32.5:23": "dead",
+      "95.213.136.146:23": "dead",
       "95.216.162.69:23": "dead",
       "95.216.171.182:23": "dns",
       "95.216.214.209:4444": "dns",
@@ -7756,6 +8838,7 @@
       "95.85.50.124:5555": "dead",
       "95.94.255.112:6969": "dns",
       "95.95.134.25:5900": "dns",
+      "96-70-186-41-static.hfc.comcastbusiness.net:23": "dead",
       "96.126.100.155:5555": "dead",
       "96.126.100.171:23": "dns",
       "96.126.100.240:5555": "dead",
@@ -7779,6 +8862,7 @@
       "96.255.255.74:7777": "dead",
       "96.29.253.198:23": "dns",
       "96.3.169.231:2323": "dead",
+      "96.30.192.92.vultrusercontent.com:23": "duplicate",
       "96.30.192.92:23": "dns",
       "96.30.195.251:23": "dns",
       "96.36.39.127:23": "dns",
@@ -7796,6 +8880,7 @@
       "96.84.232.117:9999": "dns",
       "96.88.109.173:9600": "dns",
       "9640news.ddns.net:9640": "dead",
+      "97-116-8-184.mpls.qwest.net:23": "dead",
       "97.107.133.128:7000": "dns",
       "97.107.133.86:6666": "dns",
       "97.107.138.126:4000": "dns",
@@ -7820,6 +8905,7 @@
       "97.91.190.86:23": "dead",
       "97.91.52.80:23": "dead",
       "97.92.63.79:4242": "dead",
+      "98-59-178-69.gci.net:513": "dead",
       "98.100.9.3:6010": "dns",
       "98.100.9.3:8888": "dead",
       "98.109.128.47:23": "dns",
@@ -7892,8 +8978,10 @@
       "98.60.156.191:2323": "dead",
       "98.7.221.143:23": "dead",
       "98.86.152.107:23": "dns",
+      "99-53-196-18.lightspeed.stlsmo.sbcglobal.net:23": "dead",
       "99.1.220.199:2002": "dns",
       "99.1.220.199:23": "dead",
+      "99.106.75.128:95": "duplicate",
       "99.117.88.230:7800": "dead",
       "99.119.156.33:4444": "dns",
       "99.126.115.47:23": "dns",
@@ -7917,9 +9005,11 @@
       "99.251.110.114:24": "dead",
       "99.254.12.49:2323": "dead",
       "99.30.10.38:23": "dead",
+      "99.32.67.11:23": "dead",
       "99.50.11.241:2002": "dns",
       "99.53.192.32:2222": "dns",
       "99.53.196.18:23": "duplicate",
+      "99.62.127.155:23": "dead",
       "99.62.73.95:5555": "dead",
       "99.72.75.157:23": "dns",
       "99.74.203.226:23": "dead",
@@ -8099,6 +9189,11 @@
       "adaka.internet-box.ch:5555": "dead",
       "adambbs.servebbs.org:6400": "dead",
       "aderonmud.genesismuds.com:3200": "dead",
+      "adhd.ninjaneering.net:1857": "nontelnet_banner",
+      "adhd.ninjaneering.net:23": "dead",
+      "adhd.ninjaneering.net:33060": "nontelnet_banner",
+      "adhd.ninjaneering.net:3555": "dead",
+      "adibbs.sytes.net:6800": "duplicate",
       "adventmud.funcity.org:8310": "dead",
       "adventuresweb.com:2323": "dead",
       "aelandris.org:4000": "cross",
@@ -8140,6 +9235,9 @@
       "alphacomplex.us:2323": "dead",
       "altair.virtualaltair.com:4667": "dead",
       "altd.dyndns.org:6400": "dead",
+      "alteraeon.com:3102": "dead",
+      "alteraeon.com:4100": "dead",
+      "alteraeon.com:4110": "dead",
       "alterant.leenooks.net:23": "dead",
       "alterra.bbses.org:23230": "dead",
       "altertex.synchronetbbs.org:23": "dead",
@@ -8148,8 +9246,11 @@
       "amber.org.uk:7000": "dead",
       "ambershards.com:5000": "dead",
       "americanpibbs.com:23": "dead",
+      "amigacity.xyz:513": "rlogin",
       "amigaworldbbs.spdns.de:23": "dead",
       "amigazbbs.noip.me:23": "dead",
+      "amiopen.now:21": "dead",
+      "amiopen.now:23": "dead",
       "amn.biyg.org:20000": "cross",
       "anarchybbs.com:2332": "dead",
       "ancient.anguish.org:2222": "cross",
@@ -8196,7 +9297,9 @@
       "atari8.us:10001": "dead",
       "atavachronbbs.net:23": "dead",
       "atharia.net:2222": "dead",
+      "athelstan.org:513": "rlogin",
       "athena.atcity.org:23": "dead",
+      "atl.ddns.net:6401": "dead",
       "atlantis.exventure.world:5555": "dead",
       "atlantisbbs.dyndns.org:2600": "dead",
       "atombbs.zapto.org:23": "dead",
@@ -8235,9 +9338,13 @@
       "bawks.org:9000": "dead",
       "bbbbs.synchronetbbs.org:23": "dead",
       "bbs-jesus.name:23": "dead",
+      "bbs-logiciels.com:23": "dead",
+      "bbs-me.de:23": "dead",
+      "bbs-nuernberg.de:23": "dead",
       "bbs.2b1q.net:23": "dead",
       "bbs.3bsoft.com:23": "dead",
       "bbs.44con.com:6502": "dead",
+      "bbs.4wheelham.com:513": "rlogin",
       "bbs.69megabytes.com:23": "dead",
       "bbs.8bitclassics.com:23": "dead",
       "bbs.8bitsaturdaynight.com:8888": "dead",
@@ -8246,7 +9353,10 @@
       "bbs.Barringer.org:513": "dead",
       "bbs.ClassicMUD.com:2323": "dead",
       "bbs.a2k4.com:23": "dead",
+      "bbs.abon.us:513": "rlogin",
+      "bbs.acehoss.net:513": "rlogin",
       "bbs.africamutualfunds.com:513": "dead",
+      "bbs.aghy.net:513": "rlogin",
       "bbs.aholix.net:6800": "dead",
       "bbs.akitsune.dev:23": "dead",
       "bbs.alt119.net:23": "dead",
@@ -8266,6 +9376,7 @@
       "bbs.badcow.com.tw:23": "dead",
       "bbs.balcos.net:23": "dead",
       "bbs.baud.games:6502": "dead",
+      "bbs.bbses.info:23": "dead",
       "bbs.benoneill.xyz:23": "dead",
       "bbs.bigd.lol:23": "dead",
       "bbs.bigjim.ventures:6969": "dead",
@@ -8290,6 +9401,8 @@
       "bbs.coffeehousebbs.me:2323": "dead",
       "bbs.combatnet.us:23": "dead",
       "bbs.computerklubben.dk:23": "dead",
+      "bbs.conf.eti.br:513": "rlogin",
+      "bbs.cooldavid.org:10245": "dead",
       "bbs.corbe.net:23": "dead",
       "bbs.costakis.org:23": "dead",
       "bbs.cs.pu.edu.tw:3001": "dead",
@@ -8297,6 +9410,7 @@
       "bbs.cultofjames.org:9023": "dead",
       "bbs.cutel.net:23": "dead",
       "bbs.cyberpunks.network:23": "dead",
+      "bbs.cyrellia.com:513": "rlogin",
       "bbs.dailydump.xyz:8888": "dead",
       "bbs.dapla.net:23": "dead",
       "bbs.darkenworlds.com:2323": "dead",
@@ -8306,8 +9420,11 @@
       "bbs.delorted.com:23": "dead",
       "bbs.devilsaur.us:2323": "dead",
       "bbs.dewy.ru:23": "dead",
+      "bbs.digital-warfare.net:24554": "dead",
+      "bbs.digitaldistortionbbs.com:513": "rlogin",
       "bbs.digitalexpl0it.com:23": "dead",
       "bbs.diller.org:23": "dead",
+      "bbs.disconnected-by-peer.at:513": "rlogin",
       "bbs.diskshop.ca:23": "dead",
       "bbs.docksud.com.ar:23": "dead",
       "bbs.docsplace.org:26": "dead",
@@ -8326,6 +9443,7 @@
       "bbs.electronicchicken.com:23": "dead",
       "bbs.elwynor.com:23": "dead",
       "bbs.emergencyscene.net:2475": "dead",
+      "bbs.eob-bbs.com:513": "rlogin",
       "bbs.eona.cat:2600": "dead",
       "bbs.eow.lol:2377": "dead",
       "bbs.eruditorium.org:23": "dead",
@@ -8338,13 +9456,16 @@
       "bbs.fdf.net:23": "dead",
       "bbs.fleethq.org:23": "dead",
       "bbs.flexion.io:7777": "dead",
+      "bbs.flyfish-tech.com:23": "dead",
       "bbs.foou.net:23": "dead",
       "bbs.force9.org:23": "dead",
       "bbs.foss.gay:23": "dead",
       "bbs.fox.pet:23": "dead",
       "bbs.fratm.com:23": "dead",
+      "bbs.frc.utn.edu.ar:23": "dead",
       "bbs.freeradical.zone:8888": "dead",
       "bbs.fudan.edu.cn:23": "dead",
+      "bbs.g00r00.com:513": "rlogin",
       "bbs.galactix.xyz:23": "dead",
       "bbs.geeksphere.tk:2023": "dead",
       "bbs.giaco.net:23": "dead",
@@ -8361,6 +9482,7 @@
       "bbs.hobbitempire.net:6501": "dead",
       "bbs.holmadegames.com:23": "dead",
       "bbs.hooplesbbs.net:8023": "dead",
+      "bbs.horizonbbs.org:513": "rlogin",
       "bbs.hoyvision.com:23": "dead",
       "bbs.hoyvision.com:6420": "dead",
       "bbs.ice.cycu.edu.tw:23": "dead",
@@ -8378,10 +9500,12 @@
       "bbs.itbnet.eu:23": "dead",
       "bbs.itsyssol.ca:23": "dead",
       "bbs.jackalope.pw:23": "dead",
+      "bbs.jacobcat.app:513": "rlogin",
       "bbs.jal.tw:23": "dead",
       "bbs.jamaicajoes.net:8011": "dead",
       "bbs.jammingsignal.com:23": "dead",
       "bbs.jerryhaggard.com:2323": "dead",
+      "bbs.jerseyjam.com:513": "rlogin",
       "bbs.jodh.us:23": "dead",
       "bbs.k5tmt.com:2023": "dead",
       "bbs.kaisersuzuki.net:2323": "dead",
@@ -8396,7 +9520,10 @@
       "bbs.kypctech.com:23": "dead",
       "bbs.lamehq.net:23": "dead",
       "bbs.liljoe.games:23": "dead",
+      "bbs.lizardmaster.com:513": "rlogin",
       "bbs.lockandloadedbbs.com:223": "dead",
+      "bbs.lpnet.com.br:23": "dead",
+      "bbs.lsnet.dev:513": "rlogin",
       "bbs.lu1dbq.org:6300": "dead",
       "bbs.lunacylabs.net:2222": "dead",
       "bbs.lunduke.com:23": "dead",
@@ -8404,6 +9531,7 @@
       "bbs.madaraszd.net:4321": "dead",
       "bbs.madbbs.com:23": "dead",
       "bbs.magic-systems.net:6323": "dead",
+      "bbs.maidensrealm.com:33069": "nontelnet_banner",
       "bbs.mailtrap.org:23": "dead",
       "bbs.math.ntnu.edu.tw:8000": "dead",
       "bbs.maxshideout.com:23": "dead",
@@ -8421,10 +9549,13 @@
       "bbs.monocul.us:2323": "dead",
       "bbs.monocul.us:5130": "dead",
       "bbs.mottonecessary.com:2323": "dead",
+      "bbs.mycrowd.ca:513": "rlogin",
       "bbs.n0odv.network:23": "dead",
       "bbs.ncnu.edu.tw:23": "dead",
       "bbs.ndhu.edu.tw:23": "dead",
+      "bbs.net9.org:23": "dead",
       "bbs.netcrave.io:23": "dead",
+      "bbs.newtoncity.org:513": "rlogin",
       "bbs.night-watcher.com:23": "dead",
       "bbs.nitemarecafe.com:2002": "dead",
       "bbs.notdos.com:23": "dead",
@@ -8450,10 +9581,16 @@
       "bbs.planetwichita.com:23": "dead",
       "bbs.poast.org:23": "dead",
       "bbs.ptt.cc:23": "dead",
+      "bbs.pwecksretreat.com:1245": "dead",
+      "bbs.pwecksretreat.com:1246": "dead",
+      "bbs.pwecksretreat.com:1247": "dead",
+      "bbs.pwecksretreat.com:1248": "dead",
+      "bbs.pwecksretreat.com:2377": "dead",
       "bbs.pyroxfox.com:23": "dead",
       "bbs.pyroxfox.com:513": "dead",
       "bbs.qth.social:8888": "dead",
       "bbs.radiomentor.org:23": "dead",
+      "bbs.ramifications.ca:5128": "duplicate",
       "bbs.razorsdomain.com:23230": "dead",
       "bbs.razorsdomain.com:31415": "dead",
       "bbs.rdpstudio.top:23": "dead",
@@ -8475,6 +9612,8 @@
       "bbs.schjelderup.info:2323": "dead",
       "bbs.signalthirteen.zone:23": "dead",
       "bbs.silverhawk.me:6400": "dead",
+      "bbs.silverhawk.no:6400": "duplicate",
+      "bbs.skynetbbs.com:2000": "dead",
       "bbs.sobbs.org:23": "dead",
       "bbs.solobsd.org:23": "dead",
       "bbs.sonicbbs.co.uk:23": "dead",
@@ -8499,6 +9638,7 @@
       "bbs.tecs.de:23": "dead",
       "bbs.telearena.us:23": "dead",
       "bbs.telnet.games:23": "dead",
+      "bbs.telnix.com:513": "rlogin",
       "bbs.thebitbucket.ca:23": "dead",
       "bbs.thebrewingacademy.com:8888": "dead",
       "bbs.thebytexchange.com:23": "dead",
@@ -8529,6 +9669,7 @@
       "bbs.tychostation.it:23": "dead",
       "bbs.uatsoc.us:8888": "dead",
       "bbs.ujoint.org:23": "dead",
+      "bbs.ultimatebbs.net:8023": "dead",
       "bbs.undrground.org:23": "dead",
       "bbs.unix.beer:23": "dead",
       "bbs.ustc.edu.cn:23": "dead",
@@ -8537,6 +9678,8 @@
       "bbs.valhallahomeservices.com:24": "dead",
       "bbs.valhallahomeservices.com:5023": "dead",
       "bbs.valhallahomeservices.com:513": "dead",
+      "bbs.venerandi.it:17": "dead",
+      "bbs.venerandi.it:513": "rlogin",
       "bbs.videogamenirvana.com:23": "dead",
       "bbs.virtualoak.net:23": "dead",
       "bbs.vk2way.id.au:23": "dead",
@@ -8554,13 +9697,17 @@
       "bbs.zapto.org:2000": "dead",
       "bbs.zeloof.xyz:23": "dead",
       "bbs.zenasprime.net:2323": "dead",
+      "bbs.zerotwo.tech:513": "rlogin",
       "bbs.zeusdev.co.uk:23": "dead",
       "bbs.zixia.net:23": "dead",
       "bbs.zju.edu.cn:2323": "dead",
+      "bbs.zruspas.org:513": "rlogin",
       "bbs.zt.vc:2323": "dead",
       "bbs.zzap.org:230": "dead",
+      "bbs1ue.luckysrv.de:23": "dead",
       "bbs3.nsysu.edu.tw:23": "dead",
       "bbsclubhouse.ddns.net:1040": "dead",
+      "bbsdev.net:513": "rlogin",
       "bbsdreanc64.ddns.net:10000": "dead",
       "bbsgamer.ddns.net:513": "rlogin",
       "bbsgames.com:23": "dead",
@@ -8584,12 +9731,21 @@
       "beggarscyn.com:23": "dead",
       "belameephus.mudmagic.com:1220": "dead",
       "bentoboxbbs.com:23": "dead",
+      "beos.retro-os.live:513": "dead",
       "berobbs.ddns.net:23": "dead",
+      "best-014196.bestwinz.com:23": "dead",
+      "bestbudgetmanager.com:33069": "nontelnet_banner",
+      "beta.sb-discovery.com:513": "rlogin",
       "bfo.ntsj.com:23": "dead",
       "bgdcag.synchro.net:23": "dead",
+      "bia.overband.net:1030": "dead",
+      "bia.overband.net:4910": "dead",
+      "bia.overband.net:6400": "dead",
+      "bia.overband.net:8888": "dead",
       "bigbeautifulsystem.ddns.net:2323": "dead",
       "bigdamn.com:7777": "cross",
       "bigharryblues.com:23": "dead",
+      "bigtimebbs.net:513": "rlogin",
       "bikerworldbbs.loginto.me:1969": "dead",
       "binarydreamsbbs.ddns.net:53412": "dead",
       "binarydreamsbbs.ddns.net:53419": "dead",
@@ -8621,7 +9777,10 @@
       "brainsuxxinc.ddns.net:23": "dead",
       "braintoys.org:23": "dead",
       "brakebills.aresmush.com:4201": "dead",
+      "bras-base-toroon0717w-grc-57-70-51-122-55.dsl.bell.ca:23": "dead",
+      "brazi.net:513": "rlogin",
       "brbbs.ddns.net:2323": "dead",
+      "bridge.apana.org.au:23": "dead",
       "bridge.vkradio.com:23": "dead",
       "brigandine.org:9390": "cross",
       "briskphone.duckdns.org:23": "dead",
@@ -8644,6 +9803,10 @@
       "burningchrome.net:2323": "dead",
       "business-test.ddns.net:23": "dead",
       "butthead.ddns.net:23": "dead",
+      "c-24-218-78-231.hsd1.ma.comcast.net:23": "dead",
+      "c-24-62-218-205.hsd1.ct.comcast.net:2323": "dead",
+      "c-73-92-193-183.hsd1.ca.comcast.net:513": "rlogin",
+      "c-76-134-25-116.hsd1.ar.comcast.net:513": "rlogin",
       "c1gar.synchronetbbs.org:23": "dead",
       "c3bbs.retronetworking.org:513": "rlogin",
       "c4everbbs.ddnsgeek.com:20098": "dead",
@@ -8651,6 +9814,7 @@
       "cajunnights.com:7373": "cross",
       "caleban.dosadi.online:23": "dead",
       "callandor.es:4444": "cross",
+      "calx-59.dhcp.g3-r3.tnbrsh.benlomand.net:23": "dead",
       "camelotb.synchro.net:23": "dead",
       "campbaudot.com:23": "dead",
       "canadianrebel.sytes.net:1981": "dead",
@@ -8675,19 +9839,27 @@
       "cb-sc.com:5678": "dead",
       "cbliss.synchro.net:23": "dead",
       "cbm.ip1.at:6400": "dead",
+      "ccbbs.zapto.org:3143": "dead",
       "cdhbbs.clouddatahosting.net:23": "dead",
+      "cebbs.costakis.org:513": "rlogin",
       "cebbs.synchronetbbs.org:23": "dead",
+      "cedarvalleybbs.com:2626": "duplicate",
       "cedvalar.synchro.net:2323": "dead",
       "celemir.net:3000": "dead",
       "centauri.servegame.com:7777": "dead",
+      "centerofawareness.net:23": "dead",
       "centralontarioremote.com:2002": "dead",
       "centralontarioremote.com:2300": "dead",
       "centralontarioremote.com:6300": "dead",
       "centralperk.us:2323": "dead",
       "ceph.synchronetbbs.org:23": "dead",
+      "chandra.canerduh.com:23": "dead",
       "chaos.caile.org:4201": "cross",
+      "chaos.noloop.net:23": "dead",
       "chaos2.ddns.net:23": "dead",
       "chaosmuck.no-ip.com:3333": "dead",
+      "chaotix.ddns.net:11134": "duplicate",
+      "chaotix.ddns.net:11340": "duplicate",
       "charis.servegame.com:4242": "cross",
       "chat.korokorok.com:2323": "dead",
       "chat.mywebcommunity.net:23": "dead",
@@ -8699,6 +9871,7 @@
       "chq.ddns.net:2023": "dead",
       "chqbbs.ddns.org:2023": "dead",
       "christfollowersbbs.ca:24": "dead",
+      "cib.dyndns.org:6404": "dead",
       "cityofglass.aresmush.com:4201": "dead",
       "clam.ml:23": "dead",
       "clark-home.com:23": "dead",
@@ -8717,6 +9890,7 @@
       "cocosbbs.fsxnet.nz:50600": "dead",
       "coderedbbs.dyndns.org:2323": "dead",
       "coffron.zapto.org:99": "dead",
+      "coga.ch:23": "dead",
       "cogg.contrarium.net:4001": "dead",
       "cogitators.net:23": "dead",
       "coimuck.com:1771": "cross",
@@ -8735,7 +9909,10 @@
       "community.netvillage.com:23": "dead",
       "compufuck.xyz:23": "dead",
       "concordiamu.aresmush.com:4201": "dead",
+      "condor.rorscha.ch:33060": "nontelnet_banner",
+      "conquest.gameplayer.club:23": "dead",
       "convoid.synchro.net:23": "dead",
+      "convolution.us:2002": "dead",
       "conxtor.fsxnet.nz:23": "dead",
       "coolbluebbs.com:23": "dead",
       "coolbluebbs.com:513": "dead",
@@ -8748,16 +9925,21 @@
       "cotn.subnigra.com:6969": "cross",
       "cottonwood.servebbs.com:6400": "dead",
       "counterbbs.mekcity.com:23": "dead",
+      "cpc138128-hatf10-2-0-cust157.9-3.cable.virginm.net:23": "dead",
       "cptalker.com:9900": "cross",
       "cpu.tfcis.org:23": "dead",
       "cpu.tfcis.org:443": "dead",
       "cpugod.synchro.net:23": "dead",
       "crawl.akrasiac.org:23": "dead",
       "crazytermbbs.dyndns.org:6400": "dead",
+      "crazyworldbbs.com:513": "rlogin",
       "crcwn.online:23": "dead",
+      "crisisbbs.net:513": "rlogin",
       "criterionmud.net:3999": "dead",
       "crowsnestbbs.ddns.net:6400": "dead",
       "crunchers-twgs.com:2002": "dead",
+      "cryosphere.net:6766": "dead",
+      "cryosphere.net:6767": "dead",
       "crystalsprings.aresmush.com:2064": "dead",
       "cscnet1.net:2002": "dead",
       "cubanbar.hochstenbach.net:1234": "cross",
@@ -8770,10 +9952,14 @@
       "cyberdawg.kennmer.net:1337": "dead",
       "cyberlife.es:7777": "cross",
       "cyberrun.net:443": "dead",
+      "cyberspacebbs.net:2002": "dead",
+      "cyberspacebbs.net:2003": "dead",
       "cypherpunkbbs.net:23": "dead",
       "d0.cx:23": "dead",
+      "d24-57-53-43.home.cgocable.net:23000": "dead",
       "d2d.twyst.org:9911": "dead",
       "d3relict.duckdns.org:23": "dead",
+      "d4-50-155-229.evv.wideopenwest.com:23": "dead",
       "dabone.pointclark.net:6400": "dead",
       "dadosbladebbs.dyndns.org:23": "dead",
       "dalazonen.com:9009": "cross",
@@ -8802,11 +9988,13 @@
       "datanetbbs.net:23": "dead",
       "datas-lab.nl:23": "dead",
       "datenbahn.dd-dns.de:33": "dead",
+      "datgsguy.com:513": "rlogin",
       "davesbbs.com:2002": "dead",
       "daviddgtntshouse.tk:23": "dead",
       "dawnmud.com:3000": "dead",
       "dawnofchaos.vineyard.haus:2024": "dead",
       "daystrom.trekfan.org:23": "dead",
+      "db.tastyspleen.net:23": "dead",
       "db4g.com:2323": "dead",
       "dbbs.dejacraft.uk:23": "dead",
       "dbbs.dejacraft.uk:513": "dead",
@@ -8820,6 +10008,7 @@
       "dden.discordia.org:2222": "cross",
       "de.themud.org:1234": "dead",
       "dead-souls.net:6666": "cross",
+      "deadinternet.synchronetbbs.org:513": "rlogin",
       "deadofnight.org:5000": "cross",
       "deathcult.today:7667": "dead",
       "deckersheaven.com:23": "dead",
@@ -8830,6 +10019,7 @@
       "delphine.org:23": "dead",
       "demo.evennia.com:4000": "dead",
       "demonsgate.org:3011": "cross",
+      "demonsnet.com:23": "dead",
       "denofiniquity.caltrops.com:23": "dead",
       "dept47.bbses.info:2323": "dead",
       "derelicts.org:23": "dead",
@@ -8839,6 +10029,7 @@
       "dfbbs.zapto.org:64128": "dead",
       "dforces.servegame.com:5000": "cross",
       "dhbbs.org:23": "dead",
+      "dhcp-38-162-129.cust.empireaccess.net:5525": "dead",
       "dial-up:6400": "dead",
       "dibz.synchro.net:1023": "dead",
       "diesiraemu.com:4201": "dead",
@@ -8851,6 +10042,7 @@
       "digitalshelter.net:23": "dead",
       "digitaluni.net:23": "dead",
       "dimechoes.vineyard.haus:4009": "dead",
+      "din.asciiattic.com:6783": "dead",
       "dino.surly.org:6250": "cross",
       "dirtyske.koumbit.net:23": "dead",
       "disboardia.net:2323": "dead",
@@ -8861,6 +10053,7 @@
       "doa-sector.aresmush.com:4201": "dead",
       "dogebbs.org:2002": "dead",
       "doomsday.themuds.org:7000": "dead",
+      "dott.synchro.net:513": "rlogin",
       "downlinkbbs.com:2323": "dead",
       "downmoo.sloth.org:8888": "dead",
       "doybbs.synchro.net:230": "dead",
@@ -8880,9 +10073,13 @@
       "dreamscapes.dyn.dhs.org:4500": "cross",
       "driftbbs.ddns.net:23": "dead",
       "drigon.com:4101": "dead",
+      "drk-bbs-az.de:23": "dead",
       "drpepper.dns-dynamic.net:2002": "dead",
       "ds.enyc.org.uk:8688": "cross",
       "ds.vineyard.haus:2345": "dead",
+      "dsbbs.net:513": "rlogin",
+      "dsl-201-55-181-189-dynamic.prod-infinitum.com.mx:23": "dead",
+      "dsl-252-61-181-189-dynamic.prod-infinitum.com.mx:23": "dead",
       "dswonderland.com:6969": "dead",
       "dtalon.ddns.net:8088": "dead",
       "ducksnest.guru:23": "dead",
@@ -8891,9 +10088,19 @@
       "duynt.net:23": "dead",
       "dw.kicks-ass.org:1111": "cross",
       "dwbbs.ddns.net:23": "dead",
+      "dydo.hosted-at.thebunker.net:23": "dead",
+      "dynamite.synchronetbbs.org:513": "rlogin",
       "dynamix.fansi.org:4200": "cross",
+      "dyndsl-095-033-022-007.ewe-ip-backbone.de:23": "dead",
+      "dyndsl-095-033-024-112.ewe-ip-backbone.de:513": "dead",
+      "dyndsl-095-033-088-063.ewe-ip-backbone.de:2323": "dead",
+      "dyndsl-095-033-088-070.ewe-ip-backbone.de:23": "dead",
+      "dyndsl-095-033-089-043.ewe-ip-backbone.de:23": "dead",
+      "dyndsl-095-033-093-190.ewe-ip-backbone.de:23": "dead",
+      "dyndsl-095-033-095-191.ewe-ip-backbone.de:23": "dead",
       "eaglewing1962.ddns.net:6401": "dead",
       "earth.roshosting.net:23": "dead",
+      "ec2-52-212-238-182.eu-west-1.compute.amazonaws.com:6697": "dead",
       "echto.net:23": "dead",
       "eden.limited:1995": "dead",
       "edge.xen.prgmr.com:4000": "dead",
@@ -8932,7 +10139,12 @@
       "equestrinet.gloomyjdsystems.com:23": "dead",
       "erevos.ddns.net:23": "dead",
       "erimand.pocketmud.com:5555": "dead",
+      "error1202bbs.ddns.net:9669": "dead",
+      "error404bbs.ddns.net:1202": "dead",
+      "error404bbs.ddns.net:2323": "dead",
+      "error404bbs.ddns.net:419": "dead",
       "error404bbs.ddns.net:513": "rlogin",
+      "error404bbs.ddns.net:9669": "dead",
       "esh.mugames.org:7000": "dead",
       "et.flynsarmy.com:9000": "dead",
       "eternaldarkness.net:9700": "cross",
@@ -8944,7 +10156,10 @@
       "evil.xibo.com:4201": "cross",
       "evilseedsgrownaturally.com:23": "dead",
       "evolution.mudhosting.net:1874": "dead",
+      "ex01.bbs-io.de:23": "dead",
       "excelsior.troll20.com:4201": "cross",
+      "excelsiorbbs.ddns.net:2000": "dead",
+      "exchange.bbs-nrue.de:23": "dead",
       "exchangebbs.com:38400": "dead",
       "exeonline.synology.me:23": "dead",
       "exoticabbs.com:8888": "dead",
@@ -8956,6 +10171,7 @@
       "fadingblack.net:23": "dead",
       "fafner.dyndns.org:23": "dead",
       "faibanx.lavadomefive.com:8888": "cross",
+      "familybbs.ddns.net:513": "rlogin",
       "farcasternet.org:23": "dead",
       "farmbbs.org:23": "dead",
       "farplane.net:23": "dead",
@@ -8964,6 +10180,7 @@
       "fatemud.com:7004": "dead",
       "fateoftherepublic.com:1313": "dead",
       "fatesharvest.com:6464": "dead",
+      "fdd.one:513": "rlogin",
       "fe2.dbzfe.com:4000": "dead",
       "feathermuck.avians.net:8888": "cross",
       "feem.net:1978": "dead",
@@ -8972,6 +10189,9 @@
       "feorar.org:23": "dead",
       "fgisc.org:23": "dead",
       "fh.aoh.se:4000": "dead",
+      "fido.alltsk.ru:23": "duplicate",
+      "fido.beholderbbs.org:992": "dead",
+      "fido.junc.eu:23": "dead",
       "fido2.kofobbs.net:23": "dead",
       "fidobbs.mrak.at:23": "dead",
       "fiftyfeetsmall.com:23": "dead",
@@ -8989,6 +10209,7 @@
       "fireflybbs.ddns.net:23": "dead",
       "firenetbbs.us:23": "dead",
       "firenetbbs.us:513": "dead",
+      "firesidebbs.com:513": "rlogin",
       "firstmagic.com:4242": "dead",
       "fishingnet.phatstar.org:7777": "dead",
       "flailingbbs.synchronetbbs.org:23": "dead",
@@ -9002,6 +10223,7 @@
       "fluxcap.synchro.net:2323": "dead",
       "fluxcap.synchro.net:5023": "dead",
       "flybbs.ru:2323": "dead",
+      "fmrl.throwbackbbs.com:2324": "duplicate",
       "fodbbs.dyndns.org:6502": "dead",
       "fodi.bounceme.net:6400": "dead",
       "fodim.bounceme.net:23": "dead",
@@ -9009,11 +10231,14 @@
       "forgottenkingdoms.org:4000": "cross",
       "fortbenavidez.net:23": "dead",
       "fortsackville.com:2005": "dead",
+      "forum.byr.edu.cn:23": "dead",
       "forum.talbot.audio:11223": "dead",
       "fosmud.com:4000": "dead",
       "foundlingtf.com:4201": "dead",
       "fr.hyssing.net:4001": "cross",
       "frandum.fr:2001": "cross",
+      "freechess.org:33060": "nontelnet_banner",
+      "freechess.org:33070": "nontelnet_banner",
       "freedom.servebbs.org:2323": "dead",
       "freedombone.net:23": "dead",
       "freeside.bbs.io:23": "dead",
@@ -9021,6 +10246,7 @@
       "freespeak.hopto.org:233": "dead",
       "freespeech.smeghead.club:6623": "dead",
       "freestar.synchro.net:23": "dead",
+      "freeway.vkradio.com:513": "rlogin",
       "friedpi.bbs.io:23": "dead",
       "frieltek.com:2023": "dead",
       "frontierbbs.net:23": "dead",
@@ -9029,6 +10255,7 @@
       "frontierbbs.net:3333": "dead",
       "frontierbbs.net:8888": "dead",
       "frontiers.dotoran.com:9892": "dead",
+      "frostwarning.com:23": "dead",
       "frugalbbs.com:513": "dead",
       "fruity.turbit.eu:23": "dead",
       "fta.darcness.net:2860": "cross",
@@ -9041,7 +10268,9 @@
       "furscape.servegame.com:2001": "cross",
       "fusen.ddns.net:55223": "dead",
       "fusionbbs.ddns.net:9900": "dead",
+      "futureland.today:2323": "duplicate",
       "g-point.tunk.org:1025": "dead",
+      "g77.ip19.netikka.fi:513": "dead",
       "galacticexplorers.servegame.com:22002": "dead",
       "galds.themuds.org:6666": "dead",
       "gallaxial.com:23": "dead",
@@ -9060,6 +10289,7 @@
       "gameblipsbbs.tplinkdns.com:2323": "dead",
       "gamemastersrealm.com:2112": "dead",
       "gamemastersrealm.com:23": "dead",
+      "gamenet.synchronetbbs.org:513": "rlogin",
       "games.TradeWars-League.com:2002": "dead",
       "games.world.co.uk:23": "cross",
       "gameserver.planettradewars.com:23": "dead",
@@ -9069,12 +10299,14 @@
       "gapbbs.rdfig.net:2424": "dead",
       "gapbbs.rdfig.net:3030": "dead",
       "garoumush.org:7000": "dead",
+      "gate-bbs.bbslu.de:23": "dead",
       "gathering.org.uk:5000": "cross",
       "gatofuego.synchronetbbs.org:23": "dead",
       "gatofuego.synchronetbbs.org:513": "dead",
       "gaulven.com:2002": "dead",
       "gcat.talismanbbs.com:11823": "dead",
       "gcomm.com:23": "dead",
+      "geas.de:3331": "dead",
       "geekcafe.xyz:23": "dead",
       "geekcafe.xyz:513": "dead",
       "geminibbs.dyndns.org:2700": "dead",
@@ -9085,8 +10317,10 @@
       "ghostbusterslibrary.aresmush.com:4201": "dead",
       "ghostdansing.ddns.net:23": "dead",
       "ginkosoft.com:8898": "cross",
+      "git.mccomber.ca:33060": "dead",
       "gizmo4487.dev:23": "dead",
       "glitchmush.com:4201": "dead",
+      "glitchtech.top:513": "rlogin",
       "glorantha.pocketmud.com:23": "dead",
       "godwars2.org:3000": "cross",
       "goldencrane.aresmush.com:4201": "dead",
@@ -9099,6 +10333,7 @@
       "gray-harbor.com:4201": "dead",
       "greatermud.com:23": "dead",
       "greedisland.servegame.com:4000": "dead",
+      "greywolf.synchro.net:23": "dead",
       "grimm-tales.azundris.com:7000": "dead",
       "grimne.org:4000": "cross",
       "groundzero2.duckdns.org:4000": "cross",
@@ -9107,16 +10342,29 @@
       "gryphus.vk2sja.org:5632": "dead",
       "gt.gamingmuseum.com:23": "cross",
       "gtc.synchronetbbs.org:513": "dead",
+      "guardian.synchro.net:513": "rlogin",
       "gubby.letsneverdie.net:4000": "dead",
       "gundam.aresmush.com:4201": "dead",
       "gurth.ddns.net:2002": "dead",
       "gusto-bbs.com:23": "dead",
+      "h-155-4-83-155.a980.priv.bahnhof.se:23": "dead",
+      "h-212-85-82-213.a980.priv.bahnhof.se:23": "dead",
+      "h-46-59-60-142.a213.priv.bahnhof.se:23": "dead",
+      "h-98-128-205-68.a980.priv.bahnhof.se:23": "dead",
+      "h205.85.185.173.dynamic.ip.windstream.net:23": "dead",
+      "h207-167-252-79.ptr.lidc.telus.com:2002": "dead",
+      "h207-167-252-79.ptr.lidc.telus.com:2003": "dead",
+      "h207-167-252-79.ptr.lidc.telus.com:2323": "dead",
+      "h207-167-252-79.ptr.lidc.telus.com:2424": "dead",
+      "h207-167-252-79.ptr.lidc.telus.com:513": "rlogin",
+      "h207-167-252-79.ptr.lidc.telus.com:888": "dead",
       "h2h.pocketmud.com:23": "dead",
       "h2h.pocketmud.com:5555": "dead",
       "habbnn.com:23": "dead",
       "hades-talker.org:6660": "cross",
       "haelrahv.com:3001": "cross",
       "halcyon.bluecows.com:4201": "cross",
+      "halcyonbbs.scisweb.org:64": "dead",
       "hamradio.junglevision.com:23": "dead",
       "happylandbbs.com:11892": "dead",
       "happylnd.synchro.net:23": "dead",
@@ -9124,6 +10372,11 @@
       "harvestmoons.aresmush.com:4000": "dead",
       "hash.obsqra.xyz:23": "dead",
       "hatedreality.homeunix.net:23": "cross",
+      "haven.enyc.org.uk:7423": "dead",
+      "haven.enyc.org.uk:7778": "dead",
+      "haven.enyc.org.uk:8624": "dead",
+      "haven.enyc.org.uk:8683": "dead",
+      "haven.enyc.org.uk:8689": "dead",
       "havenrpg.net:3000": "cross",
       "havens.synchro.net:23": "dead",
       "hayseed.net:7777": "cross",
@@ -9142,6 +10395,7 @@
       "hercmud.net:3000": "dead",
       "hercules.mthelicon.com:8888": "cross",
       "herm-worldmush.silvertree.org:3337": "dead",
+      "hermes.okyler.com:513": "rlogin",
       "heromux.com:9999": "dead",
       "herp.derp.org.org.za:23": "dead",
       "hexahedron.dynv6.net:5500": "dead",
@@ -9156,6 +10410,15 @@
       "horizons-rpg.dynu.com:4242": "dead",
       "horrormu.com:1880": "dead",
       "horrormu.com:4201": "dead",
+      "host-067-131-059-192.dhcp.fewpb.net:513": "rlogin",
+      "host-12-200-209-68.mybrightridge.com:23": "dead",
+      "host-59-84.bitsnet.id:23": "dead",
+      "host-79-40-163-223.business.telecomitalia.it:23": "dead",
+      "host.roughneckbbs.com:23": "dead",
+      "host168.181-14-55.telecom.net.ar:23": "dead",
+      "host207-130-211-80.serverdedicati.aruba.it:23": "dead",
+      "host23.186-123-101.telmex.net.ar:23": "dead",
+      "host81-151-59-40.range81-151.btcentralplus.com:23": "dead",
       "hot-mess.net:9900": "cross",
       "hotl3.com:5000": "dead",
       "hotwirebbs.dyndns.org:4800": "dead",
@@ -9185,6 +10448,9 @@
       "ill2000.synchronetbbs.org:23": "dead",
       "imagine.aresmush.com:1338": "dead",
       "imperial.modeemi.fi:6969": "cross",
+      "imperian.com:2003": "dead",
+      "imperian.com:23000": "dead",
+      "imperian.com:2323": "dead",
       "imud.fluffos.info:1701": "dead",
       "india.colorado.edu:13": "dead",
       "indirestraits.themuds.org:6666": "dead",
@@ -9198,6 +10464,7 @@
       "innercirclebbs.com:23": "dead",
       "innerrealmbbs.us:2323": "dead",
       "innerrealmbbs.us:513": "dead",
+      "insomnia.synchronetbbs.org:513": "rlogin",
       "insomniacs.got-game.org:7000": "dead",
       "insomniacshideout.pocketmud.com:5555": "dead",
       "insymnia.com:6600": "cross",
@@ -9205,6 +10472,11 @@
       "internalaffairsbbs.com:23": "dead",
       "interstellarimperia.com:4201": "dead",
       "intrepidmud.com:4020": "dead",
+      "ip-088-152-228-228.um26.pools.vodafone-ip.de:23": "dead",
+      "ip-203-94-34-126.as55850.net:23": "dead",
+      "ip-67-190-110-111.static.silicanetworks.com.111.110.190.in-addr.arpa:23": "dead",
+      "ip4d15bf32.dynamic.kabel-deutschland.de:23": "dead",
+      "ipbcc0184f.dynamic.kabel-deutschland.de:23": "dead",
       "ipiss.rocks:7155": "dead",
       "irata.online:6502": "dead",
       "ircbbs.ddns.net:5023": "dead",
@@ -9229,11 +10501,13 @@
       "jointhesaga.com:1790": "cross",
       "jp3tlc.com:23": "dead",
       "jp3tlc.no-ip.biz:23": "dead",
+      "jsanchez.ddns.net:6400": "dead",
       "julia.wilcox.ovh:8888": "dead",
       "jupiter.iamyourgod.org:3169": "cross",
       "k0jebish.synchro.net:23": "dead",
       "k0jebish.synchro.net:513": "dead",
       "kantele.dev:4455": "dead",
+      "kasugagate.bbs-remon.net:23": "dead",
       "kbs-cloud.com:4000": "cross",
       "kd8rev.net:23": "dead",
       "kdx.lmao.rip:23": "dead",
@@ -9245,6 +10519,7 @@
       "kf5qeo.servebbs.net:23": "dead",
       "kf5qeo.servebbs.net:513": "dead",
       "kf5qeo.synchronetbbs.org:23": "dead",
+      "kia.synchro.net:513": "rlogin",
       "kidmud.kidpub.com:7777": "dead",
       "killgodwithachainsaw.top:7666": "dead",
       "kingdoms.bithir.co.uk:1812": "cross",
@@ -9255,8 +10530,11 @@
       "kove.hollyfeld.org:6715": "dead",
       "krco.synchronetbbs.org:513": "dead",
       "ktbbs.hanzou.jp:11123": "dead",
+      "kuehlbox.wtf:992": "dead",
       "la2043.aresmush.com:4201": "dead",
       "lac.pl:4000": "cross",
+      "laceration-late.oncegrind.com:23": "dead",
+      "landover.synchronetbbs.org:513": "rlogin",
       "landover.sytes.net:23": "dead",
       "lapa.tw:23": "dead",
       "last-outpost.com:4000": "cross",
@@ -9271,18 +10549,25 @@
       "legionworld.silvertree.org:3020": "dead",
       "lejardin.org:6969": "dead",
       "lew15uk.plus.com:3001": "dead",
+      "li1165-73.members.linode.com:23": "dead",
+      "li1198-54.members.linode.com:23": "http_banner",
+      "li1276-221.members.linode.com:2525": "dead",
       "library.presby.edu:23": "dead",
       "lightningbbs.com:2400": "dead",
       "linenoisebbs.com:23": "dead",
       "linuxassistant.com:23": "dead",
+      "linuxdoc.no-ip.org:2323": "dead",
       "lions.cs.ndsu.nodak.edu:7777": "cross",
       "lionsden.synchronetbbs.org:23": "dead",
       "liquiddreamz.ddns.net:2023": "dead",
+      "lisdude.com:7443": "dead",
       "lishmud.com:9002": "dead",
       "lit.klfree.cz:7680": "cross",
       "littlebobbytables.org:23": "dead",
+      "livewirebbs.com:513": "rlogin",
       "lkynrd73.synchro.net:148": "dead",
       "lkynrd73.synchro.net:2002": "dead",
+      "localyocalbbs.com:513": "rlogin",
       "locbbs.ddns.net:6400": "dead",
       "lofe.org:8000": "cross",
       "lofi.ooo:23": "dead",
@@ -9312,10 +10597,12 @@
       "lu8fjh-c64.ddns.net:6402": "dead",
       "lu8fjh-image.ddns.net:6400": "dead",
       "lu8fjh.ddns.net:23": "dead",
+      "luminiferousaether.tel:513": "rlogin",
       "lunatic.synchro.net:23": "dead",
       "lurkingfear.org:4040": "dead",
       "lusternia.com:23": "duplicate",
       "lutin.projetpetitpeuple.org:2323": "dead",
+      "m68k.club:23": "dead",
       "m80s.blinklab.com:4421": "dead",
       "macos.retro-os.live:513": "rlogin",
       "macross.genesismuds.com:2050": "dead",
@@ -9331,8 +10618,17 @@
       "magnumbbs.net:513": "rlogin",
       "mahoumush.com:7342": "dead",
       "maikslostyouth.hoodoer.com:8888": "dead",
+      "mail-bbs.de:23": "dead",
+      "mail.bbs-burgdorf.de:23": "dead",
+      "mail.bbsadpro.com:23": "dead",
       "mail.centralontarioremote.net:5555": "dead",
       "mail.jmentz.com:8888": "dead",
+      "mail.mystic-city.de:23": "dead",
+      "mail.nashnetworks.com:23": "dead",
+      "mail.ovlab.net:513": "dead",
+      "mail01.bbs-sachsen.de:23": "dead",
+      "mail02.bbs-sachsen.de:23": "dead",
+      "mailbox.bbs-bassgeige.de:23": "dead",
       "majia.genesismuds.com:4220": "dead",
       "major.butt.care:23": "dead",
       "major.butt.care:625": "dead",
@@ -9355,6 +10651,9 @@
       "mb.oldschoolbbs.com:8888": "dead",
       "mbbs.casacam.net:2025": "dead",
       "mbbs1.ddns.net:23": "dead",
+      "mbse.gzrbbs.net:2322": "dead",
+      "mbse.gzrbbs.net:60177": "dead",
+      "mbse.gzrbbs.net:60179": "dead",
       "mc.bq.is:23": "dead",
       "mc.bq.is:513": "dead",
       "mdhavian.net:7500": "cross",
@@ -9377,12 +10676,14 @@
       "micromansion.kicks-ass.org:6400": "dead",
       "micromansion.servebbs.net:6400": "dead",
       "micromuse.duckdns.org:4201": "dead",
+      "micropolis1.micropolis.com:23": "dead",
       "middle-earth.us:4500": "dead",
       "middleages.pw:4000": "dead",
       "midgard-mud.de:4711": "dead",
       "midianmud.com:3456": "dead",
       "midmud.com:5555": "dead",
       "midnight.horse:7777": "cross",
+      "midnightlounge.online:513": "rlogin",
       "midnightsun2.org:3000": "cross",
       "mikusbbs.icu:23": "dead",
       "milliways.hopto.me:23": "dead",
@@ -9398,6 +10699,8 @@
       "mnm.glassdragon.xyz:4444": "cross",
       "moetiki.ddns.net:27": "dead",
       "moetiki.ddns.net:6502": "dead",
+      "mojo.synchro.net:513": "rlogin",
+      "molests-benkulen.vpsrdns.web-hosting.com:23": "dead",
       "momiabbs.no-ip.info:2002": "dead",
       "momiabbs.no-ip.info:2323": "dead",
       "monero.place:8888": "dead",
@@ -9414,6 +10717,7 @@
       "mortalbbs.com:23": "dead",
       "motherlodebbs.duckdns.org:23": "dead",
       "motm.kicks-ass.net:2002": "cross",
+      "mqnc.dev:23": "dead",
       "mrpenguin.ddns.net:2023": "dead",
       "msbgtn01.synchro.net:2002": "dead",
       "msbgtn01.synchro.net:23": "dead",
@@ -9453,6 +10757,7 @@
       "mud.scrollsmud.com:4040": "dead",
       "mud.sndd.io:23": "dead",
       "mud.streetwitch.com:4000": "dead",
+      "mud.talesoftheotori.com:23": "dead",
       "mud.wormhole.se:4000": "dead",
       "mudII.co.uk:23": "duplicate",
       "muddomain.com:80": "dead",
@@ -9473,13 +10778,19 @@
       "mux.net:5555": "dead",
       "mvbbs.dyndns.org:6900": "dead",
       "mvradio.synchro.net:2023": "dead",
+      "mx.hitechcreations.com:23": "dead",
+      "mx.ibbbs.be:23": "dead",
+      "mx0.bbs-cochem.de:23": "dead",
       "mycult.servebbs.com:6400": "dead",
       "myrradel.com:4000": "dead",
       "mysterymeep.net:2012": "dead",
       "mystic-anet.online:513": "rlogin",
+      "mystic-crystal.metalseed.net:23": "dead",
+      "mystic-hobbies.com:513": "rlogin",
       "mystic.bbsgametime.com:2002": "dead",
       "mystic.bbsgametime.com:23": "dead",
       "mystic.fireballex.com:23": "dead",
+      "mystic.sjcnet.id.au:23": "dead",
       "mysticdreams.dyndns.org:24": "dead",
       "mysticdungeon.club:1666": "dead",
       "mysticisland.strangled.net:23": "dead",
@@ -9490,6 +10801,7 @@
       "nanvaent.org:3000": "cross",
       "narutofor.us:4545": "cross",
       "narutomu.com:7777": "dead",
+      "nat82-178.merinet.pl:23": "dead",
       "nativosoft.com:6023": "dead",
       "nebbie.nebbie.it:4000": "cross",
       "necrobbs.com:23": "dead",
@@ -9504,12 +10816,15 @@
       "neocinci.bbs.io:2323": "dead",
       "neodraconis.com:4201": "dead",
       "nerbbs.com:2002": "dead",
+      "nerf.gameplayer.club:23": "dead",
       "nerv.tech:23": "dead",
+      "net-2-44-183-112.cust.vodafonedsl.it:23": "dead",
       "net247.io:23": "dead",
       "net298.net:25489": "dead",
       "nethack.alt.org:23": "cross",
       "nethack.zoggins.net:23": "dead",
       "netpoint.webhop.me:513": "rlogin",
+      "nettwerked.synchronetbbs.org:513": "rlogin",
       "netvillage.com:23": "dead",
       "new-leu.leu.it:6000": "cross",
       "new.vampire-wars.com:6666": "cross",
@@ -9518,8 +10833,11 @@
       "nightlight.duckdns.org:2323": "dead",
       "nightvault.fsxnet.nz:2323": "dead",
       "nilgiri.net:8888": "cross",
+      "nimbus.synchronetbbs.org:513": "rlogin",
       "nirvana.beanos.com:3500": "cross",
       "nishi.boats:23": "dead",
+      "nix.synchro.net:33060": "nontelnet_banner",
+      "nix.synchro.net:513": "rlogin",
       "noagendabbs.com:513": "dead",
       "nocturnal.hopto.org:2023": "dead",
       "nodeka.com:23": "cross",
@@ -9541,7 +10859,10 @@
       "notbbs.com:23": "dead",
       "notfoundinscotland.com:4040": "dead",
       "notionmu.com:2120": "dead",
+      "novaserver.retro-os.live:23": "dead",
       "nrgbbs.ddns.net:520": "dead",
+      "ns2.hitechcreations.com:23": "dead",
+      "ns2.taitek.com.tw:23": "dead",
       "nuclearwarmudusa.com:4080": "dead",
       "numetalmux.com:4201": "dead",
       "nvm.ilmatar.net:8456": "dead",
@@ -9555,31 +10876,45 @@
       "odysseybbs.ddns.net:8080": "dead",
       "offshoreplatform.synchronetbbs.org:513": "dead",
       "ogcserver02.onlinegamescompany.net:31000": "dead",
+      "ohb.synchronetbbs.org:23": "dead",
+      "ohb.synchronetbbs.org:513": "rlogin",
       "oit.ndsu.edu:8888": "cross",
       "oldschoo.synchro.net:2002": "dead",
       "oldschoo.synchro.net:23": "dead",
       "oliekoets.nl:6715": "dead",
+      "on.the.net.nz:513": "rlogin",
       "oneness-bbs.dragonflymoon.org:23": "dead",
       "oneringbbs.synchronetbbs.org:23": "dead",
+      "onion.sscc.uos.ac.kr:23": "dead",
       "onjin.net:4000": "cross",
       "online-access.net:23": "dead",
       "online-bbs.selfhost.bz:23": "dead",
       "online.winserver.com:24": "dead",
       "onyxbbs.mywire.org:2300": "dead",
+      "ool-44c2190f.dyn.optonline.net:23": "dead",
       "orbis.onmypc.net:23": "dead",
       "orbitbbs.ddns.net:7210": "dead",
       "oregonian.social:23": "dead",
       "oriongalaxy.mywire.org:9023": "dead",
+      "osuny.inri.net:23": "dead",
       "otemporaomor.es:4000": "dead",
       "outerlimitsbbs.ddns.net:23": "dead",
       "outland.synchronetbbs.org:23": "dead",
       "outland.synchronetbbs.org:513": "dead",
       "outpost22.strangled.net:23": "dead",
       "outremer.silvertree.org:1421": "dead",
+      "outwest.synchro.net:17": "dead",
+      "outwest.synchro.net:513": "rlogin",
+      "ov-85f53b.infomaniak.ch:23": "dead",
       "owen2k6.com:23": "dead",
       "oxz.ddns.net:4000": "dead",
+      "p4feee87b.dip0.t-ipconnect.de:23": "dead",
+      "p57806679.dip0.t-ipconnect.de:23": "dead",
       "paladin-castlebbs.mynetgear.com:2323": "dead",
       "pandacore.info:23": "dead",
+      "pap.pl:23": "dead",
+      "par69-1_migr-82-67-27-38.fbx.proxad.net:23": "dead",
+      "paradoxbbs.synchronetbbs.org:513": "rlogin",
       "parallelrpi.com:4500": "cross",
       "parkave.synchronetbbs.org:23": "dead",
       "paxrepublica.net:9999": "cross",
@@ -9595,7 +10930,10 @@
       "pegasusbbs.dyndns.org:28": "dead",
       "pegasusmuck.com:4242": "cross",
       "pendulumscalm.com:4000": "cross",
+      "penisys.online:5200": "dead",
+      "penisys.online:9000": "dead",
       "pennybbs.synchro.net:23": "dead",
+      "pepzi.se:513": "rlogin",
       "perilousrealms.com:23": "cross",
       "pern.gaslightswitch.com:4201": "cross",
       "pernworld.vineyard.haus:2211": "dead",
@@ -9612,6 +10950,7 @@
       "picovebbs.com:6860": "dead",
       "pie33.com:2223": "dead",
       "pimpbbs.erb.pw:18023": "dead",
+      "pinball.gameplayer.club:23": "dead",
       "pinksugarheartattack.net:2873": "cross",
       "piratebbs.com:23": "dead",
       "piratesden.net:23": "dead",
@@ -9637,6 +10976,9 @@
       "pleroma.nobodyhasthe.biz:8888": "dead",
       "pmacpherson.org:23": "dead",
       "pmacpherson.org:2301": "dead",
+      "pmg1.backbone.ch:23": "dead",
+      "pmg2.backbone.ch:23": "dead",
+      "pofobbs.ddns.net:513": "rlogin",
       "pogbbs.synchronetbbs.org:513": "dead",
       "pogo.mudhosting.net:5555": "dead",
       "pogsmu.com:4201": "dead",
@@ -9644,6 +10986,17 @@
       "pokemonfusion.servegame.org:4321": "cross",
       "polar.crabdance.com:23": "dead",
       "polarwireless.ca:23": "dead",
+      "pool-100-14-227-187.phlapa.fios.verizon.net:23": "dead",
+      "pool-70-19-64-120.ny325.east.verizon.net:23": "dead",
+      "pool-74-98-223-74.pitbpa.fios.verizon.net:1337": "dead",
+      "pool-74-98-223-74.pitbpa.fios.verizon.net:233": "dead",
+      "pool-74-98-223-74.pitbpa.fios.verizon.net:2331": "dead",
+      "pool-74-98-223-74.pitbpa.fios.verizon.net:513": "rlogin",
+      "pool-74-99-65-199.nrflva.fios.verizon.net:6400": "dead",
+      "pool-74-99-85-62.nrflva.fios.verizon.net:6400": "dead",
+      "pool-96-244-246-55.bltmmd.fios.verizon.net:23": "dead",
+      "pool-98-118-182-238.bflony.fios.verizon.net:513": "dead",
+      "portal-bbs-duew.de:23": "dead",
       "portalmelon.xyz:23": "dead",
       "portalmelon.xyz:513": "dead",
       "portent.digital-genesis.com:2009": "dead",
@@ -9675,9 +11028,12 @@
       "pwecksretreat.com:23": "dead",
       "pyradrake.id.au:8887": "dead",
       "pyradrake.id.au:8888": "dead",
+      "pyroto.mysticmountain.us:8086": "dead",
       "pythonmud.online:4000": "dead",
       "pythonmud.org:4000": "dead",
       "q.geek.nz:8888": "cross",
+      "qrift.synchro.net:23": "dead",
+      "quazarbbs.dynu.net:513": "rlogin",
       "quipna.com:376": "dead",
       "r1.yzl.moe:23": "dead",
       "radiosl.linkpc.net:6464": "dead",
@@ -9698,6 +11054,7 @@
       "rdfig.net:2002": "dead",
       "rdfig.net:2323": "dead",
       "rdfig.net:2812": "dead",
+      "rdnetbbs.com:513": "rlogin",
       "readyplayertwo.ddns.net:23": "dead",
       "realitybytesbbs.com:23": "dead",
       "realitybytesbbs.com:2323": "dead",
@@ -9740,6 +11097,7 @@
       "rhun.co.nz:23": "dead",
       "richardf.synchro.net:23": "dead",
       "richardf.synchro.net:513": "dead",
+      "ricksbbs.synchro.net:513": "rlogin",
       "riddermark.gg:23": "dead",
       "rilumcustom.ddns.net:23": "dead",
       "riskybusiness.hopto.org:2323": "dead",
@@ -9767,16 +11125,22 @@
       "rustbyte.servebbs.com:8888": "dead",
       "rustedpromises.com:9630": "cross",
       "rustyhedgehog.dynv6.net:2300": "dead",
+      "s01061036aac1ba5e.vs.shawcable.net:2323": "dead",
+      "s0106244bfe41f828.vs.shawcable.net:513": "rlogin",
       "sacrebase.mywire.org:486": "dead",
       "sadgirlsclub.wtf:23": "dead",
       "safehaven.vertinext.com:9100": "dead",
       "sagramoursrealm.zapto.org:23": "dead",
+      "sahaquiel.uwtb.net:23": "dead",
       "samhain.io:23": "dead",
       "sandwich.net:4201": "dead",
       "sanitysedge.com:2020": "cross",
       "sarasum.com.ar:13023": "dead",
+      "sarcraft.aperepechaev.ru:9000": "dead",
       "savageskies.aresmush.com:1616": "dead",
       "savsoul.com:6666": "cross",
+      "sb-discovery.com:513": "rlogin",
+      "sbbs.kingdomsendbbs.net:513": "rlogin",
       "sbbs.ricin.io:23": "dead",
       "sbbs.scottripley.com:23": "dead",
       "sbbs.sytes.net:2002": "dead",
@@ -9787,10 +11151,16 @@
       "scalesmuck.com:8887": "cross",
       "scarlet-citadel.co.uk:2000": "dead",
       "scbbs.ddns.net:6400": "dead",
+      "scbbs.nsupdate.info:61992": "dead",
       "scentbbs.com:23": "dead",
       "schmooze.hunter.cuny.edu:8888": "dead",
+      "schule.lkdh.de:23": "dead",
       "science.utterer.org:8888": "dead",
       "scn.org:23": "dead",
+      "scoobysdoo.ddns.net:1337": "dead",
+      "scoobysdoo.ddns.net:233": "dead",
+      "scoobysdoo.ddns.net:2331": "dead",
+      "scoobysdoo.ddns.net:513": "rlogin",
       "scorp.us.to:23": "dead",
       "scove.talismanbbs.com:2323": "dead",
       "scud.bbs.ar:2323": "dead",
@@ -9801,17 +11171,20 @@
       "sdf.org:23": "cross",
       "sdmud.drwho.org:7777": "dead",
       "seansproject.org:23": "dead",
+      "seaoffantasy.synchronetbbs.org:513": "rlogin",
       "seaside.mugames.org:4201": "dead",
       "second-foundation.ddns.net:2323": "dead",
       "secretservice.mooo.com:23": "dead",
       "segfault.hopto.org:2324": "dead",
       "sentiencemud.net:9000": "dead",
       "serenitymush.com:2020": "dead",
+      "server-mystic.synology.me:23": "dead",
       "server.equilibrium-mud.org:4000": "dead",
       "server.joaorodrigo.eu:23": "dead",
       "server.joaorodrigo.eu:513": "dead",
       "server.wiwe.org:23": "dead",
       "server1.klangdynasty.com:2009": "dead",
+      "server236204.yesilbeyazhosting.com:23": "dead",
       "server6.homeip.net:23": "dead",
       "sestar.synchro.net:513": "rlogin",
       "sevennations.aresmush.com:2021": "dead",
@@ -9859,6 +11232,8 @@
       "smaug.org:2289": "cross",
       "smile.ath.cx:6715": "cross",
       "smithware.net:2323": "dead",
+      "smtp.hitechcreations.com:23": "dead",
+      "smtp.mystic-welten.de:23": "dead",
       "smugglerscove.secnet.co.nz:23": "dead",
       "snet.johnnyware.net:23": "dead",
       "snowplains.org:3456": "cross",
@@ -9891,6 +11266,7 @@
       "srtmoo.net:8492": "dead",
       "srwmush.com:2015": "dead",
       "ssbbs3.ddns.net:6502": "dead",
+      "ssh.ninjaneering.net:23": "dead",
       "ssl.archaicbinary.net:8523": "dead",
       "ssmokingirl.ath.cx:23": "dead",
       "stabbynet.synchronetbbs.org:23": "dead",
@@ -9911,15 +11287,22 @@
       "startrekcorpora.com:23": "dead",
       "startrekkin.net:1701": "cross",
       "stateoftheark.ca:1990": "dead",
+      "static-176-158-77-95.ftth.abo.bbox.fr:23": "dead",
+      "static-176-175-6-58.ftth.abo.bbox.fr:23": "dead",
+      "static-176-175-8-52.ftth.abo.bbox.fr:23": "dead",
+      "static.140.20.47.78.clients.your-server.de:8575": "nontelnet_banner",
+      "static.158.40.9.5.clients.your-server.de:23": "dead",
       "staticchaos.mudhosting.net:1982": "dead",
       "stealthworld.tk:2023": "dead",
       "stellaraeon.com:4000": "cross",
       "stellardarkness.com:1023": "dead",
       "steppingstonebbs.com:2000": "dead",
       "steppingstonebbs.com:2020": "dead",
+      "stevensbbs.stevenshive.xyz:513": "rlogin",
       "stguildbbs.ddns.net:23": "dead",
       "stonia.ttu.ee:4000": "cross",
       "stormbreaker.net:4444": "dead",
+      "stormgate.synchronetbbs.org:513": "rlogin",
       "streamvibe.org:23": "dead",
       "stronghold.vineyard.haus:7800": "dead",
       "studios.synchro.net:513": "dead",
@@ -9935,18 +11318,59 @@
       "surfers.fysh.org:4242": "cross",
       "swamp.lol:23": "dead",
       "swanpath.aresmush.com:4201": "dead",
+      "swatsbbs.ddns.net:513": "rlogin",
       "swchronicles.com:4000": "dead",
       "swedgeofdestiny.net:2424": "dead",
       "swjvs.themudhost.net:8707": "dead",
       "swnh.vineyard.haus:4219": "dead",
+      "syn-024-158-121-019.res.spectrum.com:23": "dead",
+      "syn-024-167-101-180.res.spectrum.com:23": "dead",
+      "syn-024-182-026-050.res.spectrum.com:23": "dead",
+      "syn-035-138-222-251.res.spectrum.com:23": "dead",
+      "syn-045-048-010-136.res.spectrum.com:23": "dead",
+      "syn-047-046-052-130.res.spectrum.com:616": "dead",
+      "syn-047-049-255-012.biz.spectrum.com:513": "rlogin",
+      "syn-047-049-255-014.biz.spectrum.com:33060": "nontelnet_banner",
+      "syn-047-049-255-014.biz.spectrum.com:513": "rlogin",
+      "syn-065-035-103-040.res.spectrum.com:23": "dead",
+      "syn-066-168-116-058.res.spectrum.com:513": "dead",
+      "syn-066-188-064-039.res.spectrum.com:23": "dead",
+      "syn-068-207-216-235.res.spectrum.com:23": "dead",
+      "syn-071-081-054-208.res.spectrum.com:6400": "dead",
+      "syn-072-180-130-187.res.spectrum.com:23": "dead",
+      "syn-072-224-233-072.res.spectrum.com:23": "dead",
+      "syn-075-143-042-030.res.spectrum.com:23": "dead",
+      "syn-075-191-053-047.res.spectrum.com:23": "dead",
+      "syn-076-179-000-166.res.spectrum.com:23": "dead",
+      "syn-076-186-007-199.res.spectrum.com:23": "dead",
+      "syn-097-085-169-085.res.spectrum.com:23": "dead",
+      "syn-098-005-235-199.res.spectrum.com:2020": "dead",
+      "syn-098-122-195-062.res.spectrum.com:23": "dead",
+      "syn-098-144-007-205.res.spectrum.com:2355": "dead",
+      "syn-098-147-244-221.res.spectrum.com:23": "dead",
+      "syn-104-159-140-095.res.spectrum.com:2323": "dead",
+      "syn-104-173-038-226.res.spectrum.com:23": "dead",
+      "syn-104-174-003-006.res.spectrum.com:23": "dead",
+      "syn-173-088-167-044.res.spectrum.com:2323": "dead",
+      "syn-173-088-200-016.res.spectrum.com:23": "dead",
+      "syn-173-090-055-126.res.spectrum.com:23": "dead",
+      "syn-174-084-049-015.res.spectrum.com:2323": "dead",
+      "sync.bilalbinsaeed.com:23": "dead",
       "synch.spyvspy.us:23": "dead",
       "synchronet.retronetworking.org:513": "dead",
       "synchronet.techdudeinga.com:23": "dead",
       "syrinxbbs.ddns.net:23": "dead",
+      "sysopsolaris.ddns.net:1202": "dead",
+      "sysopsolaris.ddns.net:24": "dead",
+      "sysopsolaris.ddns.net:404": "dead",
+      "sysopsolaris.ddns.net:419": "dead",
+      "sysopsolaris.ddns.net:513": "rlogin",
+      "sysopsolaris.ddns.net:9669": "dead",
       "systemone.ddns.net:6400": "dead",
       "szbbs.zapto.org:2400": "dead",
       "ta97-portal.win:2002": "dead",
       "tacbbs.synchro.net:23": "dead",
+      "tacopronto.bbs.io:513": "rlogin",
       "tainan.jal.tw:23": "dead",
       "taliadon.ddns.net:23": "dead",
       "tankantswebhosting.mywire.org:23": "dead",
@@ -9985,13 +11409,16 @@
       "terminalunderground.zapto.org:6502": "dead",
       "terminus.greylands.net:23": "dead",
       "terranempire.ddns.net:1227": "dead",
+      "terrorkom-server.de:56656": "nontelnet_banner",
       "testbbs.arcticzonebbs.net:23": "dead",
+      "tfcbbs.com:6400": "duplicate",
       "tfgmush.org:3349": "dead",
       "tfosmux.org:2511": "dead",
       "tfuniverse.mudhosting.net:1976": "dead",
       "tg.nrbbs.net:23": "dead",
       "tghmud.org:8500": "dead",
       "tgp.tgphosting.ml:23": "dead",
+      "tgr.freeddns.org:513": "rlogin",
       "thafaker.crabdance.com:8088": "dead",
       "tharel.net:5005": "cross",
       "tharsis-gate.org:8765": "cross",
@@ -9999,14 +11426,18 @@
       "thawah.net:23": "dead",
       "the-gateway.ga:23": "dead",
       "the-night.com:2007": "cross",
+      "the-rotten-core.strangled.net:513": "rlogin",
       "thearcadebbs.ddns.net:3012": "dead",
       "thebartstop.com:46466": "dead",
       "thebartstop.com:47477": "dead",
       "thecafe.servebbs.net:1984": "dead",
       "thecell.ar:1040": "dead",
       "thechattingzone.uk:8342": "cross",
+      "thecrypt.synchronetbbs.org:23": "dead",
       "theden.angel-hare.com:8888": "cross",
       "theedgebbs.dyndns.org:1541": "dead",
+      "thegateb.synchro.net:17": "dead",
+      "thegateb.synchro.net:513": "rlogin",
       "thegatebbs.sytes.net:2424": "dead",
       "theghettobbs.com:2323": "dead",
       "thehatshop.mudhosting.net:3000": "dead",
@@ -10017,9 +11448,11 @@
       "thelunarpack.com:23": "dead",
       "themadhatter.ddns.net:23": "dead",
       "themidnightcafe.zapto.org:23": "dead",
+      "thenervoushospital.com:513": "rlogin",
       "thenetwork.mugames.org:4201": "dead",
       "thenewoldbbs.ddns.net:23": "dead",
       "theoldmillbbs.net:23": "dead",
+      "theoldnet.com:24": "dead",
       "theoraclebbs.com:23": "dead",
       "theotherrealmbbs.com:23": "dead",
       "theouterinn.synchronetbbs.org:23": "dead",
@@ -10033,6 +11466,7 @@
       "thethercraftbbs.ddns.net:23": "dead",
       "theunderground.us:1717": "dead",
       "thevaultbbs.ddns.net:2323": "dead",
+      "theviperbbs.ddnsfree.com:513": "rlogin",
       "theviperbbs.mywire.org:2002": "dead",
       "thevoid.servebbs.org:23": "dead",
       "thewayhome.aresmush.com:4201": "dead",
@@ -10051,6 +11485,7 @@
       "tierceron.com:1685": "dead",
       "tigermuck.tigerden.com:8888": "dead",
       "tilde.sbs:23": "dead",
+      "time.synchro.net:513": "rlogin",
       "timemachinebbs.com:2323": "dead",
       "timeslost.duckdns.org:4000": "cross",
       "timrouter.dns.army:2323": "dead",
@@ -10085,8 +11520,11 @@
       "towel.blinkenlights.nl:23": "dead",
       "towel.blinkenlights.nl:25": "dead",
       "towel.blinkenlights.nl:666": "dead",
+      "towers.t2tmud.org:444": "dead",
+      "towers.t2tmud.org:5050": "dead",
       "toxic.araknet.org:1337": "dead",
       "toxic.oldskoolbbs.com:1337": "dead",
+      "toxicbbs.com:513": "rlogin",
       "tpp-bbs.freeddns.org:23": "dead",
       "tpr.transprt.com:2002": "dead",
       "tpr.transprt.com:23": "dead",
@@ -10115,6 +11553,7 @@
       "ttps.dyndns.org:2323": "dead",
       "tubbs.synchro.net:23": "dead",
       "tuffy.dyndns.dk:1541": "dead",
+      "turealm.no-ip.org:2323": "duplicate",
       "turf.org:4000": "cross",
       "turkmud.vineyard.haus:5190": "dead",
       "tville.synchronetbbs.org:513": "dead",
@@ -10165,7 +11604,9 @@
       "unwrittenlegends.net:6666": "dead",
       "upsidedownmagic.net:2002": "dead",
       "urbsnovumeboracum.aresmush.com:4201": "dead",
+      "userclub-bbs.com:513": "rlogin",
       "utopiamoo.net:1111": "dead",
+      "vague.ddns.net:513": "rlogin",
       "valhalla.com:4242": "cross",
       "valles.marineris.one:4000": "dead",
       "valley.servebbs.com:6400": "dead",
@@ -10173,19 +11614,36 @@
       "vattuserver.ddns.net:23": "dead",
       "ve2pkt.dyndns.org:6300": "dead",
       "vengeance.dynu.com:1337": "dead",
+      "vern.cc:513": "rlogin",
       "versemud.com:4000": "dead",
       "vger.cloud:23": "dead",
       "vic-bbs.com:6502": "dead",
+      "vikingmud.org:2021": "dead",
       "vintagebbsing.com:23": "dead",
       "vintagebbsing.com:2323": "dead",
+      "vintagepi.asuscomm.com:513": "rlogin",
       "visionbbs.ddns.net:6400": "dead",
       "vk4tub.net:6300": "dead",
       "vkworld.ddns.net:2002": "dead",
+      "vmi1242065.contaboserver.net:17": "dead",
+      "vmi1242065.contaboserver.net:23": "dead",
+      "vmi1242065.contaboserver.net:513": "rlogin",
+      "vmi2211323.contaboserver.net:23": "dead",
+      "vmi2832463.contaboserver.net:23": "dead",
+      "vmi2832463.contaboserver.net:513": "rlogin",
+      "vmi2939130.contaboserver.net:23": "dead",
+      "vmi3094258.contaboserver.net:23": "dead",
       "void.greenfinch.com:1234": "cross",
       "volnay.org:2323": "dead",
       "vore.got-game.org:8888": "cross",
       "voxdei.genesismuds.com:3000": "dead",
+      "vpn.bullantcomm.com:23": "dead",
       "vpn.kennedy.pub:2323": "dead",
+      "vps-223b2b1c.vps.ovh.us:513": "rlogin",
+      "vps-7b7cc324.vps.ovh.ca:1347": "duplicate",
+      "vps-7b7cc324.vps.ovh.ca:1357": "duplicate",
+      "vps-7b7cc324.vps.ovh.ca:1367": "duplicate",
+      "vps-7b7cc324.vps.ovh.ca:1377": "duplicate",
       "vr.frostbite.org:3019": "cross",
       "vroma.org:8200": "dead",
       "vtvr.mudhosting.net:5555": "dead",
@@ -10211,6 +11669,7 @@
       "wcalt.rdfig.net:2324": "dead",
       "wcbbs.ddnsfree.com:6800": "dead",
       "wcmush.com:2199": "dead",
+      "wd1cks.org:513": "rlogin",
       "wdbbs.tw:23": "dead",
       "we6jbobbsdotorg.duckdns.org:23": "dead",
       "wearelsenano.org:23": "dead",
@@ -10218,8 +11677,11 @@
       "weaversh.synchro.net:23": "dead",
       "web.penguinfriends.org:7676": "dead",
       "webmail.bcgonsite.com:24": "dead",
+      "webmail.waconia.k12.mn.us:23": "dead",
       "weehours.net:2000": "cross",
       "welcome2hell.aresmush.com:3366": "dead",
+      "wfido.ru:1234": "dead",
+      "wfido.ru:60179": "dead",
       "wgbbs.ddns.net:23": "dead",
       "whatthed.synchro.net:23": "dead",
       "whatthed.synchro.net:513": "dead",
@@ -10237,12 +11699,16 @@
       "windows93.net:8082": "cross",
       "winds.org:4000": "cross",
       "windsmud.com:4500": "dead",
+      "winnow.1q1.me:513": "rlogin",
       "winserver.org:23": "dead",
       "wintermoon.servebeer.com:4003": "cross",
       "wishywish.duckdns.org:8888": "dead",
       "wizbbs.c64bbs.org:23": "dead",
       "wk.fi:23": "dead",
+      "wl.mud.de:4712": "dead",
+      "wl.mud.de:5712": "dead",
       "wn2.duckdns.org:6408": "dead",
+      "wn3.wrgnbr.com:9600": "dead",
       "wodanaz.se:23": "dead",
       "wonmud.com:9000": "dead",
       "woodwardagency.com:4201": "dead",
@@ -10255,6 +11721,7 @@
       "worldofclousecraft.themuds.org:5555": "dead",
       "worldofpa.in:6969": "cross",
       "wotf.org:23": "cross",
+      "wsip-72-215-52-60.ri.ri.cox.net:513": "rlogin",
       "wunderlust.ddns.net:2023": "dead",
       "wwiv.fireballex.com:23": "dead",
       "www.actofwar.com:4000": "dead",
@@ -10265,16 +11732,22 @@
       "www.diglet.ca:23": "dead",
       "www.dragonsspine.com:3000": "dead",
       "www.eifelaktiv.de:23": "dead",
+      "www.ems-bbs.com:992": "dead",
       "www.furymud.com:1234": "dead",
       "www.h0.tel:2323": "dead",
       "www.holyquest.org:7777": "dead",
       "www.jafhl2.com:2002": "dead",
       "www.jrs-security.com:23": "dead",
+      "www.madworldbbs.com:1246": "dead",
+      "www.madworldbbs.com:1247": "dead",
+      "www.madworldbbs.com:1248": "dead",
+      "www.madworldbbs.com:2377": "dead",
       "www.proaudiotech.net:23": "dead",
       "www.sayinnet.org:9009": "dead",
       "www.theunderground.us:10023": "dead",
       "www.theunderground.us:9707": "dead",
       "www.too-spooky.com:8888": "dead",
+      "www.unleashedinet.org:513": "rlogin",
       "www.woffordwitch.com:232": "dead",
       "wwwnet.org:8888": "dead",
       "wx4qzbbs.ddnsfree.com:49815": "dead",
@@ -10298,27 +11771,73 @@
       "yuriba.com:4201": "cross",
       "zakhooi.synchronetbbs.org:23": "dead",
       "zandura.synchronetbbs.org:23": "dead",
+      "zenolab.synchro.net:513": "rlogin",
       "zeus.cybercitizen.net:1122": "dead",
       "zombietoolshed.us:23": "dead",
       "zork.retroadventures.net:6502": "dead"
     },
     "mud": {
+      "101.132.101.53:23": "dead",
+      "104-10-253-218.lightspeed.sntcca.sbcglobal.net:7777": "dead",
+      "104.248.58.51:4000": "dead",
+      "104.37.189.44:2004": "dead",
+      "104.37.189.44:2009": "dead",
+      "104.37.189.44:5500": "dead",
+      "108-214-94-181.lightspeed.chrlnc.sbcglobal.net:4000": "dead",
+      "108.61.43.10.constant.com:4000": "dead",
+      "115.190.115.114:4000": "dead",
+      "115.70.69.167:23": "dead",
+      "118.122.8.221:23": "http_banner",
+      "118.195.195.76:4000": "dead",
       "118.195.237.158:6666": "cross",
+      "12.35.8.194:23": "dead",
+      "129.212.147.24:4000": "dead",
+      "129.213.174.135:4000": "dead",
       "130.95.13.14:4242": "cross",
+      "134.122.32.98:4000": "dead",
+      "135.129.163.185:23": "dead",
+      "136-49-177-220.googlefiber.net:4000": "dead",
+      "136.152.58.118:23": "dead",
+      "138-117-161-213.colinanet.com:23": "dead",
+      "141.148.186.203:4000": "dead",
+      "149.248.36.254.vultrusercontent.com:23": "dead",
       "155.254.17.154:4201": "dns",
+      "159.203.166.11:23": "dead",
+      "159.223.136.75:4000": "dead",
+      "159.65.111.210:23": "dead",
+      "159.65.45.88:4000": "dead",
+      "165.232.135.144:4000": "dead",
+      "167.172.20.3:4000": "dead",
+      "167.99.116.194:23": "dead",
+      "172-234-230-64.ip.linodeusercontent.com:4000": "dead",
+      "172-7-58-121.lightspeed.rcsntx.sbcglobal.net:4000": "dead",
+      "172.93.54.118:23": "dead",
       "176.122.177.178:9000": "dns",
       "188.128.39.239:4000": "dns",
+      "20.237.45.25:4000": "dead",
+      "200.37.106.169:23": "dead",
       "20forbeers.com:1337": "cross",
+      "210.186.194.135:23": "dead",
       "216.226.128.180:4444": "http_banner",
+      "27.102.207.232:4000": "dead",
       "31.220.94.14:6000": "dns",
+      "33.236.212.35.bc.googleusercontent.com:4000": "dead",
       "37.59.41.114:4000": "dns",
       "3m.vineyard.haus:3000": "duplicate",
+      "45.32.79.24.vultrusercontent.com:4000": "dead",
       "4tmu.aresmush.com:1930": "dead",
+      "50-116-41-177.ip.linodeusercontent.com:6250": "dead",
       "56kmajormud.servegame.com:23": "dead",
+      "6.132.26.77.dynamic.reverse-mundo-r.com:23": "dead",
+      "64.23.145.52:23": "dead",
+      "68.94.116.145:23": "dead",
       "69.9.132.72:4000": "dns",
       "6Dragons.themuds.org:4100": "dead",
       "71.171.93.80:1510": "dns",
       "74.208.126.44:3100": "dns",
+      "82-68-167-68.dsl.in-addr.zen.co.uk:23": "dead",
+      "82.153.225.173:23": "dead",
+      "88-184-8-209.subs.proxad.net:23": "dead",
       "99.89.65.2:23": "cross",
       "ANOTHERMUX.ORG:2860": "duplicate",
       "Actofwarmud.com:4000": "dead",
@@ -10453,6 +11972,7 @@
       "YourMUDName.themuds.org:5555": "dead",
       "YourMothersMUDPi.themuds.org:5555": "dead",
       "aardmud.org:23": "duplicate",
+      "aardmud.org:4000": "dead",
       "absolution.aresmush.com:4201": "dead",
       "aderonmud.genesismuds.com:3200": "dead",
       "adventmud.funcity.org:8310": "dead",
@@ -10460,6 +11980,12 @@
       "aether.aresmush.com:4201": "dead",
       "aimux.dune.net:7277": "dead",
       "al.mud.de:31415": "dead",
+      "alteraeon.com:3010": "dead",
+      "alteraeon.com:3110": "dead",
+      "alteraeon.com:4000": "dead",
+      "ancientmists.vineyard.haus:2075": "dead",
+      "ancientmists.vineyard.haus:4000": "dead",
+      "ancientmists.vineyard.haus:8583": "dead",
       "angelic.genesismuds.com:7705": "dead",
       "anw.aresmush.com:3030": "dead",
       "ashyriamud.com:1111": "dead",
@@ -10475,23 +12001,43 @@
       "bedlam.mudportal.com:9000": "dead",
       "beforethering.aresmush.com:2026": "dead",
       "belameephus.mudmagic.com:1220": "dead",
+      "bia.overband.net:1070": "dead",
+      "bia.overband.net:2919": "dead",
+      "bia.overband.net:3448": "dead",
+      "bia.overband.net:3449": "dead",
+      "bia.overband.net:4919": "dead",
+      "bia.overband.net:8100": "dead",
+      "bigip-test-secure-ausomxlea-crmondemand.oracle.com:4000": "dead",
+      "biyg.org:4000": "dead",
       "bl.mud.at:5678": "duplicate",
       "bl.mud.at:5679": "http_banner",
       "brakebills.aresmush.com:4201": "dead",
+      "bras-base-ptcgon2801w-grc-08-74-12-154-193.dsl.bell.ca:4000": "dead",
+      "bras-base-toroon2733w-grc-56-142-112-244-20.dsl.bell.ca:23": "dead",
       "buffy.mush-rp.com:1997": "dead",
       "catworld.muds.tw:23": "dead",
       "cityofglass.aresmush.com:4201": "dead",
       "commondescentmush.com:1859": "dead",
       "concordiamu.aresmush.com:4201": "dead",
+      "condor.rorscha.ch:4000": "dead",
+      "condor.rorscha.ch:4756": "dead",
+      "condor.rorscha.ch:6969": "dead",
+      "condor.rorscha.ch:8500": "dead",
       "coremud.org:6000": "dead",
       "criterionmud.net:3999": "dead",
       "cryosphere.net:6666": "duplicate",
       "crystalsprings.aresmush.com:2064": "dead",
+      "daedal-macabre.org:2150": "dead",
       "darklordmud.duckdns.org:5000": "duplicate",
       "dawnmud.com:3000": "dead",
       "dbnumud.com:4321": "dead",
       "dbt.mudhaven.net:2500": "dead",
+      "dcastle.org:6969": "dead",
+      "dcastle.org:6970": "dead",
+      "dcastle.org:7000": "dead",
+      "dcastle.org:7070": "dead",
       "de.themud.org:1234": "dead",
+      "debo-temp.xen.prgmr.com:4000": "dead",
       "dev.dunemud.net:4242": "duplicate",
       "devilsdue.aresmush.com:1203": "dead",
       "discworld.mush.website:8888": "dead",
@@ -10501,16 +12047,26 @@
       "doomsday.themuds.org:7000": "dead",
       "downmoo.sloth.org:8888": "dead",
       "dragon.abermud.net:6715": "dead",
+      "dragonballrevolt.genesismuds.com:1101": "dead",
+      "dragonballrevolt.genesismuds.com:3030": "dead",
+      "dragonballrevolt.genesismuds.com:4422": "dead",
+      "dragonballrevolt.genesismuds.com:4700": "dead",
       "dragonballrevolt.genesismuds.com:6969": "duplicate",
+      "dragonballrevolt.genesismuds.com:9000": "dead",
+      "dragonballrevolt.genesismuds.com:9900": "dead",
       "dragonstone.mudmagic.com:2345": "dead",
+      "dsm.com.au:23": "dead",
+      "ec2-34-249-140-180.eu-west-1.compute.amazonaws.com:23": "dead",
       "elessar.mudhosting.net:7778": "dead",
       "elseverse.aresmush.com:4201": "dead",
       "emeralddreammush.com:5001": "dead",
       "en.mudmagic.com:9009": "dead",
       "ensimud.net:4500": "dead",
       "eoemud.com:8888": "dead",
+      "ephemeron.org:4000": "dead",
       "erimand.pocketmud.com:5555": "dead",
       "euphoriamush.com:2020": "dead",
+      "euts.org:4000": "dead",
       "evolution.mudhosting.net:1874": "dead",
       "fatemud.com:7004": "dead",
       "ff.mud.de:7600": "duplicate",
@@ -10539,34 +12095,51 @@
       "herm-worldmush.silvertree.org:3337": "dead",
       "heromux.com:9999": "dead",
       "hiddendimensions.aresmush.com:4201": "dead",
+      "hoenn.me:23": "dead",
       "hopto.mud.ren:4000": "duplicate",
       "horizon.aresmush.com:1138": "dead",
       "hvmush.com:1975": "dead",
       "imagine.aresmush.com:1338": "dead",
+      "imperian.com:3000": "dead",
+      "imperian.com:5000": "dead",
+      "imperian.com:6003": "dead",
+      "imperian.com:6006": "dead",
+      "imperian.com:6010": "dead",
       "imud.fluffos.info:1701": "dead",
       "indirestraits.themuds.org:6666": "dead",
       "infiniteadventuresmush.com:2022": "dead",
       "insomniacshideout.pocketmud.com:5555": "dead",
       "intrepidmud.com:4020": "dead",
+      "ip209-46-125-36.pbiaas.com:4000": "dead",
+      "ip98-177-226-108.ph.ph.cox.net:4000": "dead",
       "islesmud.org:3232": "dead",
       "ithirMUSH.org:4000": "dead",
       "kidmud.kidpub.com:7777": "dead",
       "kota.genesismuds.com:1440": "dead",
       "la2043.aresmush.com:4201": "dead",
+      "lament.ghostglass.net:8725": "dead",
+      "li426-22.members.linode.com:23": "dead",
+      "li884-16.members.linode.com:4000": "dead",
+      "li931-248.members.linode.com:4000": "dead",
       "lishmud.com:9002": "dead",
       "lolamud.net:6969": "dead",
       "lorenmud.com:9100": "dead",
       "macross.genesismuds.com:2050": "dead",
       "magiccitymush.com:2000": "dead",
       "mahoumush.com:7342": "dead",
+      "mail.imagination-evolution.net:23": "dead",
       "majia.genesismuds.com:4220": "dead",
       "mangusmud.com:4000": "dead",
       "mclmud.mclink.it:6000": "duplicate",
+      "mediafans.org:23": "dead",
       "mg.mud.de:23": "http_banner",
       "midgard-mud.de:4711": "dead",
       "midianmud.com:3456": "dead",
       "midmud.com:5555": "dead",
+      "midnightlounge.online:1965": "dead",
+      "modemcable082.78-37-24.static.videotron.ca:4000": "dead",
       "mongoose.moo.mud.org:7777": "duplicate",
+      "mongoose.moo.mud.org:7778": "dead",
       "moo.asi.org:7777": "dead",
       "moo.ca:7777": "dead",
       "moo.demetro.nl:8888": "http_banner",
@@ -10611,7 +12184,9 @@
       "mush.worldofextant.com:4201": "dead",
       "mushhaven.com:1220": "dead",
       "mux.net:5555": "dead",
+      "nethack4.org:53401": "dead",
       "new-leu.leu.it:6000": "duplicate",
+      "nexus.obia.be:4000": "dead",
       "north.mudhosting.net:9500": "dead",
       "nostalgiamud.l-w.ca:4000": "dead",
       "nuclearwarmudusa.com:4080": "dead",
@@ -10630,7 +12205,10 @@
       "pythonmud.online:4000": "dead",
       "pythonmud.org:4000": "dead",
       "rdamud.afraid.org:4000": "dead",
+      "reaux.vineyard.haus:4000": "dead",
+      "reaux.vineyard.haus:8583": "dead",
       "redmudbbs.site:2560": "dead",
+      "rem.perreng.com.au:23": "dead",
       "remnant.aresmush.com:4201": "dead",
       "rhostmush.com:1066": "dead",
       "rmud.org:3041": "dead",
@@ -10654,12 +12232,19 @@
       "starcrossed.aresmush.com:4201": "dead",
       "stardust.genesismuds.com:4010": "dead",
       "stargate.aresmush.com:1994": "dead",
+      "static.11.191.217.95.clients.your-server.de:4000": "dead",
+      "static.19.58.167.89.clients.your-server.de:4000": "dead",
+      "static.236.177.161.5.clients.your-server.de:23": "dead",
+      "static.38.234.235.167.clients.your-server.de:23": "dead",
+      "static.53.147.224.46.clients.your-server.de:23": "dead",
       "staticchaos.mudhosting.net:1982": "dead",
       "swanpath.aresmush.com:4201": "dead",
       "swjvs.themudhost.net:8707": "dead",
       "swmud.org:6666": "duplicate",
+      "syn-074-218-146-114.biz.spectrum.com:23": "dead",
       "tecfamoo.unige.ch:7777": "dead",
       "techVidange.themuds.org:5555": "dead",
+      "technotron.asuscomm.com:7100": "dead",
       "tempusmud.com:2023": "duplicate",
       "teramud.com:4000": "dead",
       "tfgmush.org:3349": "dead",
@@ -10673,17 +12258,33 @@
       "thewayhome.aresmush.com:4201": "dead",
       "thundergulch.aresmush.com:1870": "dead",
       "torilmud.com:9999": "duplicate",
+      "towers.t2tmud.org:446": "dead",
+      "towers.t2tmud.org:6666": "dead",
+      "towers.t2tmud.org:8888": "dead",
+      "towers.t2tmud.org:9990": "dead",
       "towers.t2tmud.org:9999": "duplicate",
+      "tp.org:23": "dead",
       "transformers.mudhosting.net:1995": "dead",
       "trelawneycove.aresmush.com:1707": "dead",
       "turkmud.vineyard.haus:5190": "dead",
+      "undernet.uy:1234": "dead",
       "unitopia.de:23": "http_banner",
       "unitopia.de:3333": "http_banner",
       "urbsnovumeboracum.aresmush.com:4201": "dead",
       "utopiamoo.net:1111": "dead",
+      "v220241017189290027.happysrv.de:23": "dead",
       "versemud.com:4000": "dead",
       "vikingmud.org:2001": "duplicate",
+      "vintagecomputing.com:6115": "dead",
+      "vintagecomputing.com:6250": "dead",
+      "vmi2211323.contaboserver.net:8907": "dead",
+      "vormud.genesismuds.com:1101": "dead",
+      "vormud.genesismuds.com:3030": "dead",
+      "vormud.genesismuds.com:4422": "dead",
+      "vormud.genesismuds.com:4700": "dead",
       "vormud.genesismuds.com:7777": "duplicate",
+      "vormud.genesismuds.com:9000": "dead",
+      "vormud.genesismuds.com:9900": "dead",
       "voxdei.genesismuds.com:3000": "dead",
       "vtvr.mudhosting.net:5555": "dead",
       "wcmush.com:2199": "dead",
@@ -10694,6 +12295,7 @@
       "worldhymnonline.aresmush.com:4201": "dead",
       "worldneedsheroes.aresmush.com:2025": "dead",
       "worldofclousecraft.themuds.org:5555": "dead",
+      "wsip-70-169-164-243.dc.dc.cox.net:4000": "dead",
       "www.alteraeon.com:3000": "duplicate",
       "www.darkstonemud.com:5432": "dead",
       "www.furymud.com:1234": "dead",

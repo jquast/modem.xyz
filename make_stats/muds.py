@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import tabulate as tabulate_mod
 
 from make_stats.common import (
-    _PROJECT_ROOT, _URL_RE,
+    _PROJECT_ROOT, _URL_RE, _URL_SCANNER_DOMAINS,
     PLOT_FG, PLOT_GREEN, PLOT_CYAN,
     _listify, _first_str, _parse_int, _format_scan_time,
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
@@ -25,7 +25,7 @@ from make_stats.common import (
     _clean_log_line, _combine_banners, _has_encoding_issues,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer, purge_failed_banners,
-    _rst_heading, print_datatable,
+    _rst_heading, print_datatable, analyze_escape_sequences,
     _group_shared_ip, _most_common_hostname,
     _clean_dir, deduplicate_servers,
     _setup_plot_style, _create_pie_chart,
@@ -477,8 +477,11 @@ def load_server_data(data_dir, encoding_overrides=None,
                     match = _URL_RE.search(
                         _strip_ansi(banner_text))
                     if match:
-                        record['website'] = match.group(0)
-                        break
+                        url = match.group(0)
+                        domain = url.split('/')[0].lower().lstrip('.')
+                        if domain not in _URL_SCANNER_DOMAINS:
+                            record['website'] = url
+                            break
 
         record['protocols'] = _detect_protocols(record)
         record['adult'] = _is_adult(record)
@@ -504,6 +507,7 @@ def compute_statistics(servers):
         s['connected'] for s in servers if s['connected'])
     stats = {
         'total_servers': len(servers),
+        'unique_hosts': len(set(s['host'] for s in servers)),
         'with_mssp': sum(1 for s in servers if s['has_mssp']),
         'unique_fingerprints': len(
             set(s['fingerprint'] for s in servers)),
@@ -873,7 +877,7 @@ def display_summary_stats(stats):
     scan_date = datetime.now().strftime('%Y-%m-%d')
     print(f"*Data collected {scan_date}*")
     print()
-    print(f"- **Servers responding**: {stats['total_servers']}")
+    print(f"- **Servers responding**: {stats['unique_hosts']}")
     print(f"- **With MSSP data**: {stats['with_mssp']}")
     print(f"- **Unique protocol fingerprints**:"
           f" {stats['unique_fingerprints']}")
@@ -1453,6 +1457,107 @@ def generate_locations_rst(servers):
     _generate_rst(
         os.path.join(DOCS_PATH, "locations.rst"),
         display_location_groups, servers)
+
+
+def display_protocols(servers):
+    """Print the MUD Protocols index page."""
+    _rst_heading("Protocols", '=')
+    print("MUDs grouped by the protocol extensions they support.")
+    print("Protocol support is detected from MSSP metadata and")
+    print("Telnet option negotiation. A MUD may appear in multiple")
+    print("groups.")
+    print()
+    print(".. figure:: _static/plots/protocol_support.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Horizontal bar chart showing how many MUD servers")
+    print("   support each protocol extension.")
+    print()
+    print("   MUD protocol support across all responding servers.")
+    print()
+
+    proto_servers = {p: [] for p in MUD_PROTOCOLS}
+    for s in servers:
+        for proto, status in s.get('protocols', {}).items():
+            if status != 'no' and proto in proto_servers:
+                proto_servers[proto].append(s)
+
+    total = len(servers)
+    rows = []
+    for proto in MUD_PROTOCOLS:
+        srvs = proto_servers[proto]
+        if srvs:
+            pct = f'{len(srvs) / total * 100:.0f}%' if total else '0%'
+            rows.append({
+                'Protocol': proto,
+                'Servers': str(len(srvs)),
+                '%': pct,
+            })
+    if rows:
+        table_str = tabulate_mod.tabulate(
+            rows, headers='keys', tablefmt='rst')
+        print_datatable(table_str, caption="Protocol Support")
+
+    for proto in MUD_PROTOCOLS:
+        srvs = proto_servers[proto]
+        if not srvs:
+            continue
+        _rst_heading(f"{proto} ({len(srvs)})", '-')
+        for s in sorted(srvs,
+                        key=lambda s: (
+                            s['name'] or s['host']).lower()):
+            mud_file = s['_mud_file']
+            label = _rst_escape(s['name'] or s['host'])
+            tls = _tls_rst_suffix(s)
+            print(f"- :doc:`{label} <mud_detail/{mud_file}>`{tls}")
+        print()
+
+
+def generate_protocols_rst(servers):
+    """Generate the protocols.rst index page."""
+    _generate_rst(
+        os.path.join(DOCS_PATH, "protocols.rst"),
+        display_protocols, servers)
+
+
+def display_sequences(servers):
+    """Print the escape sequence frequency page.
+
+    Shows which terminal escape sequences appear across MUD banners,
+    ranked by how many unique servers use each sequence category.
+
+    :param servers: list of server record dicts
+    """
+    _rst_heading("Escape Sequences", '=')
+    print("Terminal escape sequences detected in MUD banners,")
+    print("ranked by number of unique servers using each sequence.")
+    print()
+
+    category_counts, total_with_banner = analyze_escape_sequences(servers)
+    if not category_counts:
+        print("No escape sequences found in banners.")
+        print()
+        return
+
+    rows = []
+    for category, count in category_counts.most_common():
+        pct = f'{count / total_with_banner * 100:.1f}%' if total_with_banner else '0%'
+        rows.append({
+            'Sequence': category,
+            'Servers': str(count),
+            '% Banners': pct,
+        })
+
+    table_str = tabulate_mod.tabulate(
+        rows, headers='keys', tablefmt='rst')
+    print_datatable(table_str, caption="Escape Sequences")
+
+
+def generate_sequences_rst(servers):
+    """Generate the sequences.rst file."""
+    _generate_rst(
+        os.path.join(DOCS_PATH, "sequences.rst"),
+        display_sequences, servers)
 
 
 def generate_tls_rst(servers):
@@ -2116,6 +2221,8 @@ def run(args):
         generate_fingerprints_rst(servers)
         generate_encoding_rst(servers)
         generate_locations_rst(servers)
+        generate_protocols_rst(servers)
+        generate_sequences_rst(servers)
         generate_tls_rst(servers)
         generate_mud_details(servers, logs_dir=logs_dir,
                              data_dir=data_dir,

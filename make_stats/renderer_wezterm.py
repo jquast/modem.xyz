@@ -17,6 +17,7 @@ from make_stats.renderer import (
 )
 
 _CJK_FALLBACK_FONT = 'Noto Sans Mono CJK SC'
+_UNICODE_FALLBACK_FONTS = ('Unifont', 'Unifont Upper')
 
 
 def _generate_mux_config(path, font_size, rows):
@@ -36,37 +37,27 @@ def _generate_mux_config(path, font_size, rows):
     brights_lua = ', '.join(f'"{c}"' for c in brights)
 
     # Build Lua table of font group definitions.
+    unifont = ', '.join(f'"{f}"' for f in _UNICODE_FALLBACK_FONTS)
     group_entries = []
     for name, info in _FONT_GROUPS.items():
         family = info['font_family']
         cell_ratio = info.get('cell_ratio', 2.0)
-        if name == 'ibm_vga':
-            # IBM VGA primary with Hack fallback for Unicode coverage.
-            group_entries.append(
-                f'    ["{name}"] = {{font = wezterm.font_with_fallback'
-                f'{{"{family}", "Hack"}}, '
-                f'size = {font_size}, cell_ratio = {cell_ratio}}},')
-            # CJK variant adds Noto CJK after Hack.
-            group_entries.append(
-                f'    ["{name}-cjk"] = {{font = wezterm.font_with_fallback'
-                f'{{"{family}", "Hack", "{_CJK_FALLBACK_FONT}"}}, '
-                f'size = {font_size}, cell_ratio = {cell_ratio}, cjk = true}},')
-        else:
-            group_entries.append(
-                f'    ["{name}"] = {{font = wezterm.font("{family}"), '
-                f'size = {font_size}, cell_ratio = {cell_ratio}}},')
-            # CJK variant with fallback font.
-            group_entries.append(
-                f'    ["{name}-cjk"] = {{font = wezterm.font_with_fallback'
-                f'{{"{family}", "{_CJK_FALLBACK_FONT}"}}, '
-                f'size = {font_size}, cell_ratio = {cell_ratio}, cjk = true}},')
+        group_entries.append(
+            f'    ["{name}"] = {{font = wezterm.font_with_fallback'
+            f'{{"{family}", {unifont}}}, '
+            f'size = {font_size}, cell_ratio = {cell_ratio}}},')
+        # CJK variant adds Noto CJK before Unifont.
+        group_entries.append(
+            f'    ["{name}-cjk"] = {{font = wezterm.font_with_fallback'
+            f'{{"{family}", "{_CJK_FALLBACK_FONT}", {unifont}}}, '
+            f'size = {font_size}, cell_ratio = {cell_ratio}, cjk = true}},')
     groups_lua = '\n'.join(group_entries)
 
     lua = f"""\
 local wezterm = require 'wezterm'
 local config = {{}}
 
-config.font = wezterm.font("Hack")
+config.font = wezterm.font_with_fallback{{{unifont}}}
 config.font_size = {font_size}
 config.initial_cols = 120
 config.initial_rows = {rows}
