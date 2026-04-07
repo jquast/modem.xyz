@@ -17,6 +17,7 @@
 130.61.249.129 4000 utf-8 100
 130.95.13.14 4242
 13.251.165.162 9999
+136.144.155.250 8888 cp437 80 tall
 136.38.83.106 8008
 138.68.247.72 5555
 139.162.249.62 5555
@@ -1112,3 +1113,4 @@ reaux.vineyard.haus 8008
 reaux.vineyard.haus 9876
 connect.mu-gateway.net 6677
 connect.mu-gateway.net 6700
+TheDen.Angel-Hare.com 8888

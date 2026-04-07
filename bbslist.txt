@@ -31,8 +31,8 @@
 118.195.195.76 9001 gbk
 118.195.237.158 6666 gbk
 120-88-120-83.785878.bne.static.aussiebb.net 23
-120.92.124.38 23 gbk
-120.92.212.76 23 gbk
+120.92.124.38 23 gbk 80 tall
+120.92.212.76 23 gbk 80 tall
 121-200-29-194.79c81d.mel.nbn.aussiebb.net 23
 122.199.12.99 8888 utf-8
 122.199.58.252 2323
@@ -42,10 +42,9 @@
 129.151.218.124 2323
 132.145.210.148 3000
 132.145.58.129 513
-132.226.155.29 23
+132.226.155.29 23 cp437 80 tall
 134.185.84.52 2323 utf-8
 134.209.40.1 31337 utf-8
-136.144.155.250 8888
 13.72.87.55 3000
 138.197.129.1 23
 139.162.227.40 513
@@ -64,7 +63,6 @@
 147.78.240.155 513
 148.251.169.181 23
 149.56.47.118 1023
-151.80.191.6 23
 152.52.103.106 23
 153.100.181.200 23
 153.100.182.80 23
@@ -73,7 +71,7 @@
 157.230.118.236 2323
 157.230.136.41 2323
 157.230.152.152 23
-157.230.64.29 4000
+157.230.64.29 4000 ascii 80 tall
 157.245.141.84 8888 utf-8
 158.69.60.181 2323 utf-8
 159.203.135.29 23
@@ -220,12 +218,12 @@
 5.38.247.23 1212
 5.39.80.203 7000
 54.238.90.108 23 big5bbs no_ambig
-59.167.142.49 12800 petscii 80
+59.167.142.49 12800 cp437 80
 5.9.58.175 2002
 64-121-67-27.s1049.c3-0.tlg-cbr2.atw-tlg.pa.cable.rcncustomer.com 8023
 64.121.82.225 9999
 64life.net 1983 cp437
-64vintageremixbbs.dyndns.org 6400 petscii
+64vintageremixbbs.dyndns.org 6400 cp437
 66.168.116.58 23
 66.228.57.87 2323
 66.23.221.29 2323 utf-8
@@ -581,7 +579,7 @@ bbs.nikom.org 2323
 bbs.ninthchevron.com.au 23
 bbs.novass.net 2323 cp437
 bbs.nuageinfo.com 23 utf-8
-bbs.nykz.net 2323 petscii
+bbs.nykz.net 2323 cp437
 bbs.nykz.net 23 gbk
 bbs.oldchat.ru 23 cp437
 bbs.oldchat.ru 4000
@@ -671,7 +669,7 @@ bbs.uncomfortable.business 6423
 bbs.undermine.ca 23 utf-8
 bbs.unicyber.co.uk 2323 utf-8 80 tall
 bbs.vcgsa.co.za 23 utf-8
-bbs.vcgsa.co.za 6400 petscii
+bbs.vcgsa.co.za 6400 cp437
 bbs.venerandi.it 23
 bbs.vslib.cz 23
 bbs.wantit.net 23 utf-8
@@ -726,7 +724,7 @@ c-24-130-12-201.hsd1.ca.comcast.net 513
 c3bbs.retronetworking.org 128 petscii 80
 c3bbs.retronetworking.org 23 utf-8
 c3bbs.retronetworking.org 64 petscii 40
-c64u.club 6400 petscii
+c64u.club 6400 cp437
 c-68-41-66-48.hsd1.mi.comcast.net 23 cp437
 c-69-181-118-30.hsd1.ca.comcast.net 23
 c-71-204-139-119.hsd1.ca.comcast.net 23
@@ -843,7 +841,7 @@ d1st.org 8347 cp437
 d205-250-123-117.bchsia.telus.net 23
 dangerbaybbs.dyndns.org 1337
 darkagesbbs.com 23 utf-8
-darkendlessbbs.hopto.org 6510 petscii
+darkendlessbbs.hopto.org 6510 cp437
 darkforce-bbs.dyndns.org 1040
 darkgame.buanzo.org 23
 darklevel.hopto.org 64128
@@ -1198,7 +1196,7 @@ onyx.the.net.nz 23 utf-8
 ool-44c38ccf.dyn.optonline.net 2323
 opinsane.noip.me 23
 opivy-bbs.com 23
-optical.c64bbs.nu 64128 petscii
+optical.c64bbs.nu 64128 cp437
 osuny.bell-labs.co 17019
 osuny.bell-labs.co 17020
 osuny.bell-labs.co 666
@@ -1244,7 +1242,7 @@ playpenbbs.com 2323 cp437
 pocbbs.duckdns.org 23 cp437
 pocbbs.duckdns.org 2323 utf-8
 pocbbs.duckdns.org 6400
-pofobbs.ddns.net 1123 petscii
+pofobbs.ddns.net 1123 cp437
 pofobbs.ddns.net 1337
 pofobbs.ddns.net 2523
 pofobbs.ddns.net 992
@@ -1267,12 +1265,12 @@ ptt2.cc 23 big5
 pulsebbs.hopto.org 1984 utf-8
 px4.kitsunet.net 2069
 qeeai.com 23 gbk
-quazarbbs.dynu.net 1123 petscii
+quazarbbs.dynu.net 1123 cp437
 quazarbbs.dynu.net 1337
 quazarbbs.dynu.net 2523
 radiostream.amigaz.org 2323
-rapidfire.hopto.org 64128 petscii
-raveolution.hopto.org 64128 petscii
+rapidfire.hopto.org 64128 cp437
+raveolution.hopto.org 64128 cp437
 rbb.fidonet.fi 32
 rc2014.ddns.net 2014
 rdnetbbs.com 17
@@ -1424,7 +1422,6 @@ theattic.v1cd3m1z3r.net 23 utf-8
 thebassplanet.com 64128
 thebrewery.servebeer.com 6400
 thecabinbbs.com 6400
-TheDen.Angel-Hare.com 8888
 thedigitalpost.freeddns.org 23
 the.ericade.net 23
 thegateb.synchro.net 23
@@ -1451,7 +1448,7 @@ tiabbs.synchro.net 23
 tigernet.dewindt.us 23
 time.synchro.net 24 utf-8
 tlcbbs.dynu.net 6400
-tlcbbs.dynu.net 6401 petscii
+tlcbbs.dynu.net 6401 cp437
 tlcbbs.synchro.net 23 utf-8
 tlcbbs.synchro.net 6023
 tlcbbs.synchro.net 6400
@@ -1570,7 +1567,7 @@ wn6.wrgnbr.com 6405
 wn6.wrgnbr.com 6411
 wn6.wrgnbr.com 6800
 wn6.wrgnbr.com 9600
-wordbbs.hopto.org 64128 petscii
+wordbbs.hopto.org 64128 cp437
 workstation.ddmcomputers.com.au 2323
 workstation.ddmcomputers.com.au 8010
 wsip-72-215-52-60.ri.ri.cox.net 23
@@ -1595,7 +1592,7 @@ wyldware.com 2020
 wyldware.com 2021
 wyldware.com 2424
 x22.ddns.net 9000
-x.a-net.online 1337 petscii
+x.a-net.online 1337 cp437
 x.a-net.online 2323 utf-8
 x-bit.org 1336 utf-8
 x-bit.org 2112
