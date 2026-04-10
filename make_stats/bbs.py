@@ -527,7 +527,7 @@ def create_port_plot(stats, output_path):
         return
     sorted_items = sorted(port_counts.items(),
                           key=lambda x: x[1], reverse=True)
-    _create_pie_chart(sorted_items, output_path)
+    _create_pie_chart(sorted_items, output_path, min_count=3)
 
 
 def create_all_plots(stats):

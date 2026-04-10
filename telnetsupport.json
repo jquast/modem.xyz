@@ -84,6 +84,13 @@
     "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
   },
   {
+    "host": "sentience.megacosm.net",
+    "port": 9010,
+    "ssl": 1,
+    "up": 1,
+    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
+  },
+  {
     "host": "www.mudbar.cn",
     "port": 3333,
     "ssl": 0,
@@ -875,6 +882,13 @@
     "options": "[\"TERMINAL TYPE\",\"NEW-ENVIRON\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "zebedee-mud.org",
+    "port": 7000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"NAWS\",\"MSSP\",\"GMCP\"]"
+  },
+  {
     "host": "mud.theforestsedge.com",
     "port": 4000,
     "ssl": 0,
@@ -931,18 +945,18 @@
     "options": "[\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "zebedee-mud.org",
-    "port": 7000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"NAWS\",\"MSSP\",\"GMCP\"]"
-  },
-  {
     "host": "dynamix.fansi.org",
     "port": 4200,
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\"]"
+  },
+  {
+    "host": "darkmists.org",
+    "port": 2222,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"ECHO\",\"MSSP\",\"GMCP\"]"
   },
   {
     "host": "mud.genesismud.org",
@@ -1111,13 +1125,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\"]"
-  },
-  {
-    "host": "darkmists.org",
-    "port": 2222,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"MSSP\",\"GMCP\"]"
   },
   {
     "host": "wildsofpern.aresmush.com",

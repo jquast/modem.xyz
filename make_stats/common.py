@@ -1269,10 +1269,10 @@ def display_top_sequences(servers, limit=100):
     for seq, count in seq_banners.most_common(limit):
         pct = f'{count / total_with_banner * 100:.1f}%'
         rows.append({
+            '%': pct,
+            'Banners': str(count),
             'Sequence': f'``{repr(seq)}``',
             'Name': _classify_seq(seq),
-            'Banners': str(count),
-            '%': pct,
         })
 
     table_str = tabulate_mod.tabulate(rows, headers='keys', tablefmt='rst')

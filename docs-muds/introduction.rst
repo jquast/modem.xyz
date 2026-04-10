@@ -48,7 +48,8 @@ Popular `BBS door <https://en.wikipedia.org/wiki/BBS_door>`_ games, like `Legend
 <https://en.wikipedia.org/wiki/Legend_of_the_Red_Dragon>`_, `Usurper <https://www.usurper.info/>`_,
 `Trade Wars <https://en.wikipedia.org/wiki/Trade_Wars>`_, `Barren Realms Elite
 <https://www.johndaileysoftware.com/products/bbsdoors/barrenrealmselite>`_ have similar gameplay,
-but game design differs due to time limitations to free the telephone line free for other "Callers".
+but game design differs by artificial time limitations imposed on BBSs to keep the telephone lines
+available for other "Callers".
 
 Playing MUDs today
 ------------------

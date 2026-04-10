@@ -20,6 +20,11 @@ $(document).ready(function() {
                     var serversIdx = headers.indexOf('Servers');
                     table.order([serversIdx, 'desc']).draw();
                 }
+                // Escape sequences table: sort by % (descending)
+                else if (headers.includes('%') && headers.includes('Sequence')) {
+                    var pctIdx = headers.indexOf('%');
+                    table.order([pctIdx, 'desc']).draw();
+                }
             }
         });
 
