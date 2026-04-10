@@ -69,12 +69,14 @@ def discover_column_width_issues(data_dir, list_path):
     allowed_servers = {(h, p) for h, p, _ in list_entries if h and p}
 
     has_override = set()
+    _kw = {'ssl', 'tall', 'no_ambig'}
     for h, p, line in list_entries:
         if h and p:
             parts = line.split()
-            if len(parts) >= 4:
+            positional = [x for x in parts[2:] if x not in _kw]
+            if len(positional) >= 2:
                 try:
-                    int(parts[3])
+                    int(positional[1])
                     has_override.add((h, p))
                 except ValueError:
                     pass
@@ -209,12 +211,17 @@ def review_column_width_issues(mud_issues, bbs_issues,
             for h, p, line in entries:
                 if h == host and p == port:
                     parts = line.split()
-                    if len(parts) >= 4:
-                        parts[3] = str(columns)
-                    elif len(parts) >= 3:
-                        parts.append(str(columns))
-                    elif len(parts) >= 2:
-                        parts.extend(['utf-8', str(columns)])
+                    _kw = {'ssl', 'tall', 'no_ambig'}
+                    keywords = [x for x in parts[2:] if x in _kw]
+                    positional = [x for x in parts[2:]
+                                  if x not in _kw]
+                    if len(positional) >= 2:
+                        positional[1] = str(columns)
+                    elif len(positional) == 1:
+                        positional.append(str(columns))
+                    else:
+                        positional = ['utf-8', str(columns)]
+                    parts = parts[:2] + positional + keywords
                     new_entries.append((h, p, ' '.join(parts)))
                     updated = True
                 else:

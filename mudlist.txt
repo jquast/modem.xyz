@@ -157,7 +157,7 @@ akanbar.com 23
 aladon.sovintel.ru 9000 cp1251 90
 alcatraz.wolfpaw.net 8000
 alcatraz.wolfpaw.net 8070
-aldebaran-mud.de 2000 ssl 80 tall
+aldebaran-mud.de 2000 ascii 80 tall ssl
 alexmud.stacken.kth.se 4000
 alfandria.net 8888
 alteraeon.com 23
@@ -201,13 +201,13 @@ ansiblemoo.org 6000 ascii 80 tall
 aod.genesismuds.com 23
 aoh.genesismuds.com 6969
 aoh.zitz.dk 2345 ascii 80 tall
-aoh.zitz.dk 2348 ssl 80 tall
+aoh.zitz.dk 2348 ascii 80 tall ssl
 aow.lol 6000
 ap.dipterous.org 8888
 apocalypse6.com 6000 ascii 80 tall
 apothica.kozow.com 6464
 aragond.net 9000 ascii 80 tall
-aragond.net 9001 ssl 80 tall
+aragond.net 9001 utf-8 80 tall ssl
 aranylaz.mud.hu 4321
 arcanetides.net 3000
 arda.pp.ru 4000 ascii 80 tall
@@ -225,11 +225,11 @@ ateraan.com 4002 ascii 90
 atlantis.mushpark.com 7777 ascii 80 tall
 atp.pedia.szote.u-szeged.hu 3000 ascii 90
 atp.pedia.szote.u-szeged.hu 3500 ascii 90
-ats.trekmush.org 1700 ssl 80 tall
+ats.trekmush.org 1700 ascii 80 tall ssl
 ats.trekmush.org 1701 ascii 80 tall
 aturiondynasty.hopto.org 4444
 avalon.mud.de 7777 ascii 80 tall
-avalon.mud.de 7778 ssl 80 tall
+avalon.mud.de 7778 ascii 80 tall ssl
 avatar.outland.org 3000
 avendar.net 9999 ascii 80 tall
 avpmud.com 5000 ascii 80 tall
@@ -255,7 +255,7 @@ biyg.org 4020
 blackfire.online 4000 ascii 80 tall
 blackmud.com 2000 ascii 80 tall
 bod.westeros.org 3000
-bod.westeros.org 3001 ssl 80 tall
+bod.westeros.org 3001 ascii 80 tall ssl
 brazilmux.tinymux.org 2860
 brigandine.org 9390
 british-legends.com 27750
@@ -389,7 +389,7 @@ ds.enyc.org.uk 8688
 dsl-mud.org 4000 ascii 80 tall
 dsmush.com 4000 utf-8 180 tall
 dum.acc.umu.se 2001 ascii 80 tall
-dunemud.net 6788 ssl 90 tall
+dunemud.net 6788 utf-8 90 tall ssl
 dunemud.net 6789 ascii 100 tall
 dungeon.name 20022 utf-8 80
 dw.kicks-ass.org 1111
@@ -594,7 +594,7 @@ lament.ghostglass.net 8675
 lament.ghostglass.net 8676
 landsofredemption.com 1269 ascii 80 tall
 last-outpost.com 4000 ascii 80 tall
-last-outpost.com 4443 ssl 80 tall
+last-outpost.com 4443 ascii 80 tall ssl
 latitude.muck.ca 23
 legacyofthesith.com 3000 ascii 80 tall
 legendsofthejedi.com 5656 ascii 80 tall
@@ -628,10 +628,10 @@ megamanmush.com 1997
 mf.deepfire.net 4242
 mg.mud.de 4711
 mg.mud.de 4712 ssl
-midgardmud.de 4711 ascii 80 tall
-midgardmud.de 4712 ssl 80 tall
+midgardmud.de 4711 utf-8 80 tall
+midgardmud.de 4712 utf-8 80 tall ssl
 midnight.horse 7777 ascii 120 tall
-midnightsun2.org 3000 ssl 80 tall
+midnightsun2.org 3000 ascii 80 tall ssl
 minstrelhall.com 221
 mirkwoodmud.org 4000
 mirrorsmud.net 2222
@@ -743,10 +743,10 @@ mud.swmud.org 6666
 mud.swmud.org 7777 ssl
 mud.talesoftheotori.com 7070
 mud.tamedhon.de 4711 ascii 80 tall
-mud.tamedhon.de 4712 ssl 80 tall
+mud.tamedhon.de 4712 utf-8 80 tall ssl
 mud.temporasanguinis.it 4000 ascii 80 tall
 mud.tempusmud.com 2020 ascii 100
-mud.tempusmud.com 2023 ssl 100
+mud.tempusmud.com 2023 ascii 100 ssl
 mud.tgchan.org 5555 ascii 80 tall
 mud.tgchan.org 5585
 mud.theforestsedge.com 3999 ssl
@@ -776,10 +776,10 @@ mushpark.com 1972
 mushpark.com 6000
 mush.pennmush.org 4201
 mush.pokemorph.com 2222 ascii 80 tall
-mush.pokemorph.com 2223 ssl 80 tall
+mush.pokemorph.com 2223 ascii 80 tall ssl
 mush.shelteringcolorado.com 2601 ascii 80 tall
 mw.muddywaters.org 3000
-mystavaria.com 4000 ssl 80 tall
+mystavaria.com 4000 ascii 80 tall ssl
 mysticalmud.org 5000 ascii 80 tall
 mysticmud.com 3000
 nanvaent.org 23
