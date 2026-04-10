@@ -147,8 +147,7 @@ an encoding as a pull request.  Feel free to suggest any other changes or fixes.
 
 Telnet banners are rendered using IBM VGA 8x16 font, with `GNU Unifont
 <https://unifoundry.com/unifont/>`_ as fallback for remaining Unicode coverage.  Banner data is sent to `WezTerm
-<https://wezterm.org/index.html>`_ for a screenshot, and artificial scanlines and bloom effect are
-applied.
+<https://wezterm.org/index.html>`_ for a screenshot.
 
 .. _telnetlib3: https://telnetlib3.readthedocs.org/
 .. _Telix: https://telix.readthedocs.io/en/latest/intro.html
@@ -173,7 +172,8 @@ Exercises for the reader!
 
 - How do MUDs differ from text adventure games and `BBSs <https://bbs.modem.xyz/>`_?
 - Why is ASCII so common? Why are colors optional?
-- What kind of systems do MUDs run on and why is linemode preferred?
+- What kind of Operating Systems do MUDs usually run on?
+- Why are almost all MUDs in linemode, but `BBSs <https://bbs.modem.xyz/>`_ in raw mode?
 - Why are MUDs popular with the visually impaired?
 - MUD clients offer scripting, what kind of tasks could you automate?
 - What popular games started with MUD codebases? Any famous game developers?

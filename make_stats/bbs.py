@@ -15,14 +15,16 @@ from make_stats.common import (
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
     _load_row_overrides, _load_no_ambig_overrides, _load_ssh_overrides,
     _load_base_records, _generate_rst,
-    _render_banner_section, _render_json_section,
+    _render_banner_section, _render_similar_banners,
+    _render_json_section,
     _render_log_section, _render_fingerprint_section,
+    _find_similar_banners,
     _rst_escape, _strip_ansi, _is_garbled,
     _clean_log_line, _combine_banners,
     _has_encoding_issues, _truncate,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer, purge_failed_banners,
-    _rst_heading, print_datatable, analyze_escape_sequences,
+    _rst_heading, print_datatable, display_top_sequences,
     _group_shared_ip, _most_common_hostname,
     _clean_dir, _remove_stale_rst, _needs_rebuild,
     _rst_references_missing_images,
@@ -75,7 +77,7 @@ _EXTRA_SERVICE_PORTS = {
 _SCHEME_DEFAULT_PORTS = {
     'ftp': 21, 'gopher': 70, 'finger': 79,
     'http': 80, 'nntp': 119, 'https': 443, 'irc': 6667,
-    'ws': 1123, 'wss': 11235,
+    'ws': 80, 'wss': 443,
 }
 
 
@@ -456,6 +458,11 @@ def compute_statistics(servers):
 
     stats['emsi_count'] = sum(1 for s in servers if s['has_emsi'])
 
+    port_counts = Counter()
+    for s in servers:
+        port_counts[s['port']] += 1
+    stats['port_counts'] = dict(port_counts)
+
     option_offered = Counter()
     option_requested = Counter()
     option_both = Counter()
@@ -513,6 +520,16 @@ def create_encoding_plot(stats, output_path):
     _create_pie_chart(sorted_items, output_path)
 
 
+def create_port_plot(stats, output_path):
+    """Create pie chart of most popular ports."""
+    port_counts = stats.get('port_counts', {})
+    if not port_counts:
+        return
+    sorted_items = sorted(port_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path)
+
+
 def create_all_plots(stats):
     """Generate all matplotlib plots."""
     os.makedirs(PLOTS_PATH, exist_ok=True)
@@ -524,6 +541,8 @@ def create_all_plots(stats):
         stats, os.path.join(PLOTS_PATH, 'bbs_protocols.png'))
     create_encoding_plot(
         stats, os.path.join(PLOTS_PATH, 'encoding_distribution.png'))
+    create_port_plot(
+        stats, os.path.join(PLOTS_PATH, 'port_distribution.png'))
     create_telnet_options_plot(
         stats, os.path.join(PLOTS_PATH, 'telnet_options.png'))
     create_location_plot(
@@ -607,6 +626,18 @@ def display_plots(servers):
           " software packages across all responding servers.")
     print()
     print("   BBS software detected from login banners.")
+    print()
+
+    print("Port Distribution")
+    print("------------------")
+    print()
+    print(".. figure:: _static/plots/port_distribution.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the most popular"
+          " ports used by BBS servers.")
+    print()
+    print("   Most popular ports across all BBS servers.")
     print()
 
     print("Encoding Distribution")
@@ -870,6 +901,7 @@ def generate_summary_rst(stats, servers):
     def _display(stats, servers):
         display_summary_stats(stats)
         display_plots(servers)
+        display_top_sequences(servers)
 
     _generate_rst(
         os.path.join(DOCS_PATH, "statistics.rst"),
@@ -992,46 +1024,6 @@ def generate_protocols_rst(servers):
         display_protocols, servers)
 
 
-def display_sequences(servers):
-    """Print the escape sequence frequency page.
-
-    Shows which terminal escape sequences appear across BBS banners,
-    ranked by how many unique servers use each sequence category.
-
-    :param servers: list of server record dicts
-    """
-    _rst_heading("Escape Sequences", '=')
-    print("Terminal escape sequences detected in BBS banners,")
-    print("ranked by number of unique servers using each sequence.")
-    print()
-
-    category_counts, total_with_banner = analyze_escape_sequences(servers)
-    if not category_counts:
-        print("No escape sequences found in banners.")
-        print()
-        return
-
-    rows = []
-    for category, count in category_counts.most_common():
-        pct = f'{count / total_with_banner * 100:.1f}%' if total_with_banner else '0%'
-        rows.append({
-            'Sequence': category,
-            'Servers': str(count),
-            '% Banners': pct,
-        })
-
-    table_str = tabulate_mod.tabulate(
-        rows, headers='keys', tablefmt='rst')
-    print_datatable(table_str, caption="Escape Sequences")
-
-
-def generate_sequences_rst(servers):
-    """Generate the sequences.rst file."""
-    _generate_rst(
-        os.path.join(DOCS_PATH, "sequences.rst"),
-        display_sequences, servers)
-
-
 def generate_bbs_software_rst(servers):
     """Generate the bbs_software.rst file."""
     _generate_rst(
@@ -1128,7 +1120,8 @@ def _copy_button(host, port):
     print(f'   </button>')
 
 
-def _write_bbs_server_urls(server, sec_char, show_peers=True):
+def _write_bbs_server_urls(server, sec_char, show_peers=True,
+                           show_extras=True):
     """Write server URLs section for a BBS server.
 
     Shows the primary telnet/rlogin connection, any peer connections at
@@ -1138,6 +1131,7 @@ def _write_bbs_server_urls(server, sec_char, show_peers=True):
     :param server: server record dict
     :param sec_char: RST underline character
     :param show_peers: if False, suppress peer server links
+    :param show_extras: if False, suppress extra services and website
     """
     host = server['host']
     port = server['port']
@@ -1190,46 +1184,48 @@ def _write_bbs_server_urls(server, sec_char, show_peers=True):
         _copy_button(host, ssh_port)
         print('   </li>')
 
-    # Extra services from nmap (FTP, Gopher, NNTP, IRC, BINKP, …).
-    # HTTP/HTTPS are shown as Website if no other website is known.
-    extra = server.get('extra_services', {})
-    website_from_nmap = ''
-    for svc_name in sorted(extra):
-        for svc_port in sorted(extra[svc_name]):
-            if svc_name in ('HTTP', 'HTTPS'):
-                if not server['website'] and not website_from_nmap:
-                    website_from_nmap = _extra_service_url(
-                        host, svc_name, svc_port)
-                continue
-            url_str = _extra_service_url(host, svc_name, svc_port)
-            if url_str:
-                print(f'   <li><strong>{svc_name}</strong>:'
-                      f' <a href="{url_str}">'
-                      f'{url_str}</a></li>')
-            else:
-                print(f'   <li><strong>{svc_name}</strong>:'
-                      f' {host}:{svc_port}</li>')
+    if show_extras:
+        # Extra services from nmap (FTP, Gopher, NNTP, IRC, BINKP, …).
+        # HTTP/HTTPS are shown as Website if no other website is known.
+        extra = server.get('extra_services', {})
+        website_from_nmap = ''
+        for svc_name in sorted(extra):
+            for svc_port in sorted(extra[svc_name]):
+                if svc_name in ('HTTP', 'HTTPS'):
+                    if not server['website'] and not website_from_nmap:
+                        website_from_nmap = _extra_service_url(
+                            host, svc_name, svc_port)
+                    continue
+                url_str = _extra_service_url(host, svc_name, svc_port)
+                if url_str:
+                    print(f'   <li><strong>{svc_name}</strong>:'
+                          f' <a href="{url_str}">'
+                          f'{url_str}</a></li>')
+                else:
+                    print(f'   <li><strong>{svc_name}</strong>:'
+                          f' {host}:{svc_port}</li>')
 
-    # Website (from banner/IBBS metadata, or inferred from HTTP/HTTPS).
-    website = server['website'] or website_from_nmap
-    if website:
-        href = website
-        if not href.startswith(('http://', 'https://')):
-            href = f'http://{href}'
-        print(f'   <li><strong>Website</strong>:'
-              f' <a href="{href}">'
-              f'{_rst_escape(website)}'
-              f'</a></li>')
+        # Website (from banner/IBBS metadata, or inferred from HTTP/HTTPS).
+        website = server['website'] or website_from_nmap
+        if website:
+            href = website
+            if not href.startswith(('http://', 'https://')):
+                href = f'http://{href}'
+            print(f'   <li><strong>Website</strong>:'
+                  f' <a href="{href}">'
+                  f'{_rst_escape(website)}'
+                  f'</a></li>')
 
     print('   </ul>')
     print()
 
 
-def _write_bbs_server_info(server, sec_char):
+def _write_bbs_server_info(server, sec_char, show_listing=True):
     """Write BBS-specific server info sections.
 
     :param server: server record dict
     :param sec_char: RST underline character
+    :param show_listing: if False, suppress the Listing section
     """
     geoip_loc = server.get('_country_name', '')
     geoip_flag = _country_flag(
@@ -1241,7 +1237,8 @@ def _write_bbs_server_info(server, sec_char):
         print(f"**Server Location**: {loc_display} (GeoIP)")
         print()
 
-    if server.get('ibbs_name') or server.get('ibbs_sysop') or server.get('ibbs_location'):
+    if show_listing and (server.get('ibbs_name') or server.get('ibbs_sysop')
+                         or server.get('ibbs_location')):
         _rst_heading("Listing", sec_char)
         if server.get('ibbs_name'):
             print(f"- **BBS Name**: {_rst_escape(server['ibbs_name'])}"
@@ -1297,7 +1294,9 @@ def _write_bbs_server_info(server, sec_char):
 
 def _write_bbs_port_section(server, sec_char, logs_dir=None,
                              data_dir=None, fp_counts=None,
-                             show_peers=True):
+                             show_peers=True, show_extras=True,
+                             show_listing=True,
+                             similar_banners=None):
     """Write detail content sections for one BBS port.
 
     :param server: server record dict
@@ -1307,6 +1306,9 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
     :param fp_counts: dict mapping fingerprint to server count
     :param show_peers: if False, suppress peer server links (used on IP-group
         pages where all peers are already shown as sibling sections)
+    :param show_extras: if False, suppress extra services and website
+    :param show_listing: if False, suppress the Listing section
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     banner_rst = _render_banner_section(
         server, BANNERS_PATH,
@@ -1314,10 +1316,15 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
         ice_colors=True)
     if banner_rst:
         print(banner_rst)
+    sim_rst = _render_similar_banners(
+        server, similar_banners, '_bbs_file')
+    if sim_rst:
+        print(sim_rst)
 
-    _write_bbs_server_urls(server, sec_char, show_peers=show_peers)
+    _write_bbs_server_urls(server, sec_char, show_peers=show_peers,
+                           show_extras=show_extras)
 
-    _write_bbs_server_info(server, sec_char)
+    _write_bbs_server_info(server, sec_char, show_listing=show_listing)
 
     fp_rst = _render_fingerprint_section(
         server, sec_char, fp_counts)
@@ -1334,7 +1341,8 @@ def _write_bbs_port_section(server, sec_char, logs_dir=None,
 
 
 def generate_bbs_detail(server, logs_dir=None, force=False,
-                         data_dir=None, fp_counts=None):
+                         data_dir=None, fp_counts=None,
+                         similar_banners=None):
     """Generate a detail page for one BBS server.
 
     :param server: server record dict
@@ -1342,6 +1350,7 @@ def generate_bbs_detail(server, logs_dir=None, force=False,
     :param force: if True, skip mtime checks
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     bbs_file = server['_bbs_file']
     detail_path = os.path.join(BBS_DETAIL_PATH,
@@ -1372,11 +1381,13 @@ def generate_bbs_detail(server, logs_dir=None, force=False,
 
         _write_bbs_port_section(
             server, '-', logs_dir=logs_dir, data_dir=data_dir,
-            fp_counts=fp_counts)
+            fp_counts=fp_counts,
+            similar_banners=similar_banners)
 
 
 def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
-                               data_dir=None, fp_counts=None):
+                               data_dir=None, fp_counts=None,
+                               similar_banners=None):
     """Generate a combined detail page for BBSes sharing an IP.
 
     :param ip: shared IP address
@@ -1384,6 +1395,7 @@ def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
     :param logs_dir: path to log directory
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     bbs_file = group_servers[0]['_bbs_file']
     detail_path = os.path.join(BBS_DETAIL_PATH,
@@ -1399,7 +1411,7 @@ def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
         escaped_name = _rst_escape(display_name)
         _rst_heading(escaped_name, '=')
 
-        for server in group_servers:
+        for idx, server in enumerate(group_servers):
             host = server['host']
             port = server['port']
             sub_title = f"{host}:{port}"
@@ -1413,11 +1425,14 @@ def generate_bbs_detail_group(ip, group_servers, logs_dir=None,
             _write_bbs_port_section(
                 server, '~', logs_dir=logs_dir,
                 data_dir=data_dir, fp_counts=fp_counts,
-                show_peers=False)
+                show_peers=False, show_extras=(idx == 0),
+                show_listing=(idx == 0),
+                similar_banners=similar_banners)
 
 
 def generate_bbs_details(servers, logs_dir=None, force=False,
-                          data_dir=None, ip_groups=None):
+                          data_dir=None, ip_groups=None,
+                          similar_banners=None):
     """Generate all per-BBS detail pages.
 
     :param servers: list of server records
@@ -1425,6 +1440,7 @@ def generate_bbs_details(servers, logs_dir=None, force=False,
     :param force: if True, regenerate all files
     :param data_dir: path to data directory
     :param ip_groups: dict from :func:`_group_shared_ip`
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     if force:
         _clean_dir(BBS_DETAIL_PATH)
@@ -1444,7 +1460,8 @@ def generate_bbs_details(servers, logs_dir=None, force=False,
             continue
         result = generate_bbs_detail(
             s, logs_dir=logs_dir, force=force, data_dir=data_dir,
-            fp_counts=fp_counts)
+            fp_counts=fp_counts,
+            similar_banners=similar_banners)
         if result is not False:
             rebuilt += 1
 
@@ -1452,7 +1469,8 @@ def generate_bbs_details(servers, logs_dir=None, force=False,
         for ip, members in sorted(ip_groups.items()):
             generate_bbs_detail_group(
                 ip, members, logs_dir=logs_dir,
-                data_dir=data_dir, fp_counts=fp_counts)
+                data_dir=data_dir, fp_counts=fp_counts,
+                similar_banners=similar_banners)
             rebuilt += 1
 
     total = (len(servers) - len(grouped_keys)
@@ -1674,7 +1692,6 @@ def run(args):
     os.makedirs(BANNERS_PATH, exist_ok=True)
     purge_failed_banners(BANNERS_PATH)
     init_renderer(rows=25,
-                  crt_effects=not getattr(args, 'no_crt_effects', False),
                   check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)
@@ -1686,10 +1703,12 @@ def run(args):
         generate_locations_rst(servers)
         generate_fidonet_rst(servers)
         generate_protocols_rst(servers)
-        generate_sequences_rst(servers)
+        similar_banners = _find_similar_banners(
+            servers, default_encoding=DEFAULT_ENCODING)
         generate_bbs_details(servers, logs_dir=logs_dir,
                               force=force, data_dir=data_dir,
-                              ip_groups=ip_groups)
+                              ip_groups=ip_groups,
+                              similar_banners=similar_banners)
         generate_fingerprint_details(servers, force=force,
                                       data_dir=data_dir)
         generate_banner_gallery_rst(servers)

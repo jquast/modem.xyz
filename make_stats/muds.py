@@ -19,13 +19,15 @@ from make_stats.common import (
     _parse_server_list, _load_encoding_overrides, _load_column_overrides,
     _load_ssl_overrides, _load_no_ambig_overrides, _load_ssh_overrides,
     _load_base_records, _generate_rst,
-    _render_banner_section, _render_json_section,
+    _render_banner_section, _render_similar_banners,
+    _render_json_section,
     _render_log_section, _render_fingerprint_section,
+    _find_similar_banners,
     _rst_escape, _strip_ansi, _is_garbled,
     _clean_log_line, _combine_banners, _has_encoding_issues,
     _banner_to_png, _banner_alt_text, _telnet_url,
     init_renderer, close_renderer, purge_failed_banners,
-    _rst_heading, print_datatable, analyze_escape_sequences,
+    _rst_heading, print_datatable, display_top_sequences,
     _group_shared_ip, _most_common_hostname,
     _clean_dir, deduplicate_servers,
     _setup_plot_style, _create_pie_chart,
@@ -553,6 +555,11 @@ def compute_statistics(servers):
                 pass
     stats['year_counts'] = dict(year_counts)
 
+    port_counts = Counter()
+    for s in servers:
+        port_counts[s['port']] += 1
+    stats['port_counts'] = dict(port_counts)
+
     option_offered = Counter()
     option_requested = Counter()
     option_both = Counter()
@@ -814,6 +821,16 @@ def create_encoding_plot(stats, output_path):
     _create_pie_chart(sorted_items, output_path)
 
 
+def create_port_plot(stats, output_path):
+    """Create pie chart of most popular ports."""
+    port_counts = stats.get('port_counts', {})
+    if not port_counts:
+        return
+    sorted_items = sorted(port_counts.items(),
+                          key=lambda x: x[1], reverse=True)
+    _create_pie_chart(sorted_items, output_path)
+
+
 def create_all_plots(stats):
     """Generate all matplotlib plots."""
     os.makedirs(PLOTS_PATH, exist_ok=True)
@@ -821,6 +838,8 @@ def create_all_plots(stats):
 
     create_encoding_plot(
         stats, os.path.join(PLOTS_PATH, 'encoding_distribution.png'))
+    create_port_plot(
+        stats, os.path.join(PLOTS_PATH, 'port_distribution.png'))
     create_protocol_support_plot(
         stats, os.path.join(PLOTS_PATH, 'protocol_support.png'))
     create_codebases_plot(
@@ -963,6 +982,18 @@ def display_plots(stats, servers):
     print()
     print("   When MUDs were created, by year, as reported"
           " via MSSP data.")
+    print()
+
+    print("Port Distribution")
+    print("------------------")
+    print()
+    print(".. figure:: _static/plots/port_distribution.png")
+    print("   :align: center")
+    print("   :width: 800px")
+    print("   :alt: Pie chart showing the most popular"
+          " ports used by MUD servers.")
+    print()
+    print("   Most popular ports across all MUD servers.")
     print()
 
     print("Protocol Support")
@@ -1396,6 +1427,7 @@ def generate_summary_rst(stats, servers):
     def _display(stats, servers):
         footnotes = display_summary_stats(stats)
         display_plots(stats, servers)
+        display_top_sequences(servers)
         for fn in footnotes:
             print(fn)
             print()
@@ -1470,8 +1502,8 @@ def display_protocols(servers):
     print(".. figure:: _static/plots/protocol_support.png")
     print("   :align: center")
     print("   :width: 800px")
-    print("   :alt: Horizontal bar chart showing how many MUD servers")
-    print("   support each protocol extension.")
+    print("   :alt: Horizontal bar chart showing how many MUD servers"
+          " support each protocol extension.")
     print()
     print("   MUD protocol support across all responding servers.")
     print()
@@ -1489,19 +1521,24 @@ def display_protocols(servers):
         if srvs:
             pct = f'{len(srvs) / total * 100:.0f}%' if total else '0%'
             rows.append({
-                'Protocol': proto,
+                'Protocol': f':ref:`{proto} <proto-{proto.lower()}>`',
                 'Servers': str(len(srvs)),
                 '%': pct,
             })
+    rows.sort(key=lambda r: int(r['Servers']), reverse=True)
     if rows:
         table_str = tabulate_mod.tabulate(
             rows, headers='keys', tablefmt='rst')
         print_datatable(table_str, caption="Protocol Support")
 
-    for proto in MUD_PROTOCOLS:
+    sorted_protos = sorted(
+        [p for p in MUD_PROTOCOLS if proto_servers[p]],
+        key=lambda p: len(proto_servers[p]),
+        reverse=True)
+    for proto in sorted_protos:
         srvs = proto_servers[proto]
-        if not srvs:
-            continue
+        print(f".. _proto-{proto.lower()}:")
+        print()
         _rst_heading(f"{proto} ({len(srvs)})", '-')
         for s in sorted(srvs,
                         key=lambda s: (
@@ -1518,46 +1555,6 @@ def generate_protocols_rst(servers):
     _generate_rst(
         os.path.join(DOCS_PATH, "protocols.rst"),
         display_protocols, servers)
-
-
-def display_sequences(servers):
-    """Print the escape sequence frequency page.
-
-    Shows which terminal escape sequences appear across MUD banners,
-    ranked by how many unique servers use each sequence category.
-
-    :param servers: list of server record dicts
-    """
-    _rst_heading("Escape Sequences", '=')
-    print("Terminal escape sequences detected in MUD banners,")
-    print("ranked by number of unique servers using each sequence.")
-    print()
-
-    category_counts, total_with_banner = analyze_escape_sequences(servers)
-    if not category_counts:
-        print("No escape sequences found in banners.")
-        print()
-        return
-
-    rows = []
-    for category, count in category_counts.most_common():
-        pct = f'{count / total_with_banner * 100:.1f}%' if total_with_banner else '0%'
-        rows.append({
-            'Sequence': category,
-            'Servers': str(count),
-            '% Banners': pct,
-        })
-
-    table_str = tabulate_mod.tabulate(
-        rows, headers='keys', tablefmt='rst')
-    print_datatable(table_str, caption="Escape Sequences")
-
-
-def generate_sequences_rst(servers):
-    """Generate the sequences.rst file."""
-    _generate_rst(
-        os.path.join(DOCS_PATH, "sequences.rst"),
-        display_sequences, servers)
 
 
 def generate_tls_rst(servers):
@@ -1628,13 +1625,14 @@ def generate_details_rst(servers):
 # ---------------------------------------------------------------------------
 
 def generate_mud_detail(server, logs_dir=None, data_dir=None,
-                        fp_counts=None):
+                        fp_counts=None, similar_banners=None):
     """Generate a detail page for one MUD server.
 
     :param server: server record dict
     :param logs_dir: path to log directory
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     mud_file = server['_mud_file']
     detail_path = os.path.join(MUD_DETAIL_PATH, f"{mud_file}.rst")
@@ -1645,7 +1643,8 @@ def generate_mud_detail(server, logs_dir=None, data_dir=None,
         _rst_heading(_rst_escape(name), '=')
         footnotes = _write_mud_port_section(
             server, '-', logs_dir=logs_dir,
-            data_dir=data_dir, fp_counts=fp_counts)
+            data_dir=data_dir, fp_counts=fp_counts,
+            similar_banners=similar_banners)
         for fn in footnotes:
             print(fn)
             print()
@@ -1877,7 +1876,7 @@ def _write_mud_protocol_support(server, sec_char):
 
 def _write_mud_port_section(server, sec_char, logs_dir=None,
                             data_dir=None, fp_counts=None,
-                            fn_suffix=''):
+                            fn_suffix='', similar_banners=None):
     """Write detail content sections for one MUD server port.
 
     :param server: server record dict
@@ -1886,11 +1885,16 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
     :param fn_suffix: suffix for footnote labels to avoid clashes
+    :param similar_banners: dict from :func:`_find_similar_banners`
     :returns: list of footnote strings to print at page end
     """
     banner_rst = _render_banner_section(server, BANNERS_PATH)
     if banner_rst:
         print(banner_rst)
+    sim_rst = _render_similar_banners(
+        server, similar_banners, '_mud_file')
+    if sim_rst:
+        print(sim_rst)
 
     _write_mud_server_urls(server, sec_char)
 
@@ -1926,7 +1930,8 @@ def _write_mud_port_section(server, sec_char, logs_dir=None,
 
 
 def generate_mud_detail_group(ip, group_servers, logs_dir=None,
-                              data_dir=None, fp_counts=None):
+                              data_dir=None, fp_counts=None,
+                              similar_banners=None):
     """Generate a combined detail page for servers sharing an IP.
 
     :param ip: shared IP address
@@ -1934,6 +1939,7 @@ def generate_mud_detail_group(ip, group_servers, logs_dir=None,
     :param logs_dir: path to log directory
     :param data_dir: path to data directory
     :param fp_counts: dict mapping fingerprint to server count
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     mud_file = group_servers[0]['_mud_file']
     detail_path = os.path.join(MUD_DETAIL_PATH, f"{mud_file}.rst")
@@ -1967,7 +1973,8 @@ def generate_mud_detail_group(ip, group_servers, logs_dir=None,
             footnotes = _write_mud_port_section(
                 server, '~', logs_dir=logs_dir,
                 data_dir=data_dir, fp_counts=fp_counts,
-                fn_suffix=f'_{host}_{port}')
+                fn_suffix=f'_{host}_{port}',
+                similar_banners=similar_banners)
             all_footnotes.extend(footnotes)
 
         for fn in all_footnotes:
@@ -1976,13 +1983,14 @@ def generate_mud_detail_group(ip, group_servers, logs_dir=None,
 
 
 def generate_mud_details(servers, logs_dir=None, data_dir=None,
-                         ip_groups=None):
+                         ip_groups=None, similar_banners=None):
     """Generate all per-MUD detail pages.
 
     :param servers: list of server records
     :param logs_dir: path to log directory
     :param data_dir: path to data directory
     :param ip_groups: dict from :func:`_group_shared_ip`
+    :param similar_banners: dict from :func:`_find_similar_banners`
     """
     _clean_dir(MUD_DETAIL_PATH)
     os.makedirs(MUD_DETAIL_PATH, exist_ok=True)
@@ -2001,7 +2009,8 @@ def generate_mud_details(servers, logs_dir=None, data_dir=None,
             continue
         result = generate_mud_detail(
             s, logs_dir=logs_dir, data_dir=data_dir,
-            fp_counts=fp_counts)
+            fp_counts=fp_counts,
+            similar_banners=similar_banners)
         if result is not False:
             rebuilt += 1
 
@@ -2009,7 +2018,8 @@ def generate_mud_details(servers, logs_dir=None, data_dir=None,
         for ip, members in sorted(ip_groups.items()):
             generate_mud_detail_group(
                 ip, members, logs_dir=logs_dir,
-                data_dir=data_dir, fp_counts=fp_counts)
+                data_dir=data_dir, fp_counts=fp_counts,
+                similar_banners=similar_banners)
             rebuilt += 1
 
     total = (len(servers) - len(grouped_keys)
@@ -2211,7 +2221,6 @@ def run(args):
     os.makedirs(BANNERS_PATH, exist_ok=True)
     purge_failed_banners(BANNERS_PATH)
     init_renderer(columns=120, rows=100,
-                  crt_effects=not getattr(args, 'no_crt_effects', False),
                   check_dupes=getattr(args, 'check_dupes', False))
     try:
         print("Generating RST ...", file=sys.stderr)
@@ -2222,11 +2231,12 @@ def run(args):
         generate_encoding_rst(servers)
         generate_locations_rst(servers)
         generate_protocols_rst(servers)
-        generate_sequences_rst(servers)
         generate_tls_rst(servers)
+        similar_banners = _find_similar_banners(servers)
         generate_mud_details(servers, logs_dir=logs_dir,
                              data_dir=data_dir,
-                             ip_groups=ip_groups)
+                             ip_groups=ip_groups,
+                             similar_banners=similar_banners)
         generate_fingerprint_details(servers)
         generate_banner_gallery_rst(servers)
     finally:

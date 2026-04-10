@@ -19,11 +19,28 @@ import subprocess
 import sys
 import tempfile
 import time
-import warnings
 
 import wcwidth
 
 _HELPER_SCRIPT = os.path.join(os.path.dirname(__file__), 'terminal_helper.py')
+
+# Characters considered printable for visible-length checks.
+# C0 control codes (\x00-\x1f except \t, \n, \r) and DEL (\x7f)
+# are invisible in terminal output and should not count.
+_C0_CONTROLS = frozenset(
+    chr(c) for c in range(0x20) if chr(c) not in '\t\n\r'
+) | {'\x7f'}
+
+
+def _printable_chars(text):
+    """Return only printable characters from text, stripping escapes and controls.
+
+    :param text: raw banner text with ANSI escape sequences
+    :returns: string with only printable characters
+    """
+    stripped = wcwidth.strip_sequences(text).strip()
+    return ''.join(c for c in stripped if c not in _C0_CONTROLS)
+
 
 # CGA/VGA 16-color palette matching ansilove defaults.
 _PALETTE = {
@@ -173,6 +190,7 @@ class TerminalInstance(abc.ABC):
         self._ready_fifo = None
         self._stderr_file = None
         self._last_capture_md5 = None
+        self._retry_settle = 0
         self._last_capture_content_blank = False
 
     @abc.abstractmethod
@@ -326,25 +344,37 @@ class TerminalInstance(abc.ABC):
 
         Uses plain ``XGetImage`` (no SHM), avoiding the ``EAGAIN``
         failures that ``import``'s ``XShmGetImage`` triggers.
+        Retries once on ``BadMatch`` errors caused by window resize
+        races (the Lua config handler may still be resizing the window
+        when the first ``xwd`` call fires).
 
         :param output_path: path to write the output PNG
         :returns: True if the PNG was created successfully
         """
         xwd_path = output_path + '.xwd'
-        try:
-            result = subprocess.run(
-                ['xwd', '-id', self._window_id, '-silent', '-out', xwd_path],
-                capture_output=True, timeout=10,
-                env=self._subprocess_env(),
-            )
-            if result.returncode != 0:
-                print(f"  xwd failed for {output_path}: "
-                      f"{result.stderr.decode(errors='replace').strip()}",
+        for attempt in range(2):
+            try:
+                result = subprocess.run(
+                    ['xwd', '-id', self._window_id,
+                     '-silent', '-out', xwd_path],
+                    capture_output=True, timeout=10,
+                    env=self._subprocess_env(),
+                )
+                if result.returncode != 0:
+                    stderr_msg = result.stderr.decode(
+                        errors='replace').strip()
+                    if 'BadMatch' in stderr_msg and attempt == 0:
+                        time.sleep(0.5)
+                        continue
+                    print(f"  xwd failed for {output_path}: "
+                          f"{stderr_msg}",
+                          file=sys.stderr)
+                    return False
+                break
+            except subprocess.TimeoutExpired:
+                print(f"  xwd timed out for {output_path}",
                       file=sys.stderr)
                 return False
-        except subprocess.TimeoutExpired:
-            print(f"  xwd timed out for {output_path}", file=sys.stderr)
-            return False
 
         try:
             result = subprocess.run(
@@ -369,12 +399,13 @@ class TerminalInstance(abc.ABC):
         return True
 
     def _activate(self):
-        """Raise the terminal window to the top of the X11 stacking order.
+        """Raise and focus the terminal window.
 
         On Xvfb without a window manager, ``XGetImage`` reads from the
         screen framebuffer so obscured windows return wrong pixels.
-        ``XRaiseWindow`` via ``xdotool windowraise`` brings the target
-        window to the top before each screenshot.
+        ``windowraise`` brings the window to the top, and
+        ``windowfocus`` generates a ``FocusIn`` event that nudges the
+        software renderer to repaint.
 
         Overridden by mux-based subclasses to also activate the pane.
         """
@@ -382,6 +413,12 @@ class TerminalInstance(abc.ABC):
             try:
                 subprocess.run(
                     ['xdotool', 'windowraise', self._window_id],
+                    capture_output=True, timeout=5,
+                    env=self._subprocess_env(),
+                )
+                subprocess.run(
+                    ['xdotool', 'windowfocus', '--sync',
+                     self._window_id],
                     capture_output=True, timeout=5,
                     env=self._subprocess_env(),
                 )
@@ -495,7 +532,8 @@ class TerminalInstance(abc.ABC):
             return False
 
         self._activate()
-        time.sleep(0.10)
+        time.sleep(0.25 if not self._retry_settle else self._retry_settle)
+        self._retry_settle = 0
 
         self._last_capture_content_blank = False
         ok, raw_w, raw_h, raw_md5 = self._screenshot_and_crop(output_path)
@@ -527,7 +565,7 @@ class TerminalInstance(abc.ABC):
         if 0 < w < 20 and 0 < h < 20:
             if raw_w >= 100 and raw_h >= 100:
                 visible_len = len(
-                    wcwidth.strip_sequences(text).strip())
+                    _printable_chars(text))
                 if visible_len < 50:
                     # Content genuinely sparse (backspaces, whitespace,
                     # short prompts).  Terminal is fine, skip retry.
@@ -538,21 +576,42 @@ class TerminalInstance(abc.ABC):
                           f"skipping: "
                           f"{os.path.basename(output_path)}",
                           file=sys.stderr)
+                    try:
+                        os.unlink(output_path)
+                    except OSError:
+                        pass
+                    return False
+                # Substantial banner rendered to near-empty screenshot
+                # — likely paint-lag from the software renderer on
+                # Xvfb.  Retry the screenshot in-place with increasing
+                # delays to avoid the expensive instance/mux restart.
+                for delay in (0.30, 0.50, 0.75, 1.00):
+                    time.sleep(delay)
+                    self._activate()
+                    ok2, raw_w2, raw_h2, raw_md5 = (
+                        self._screenshot_and_crop(output_path))
+                    if not ok2:
+                        continue
+                    w2, h2 = _png_dimensions(output_path)
+                    if w2 >= 20 or h2 >= 20:
+                        print(f"  banner recovered after paint-lag "
+                              f"retry: "
+                              f"{os.path.basename(output_path)}",
+                              file=sys.stderr)
+                        break
                 else:
-                    # Substantial banner rendered to near-empty
-                    # screenshot — likely a paint-lag or form-feed
-                    # timing issue.  Let retry mechanism fire.
+                    # All in-place retries exhausted.
                     print(f"  banner trimmed to {w}x{h}px "
                           f"(raw {raw_w}x{raw_h}, "
                           f"{visible_len} visible chars), "
                           f"will retry: "
                           f"{os.path.basename(output_path)}",
                           file=sys.stderr)
-                try:
-                    os.unlink(output_path)
-                except OSError:
-                    pass
-                return False
+                    try:
+                        os.unlink(output_path)
+                    except OSError:
+                        pass
+                    return False
             print(f"  render too small ({w}x{h}px), likely poison escape: "
                   f"{output_path}", file=sys.stderr)
             return False
@@ -569,99 +628,6 @@ class TerminalInstance(abc.ABC):
         return True
 
 
-def _apply_crt_effects(path, group_name, columns, font_size):
-    """Apply CRT phosphor bloom and scanline effects.
-
-    The input image (1x from ``font_size=12``) is upscaled 2x via
-    nearest-neighbor, then bloom and scanlines are applied at the
-    final 2x resolution.
-
-    Scanline frequency is derived from the font's native pixel height
-    so that each bitmap row gets one scanline, matching the physical
-    CRT raster.
-
-    :param path: path to the PNG file (modified in place)
-    :param group_name: font group key from ``_FONT_GROUPS``
-    :param columns: number of terminal columns used for this capture
-    :param font_size: font point size used for rendering (determines scale)
-    """
-    from PIL import Image, ImageDraw
-    import pixelgreat as pg
-
-    img = Image.open(path)
-    orig_mode = img.mode
-    if orig_mode not in ('RGB', 'RGBA'):
-        img = img.convert('RGB')
-
-    # --- 2x upscale from 1x to 2x (nearest-neighbor to keep sharp pixels) ---
-    img = img.resize((img.width * 2, img.height * 2), Image.NEAREST)
-
-    # --- Bloom at 2x ---
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore')
-        result = pg.pixelgreat(
-            image=img,
-            pixel_size=20,
-            output_scale=1,
-            bloom_strength=0.67,
-            bloom_size=0.5,
-            scanline_strength=0,
-            grid_strength=0,
-            blur=0,
-            washout=0,
-            pixelate=False,
-            rounding=0,
-        )
-
-    # --- Scanlines at 2x ---
-    # Period is computed from font metrics, not image dimensions (the
-    # image is cropped to content so height/rows would be wrong).
-    # At 96 DPI, font_size pt = font_size*96/72 px cell height at 1x.
-    # The 1x input is upscaled 2x, so each native pixel row occupies
-    # font_size*8/(3*native_height) 2x-pixels.
-    group_info = _FONT_GROUPS.get(group_name, {})
-    native_height = group_info.get('native_height', 16)
-    period = font_size * 8.0 / (3.0 * native_height)
-
-    overlay = Image.new('RGBA', result.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-    w = result.width - 1
-    total_scanlines = int(result.height / period) + 1
-    # Dark band must be narrower than the period so bright gaps remain.
-    # Target ~40% of the period as the full band width (flat center +
-    # soft edges), leaving ~60% bright.
-    band_half = period * 0.20
-    flat_half = max(0, round(band_half * 0.5))
-    edge = max(0, round(band_half * 0.5))
-    # Reduced alpha since there is no LANCZOS downscale to soften the
-    # scanline bands — they render at final resolution.
-    peak_alpha = min(255, int(50 + 40 * (8.0 / max(period, 1))))
-    for i in range(total_scanlines):
-        cy = round(i * period)
-        for offset in range(-flat_half - edge, flat_half + edge + 1):
-            y = cy + offset
-            if 0 <= y < result.height:
-                d = abs(offset)
-                if d <= flat_half:
-                    alpha = peak_alpha
-                elif edge > 0:
-                    t = (d - flat_half) / (edge + 1)
-                    alpha = int(peak_alpha * (1.0 - t))
-                else:
-                    alpha = 0
-                if alpha > 0:
-                    draw.line([(0, y), (w, y)], fill=(0, 0, 0, alpha))
-    result = Image.alpha_composite(result.convert('RGBA'), overlay)
-
-    result = result.convert('RGB')
-
-    if orig_mode == 'L':
-        result = result.convert('L')
-    elif orig_mode == 'LA':
-        result = result.convert('LA')
-    result.save(path)
-
-
 class RendererPool:
     """Pool of terminal instances, one per font group and column width.
 
@@ -673,15 +639,13 @@ class RendererPool:
     :param columns: default terminal width in columns
     :param rows: terminal height in rows
     :param font_size: font size for all instances
-    :param crt_effects: apply CRT bloom and scanlines to output PNGs
     """
 
     def __init__(self, columns=80, rows=60, font_size=12,
-                 crt_effects=True, check_dupes=False):
+                 check_dupes=False):
         self._columns = columns
         self._rows = rows
         self._font_size = font_size
-        self._crt_effects = crt_effects
         self._check_dupes = check_dupes
         self._instances = {}
         self._xvfb_proc = None
@@ -912,6 +876,8 @@ class RendererPool:
                 instance = self._get_instance(
                     group_name, columns=columns, rows=rows,
                     east_asian_wide=east_asian)
+                if instance is not None:
+                    instance._retry_settle = 0.50
                 if instance is None or not instance.capture(text, output_path):
                     # Nuclear option: restart entire mux server.
                     print(f"  renderer [{group_name}] retry also failed, "
@@ -921,6 +887,7 @@ class RendererPool:
                         group_name, columns=columns, rows=rows,
                         east_asian_wide=east_asian)
                     if instance is not None:
+                        instance._retry_settle = 1.00
                         if not instance.capture(text, output_path):
                             return None
                     else:
@@ -939,12 +906,6 @@ class RendererPool:
                  output_path],
                 capture_output=True, timeout=10,
             )
-
-        if self._crt_effects and os.path.isfile(output_path):
-            effective_cols = columns if columns is not None else (
-                group_info.get('columns', self._columns))
-            _apply_crt_effects(output_path, group_name, effective_cols,
-                               self._font_size)
 
         return instance._group_name
 

@@ -9,6 +9,5 @@ BBS Indices
    locations
    bbs_software
    encodings
-   sequences
    fingerprints
    fidonet

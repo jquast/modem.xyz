@@ -79,8 +79,10 @@ def _display_banner(text, maxlines=8):
     text = _strip_ansi(text)
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     if len(lines) > maxlines:
-        shown = lines[:maxlines]
-        shown.append(f"  ... ({len(lines) - maxlines} more lines)")
+        head = lines[:2]
+        tail = lines[-(maxlines - 2):]
+        skipped = len(lines) - maxlines
+        shown = head + [f"  [.. {skipped} lines ..]"] + tail
         return "\n".join(shown)
     return "\n".join(lines)
 

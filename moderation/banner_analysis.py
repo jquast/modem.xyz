@@ -182,17 +182,20 @@ def review_column_width_issues(mud_issues, bbs_issues,
             if report_only:
                 continue
 
-            choice = _prompt(
-                f"    Apply {suggested} columns?"
-                f" (Y/n/q/NUMBER) ",
-                "ynq")
+            try:
+                choice = input(
+                    f"    Apply {suggested} columns?"
+                    f" (Y/n/q/NUMBER) ").strip().lower()
+            except (EOFError, KeyboardInterrupt):
+                print()
+                return applied_count
             if choice == 'q':
                 return applied_count
             if choice == 'n':
                 continue
 
             columns = suggested
-            if choice and choice not in 'ynq':
+            if choice and choice not in ('', 'y'):
                 try:
                     columns = int(choice)
                 except ValueError:
@@ -1003,8 +1006,8 @@ def discover_http_banners(data_dir, list_path):
             if isinstance(banner_after, dict):
                 banner_after = banner_after.get('text', '')
 
-            if not (_is_http_banner(banner_before)
-                    or _is_http_banner(banner_after)):
+            if (not _is_http_banner(banner_before)
+                    and not _is_http_banner(banner_after)):
                 continue
 
             combined = (
@@ -1360,7 +1363,8 @@ def discover_misplaced_servers(data_dir, list_path, keyword_re):
 
 def review_misplaced_servers(bbs_issues, mud_issues,
                               bbs_list, mud_list,
-                              report_only=False, dry_run=False):
+                              report_only=False, dry_run=False,
+                              decisions=None):
     """Interactively review and move misplaced servers between lists.
 
     *bbs_issues* are BBS-list entries whose banners mention MUD (candidates
@@ -1373,20 +1377,37 @@ def review_misplaced_servers(bbs_issues, mud_issues,
     :param mud_list: path to mudlist.txt
     :param report_only: if True, only print without prompting
     :param dry_run: if True, don't write files
+    :param decisions: mutable decisions dict for caching choices
     :returns: (bbs_to_mud, mud_to_bbs) sets of (host, port) moved
     """
     bbs_to_mud = set()
     mud_to_bbs = set()
     stopped = False
+    move_cache = (decisions or {}).get("banner_move", {})
 
     def _review_batch(issues, src_label, dst_label):
         """Prompt for each issue; returns (to_move set, quit_early bool)."""
         to_move = set()
+        cached_count = 0
+        uncached = []
+        for issue in issues:
+            cache_key = f"{issue['host']}:{issue['port']}"
+            cached = move_cache.get(cache_key)
+            if cached is not None:
+                if cached == 'y':
+                    to_move.add((issue['host'], issue['port']))
+                cached_count += 1
+            else:
+                uncached.append(issue)
         print(f"\n--- {src_label} entries with {dst_label} banners"
               f" ({len(issues)}) ---")
-        for i, issue in enumerate(issues):
+        if cached_count:
+            print(f"  ({cached_count} decision(s)"
+                  f" auto-resolved from cache)")
+        for i, issue in enumerate(uncached):
             host = issue['host']
             port = issue['port']
+            cache_key = f"{host}:{port}"
             banner = _display_banner(issue['banner'])
             print(f"\n  {host}:{port}")
             print(f"  Banner:\n{banner}")
@@ -1401,14 +1422,20 @@ def review_misplaced_servers(bbs_issues, mud_issues,
                 return to_move, True
             if ans == 'a':
                 remaining = {(iss['host'], iss['port'])
-                             for iss in issues[i:]}
+                             for iss in uncached[i:]}
                 to_move.update(remaining)
+                if decisions is not None:
+                    for iss in uncached[i:]:
+                        decisions["banner_move"][
+                            f"{iss['host']}:{iss['port']}"] = 'y'
                 print(f"  Accepting all remaining"
                       f" ({len(remaining)} server(s)).")
                 break
             if ans == 'y':
                 to_move.add((host, port))
                 print(f"    \u2192 will move to {dst_label} list")
+            if decisions is not None and ans in ('y', 'n'):
+                decisions["banner_move"][cache_key] = ans
         return to_move, False
 
     if bbs_issues:

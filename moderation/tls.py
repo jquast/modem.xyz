@@ -94,7 +94,10 @@ def discover_tls_ports(data_dir, list_path):
             if tls_port is None:
                 continue
 
-            key = (host.lower(), port, tls_port, same_port)
+            if same_port:
+                key = (host.lower(), port)
+            else:
+                key = (host.lower(), tls_port)
             if key in seen:
                 continue
             seen.add(key)

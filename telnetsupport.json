@@ -35,13 +35,6 @@
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MSP\",\"MXP\",\"ZMP\",\"AARDWOLF MUSHCLIENT\",\"GMCP\"]"
   },
   {
-    "host": "petria.rivendel.org",
-    "port": 6600,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"UNKNOWN-100\",\"ATCP\",\"GMCP\"]"
-  },
-  {
     "host": "game.petriamud.com",
     "port": 6600,
     "ssl": 0,
@@ -70,13 +63,6 @@
     "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"END OF RECORD\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"GMCP\"]"
   },
   {
-    "host": "godwars.net",
-    "port": 9000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
-  },
-  {
     "host": "vitaliamud.com.br",
     "port": 8242,
     "ssl": 0,
@@ -98,13 +84,6 @@
     "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"NEW-ENVIRON\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
   },
   {
-    "host": "sentience.megacosm.net",
-    "port": 9010,
-    "ssl": 1,
-    "up": 1,
-    "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\",\"GMCP\"]"
-  },
-  {
     "host": "www.mudbar.cn",
     "port": 3333,
     "ssl": 0,
@@ -117,6 +96,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"SUPPRESS GO AHEAD\",\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MXP\",\"ZMP\",\"GMCP\"]"
+  },
+  {
+    "host": "godwars.net",
+    "port": 9000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\",\"CHARSET\",\"MSDP\",\"MSSP\",\"MCCP1\",\"MCCP2\",\"MSP\",\"MXP\",\"ATCP\"]"
   },
   {
     "host": "mud.merentha.com",
@@ -721,6 +707,13 @@
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\",\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
+    "host": "darkwiz.org",
+    "port": 6969,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"NEW-ENVIRON\",\"MSSP\",\"MCCP2\",\"MCCPX\",\"MXP\",\"GMCP\"]"
+  },
+  {
     "host": "proceduralrealms.com",
     "port": 3000,
     "ssl": 0,
@@ -882,13 +875,6 @@
     "options": "[\"TERMINAL TYPE\",\"NEW-ENVIRON\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "zebedee-mud.org",
-    "port": 7000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"NAWS\",\"MSSP\",\"GMCP\"]"
-  },
-  {
     "host": "mud.theforestsedge.com",
     "port": 4000,
     "ssl": 0,
@@ -945,11 +931,11 @@
     "options": "[\"CHARSET\",\"MSSP\",\"GMCP\"]"
   },
   {
-    "host": "retromud.org",
-    "port": 3000,
+    "host": "zebedee-mud.org",
+    "port": 7000,
     "ssl": 0,
     "up": 1,
-    "options": "[\"ECHO\",\"TERMINAL TYPE\",\"NAWS\"]"
+    "options": "[\"NAWS\",\"MSSP\",\"GMCP\"]"
   },
   {
     "host": "dynamix.fansi.org",
@@ -957,13 +943,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"TERMINAL TYPE\",\"NAWS\",\"LINEMODE\"]"
-  },
-  {
-    "host": "darkmists.org",
-    "port": 2222,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"MSSP\",\"GMCP\"]"
   },
   {
     "host": "mud.genesismud.org",
@@ -1092,6 +1071,13 @@
     "options": "[\"MSSP\",\"MSP\"]"
   },
   {
+    "host": "retromud.org",
+    "port": 3000,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"TERMINAL TYPE\",\"NAWS\"]"
+  },
+  {
     "host": "alteraeon.com",
     "port": 23,
     "ssl": 0,
@@ -1125,6 +1111,13 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"ECHO\",\"SUPPRESS GO AHEAD\"]"
+  },
+  {
+    "host": "darkmists.org",
+    "port": 2222,
+    "ssl": 0,
+    "up": 1,
+    "options": "[\"MSSP\",\"GMCP\"]"
   },
   {
     "host": "wildsofpern.aresmush.com",
@@ -1190,13 +1183,6 @@
     "options": "[\"ECHO\",\"NAWS\"]"
   },
   {
-    "host": "mud.mystic-adventure.org",
-    "port": 4000,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\",\"NEW-ENVIRON\"]"
-  },
-  {
     "host": "atp.pedia.szote.u-szeged.hu",
     "port": 3000,
     "ssl": 0,
@@ -1223,20 +1209,6 @@
     "ssl": 0,
     "up": 1,
     "options": "[\"MSSP\"]"
-  },
-  {
-    "host": "mud.harshlands.net",
-    "port": 5555,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\"]"
-  },
-  {
-    "host": "mud.shatteredkingdoms.org",
-    "port": 1996,
-    "ssl": 0,
-    "up": 1,
-    "options": "[\"ECHO\"]"
   },
   {
     "host": "moo.squidsoft.net",

@@ -15,6 +15,7 @@ from fetch_lists import (
     fetch_commodorebbs,
     fetch_ibbs_csv,
     fetch_relay_cfg,
+    fetch_sbbsimsg,
     fetch_telnetsupport,
 )
 
@@ -660,6 +661,79 @@ class TestFetchIbbsCsv:
             csv_out=csv_out)
         assert len(telnet) == 1
         assert telnet[0][0] == 'valid.com'
+
+
+class TestFetchSbbsimsg:
+
+    def test_parses_tab_separated(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text(
+            'vert.synchro.net\t71.95.196.34\tVertrauen\n'
+            'bbs.example.com\t10.0.0.1\tExample BBS\n'
+        )
+        result = fetch_sbbsimsg(str(p))
+        assert ('vert.synchro.net', 23) in result
+        assert ('bbs.example.com', 23) in result
+
+    def test_skips_blank_and_comment_lines(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text(
+            '# comment line\n'
+            '\n'
+            'valid.com\t1.2.3.4\tValid BBS\n'
+        )
+        result = fetch_sbbsimsg(str(p))
+        assert len(result) == 1
+        assert result[0] == ('valid.com', 23)
+
+    def test_skips_malformed_lines(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text(
+            'notabs\n'
+            'valid.com\t1.2.3.4\tValid BBS\n'
+        )
+        result = fetch_sbbsimsg(str(p))
+        assert len(result) == 1
+
+    def test_two_field_line_accepted(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text('bbs.example.com\t1.2.3.4\n')
+        result = fetch_sbbsimsg(str(p))
+        assert len(result) == 1
+        assert result[0] == ('bbs.example.com', 23)
+
+    def test_deduplicates_within_source(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text(
+            'vert.synchro.net\t71.95.196.34\tVertrauen\n'
+            'VERT.SYNCHRO.NET\t71.95.196.34\tVertrauen\n'
+        )
+        result = fetch_sbbsimsg(str(p))
+        assert len(result) == 1
+
+    def test_strips_whitespace(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text(
+            '  bbs.example.com  \t10.0.0.1\tExample BBS\n'
+        )
+        result = fetch_sbbsimsg(str(p))
+        assert result[0] == ('bbs.example.com', 23)
+
+    def test_all_port_23(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text(
+            'a.com\t1.1.1.1\tA\n'
+            'b.com\t2.2.2.2\tB\n'
+            'c.com\t3.3.3.3\tC\n'
+        )
+        result = fetch_sbbsimsg(str(p))
+        assert all(port == 23 for _, port in result)
+
+    def test_empty_file(self, tmp_path):
+        p = tmp_path / 'sbbsimsg.lst'
+        p.write_text('')
+        result = fetch_sbbsimsg(str(p))
+        assert result == []
 
 
 class TestEndToEnd:

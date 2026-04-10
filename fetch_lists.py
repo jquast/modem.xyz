@@ -7,7 +7,8 @@ any existing encoding or column overrides.  Cross-list deduplication
 ensures hosts already tracked in one list are not added to the other.
 
 Sources:
-- BBS: ipingthereforeiam.com relay.cfg, commodorebbs.com JSON API
+- BBS: ipingthereforeiam.com relay.cfg, commodorebbs.com JSON API,
+  synchro.net sbbsimsg.lst, telnetbbsguide.com ibbs CSV
 - MUD: lociterm.com telnetsupport.json
 """
 
@@ -31,6 +32,7 @@ RELAY_CFG_URL = 'https://www.ipingthereforeiam.com/bbs/dir/relay.cfg'
 COMMODOREBBS_URL = 'https://www.commodorebbs.com/api/bbs'
 TELNETSUPPORT_URL = 'https://lociterm.com/telnetsupport.json'
 IBBS_BASE_URL = 'https://www.telnetbbsguide.com/bbslist/'
+SBBSIMSG_URL = 'http://www.synchro.net/sbbs/sbbsimsg.lst'
 
 USER_AGENT = 'modem.xyz/0.1 (telnet census)'
 
@@ -306,6 +308,45 @@ def fetch_ibbs_csv(daily_url=None, monthly_url=None,
     return telnet_entries, ssh_map
 
 
+def fetch_sbbsimsg(source=SBBSIMSG_URL):
+    """Fetch BBS entries from Synchronet sbbsimsg.lst.
+
+    The file is tab-separated with columns: hostname, IP, BBS name.
+    All entries are assumed to use port 23 (standard Synchronet telnet).
+
+    :param source: URL or local filesystem path
+    :returns: list of ``(host, port)`` tuples
+    """
+    if source.startswith(('http://', 'https://')):
+        print(f'  downloading {source} ...', file=sys.stderr)
+        req = urllib.request.Request(
+            source, headers={'User-Agent': USER_AGENT})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            text = resp.read().decode('utf-8', errors='replace')
+    else:
+        print(f'  reading {source} ...', file=sys.stderr)
+        with open(source, encoding='utf-8', errors='replace') as f:
+            text = f.read()
+
+    entries = []
+    seen = set()
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        parts = line.split('\t')
+        if len(parts) < 2:
+            continue
+        host = parts[0].strip()
+        if not host:
+            continue
+        key = (host.lower(), 23)
+        if key not in seen:
+            seen.add(key)
+            entries.append((host, 23))
+    return entries
+
+
 def _merge_ssh_entries(existing, ssh_map):
     """Add SSH lines for hosts already tracked as telnet entries.
 
@@ -461,6 +502,12 @@ def main(argv=None):
     parser.add_argument(
         '--ibbs-csv', default=DEFAULT_IBBS_CSV,
         help='path to save ibbs_bbslist.csv')
+    parser.add_argument(
+        '--no-sbbsimsg', action='store_true',
+        help='skip synchro.net sbbsimsg source')
+    parser.add_argument(
+        '--sbbsimsg', default=SBBSIMSG_URL,
+        help='URL or path for sbbsimsg.lst')
     args = parser.parse_args(argv)
 
     do_bbs = args.bbs or not (args.bbs or args.muds)
@@ -533,6 +580,24 @@ def main(argv=None):
                       file=sys.stderr)
             except (OSError, ValueError, KeyError) as exc:
                 print(f'  ibbs: fetch failed ({exc})', file=sys.stderr)
+
+        if not args.no_sbbsimsg:
+            try:
+                sbbs = fetch_sbbsimsg(args.sbbsimsg)
+                n, rej, alt, cross = _merge_entries(
+                    entries, sbbs, rejected=rejected,
+                    exclude_hosts=mud_hosts)
+                msg = f'  sbbsimsg: {len(sbbs)} fetched, {n} new'
+                if rej:
+                    msg += f', {rej} rejected'
+                if alt:
+                    msg += f', {alt} alt-port skipped'
+                if cross:
+                    msg += f', {cross} in mudlist'
+                print(msg, file=sys.stderr)
+            except (OSError, ValueError) as exc:
+                print(f'  sbbsimsg: fetch failed ({exc})',
+                      file=sys.stderr)
 
         rlogin_removed = _remove_rlogin_dupes(entries)
         if rlogin_removed:

@@ -1,5 +1,5 @@
 matplotlib
 numpy
+rapidfuzz
 tabulate
 ansi2html
-pixelgreat

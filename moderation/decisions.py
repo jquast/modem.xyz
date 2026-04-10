@@ -19,6 +19,8 @@ def load_decisions(path):
     data.setdefault("cross", {})
     data.setdefault("dupes", {})
     data.setdefault("dns", {})
+    data.setdefault("encoding", {})
+    data.setdefault("banner_move", {})
     data.setdefault("rejected", {"mud": {}, "bbs": {}})
     return data
 

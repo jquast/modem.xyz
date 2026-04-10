@@ -1,423 +1,393 @@
 # format,
-# ip address [port number [encoding [columns [tall]]]]
-101.101.168.34.bc.googleusercontent.com 23
+# ip address [port number [encoding [columns [tall]]]] [ssl]
+101.101.168.34.bc.googleusercontent.com 23 cp437 80 tall
 103.95.48.171 23
 104.142.112.149 9000 utf-8
 104.195.221.163 23
-104-2-125-12.lightspeed.iplsin.sbcglobal.net 23
-104.236.78.248 23
+104-2-125-12.lightspeed.iplsin.sbcglobal.net 23 cp437
+104.236.78.248 23 cp437
 104.246.170.121 23
-104.57.170.70 6840
+104.57.170.70 6840 cp437 80 tall
+107.173.85.173 2223
 107.175.69.10 60023 utf-8
 107.195.72.202 1170
 107-200-207-176.lightspeed.mmphtn.sbcglobal.net 23
-107-217-127-33.lightspeed.nsvltn.sbcglobal.net 23
-107-217-127-34.lightspeed.nsvltn.sbcglobal.net 23
-107.217.154.237 513
+107-217-127-33.lightspeed.nsvltn.sbcglobal.net 23 cp437
+107-217-127-34.lightspeed.nsvltn.sbcglobal.net 23 cp437
+107.217.154.237 513 cp437 80 tall
+108.191.210.10 23
 108-210-207-115.lightspeed.sntcca.sbcglobal.net 23
 108.216.156.236 2423 utf-8
 108.242.55.251 23 utf-8
-108.29.0.206 23
-108-84-210-172.lightspeed.hstntx.sbcglobal.net 23
-109.247.190.78 2323
-112.188.70.115.static.exetel.com.au 23
-114.255.40.186 23
-114-34-31-241.hinet-ip.hinet.net 23
+108.29.0.206 23 cp437
+109.247.190.78 2323 cp437 80 tall
+114.255.40.186 23 big5
+114-34-31-241.hinet-ip.hinet.net 23 cp437
 115.129.39.200 6800
 118.195.195.76 4001 gbk
 118.195.195.76 6000 utf-8
 118.195.195.76 6002 utf-8
 118.195.195.76 9000 gbk
 118.195.195.76 9001 gbk
-118.195.237.158 6666 gbk
-120-88-120-83.785878.bne.static.aussiebb.net 23
+120-88-120-83.785878.bne.static.aussiebb.net 23 cp437
 120.92.124.38 23 gbk 80 tall
 120.92.212.76 23 gbk 80 tall
-121-200-29-194.79c81d.mel.nbn.aussiebb.net 23
 122.199.12.99 8888 utf-8
-122.199.58.252 2323
+122.199.58.252 2323 cp437
 122.58.172.195 1024 utf-8
-122-58-239-220-vdsl.sparkbb.co.nz 23
+122-58-239-220-vdsl.sparkbb.co.nz 23 cp437
 124.223.196.108 23
-129.151.218.124 2323
+129.151.218.124 2323 cp437 80 tall
+130.95.13.14 4242
 132.145.210.148 3000
 132.145.58.129 513
 132.226.155.29 23 cp437 80 tall
 134.185.84.52 2323 utf-8
 134.209.40.1 31337 utf-8
 13.72.87.55 3000
-138.197.129.1 23
-139.162.227.40 513
-139.59.222.14 23
-13leader.net 8013 utf-8
-13leader.net 8023 utf-8
-13th.hoyvision.com 6400
-141.0.110.62 2323
+138.197.129.1 23 cp437
+139.162.227.40 513 cp437
+139.59.222.14 23 cp437 80 tall
+13leader.net 8013 ascii
+13leader.net 8023 ascii
+13th.hoyvision.com 6400 cp437
+141.0.110.62 2323 cp437 80 tall
 142.11.212.221 23
 142.44.247.204 23 utf-8
-142.93.52.94 23
+142.93.52.94 23 cp437 80 tall
 143.103.124.204 6984
 143.223.235.160 23 utf-8
 146.59.43.83 23 utf-8
-147.182.189.53 23
-147.78.240.155 513
+147.78.240.155 513 cp437
 148.251.169.181 23
-149.56.47.118 1023
+149.56.47.118 1023 cp437
 152.52.103.106 23
 153.100.181.200 23
 153.100.182.80 23
 153.127.6.190 2323
 155.212.185.109 4000
-157.230.118.236 2323
-157.230.136.41 2323
+157.230.118.236 2323 cp437
+157.230.136.41 2323 cp437
 157.230.152.152 23
-157.230.64.29 4000 ascii 80 tall
 157.245.141.84 8888 utf-8
 158.69.60.181 2323 utf-8
-159.203.135.29 23
-160-2-35-236.cpe.sparklight.net 223
-162.118.68.104 23
-162.212.158.202 23
+160-2-35-236.cpe.sparklight.net 223 cp437
+162.212.158.202 23 cp437
 162.243.54.214 23
-165.239.226.35.bc.googleusercontent.com 31337
+165.239.226.35.bc.googleusercontent.com 31337 utf-8 80 tall
 165.239.226.35.bc.googleusercontent.com 39001
-165.239.226.35.bc.googleusercontent.com 47145
+165.239.226.35.bc.googleusercontent.com 47145 utf-8 80 tall
 165.239.226.35.bc.googleusercontent.com 6767
-167.86.109.250 23 utf-8
 172.101.80.169 2000 cp437
-172-105-27-143.ip.linodeusercontent.com 23
-172.110.183.196 2323
+172-105-27-143.ip.linodeusercontent.com 23 cp437
+172.110.183.196 2323 cp437
 172.111.168.176 23
 172.111.168.90 23
-17.227.167.72.host.secureserver.net 23
+17.227.167.72.host.secureserver.net 23 cp437
 173.14.206.213 23
-173.14.208.154 9911
+173.14.208.154 9911 cp437 80 tall
 173.199.127.12 2002
-173.217.78.103 2323 utf-8
+173.217.78.103 2323 ascii
 173.255.220.187 443
-173.63.126.200 513
-173.75.131.40 4000
-174.1.49.147 2323
+173.63.126.200 513 cp437
+174.1.49.147 2323 cp437
 174.3.235.112 230 utf-8
 174.54.53.254 8000
-180.153.120.36 5555 big5
+179.41.23.26 23
 185.229.238.56 513
-188.166.127.214 1223
+188.166.127.214 1223 cp437
 188.166.9.190 23
-188.60.225.170 23
-188.81.201.94 2323
+188.60.225.170 23 cp437
+188.81.201.94 2323 cp437
 189.181.46.61 23
-190.92.134.117 2323
-192.0.135.41 23
-192.138.210.158 513
-192.243.111.121 2323
+190.92.134.117 2323 cp437
+192.0.135.41 23 cp437
+192.138.210.158 513 cp437
+192.243.111.121 2323 cp437
 192.3.122.156 2002
-192.3.80.52 6523
-192.81.129.7 513
-192.81.133.87 513
-192.82.254.205 8888
+192.3.80.52 6523 cp437
+192.81.129.7 513 cp437 80 tall
+192.81.133.87 513 cp437
+192.82.254.205 8888 cp437
 1984.ws 23 utf8
-1984.ws 444
-1984.ws 555
-1984.ws 666
-1984.ws 8023
-198.71.48.13 1040
-198.71.48.13 7777
+198.71.48.13 1040 cp437
+198.71.48.13 7777 cp437
 1987846-static.wsfdindl.metronetinc.net 10023
-1987846-static.wsfdindl.metronetinc.net 1717
+1987846-static.wsfdindl.metronetinc.net 1717 cp437 80 tall
 1987846-static.wsfdindl.metronetinc.net 23
-199.195.254.241 6800
-1stchoicecore.co.nz 1024
+199.195.254.241 6800 cp437
+1stchoicecore.co.nz 1024 utf-8
 1stchoicecore.co.nz 1028 cp437
-1stchoicecore.co.nz 1030
-20.245.25.86 23
+1stchoicecore.co.nz 1030 cp437
+20.245.25.86 23 cp437
 202.61.251.17 23
+203.134.137.155 23
 203.191.174.46 23
+204.111.89.89 6800
 205.166.250.238 23
 206.189.226.31 23 utf-8
-207.167.252.79 2324
-207.90.251.241 2323
-208.97.60.219 2300
-209.38.6.175 23
-209.38.6.175 5513
+207.167.252.79 2324 cp437
+207.90.251.241 2323 cp437
+208.97.60.219 2300 cp437
+209.38.6.175 23 cp437
+209.38.6.175 5513 cp437
 20forbeers.com 1337 cp437
 211.34.105.88 8881
 213.166.5.201 23
-213.95.46.21 513
+213.95.46.21 513 cp437
 216.136.9.5 1809
-216.82.29.171 23
-217.154.107.144 23 utf-8
-217.180.212.89 23
-217.180.212.89 2323
+216.47.54.43 2323 cp437 80 tall
+217.154.107.144 23 ascii
+217.180.212.89 23 cp437
+217.180.212.89 2323 cp437
 217.198.137.127 23 utf-8
 217.81.85.246 23
 23.95.146.28 8282 utf-8
-24.131.193.139 23
-24.166.43.233 23
-24.209.50.108 2332
-24.64.95.197 23903
+24.131.193.139 23 cp437 80 tall
+24.166.43.233 23 cp437
+24.209.50.108 2332 cp437
+24.3.154.248 23 cp437 80 tall
+24.64.95.197 23903 cp437
 24.80.160.127 23 cp437
 24.96.157.17 23
-254.sub-75-215-45.myvzw.com 23
+254.sub-75-215-45.myvzw.com 23 cp437
 300baud.dynu.net 1123 cp437
-300baud.dynu.net 1337
-300baud.dynu.net 2523
 300baud.dynu.net 2525
-3.132.92.116 24
-32-217-68-154.bng02.wtrb.ct.frontiernet.net 23
+31.14.136.115 23
+3.132.92.116 24 cp437
+32-217-68-154.bng02.wtrb.ct.frontiernet.net 23 cp437
 34.162.43.84 23 utf-8
-37.27.85.185 2323
+35.192.18.87 8888
+37.27.85.185 2323 cp437
 38.123.201.128 10123
 38.123.201.142 10123
 38.123.201.186 10123
+38.162.129.234 23 cp437
 38.179.43.245 2323
 38.188.130.43 23
-38.98.98.115 45001
+38.98.98.115 45001 cp437
 39.106.161.147 23 gbk
 39.108.72.91 9999 gbk
-45.10.160.94 64
+45.10.160.94 64 cp437 80 tall
 45-24-186-194.lightspeed.tukrga.sbcglobal.net 23
-45.24.186.195 513
-45-24-186-196.lightspeed.tukrga.sbcglobal.net 2323
-45.24.186.198 513
-45-24-186-198.lightspeed.tukrga.sbcglobal.net 23
+45.24.186.195 513 cp437
+45.24.186.198 513 cp437
 45.33.40.193 443
 45.4.217.182 30023
 45.4.219.29 30023
 45.72.180.214 23 topaz
-45-79-37-227.ip.linodeusercontent.com 23
-45.79.69.172 513
+45-79-37-227.ip.linodeusercontent.com 23 cp437
+45.79.69.172 513 cp437
 45.79.93.198 23
-45.86.125.202 6666
-45.86.125.203 6666
 47.100.41.3 23
-47-177-33-34.fdr01.splv.ca.ip.frontiernet.net 23
 47.185.76.199 23
-47-188-56-111.fdr04.plan.tx.ip.frontiernet.net 23
+47-188-56-111.fdr04.plan.tx.ip.frontiernet.net 23 cp437
 47.223.173.180 23 utf-8
-47.25.173.251 23
+47.25.173.251 23 cp437 80 tall
 47.38.20.227 23
-47.46.52.130 23
-47.pool85-54-48.dynamic.orange.es 2323
-48.56.236.23.bc.googleusercontent.com 23
-50.104.161.62 23
-50-107-162-117.dlls.pa.frontiernet.net 23
-50.109.243.162 513
-50.110.169.17 23
-50.116.41.177 23 utf-8
-50-116-41-177.ip.linodeusercontent.com 513
-50.116.51.149 23
-50.20.127.213 23
-50.214.28.50 8888
-50.47.85.64 23
-51.222.110.111 2323
+47.46.52.130 23 cp437 80 tall
+50.104.161.62 23 cp437
+50.107.162.117 513
+50-107-162-117.dlls.pa.frontiernet.net 23 cp437
+50.116.51.149 23 cp437
+50.20.127.213 23 cp437
+50.214.28.50 8888 cp437 80 tall
+50.47.85.64 23 cp437 80 tall
+51.222.110.111 2323 cp437
 5.150.245.20 2323 topaz
-5.150.254.12 31337
-5.198.54.18 23
+5.150.254.12 31337 cp437
+5.198.54.18 23 cp437
 52.40.49.152 23 latin-1
 5.38.247.23 1212
 5.39.80.203 7000
 54.238.90.108 23 big5bbs no_ambig
-59.167.142.49 12800 cp437 80
-5.9.58.175 2002
-64-121-67-27.s1049.c3-0.tlg-cbr2.atw-tlg.pa.cable.rcncustomer.com 8023
-64.121.82.225 9999
-64life.net 1983 cp437
-64vintageremixbbs.dyndns.org 6400 cp437
-66.168.116.58 23
-66.228.57.87 2323
+59.167.142.49 12800 petscii 80
+64.121.82.225 9999 cp437 80 tall
+64life.net 1983 cp437 80 tall
+64vintageremixbbs.dyndns.org 6400 cp437 80 tall
+65.189.82.45 23
+66.168.116.58 23 cp437
+66.188.64.39 23
+66.228.57.87 2323 cp437 80 tall
 66.23.221.29 2323 utf-8
-67.131.59.192 27
+67.131.59.192 27 cp437 80 tall
 67.149.17.69 23 utf-8
-67.163.148.95 23
-67.190.218.57 2323
-67.205.168.255 2323
+67.163.148.95 23 cp437 80 tall
+67.190.218.57 2323 cp437
+67.205.168.255 2323 cp437 80 tall
 67.230.158.234 23
 68.145.253.237 23 utf-8
-68-168-184-229.fttp.usinternet.com 23
-68.98.101.79 23
-69.178.59.98 23 utf-8
+68-168-184-229.fttp.usinternet.com 23 cp437
+68.34.234.44 2323
+68.98.101.79 23 cp437 80 tall
+69.196.169.60 23
 69.201.1.134 23
-69.24.117.72 23
-69.28.93.15.static.cyrellia.com 23
+69.24.117.72 23 cp437
+69.28.93.15.static.cyrellia.com 23 cp437
 69.4.62.151 23
-69-4-62-151.dsl.ingr.hctcnetworks.net 2003
 69.87.219.91 8221
 70.122.247.57 2002
-70.123.70.30 23
-71.193.203.232 9000
-71.237.240.26 23
-71.95.196.34 513
-72.12.252.162 31810
-72.178.2.58 513
-73.242.209.94 23 utf-8
+70.123.70.30 23 cp437
+70.53.253.249 513 cp437 80 tall
+71.193.203.232 9000 cp437
+71.237.240.26 23 cp437
+71.95.196.34 513 cp437 80 tall
+72.12.252.162 31810 cp437
+72.178.2.58 513 cp437
+73.242.209.94 23 ascii
 73.42.12.93 23 utf-8
-74.138.82.254 23 utf-8
+74.138.82.254 23 cp437
 74.65.39.90 6809 utf-8
-74.75.213.5 23
+74.75.213.5 23 cp437
 74.93.16.50 7777
-74.98.223.74 23233
+74.98.223.74 23233 cp437
+75.169.140.226 23
+75.174.144.205 2112
 75.186.39.144 or fodim.bounceme.net 23 petscii
-75.3.200.42 9000
-76.104.161.135 23
-76.179.0.166 2002
-76.237.109.228 6400
-76.242.166.61 2002
-76-242-166-61.lightspeed.dybhfl.sbcglobal.net 23
+76.104.161.135 23 cp437 80 tall
+76.179.0.166 2002 cp437
+76.237.109.228 6400 cp437
+76-242-166-61.lightspeed.dybhfl.sbcglobal.net 23 cp437 80 tall
 77.14.51.149 23
-79.202.49.242 3023
+79.202.49.242 3023 cp437 80 tall
 80.144.3.91 3023
 80.153.193.93 23
-80.211.167.123 23
+80.211.167.123 23 cp437
 80.229.19.209 23 utf-8
 80.7.90.17 31337 topaz
 82.51.113.85 2323
-82-65-188-127.subs.proxad.net 1337
-83.135.0.174 5745 utf-8
-83.135.7.11 5745 utf-8
+82-65-188-127.subs.proxad.net 1337 cp437 80 tall
 84.104.78.157 23
-84-217-62-182.customers.ownit.se 2323
-84.68.177.61 2323
-84-87-244-28.fixed.kpn.net 2323
+84.68.177.61 2323 cp437 80 tall
+84-87-244-28.fixed.kpn.net 2323 cp437 80 tall
 84.92.196.99 23
-86.12.24.168 23 utf-8
-86.180.19.193 1338
-86.184.171.95 1338
+86.12.24.168 23 ascii
+86.180.19.193 1338 cp437 80 tall
+86.184.171.95 1338 cp437 80 tall
 86.32.95.42 23 cp437
 86.59.167.15 1212
 86.88.76.77 6323
-87.106.7.15 23
+87.106.7.15 23 cp437
 87.148.28.165 8888
-87.212.201.57 4000
+87.212.201.57 4000 cp437
 89.244.217.180 23
+89.58.51.248 7500
 8bit.hoyvision.com 6400
 8bit.hoyvision.com 6502 cp437
-91-119-62-15.dsl.dynamic.surfer.at 23
+91-119-62-15.dsl.dynamic.surfer.at 23 cp437
 91.138.216.205 2323
 91.210.224.213 2323
 91.56.162.74 8888
-92.91.25.209 2323
+92.91.25.209 2323 cp437
 94.22.232.77 23
 94.32.85.38 2023
 95.217.16.88 8888 utf-8
-95.217.22.142 2323
+95.217.22.142 2323 cp437
 95.33.25.119 2323
 95.33.93.81 2323
-96.231.233.46 23
-96.231.233.47 23
-96.231.233.50 23
+96.231.233.46 23 cp437 80 tall
+96.231.233.47 23 cp437 80 tall
+96.231.233.50 23 cp437 80 tall
 96.231.233.52 23
-96.231.233.53 23
+96.231.233.53 23 cp437 80 tall
 96.231.233.58 23
-96.231.233.60 23
+96.231.233.60 23 cp437 80 tall
 96.231.233.61 23
 96.27.249.221 23
 97.247.163.174 23
-97.76.12.194 23
+97.76.12.194 23 cp437
 98.113.13.134 2323
-98.144.7.205 23
-98.235.15.14 23
-98.45.212.129 23
-99.184.243.231 23
+98.144.7.205 23 cp437 80 tall
+98.235.15.14 23 cp437
+98.45.212.129 23 cp437
+99.184.243.231 23 cp437
 99.85.80.17 23
-99.89.65.2 23
+99.89.65.2 23 cp437 80 tall
 abandonedstardock.ddns.net 2002
-abandonedstardock.ddns.net 2003
 absinthebbs.net 1940 topaz
-acentauribbs.no-ip.org 1955
 acentauribbs.no-ip.org 2002 cp437
 acentauribbs.no-ip.org 2424 cp437
-adeptbbs.com 23
+adeptbbs.com 23 cp437 80 tall
 adhd.ninjaneering.net 12345
-aeug.asuscomm.com 8888 big5bbs no_ambig
-agency.bbs.nz 23
-alamobbs.mywire.org 6400
+aeug.asuscomm.com 8888 big5bbs
+alamobbs.mywire.org 6400 cp437
 alcatrazbbs.ddns.net 9000 atascii
 alco.bbs.io 23 topaz
 alephbbs.com 2626 utf-8
 altairiv.ddns.net 2323
 altarofwaresbbs.hopto.org 6464 cp437
-alteraeon.com 3000
-alteraeon.com 3002
-alteraeon.com 4002
-alteraeon.com 4010
-alteraeon.com 4224
-alterant.bbs.dege.au 123
+alterant.bbs.dege.au 123 cp437
 alterant.bbs.dege.au 23 utf-8
-amibbs.amigaretro.com 6880 topaz
+amibbs.amigaretro.com 6880 topaz 80 tall
 amigacity.xyz 23 utf-8
 amiganer.amms-bbs.de 23 topaz
 amigaunderground.com 1985 topaz
 amigaunderground.com 2002 topaz
-amigaunderground.com 2300 topaz
+amigaunderground.com 2300 topaz 80 tall
 amis86.ddns.net 9000 atascii 40 tall
 amnesiabbs.duckdns.org 23 utf-8
 amstrad.simulant.uk 464
 amstrad.simulant.uk 664
 anancy-653-1-49-170.w86-204.abo.wanadoo.fr 23
 andcycle.idv.tw 23 big5bbs
-andr01d.zapto.org 9999
+andr01d.zapto.org 9999 cp437
 a-net.online 23 utf-8
 angstridden.net 1337
-antidote.triad.se 64128
+antidote.triad.se 64128 petscii
 anybox.freedyndns.de 23 utf-8
-app.winzlo.com 23
-arda-bbs.com 23
+arda-bbs.com 23 cp437
 area52.tk 5200 atascii
-argentumage.com 23
+argentumage.com 23 cp437
 asanocomp.ddns.net 2300 utf-8
-ascii.dynu.net 4096
 ashlands.com 23
 astronetbbs.ddns.net 23
 ataribbs.ddns.net 6502 atascii
 atari-bbs.zapto.org 8888 atascii 80 tall
-athelstan.org 23
+athelstan.org 23 cp437
+atl.ddns.net 6400 cp437
 aubbs.zapto.org or aubbs.dyndns.org 2300 petscii
 avastbbs.servegame.com 23 cp437 80 tall
 aws1.fmerino.com.br 23 utf-8
-ayce.fozztexx.com 23
-backintime.ddns.net 6510
-baybuds.org 23
-bay.jayscafe.net 6401
-bayoublog.ddns.net 23
-bayvillewireless.com 23
+backintime.ddns.net 6510 cp437 80 tall
+baybuds.org 23 cp437
+bayoublog.ddns.net 23 cp437
+bayvillewireless.com 23 cp437 80 tall
 bbbs.net 23
-bbs1.tardisbbs.com 8023
+bbs1.tardisbbs.com 8023 cp437 80 tall
 bbs.2girl.net 23 big5
-bbs2.ipingthereforeiam.com 2323
-bbs.4d2.org 128 petscii 80
+bbs2.ipingthereforeiam.com 2323 cp437
+bbs.4d2.org 128 petscii
 bbs.4d2.org 23 utf-8
-bbs.4d2.org 64 petscii 40
+bbs.4d2.org 64 petscii 80 tall
 bbs.4wheelham.com 23 utf-8
-bbs.8-bitarchive.com 2223 utf-8
-bbs.8bitboyz.com 23
+bbs.8-bitarchive.com 2223 ascii
+bbs.8bitboyz.com 23 utf-8
 bbs.8bitboyz.com 6502 utf-8
-bbs.8bitboyz.com 6800
+bbs.8bitboyz.com 6800 cp437
 bbs.8bitclub.com 6502 utf-8
-bbs.8yo.biz 5150
-bbs.abbadabba.tech 4242
-bbs.abon.us 2321
+bbs.8yo.biz 5150 cp437
+bbs.abbadabba.tech 4242 cp437 80 tall
 bbs.abyssnode.net 23
 bbs.acehoss.net 23 utf-8
 bbs.aghy.net 23 utf-8
 bbs.alcatrash.org 23 utf-8
-bbs.alecoexp.cz 23
+bbs.alecoexp.cz 23 cp437
 bbs.alsgeeklab.com 2323 utf-8
-bbs.anduin.net 23
-bbs.apostols.org 23 utf-8
+bbs.anduin.net 23 cp437
+bbs.apostols.org 23 ascii
 bbs.archaicbinary.net 23
 bbs.arcticzonebbs.net 23
 bbs.as.ntu.edu.tw 23 big5bbs tall
 bbs.at2k.org 23
-bbs.atavachronbbs.net 23
+bbs.atavachronbbs.net 23 cp437
 bbs.bajer.cz 32
-bbs.bbses.info 2323
+bbs.bbses.info 2323 cp437
 bbs.beanzilla.net 2323 big5
 bbs.beardy.se 23 utf-8
-bbs.bearfather.net 23
-bbs.birdenuf.com 4269
+bbs.bearfather.net 23 cp437 80 tall
+bbs.birdenuf.com 2003 cp437 80 tall
+bbs.birdenuf.com 4269 cp437
 bbs.bnbbbs.net 2023
-bbs.bnbbbs.net 2323
 bbs.bnbbbs.net 3023
 bbs.bnbbbs.net 60177
 bbs.bnbbbs.net 60179
@@ -425,784 +395,705 @@ bbs.bnbbbs.net 60277
 bbs.bnbbbs.net 60279
 bbs.bnbbbs.net 60377
 bbs.bnbbbs.net 60379
+bbs.b-o-g.org 23
 bbs.bottomlessabyss.net 2023 topaz
 bbs.buema.ch 2300 cp437
-bbs.b-wells.us 23 utf-8 80 tall
+bbs.b-wells.us 23 ascii 80 tall
 bbs.byr.cn 23 gbk
-bbs.bytebarn.de 2300
-bbs.c64.pub 128 petscii 80
-bbs.c64.pub 23 utf-8
-bbs.c64.pub 64 petscii 40
+bbs.bytebarn.de 2300 cp437
+bbs.c64.pub 128 petscii
+bbs.c64.pub 23 ascii
+bbs.c64.pub 64 petscii
 bbs.cabanabar.net 11123 utf-8
 bbs.cabanabar.net 11513
-bbs.canerduh.com 23056
-bbs.canerduh.com 23905
-bbs.ccns.ncku.edu.tw 23 big5bbs no_ambig
-bbs.ccns.ncku.edu.tw 3456 big5bbs no_ambig
+bbs.canerduh.com 23056 cp437
+bbs.canerduh.com 23905 cp437
+bbs.ccns.ncku.edu.tw 23 big5bbs
+bbs.ccns.ncku.edu.tw 3456 big5bbs
 bbs.ccxbbs.net 23
-bbs.centronian.ca 6400
-bbs.circl.lu 128 petscii 80
+bbs.centronian.ca 6400 cp437
+bbs.circl.lu 128 petscii 80 tall
 bbs.circl.lu 23 utf-8
-bbs.circl.lu 64 petscii 40
+bbs.circl.lu 64 petscii 80 tall
 bbs.cis92.net 23 big5
 bbs.cittadellabbs.it 4001
 bbs.clutchbbs.com 23
-bbs.coldwinterknights.net 8888
-bbs.conf.eti.br 23 latin-1
+bbs.coldwinterknights.net 8888 cp437 80 tall
+bbs.conf.eti.br 23 latin-1 80 tall
 bbs.cooldavid.org 23 big5 no_ambig
-bbs.cortex-media.info 23
+bbs.cortex-media.info 23 cp437
 bbs.crazyerics.com 23
 bbs.crnet.net 2323
-bbs.cs.nthu.edu.tw 23 big5bbs no_ambig
+bbs.cs.nthu.edu.tw 23 big5bbs
 bbs.cyrellia.com 23 utf-8
 bbs.darkcarnival.org 23
 bbs.darkrealms.ca 23 cp437
-bbs.deadparrotbbs.com 2300
+bbs.deadparrotbbs.com 2300 cp437
 bbs.deadparrotbbs.com 2323
-bbs.deadparrotbbs.com 2324
+bbs.deadparrotbbs.com 2324 cp437
 bbs.decafbad.com 6513 utf-8
-bbs.deek.se 23
+bbs.deek.se 23 cp437
+bbs.deepskies.com 6400
 bbs.demigoth.com 2002 rlogin
-bbs.demigoth.com 2003
 bbs.demigoth.com 23 utf-8
-bbsdev.net 23
+bbsdev.net 23 cp437
 bbs.dicksonlabs.net 2325
 bbs.digicombbs.com 2323 utf-8
 bbs.digilogbbs.com 2323
-bbs.digitaldistortionbbs.com 23
-bbs.digitalrainbow.info 128 petscii 80
+bbs.digitaldistortionbbs.com 23 cp437
+bbs.digitalrainbow.info 128 cp437
 bbs.digitalrainbow.info 23 utf-8
-bbs.digitalrainbow.info 64 petscii 40
-bbs.digital-warfare.net 1337
+bbs.digitalrainbow.info 64 cp437
+bbs.digital-warfare.net 1337 cp437
 bbs.disconnected-by-peer.at 23 latin-1
-bbs.distantempires.com 8023
-bbs.distantempires.com 8513
-bbsdoors.com 23
+bbs.distantempires.com 8023 cp437
+bbs.distantempires.com 8513 cp437
+bbsdoors.com 23 cp437 80 tall
 bbs.dosnetz.de 3232
 bbs.dragonsweb.org 23
 bbs.dragonsweb.org 60177
 bbs.dragonsweb.org 60179
 bbs.dsbbs.ca 23
-bbs.duensing.digital 23
-bbs.echo-mirage.net 1989
+bbs.duensing.digital 23 cp437
+bbs.echo-mirage.net 1989 cp437
 bbs.efectolinux.com 23 utf-8 80 tall
-bbs.emeraldhill.org 23
+bbs.electronwrangler.io 1337
+bbs.emeraldhill.org 23 cp437
 bbs.emeraldvalley.net 23 utf-8 80 tall
-bbs.emu486.net 23 big5bbs no_ambig
-bbs.endofthelinebbs.com 128 petscii 80
+bbs.emu486.net 23 big5bbs
 bbs.endofthelinebbs.com 17
-bbs.endofthelinebbs.com 23
-bbs.endofthelinebbs.com 64 petscii 40
-bbs.eob-bbs.com 23
-bbs.eotd.com 23
-bbs.erb.pw 23
-bbs.erb.pw 51301
+bbs.eob-bbs.com 23 cp437
+bbs.eotd.com 23 cp437
+bbs.erb.pw 23 cp437
+bbs.erb.pw 51301 cp437
 bbs.erb.pw 65534
-bbs.eternaldomain.net 23
+bbs.error200.tech 1337 utf-8
+bbs.eternaldomain.net 23 cp437
 bbs.excalibursheath.com 23 utf-8
-bbs.excalibursheath.com 5513
+bbs.excalibursheath.com 5513 cp437
 bbs.f4fbbs.com 2323
 bbs.fozztexx.com 1701
 bbs.fozztexx.com 23
 bbs.fozztexx.com 6502
 bbs.fozztexx.com 9600
+bbs.fputs.com 23
 bbs.ftelnet.ca 23 utf-8
-bbs.furryrefuge.com 23 utf-8
-bbs.g00r00.com 23
+bbs.furryrefuge.com 23 ascii
+bbs.g00r00.com 23 cp437
 bbs.game-master.com 23 cp437 80 tall
 bbs.gamer.com.tw 23 big5
 bbs.gamer.com.tw 443 big5
-bbs.gamer.com.tw 88 big5
-bbs.gamer.com.tw 888 big5
 bbs.gamer.com.tw 8888 big5
+bbs.gamer.com.tw 888 big5
+bbs.gamer.com.tw 88 big5
 bbsgamer.ddns.net 2600 utf-8
-bbs.gglab.cloud 2323
-bbs.gigabite.se 23
-bbs.greektimes.ca 23
+bbs.gglab.cloud 2323 cp437
+bbs.gigabite.se 23 cp437
+bbs.greektimes.ca 23 cp437
 bbs.greenhead.ca 23 utf-8
-bbs.hackerforce.de 2323 cp437
-bbs.hackerforce.de 2324 cp437
+bbs.hackerforce.de 2323 cp437 80 tall
+bbs.hackerforce.de 2324 cp437 80 tall
 bbs.hackishack.online 6401 cp437
-bbs.hispamsx.org 128 petscii 80
-bbs.hispamsx.org 23
+bbs.hispamsx.org 128 cp437
+bbs.hispamsx.org 23 cp437
 bbs.horizonbbs.org 23 utf-8
 bbs.hyena.network 23 utf-8
-bbs.ibbs.be 23
+bbs.ibbs.be 23 cp437
 bbs.idbbs.ca 1581 topaz
 bbs.idbbs.ca 59 topaz
 bbs.idbbs.ca 6502
 bbs.impakt.net 6502
-bbs.interlinked.us 23
 bbs.intersrv.net 23 utf-8
 bbs.iscabbs.com 23
-bbs.iswix.com 6800
-bbs.jacobcat.app 23
+bbs.iswix.com 6800 cp437
+bbs.jacobcat.app 23 cp437
 bbs.jammingsignal.com   [206.248.167.113] 23 petscii
-bbs.jasonwalker.ca 2323
-bbs.jayscafe.net 6402
-bbs.jerseyjam.com 23
-bbs.jerseyjam.com 2323
-bbs.kd3.us 23
-bbs.kd8hfx.net 23
-bbs.kiwi.net 23
+bbs.jasonwalker.ca 2323 cp437
+bbs.jayscafe.net 6402 cp437
+bbs.jerseyjam.com 2323 cp437
+bbs.kd3.us 23 cp437
+bbs.kd8hfx.net 23 cp437
+bbs.kiwi.net 23 cp437
 bbs.kn6q.org 2002
-bbs.korenblom.nl 23
+bbs.korenblom.nl 23 cp437
 bbs.kry.pt 2323 utf-8
 bbs.lightly-salted.com 8023 utf-8
 bbs.lizardmaster.com 23 utf-8
 bbs.lizsugar.me 6000 utf-8
 bbs.lostcause.house 23
-bbs.lostcrypt.com 23
+bbs.lostcrypt.com 23 cp437
 bbs.lowcrash.dev 8888 utf-8
 bbs.lsnet.dev 23 utf-8
-bbs.madetoraid.com 2323
+bbs.madetoraid.com 2323 cp437
 bbs.maidensrealm.com 2002
-bbs.maidensrealm.com 2003
 bbs.maidensrealm.com 23 utf-8
 bbs.memphistw.org 2002
 bbs.memphistw.org 23
 bbs.millhill.org 2323 utf-8
 bbs.miyanet.moe 23 utf-8
-bbs-mousenet.dynip.online 8889
-bbs.mozysswamp.org 23
+bbs-mousenet.dynip.online 8889 cp437
+bbs.mozysswamp.org 23 cp437
 bbs.mozysswamp.org 24
 bbs.mycrowd.ca 23 utf-8
-bbs.mynameisgabe.com 23
-bbs.mynameisgabe.com 2323
+bbs.mynameisgabe.com 23 cp437
+bbs.mynameisgabe.com 2323 cp437
 bbs.mynameisgabe.com 6969
 bbs.mythicalkingdom.com 3001
 bbs.mythicalkingdom.com 3002
-bbs.mythicalkingdom.com 5001
+bbs.mythicalkingdom.com 5001 cp437
 bbs.mythicalkingdom.com 5023 utf-8
 bbs.newtoncity.org 23 utf-8
 bbs.nikom.org 2323
 bbs.ninthchevron.com.au 23
 bbs.novass.net 2323 cp437
 bbs.nuageinfo.com 23 utf-8
-bbs.nykz.net 2323 cp437
+bbs.nykz.net 2323 gbk
 bbs.nykz.net 23 gbk
-bbs.oldchat.ru 23 cp437
-bbs.oldchat.ru 4000
+bbs.oldchat.ru 23 cp866
+bbs.oldchat.ru 4000 cp437
 bbs.olddos.kr 9000 euc-kr
-bbs.olografix.org 23
-bbs.opto22.com 23
+bbs.opto22.com 23 cp437
 bbs.orreli.net 2002
-bbs.orreli.net 32223
+bbs.orreli.net 32223 cp437
 bbs.orreli.net 45023 utf-8
-bbs.outpost9.co 2023
-bbs.pathunknown.net 23
+bbs.outpost9.co 2023 cp437
+bbs.pathunknown.net 23 cp437
 bbs.pewp.us 23 utf-8
-bbs.phantombbs.info 2323
+bbs.phantombbs.info 2323 cp437
 bbs.pharcyde.org 23 cp437 80 tall
 bbs.pharos.rocks 23 big5
-bbs.pharos.rocks 8888
+bbs.pharos.rocks 8888 cp437
 bbs.phospher.com 23 utf-8
-bbs.photik.org 23 utf-8
+bbs.photik.org 23 cp437
 bbs.phreaknet.net 23
 bbs.pixelgrounds.net 8888 utf-8
 bbs.powerbbs.com 23
-bbs.pwecksretreat.com 2332
+bbs.pwecksretreat.com 2332 cp437 80 tall
 bbs.pwecksretreat.com 8010
-bbs.qzwx.com 23
+bbs.qzwx.com 23 cp437
 bbs.retro32.com 1337 topaz
 bbs.retroarchive.org 23 utf-8
 bbs.retroboardbbs.com 2323 cp437 80 tall
-bbs.retroboardbbs.com 2324
+bbs.retroboardbbs.com 2324 cp437 80 tall
 bbs.retrocampus.com 23
-bbs.retrocampus.com 6510 cp437
+bbs.retrocampus.com 6510 cp437 80 tall
 bbs.retrocampus.com 8000
 bbs.retrocampus.com 8001
-bbs.retrocampus.com 8086
-bbs.retrocampus.com 8088
-bbs.retrocampus.com 8089
+bbs.retrocampus.com 8086 utf-8
+bbs.retrocampus.com 8088 cp437
+bbs.retrocampus.com 8089 cp437
 bbs.retrohack.se 23 utf-8
-bbs.retrohack.se 64128
+bbs.retrohack.se 64128 petscii
 bbs.riddells.net 10023 utf-8
 bbs.rockvilletavern.com 23 cp437 80 tall
 bbs.roguenet.work 8888 utf-8
 bbs.roonsbbs.hu 1212
+bbs.saturn5bbs.com 23 cp437 80 tall
 bbs.sbbsystems.com 8888 utf-8
-bbs.sdf1.net 5023
+bbs.sdf1.net 5023 cp437
 bbs.sfhqbbs.org 5983
 bbs.shift-bits.com 2000
 bbs.shift-bits.com 2001
 bbs.shift-bits.com 2002
 bbs.shift-bits.com 2003
-bbs.silfenpath.com 23 cp437
-bbs.sinnershaven.com 23
-bbs.skynetbbs.com 20023
-bbs.soc4ever.com 2002
-bbs.soc4ever.com 23
-bbs.softsolutions.net.br 2023 utf-8
-bbs.starbase11.de 2323 utf-8
-bbs.starbase21.net 23
-bbs.stardoc134.com 2323 cp437
-bbs.starshipjunkyard.com 23
-bbs.sunspothq.dyndns.org 23
-bbs.swissirc.net 23
-bbs.swissirc.net 2323
-bbs.tabakov.net 13023
-bbs.tabakov.net 8010
+bbs.silfenpath.com 23 cp437 80 tall
+bbs.sinnershaven.com 23 cp437
+bbs.skynetbbs.com 20023 cp437 80 tall
+bbs.soc4ever.com 23 cp437 80 tall
+bbs.softsolutions.net.br 2023 utf-8 80 tall
+bbs.starbase11.de 2323 ascii
+bbs.starbase21.net 23 cp437
+bbs.stardoc134.com 2323 cp437 80 tall
+bbs.starshipjunkyard.com 23 cp437
+bbs.sunspothq.dyndns.org 23 cp437
+bbs.swissirc.net 23 cp437
+bbs.swissirc.net 2323 cp437
+bbs.tabakov.net 13023 cp437
 bbs.techware2k.com 23 cp437
-bbs.telnix.com 6502
-bbs.terminaltavern.com 23
-bbs.tfsi.dev 23 utf-8 80 tall
-bbs.thebrokenbubble.com 2323
+bbs.telesc.net.br 23
+bbs.terminaltavern.com 23 cp437 80 tall
+bbs.tfsi.dev 23 ascii 80 tall
 bbs.thebrokenbubble.com 23 utf-8
 bbs.theiguru.au 2323 utf-8
 bbs.thejollyrogerbbs.com 8023 cp437
-bbs.themajorbbs.com 23
+bbs.themajorbbs.com 23 cp437
 bbs.thisoldcabin.net 2323
-bbs.throwbackbbs.com 23
-bbs.throwbackbbs.com 2323 cp437
+bbs.throwbackbbs.com 23 cp437
 bbs.tingtao.net 23 gbk
 bbs.tomato.place 8888 utf-8
-bbs.trod.org 23
+bbs.trod.org 23 cp437 80 tall
 bbs.trod.org 60177
 bbs.trod.org 60179
-bbs.twixed.net 62323
+bbs.tunemanbbs.com 23 cp437 80 tall
+bbs.twixed.net 62323 cp437
 bbs.twlounge.net 23 utf-8
 bbs.twomice.net 23 gbk
 bbs.ultimatebbs.net 23
 bbs.ultimatebbs.net 8513
-bbs.uncomfortable.business 6423
+bbs.uncomfortable.business 6423 cp437
 bbs.undermine.ca 23 utf-8
 bbs.unicyber.co.uk 2323 utf-8 80 tall
+bbs.uorealms.com 23 cp437 80 tall
 bbs.vcgsa.co.za 23 utf-8
 bbs.vcgsa.co.za 6400 cp437
-bbs.venerandi.it 23
+bbs.venerandi.it 23 cp437
 bbs.vslib.cz 23
 bbs.wantit.net 23 utf-8
-bbs.wccastle.net 2424
+bbs.wccastle.net 2424 cp437
 bbs.weather-station.org 23
 bbs.wehack.net 23
 bbs.whitewing.gr.jp 23 shift-jis
 bbs.windcity.net 23 big5
+bbs.winzlo.com 23
 bbswordle.com 23
-bbs.wreckhall.net 23
-bbs.wretchedbeagle.com 23
-bbs.wz5bbs.com 23
-bbs.x65.zone 2323
+bbs.wreckhall.net 23 cp437 80 tall
+bbs.wretchedbeagle.com 23 cp437 80 tall
+bbs.wz5bbs.com 23 cp437
 bbs.x65.zone 8888 utf-8
-bbs.zerotwo.tech 23 utf-8
+bbs.zerotwo.tech 23 ascii
 bbs.zruspas.org 23 utf-8
-bcrgames.com 23 cp437
-bcrgames.com 31337
-bcrgames.com 8787 cp437
-bcrgames.com 9898 cp437
+bcrgames.com 31337 cp437 80 tall
+beachboys.quest 23
 beryl.h-o-soft.com 2323 shift-jis
-bestbudgetmanager.com 2002
-bestbudgetmanager.com 2003
-beta.sb-discovery.com 23
-bfbbs.no-ip.com 8880
-bfbbs.no-ip.com 8881 petscii
-bfbbs.no-ip.com 8882 petscii
-bfbbs.no-ip.com 8888
-bigtimebbs.net 2323
-bigtimebbs.net 64 petscii 40
+beta.sb-discovery.com 23 cp437
+bfbbs.no-ip.com 8888 cp437
+bigtimebbs.net 2323 cp437
+bigtimebbs.net 64 cp437
 bitwoods.duckdns.org 23
-bl16-240-121.dsl.telepac.pt 23
+bl16-240-121.dsl.telepac.pt 23 cp437
 blackflag.acid.org 23 cp437
 blackflag.acid.org 26 cp437
 blackflag.acid.org 27 cp437
 blackice.bbsindex.de 23 latin-1
-blackstar-bbs.servegame.com 23 cp437
+blackstar-bbs.servegame.com 23 cp437 80 tall
 bloodbbs.ddns.net 2323 utf-8
-board.classicbbs.net 9339
+board.classicbbs.net 9339 cp437
 bookworm.synchro.net 2323
-borderlinebbs.dyndns.org 6400
-borderlinebbs.dyndns.org 6502
-box.imzadi.de 23 utf-8
-bpc.jayscafe.net 6402 cp437
+borderlinebbs.dyndns.org 6400 cp437
+box.imzadi.de 23 ascii
 brazi.net 23 utf-8
 bunnybbs.tw 23 big5
-bwrbbs.ddns.net 23 utf-8
-byob.hopto.org 64128
-c-174-169-111-227.hsd1.ct.comcast.net 23
-c-174-58-81-72.hsd1.fl.comcast.net 2323
-c-24-130-12-201.hsd1.ca.comcast.net 513
-c3bbs.retronetworking.org 128 petscii 80
+bwrbbs.ddns.net 23 ascii
+byob.hopto.org 64128 petscii
+c-24-130-12-201.hsd1.ca.comcast.net 513 cp437
+c3bbs.retronetworking.org 128 petscii
 c3bbs.retronetworking.org 23 utf-8
-c3bbs.retronetworking.org 64 petscii 40
-c64u.club 6400 cp437
+c3bbs.retronetworking.org 64 petscii 80 tall
+c64u.club 6400 petscii
 c-68-41-66-48.hsd1.mi.comcast.net 23 cp437
-c-69-181-118-30.hsd1.ca.comcast.net 23
-c-71-204-139-119.hsd1.ca.comcast.net 23
-c-73-124-42-198.hsd1.fl.comcast.net 23
-c-73-92-193-183.hsd1.ca.comcast.net 23
-c-73-96-188-76.hsd1.or.comcast.net 24
-c-75-71-52-212.hsd1.co.comcast.net 23
-c-76-115-96-245.hsd1.or.comcast.net 23
-c-76-134-25-116.hsd1.ar.comcast.net 49815
-c-98-214-156-85.hsd1.il.comcast.net 23
-c-98-52-75-5.hsd1.il.comcast.net 23
-call.rofbbs.com 2300
-call.rofbbs.com 6400
+c-69-181-118-30.hsd1.ca.comcast.net 23 cp437
+c-73-124-42-198.hsd1.fl.comcast.net 23 cp437
+c-73-92-193-183.hsd1.ca.comcast.net 23 cp437
+c-75-71-52-212.hsd1.co.comcast.net 23 cp437
+c-76-134-25-116.hsd1.ar.comcast.net 49815 cp437
+call.rofbbs.com 2300 cp437
+call.rofbbs.com 6400 cp437
 call.rofbbs.com 6800 topaz
 call.rofbbs.com 8502 petscii
-capitolcityonline.net 23
-capitolcityonline.net 24
-capitolcityonline.net 26
+capitolcityonline.net 23 cp437 80 tall
+capitolcityonline.net 24 cp437 80 tall
+capitolcityonline.net 26 cp437 80 tall
 capitolshrill.com 23 cp437
-capitolshrill.com 666
+capitolshrill.com 666 utf-8 80 tall
 casbah.goip.de 5354 latin-1
-casper.homeip.net 23
-cbbs.mitsaltair.com 8800
+casper.homeip.net 23 cp437
+cavebbs.homeip.net 23
+cbbs.mitsaltair.com 8800 cp437 80 tall
 ccbbs.zapto.org 4513 cp437
 cd.csie.io 23 big5bbs
-cd.csie.io 3456 big5bbs no_ambig
-cd.csie.io 443 big5bbs no_ambig
+cd.csie.io 3456 big5bbs
+cd.csie.io 443 big5bbs
 cebbs.costakis.org 23 utf-8
+cedarvalleybbs.com 2424 cp437 80 tall
+cedarvalleybbs.com 2525 cp437 80 tall
 centralontarioremote.net 1123
-centralontarioremote.net 23
-centralontarioremote.net 6789
+centralontarioremote.net 23 cp437
+centralontarioremote.net 6789 cp437
 cfbbs.net 23 cp437
-chaotix.ddns.net 2323
+chaotix.ddns.net 2323 cp437
 chimia.se 2323 utf-8
-chrysalisbbs.org 5001
-chrysalisbbs.org 5003
-chrysalisbbs.org 5004
-chrysalisbbs.org 5006
-chrysalisbbs.org 5007
-chrysalisbbs.org 5008
-chrysalisbbs.org 5009
-chrysalisbbs.org 5014
-chrysalisbbs.org 5017
-chrysalisbbs.org 5018
-chrysalisbbs.org 5019
-chrysalisbbs.org 5020
-chrysalisbbs.org 5022
-chrysalisbbs.org 5023
-chrysalisbbs.org 5024
-chrysalisbbs.org 5026
-chrysalisbbs.org 5031
-chrysalisbbs.org 5032
+chrysalisbbs.org 5001 cp437 80 tall
+chrysalisbbs.org 5003 cp437 80 tall
+chrysalisbbs.org 5004 cp437 80 tall
+chrysalisbbs.org 5006 cp437 80 tall
+chrysalisbbs.org 5007 cp437 80 tall
+chrysalisbbs.org 5008 cp437 80 tall
+chrysalisbbs.org 5009 cp437 80 tall
+chrysalisbbs.org 5014 cp437 80 tall
+chrysalisbbs.org 5017 cp437 80 tall
+chrysalisbbs.org 5018 cp437 80 tall
+chrysalisbbs.org 5019 cp437 80 tall
+chrysalisbbs.org 5020 cp437 80 tall
+chrysalisbbs.org 5022 cp437 80 tall
+chrysalisbbs.org 5023 cp437 80 tall
+chrysalisbbs.org 5024 cp437 80 tall
+chrysalisbbs.org 5026 cp437 80 tall
+chrysalisbbs.org 5031 cp437 80 tall
+chrysalisbbs.org 5032 cp437 80 tall
 chrysalisbbs.org 8888
-ciaamigabbs.dynu.net 6400 topaz
-cib.dyndns.org 6400 cp437
-cib.dyndns.org 6401 cp437
-cib.dyndns.org 6402 cp437
-cib.dyndns.org 6403
+ciaamigabbs.dynu.net 6400 topaz 80 tall
+cib.dyndns.org 6400 petscii
+cib.dyndns.org 6401 petscii
+cib.dyndns.org 6402 petscii
+cib.dyndns.org 6403 cp437
 cib.dyndns.org 6405 petscii
-cib.dyndns.org 6407 cp437
+cib.dyndns.org 6407 petscii
 cib.dyndns.org 6464
-cib.dyndns.org 6491 cp437
-citadel64.thejlab.com 6400 cp437
-citadel.dc540.org 23230
-cjsplace.thruhere.net 2002 rlogin
+cib.dyndns.org 6491 petscii 80 tall
+citadel64.thejlab.com 6400 cp437 80 tall
+citadel.dc540.org 23230 cp437 80 tall
+cjsplace.thruhere.net 2002 rlogin 80 tall
 cjsplace.thruhere.net 23 utf-8
 claudes.lovelybits.org 23
-claudes.lovelybits.org 2323
-cloud.kanskje.com 1373
+claudes.lovelybits.org 2323 cp437 80 tall
+cloud.kanskje.com 1373 utf-8
 cloud.kanskje.com 23 utf-8
-coconet.ddns.net 6809
-coderedmud.servegame.com 2323
-commodoreserver.com 1541 petscii
-conchaos.synchro.net 2002
-conchaos.synchro.net 23 utf-8
-concreteroots.servebbs.org 23
+coconet.ddns.net 6809 cp437
+coderedmud.servegame.com 2323 cp437 80 tall
+commodoreserver.com 1541 cp437
+conchaos.synchro.net 2002 cp437
+conchaos.synchro.net 23 ascii
+concreteroots.servebbs.org 23 cp437 80 tall
 condor.rorscha.ch 1234 utf-8
-connect.mu-gateway.net 6677
-connect.mu-gateway.net 6700
 connect.rayzer.net 2112 cp437
 connect.rayzer.net 2323
 connect.serionbbs.com 23 cp437
 convolution.us 23 utf-8
 corsysystem.org 2300
-cosmicrage.earth 7777 cp437 80 tall
-cottonwoodbbs.dyndns.org 6400
-cottonwoodbbs.dyndns.org 6502 cp437
+cottonwoodbbs.dyndns.org 6502 cp437 80 tall
 cpbbs.de 2323 cp437 90
 cqbbs.ddns.net 6800 utf-8
 crackintimebbs.ddns.net 2323
 crazyworldbbs.com 2002 rlogin
 crazyworldbbs.com 2003
-crazyworldbbs.com 2323 utf-8
-crazyworldbbs.com 2424 cp437
-crazyworldbbs.com 888
+crazyworldbbs.com 2323 utf-8 80 tall
 crisisbbs.net 23 utf-8
-crowsnestbbs.ddns.net 6800
 crowsnestbbs.ddns.net 6801
-cryosphere.net 6666 utf-8
-cryosphere.net 6667
-cryosphere.net 9999
-csbbs.dyndns.org 23 utf-8
-cscnet1.net 23
-cust22-dsl93-89-128.idnet.net 23
+csbbs.dyndns.org 23 ascii
+cscnet1.net 23 cp437
+cust22-dsl93-89-128.idnet.net 23 cp437
 cvic.org 23 big5
-cyberiabbs.zapto.org 23 utf-8
-cyberiabbs.zapto.org 3640
 cyberspacebbs.net 2323
 cyberspacebbs.net 23 utf-8
-cybersphere.net 7777
-d149-67-69-17.nap.wideopenwest.com 513
+d149-67-69-17.nap.wideopenwest.com 513 cp437
 d1st.org 23 cp437
 d1st.org 8347 cp437
-d205-250-123-117.bchsia.telus.net 23
-dangerbaybbs.dyndns.org 1337
+d205-250-123-117.bchsia.telus.net 23 cp437
+dangerbaybbs.dyndns.org 1337 cp437
 darkagesbbs.com 23 utf-8
-darkendlessbbs.hopto.org 6510 cp437
+darkendlessbbs.hopto.org 6510 cp437 80 tall
 darkforce-bbs.dyndns.org 1040
 darkgame.buanzo.org 23
-darklevel.hopto.org 64128
-darkwood.ddns.net 23
-datgsguy.com 6502
-datotal.net 1280 petscii
+darklevel.hopto.org 64128 cp437
+darkwood.ddns.net 23 cp437 80 tall
+datgsguy.com 6502 cp437
+datotal.net 1280 cp437
 datotal.net 35723 utf-8
-datotal.net 6400 petscii
+datotal.net 6400 cp437
 dazexy.synology.me 52323 utf-8
 ddreams.synchro.net 23 utf-8
 deadinternet.synchronetbbs.org 23 utf-8
-deathrow.servebbs.org 1001
+deadlines.ddns.net 6510
+deathrow.servebbs.org 1001 cp437 80 tall
 decades.freeddns.org 6401 cp437
 deltacity.se 23
 demo.winserver.com 24
-dgu.strangled.net 23
+dgu.strangled.net 23 cp437
 dhxy.info 23 gbk
 digitalx.ddns.net 7411 topaz
-din.asciiattic.com 23
-din.themajorbbs.com 23
-diskhopp.synchro.net 2002
-diskhopp.synchro.net 23
-djdave.uk 8088
+din.asciiattic.com 23 cp437
+din.themajorbbs.com 23 cp437
+diskhopp.synchro.net 23 cp437
+djdave.uk 8088 cp437
 dl2.net 4000
 dl2.net 4001
 doozy.thruhere.net 23 utf-8
 dose.0wnz.at 23
-dose.0wnz.at 3001 atascii
-dose.0wnz.at 3002
 dott.synchro.net 2002 rlogin
 dott.synchro.net 2003
-dott.synchro.net 2323
-dott.synchro.net 2424 cp437
-dott.synchro.net 888
 dragon.vk3heg.net 2323
-dragon.vk3heg.net 6800 topaz
+dragon.vk3heg.net 6800 topaz 80 tall
 dsbbs.net 23 cp437
-dsl-98.a66-102-151.caltel.us 2323
 dslb-084-056-236-163.084.056.pools.vodafone-ip.de 23
 dumuzi.lykaina.com 23 utf-8
 dungeon.name 20020
-dungeon.name 20028
-dungeon.name 22222
-dungeon.synchro.net 23
-dungeon.synchro.net 64000 petscii
-dura-bbs.net 6359
+dungeon.name 20028 utf-8
+dungeon.name 22222 utf-8
+dungeon.synchro.net 23 cp437
+dungeon.synchro.net 64000 cp437
+dura-bbs.net 6359 cp437
 dydo.erb.pw 1337 utf-8
-dynamite.bbsing.com 23 utf-8
-dynamite.synchronetbbs.org 23
+dynamite.bbsing.com 23 ascii 80 tall
+dynamite.synchronetbbs.org 23 cp437
 dzbbs.hopto.org 64128 petscii
-eaglewing1962.freeddns.org 6400 petscii
-ec2-54-238-90-108.ap-northeast-1.compute.amazonaws.com 3456
-ec2-54-238-90-108.ap-northeast-1.compute.amazonaws.com 888
-echochamber.zapto.org 23
-echochamber.zapto.org 3640
-echoes.120v.ac 23
-elveszettvilag.hu 23
-elveszettvilag.hu 3333
-elveszettvilag.hu 6666
-elveszettvilag.hu 8080
+eaglewing1962.freeddns.org 6400 petscii 80 tall
+ec2-54-238-90-108.ap-northeast-1.compute.amazonaws.com 3456 cp437
+ec2-54-238-90-108.ap-northeast-1.compute.amazonaws.com 888 cp437
+echochamber.zapto.org 3640 cp437
+echoes.120v.ac 23 cp437
+elveszettvilag.hu 23 cp437 80 tall
+elveszettvilag.hu 3333 cp437 80 tall
+elveszettvilag.hu 8080 cp437 80 tall
 elveszettvilag.hu 9000
-endofthelinebbs.com 128 petscii 80
+endofthelinebbs.com 128 cp437
 endofthelinebbs.com 17
 endofthelinebbs.com 23 utf-8
-endofthelinebbs.com 64 petscii 40
+endofthelinebbs.com 64 cp437
+eniacv2.net 1337
 enigma-bbs.com 23 utf-8
-enterprisebbs.ddns.net 1701 cp437
-entropybbs.zapto.org 23
-ent.synchro.net 23
-eow.lol 2377
+enterprisebbs.ddns.net 1701 petscii 80 tall
+entropybbs.zapto.org 23 cp437
+ent.synchro.net 23 cp437
+eow.lol 2377 cp437
 Error1202bbs.DDns.net 1202 utf-8
-error404bbs.ddns.net 24
+error404bbs.ddns.net 24 cp437
 error404bbs.ddns.net 404 utf-8
-eternalforest.net 9000
 euklid.ddns.net 5745 utf-8
-euts.org 1997
-euts.org 1998
 exciter.ws 2002
 exigenesis.net 4201
-exoplanetbbs.net 23
-ezycom.retroswim.net 2323
-familybbs.ddns.net 23
-familybbs.ddns.net 2323
-familybbs.ddns.net 516
+exoplanetbbs.net 23 cp437
+ezycom.retroswim.net 2323 cp437
+familybbs.ddns.net 23 cp437
+familybbs.ddns.net 516 cp437
 fatcatsbbs.com 23 utf-8
-fdd.one 23
+fdd.one 23 cp437
 fedapoc.tel 2301 cp437
-fenglin.info 2323 utf-8
+fenglin.info 2323 utf-8 80 tall
 ferchobbs.ddns.net 2323 utf-8
 fibs.com 4321
 fido.bajtek.org 23
 fido.bajtek.org 60177
 fido.bajtek.org 60179
 fido.beholderbbs.org 23
-fido.fidobbs.it 2301
+fido.fidobbs.it 2301 cp437 80 tall
 firesidebbs.com 23231 utf-8
-firesidebbs.com 23234
+firesidebbs.com 23234 cp437
 fix.no 24
-flashbackbbs.sytes.net 6502 utf-8
-fmrl.throwbackbbs.com 2323 cp437
-foremxebbs.ddns.net 9999 atascii
+flashbackbbs.sytes.net 6502 ascii
+foremxebbs.ddns.net 9999 atascii 80 tall
 forze.opicron.eu 23
 fqbbs.synchro.net 23 utf-8
-frad.org 23
+frad.org 23 cp437 80 tall
 freechess.org 23
-freeway.vkradio.com 23
-friabad.hopto.org 64128
+freeway.vkradio.com 23 cp437
+friabad.hopto.org 64128 petscii
 frontierbbs.co.uk 23 utf-8
 ft.furtoonia.net 9999
 funtopia.synchro.net 3023 utf-8
-funtopia.synchro.net 64 petscii 40
-futureland.today 1513
-futureland.today 23
+funtopia.synchro.net 64 cp437 80 tall
+futureland.today 1513 cp437
+futureland.today 23 cp437
 fw2.cnetbbs.net 6800 topaz
-galaxy74bbs.com 23 utf-8
+galaxy74bbs.com 23 ascii
 galaxybbs.net 23 utf-8
 game.allegoryofempires.com 7098
-game.a-net-online.lol 2002
+game.a-net-online.lol 2002 cp437
 game.a-net-online.lol 2112
 gamenet.synchronetbbs.org 23 utf-8
 games.libreplanet.org 23
 game.tw2002.net 23
-gateway.deltasoft.com 23
+gateway.deltasoft.com 23 cp437
 gcbbs.net 2323 cp437
 gcc-bbs.com 23
-gemenon.org 2323
-geniv.dyndns.org 150
+gemenon.org 2323 cp437
+geniv.dyndns.org 150 cp437
 geniv.dyndns.org 24 cp437
 glitchtech.top 23 utf-8
 globalchaosbbs.com 23 cp437
 globalchaosbbs.com 3141 cp437
-goldminedoors.com 2513
+goldminedoors.com 2513 cp437
 goofsgarage.com 6464
-grimoirebbs.sytes.net 23
-grimoirebbs.sytes.net 99
-guardian.synchro.net 23
+g-point.tunk.org 500
+grimoirebbs.sytes.net 23 cp437 80 tall
+grimoirebbs.sytes.net 99 cp437 80 tall
+guardian.synchro.net 23 cp437
 guis.es 23
-gw-2.mp.inet.t0x.net 1337
+gw-2.mp.inet.t0x.net 1337 cp437 80 tall
 h-212-85-82-213.a980.priv.bahnhof.se 9091
-h69-128-114-51.lactwa.broadband.dynamic.tds.net 24
 haciend.com 8821 cp437
 hagars.org.uk 24 cp437
-halcyonbbs.scisweb.org 23 utf-8
+halcyon.synchro.net 23
 hamshack.synchro.net 23 utf-8
-haven.enyc.org.uk 6969
-haven.enyc.org.uk 7422
+haven.enyc.org.uk 6969 cp437 80 tall
 haven.enyc.org.uk 7777
-haven.enyc.org.uk 8623
-haven.enyc.org.uk 8682
-haven.enyc.org.uk 8688
 heatwave.ddns.net 9640
 heightsbbs.heightspc.net 6860 petscii
-herbies-bbs.ddns.net 23
+herbies-bbs.ddns.net 23 cp437
 herbies-bbs.ddns.net 2424 utf-8
 hermes.okyler.com 23 utf-8
 hexedbbs.com 23999 cp437
-hg8lxl.ham.hu 1194
+hg8lxl.ham.hu 1194 cp437
 hg8lxl.ham.hu 23
-highdesertbbs.ddns.net 6400 cp437
-hobbylinebbs.com 23
+higgshightech.org 2323 utf-8
+highdesertbbs.ddns.net 6400 cp437 80 tall
+hinterland.cube4fun.net 9223
+hobbylinebbs.com 23 cp437
 hobbylinebbs.com 3141
 hobbyspace.ddns.net 23 utf-8
-home.thezen.garden 23
-host-067-131-059-192.dhcp.fewpb.net 2023
-host-067-131-059-192.dhcp.fewpb.net 23
-host-067-131-059-192.dhcp.fewpb.net 24
-host-067-131-059-192.dhcp.fewpb.net 26
-host-148-170-167-4.public.eastlink.ca 23
-host81-151-56-255.range81-151.btcentralplus.com 23
-host86-175-149-135.range86-175.btcentralplus.com 23
+home.thezen.garden 23 cp437
+host-067-131-059-192.dhcp.fewpb.net 2023 cp437
+host81-151-56-255.range81-151.btcentralplus.com 23 cp437
+host86-175-149-135.range86-175.btcentralplus.com 23 cp437
 houseofbaud.com 8888 utf-8
 houseoftna.xyz 23 utf-8
-hovalbbs.com 2333 utf-8
+hovalbbs.com 2333 utf-8 80 tall
 hwsrv-1289162.hostwindsdns.com 2003
 hypernode.ddns.net 23
+ice-castle-bbs.net 23
 igs.joyjoy.net 6969
 illusionforge.rocks 6400 cp437
 imperian.com 23
-infonet-bbs.rclabs.com.br 2323
+infonet-bbs.rclabs.com.br 2323 cp437
 insomnia.synchronetbbs.org 23 utf-8
-interzone.annexia.xyz 2002
 interzone.annexia.xyz 2323
-intranet.fites.net 23
-ip-037-201-034-231.um10.pools.vodafone-ip.de 23
-ip-134-003-060-152.um41.pools.vodafone-ip.de 23
-ip174-70-227-224.fv.ks.cox.net 23
-ip2.ip-192-99-83.net 23
-ip74-208-46-56.pbiaas.com 23
-ip83.ip-146-59-43.eu 513
-ip98-169-12-67.dc.dc.cox.net 6400
-irc.s3tg5z.com 23
+intranet.fites.net 23 cp437
+ip2.ip-192-99-83.net 23 cp437 80 tall
+ip83.ip-146-59-43.eu 513 cp437
+irc.s3tg5z.com 23 cp437 80 tall
 itcbbs.ddns.net 23000 cp437 80 tall
-itchybutt.org 6502 petscii
+itchybutt.org 6502 petscii 40 tall
 jabbergames.ru 5678 utf-8
 jamesmauler.net 23
 javatrek.org 1764
-jerseyjam.com 23
-jerseyjam.com 2323
+jerseyjam.com 23 cp437
 joesbbs.com 2300 cp437
 joesbbs.com 23 utf-8
 joestavern.ddns.net 2002
-joestavern.ddns.net 2003
 jsanchez.ddns.net 23 utf-8
 junglebbs.com 23
-jupiter.bbs.io 23 utf-8
+jupiter.bbs.io 23 ascii
 kia.synchro.net 23 utf-8
-kingdomsend.synchronetbbs.org 23
+kingdomsend.synchronetbbs.org 23 cp437
 kk4qbn.synchro.net 23 utf-8
 klud.ge 23
 kneesurgery.moe 23
 kraaby.synchro.net 23 utf-8
 krion.io 1337
 krion.io 7777
-kuehlbox.wtf 23
-lakehouse.lilpenguins.com 2333 utf-8
-landofthelost.ca 2300
+kuehlbox.wtf 23 cp437
+lakehouse.lilpenguins.com 2333 utf-8 80 tall
+landofthelost.ca 2300 cp437 80 tall
 landofthelost.ca 6767
 landover.synchronetbbs.org 23 utf-8
 lastrangers.com 23 utf-8
 latenight.diversidial.com 313
-leo.gnx.com.br 23
-lexiconbbs.com 6400
+lexiconbbs.com 6400 cp437
 lfbn-idf1-1-366-193.w86-195.abo.wanadoo.fr 23
 lfbn-idf1-1-366-193.w86-195.abo.wanadoo.fr 6300
 lfbn-ren-1-555-197.w81-53.abo.wanadoo.fr 23 cp437
 lfbn-tou-1-1036-63.w90-76.abo.wanadoo.fr 23
-li271-19.members.linode.com 23
-li423-149.members.linode.com 513
-libido.cx 23 big5bbs no_ambig
-lilacbbs.com 23 gbk
-linuxdoc.no-ip.org 23
-lisdude.com 1236
-lisdude.com 7777
-lisdude.com 8888
-literature.twbbs.io 23 big5
+li423-149.members.linode.com 513 cp437
+libido.cx 23 big5bbs
+linuxdoc.no-ip.org 23 cp437
+literature.twbbs.io 23 big5 80 tall
 livewirebbs.com 1025 utf-8
-localyocalbbs.com 23
-lofac.mintyfresh.love 23 utf-8
-looneybinbbs.com 2023 utf-8
+localyocalbbs.com 23 cp437
+lofac.mintyfresh.love 23 utf-8 80 tall
+looneybinbbs.com 2023 utf-8 80 tall
 lord.stabs.org 23
-lovelybits.org 1337
-luminiferousaether.tel 23
-lunarout.synchro.net 8023
+lovelybits.org 1337 cp437
+luminiferousaether.tel 23 cp437
+lumnisplayhouse.ddns.net 2300
+lunarout.synchro.net 8023 cp437
 lunaticsunleashed.ddns.net 2333
 lv426bbs.hopto.org 6464
 lv426bbs.hopto.org 9600
 lynx.scramworks.net 23
 macos.retro-os.live 23 utf-8 tall
 madmanbbs.ddns.net 23 utf-8
-madmanbbs.ddns.net 3640
-magnumbbs.net 128 petscii 80
-magnumbbs.net 23
-magnumbbs.net 2323
+magnumbbs.net 128 cp437
+magnumbbs.net 23 cp437
 mail.drf-solutions.net 23 utf-8
-mail.geomancer.xyz 23
-mail.hohimer.org 1336
-mail.myretrocomp.com 23
-mail.velenobbs.net 513 cp437
-majicka.at2k.org 1955
-majicka.at2k.org 2002 cp437
-majicka.at2k.org 2424 cp437
-majormud.gotdns.com 23
+mail.geomancer.xyz 23 cp437 80 tall
+mail.hohimer.org 1336 cp437
+mail.myretrocomp.com 23 cp437
+mail.velenobbs.net 513 utf-8
+majicka.at2k.org 1955 cp437
+majormud.gotdns.com 23 cp437 80 tall
 manalejandro.com 23 utf-8
 maxbbs.ddns.net 24023 cp437
-mba.dnsalias.com 2002
-mba.dnsalias.com 2003
-mba.dnsalias.com 23
-mbpeikert.ddns.net 23 utf-8
-mbsedev.bnbbbs.net 2023
-mbsedev.bnbbbs.net 2323
-mbsedev.bnbbbs.net 3023
-mbsedev.bnbbbs.net 60177
-mbsedev.bnbbbs.net 60179
-mbsedev.bnbbbs.net 60277
-mbsedev.bnbbbs.net 60279
-mbsedev.bnbbbs.net 60377
-mbsedev.bnbbbs.net 60379
+mba.dnsalias.com 2002 cp437
+mba.dnsalias.com 23 cp437
+mbpeikert.ddns.net 23 ascii
 mbse.gzrbbs.net 2320
 mbse.gzrbbs.net 2323 cp437
 megadodo.online 4242 utf-8
-microblaster.net 2002
-microtownbbs.com 6400
-midnightlounge.online 23
+microtownbbs.com 6400 cp437
 milek7.pl 23
 mimac.bizzi.org 2323 utf-8
-modematider.selstam.nu 50023
+modematider.selstam.nu 50023 cp437
 modem.serial-port.com 1333
 mojo.synchro.net 23 utf-8
 mojo.synchro.net 5513 cp437
-mono.org 23 utf-8 40
+mono.org 23 ascii 40
 montereybbs.com 23 topaz
-mortuary.ddns.net 23
-mouthofhell.duckdns.org 23
-mozz.us 23
-msmacbbs.maletazul.pt 23 utf-8 90 110
-mstation.servebbs.com 23 topaz
+moo.demetro.nl 8888
+mortuary.ddns.net 23 cp437 80 tall
+mouthofhell.duckdns.org 23 cp437
+mozz.us 23 cp437 80 tall
+msmacbbs.maletazul.pt 23 utf-8 90 110 tall
 mtlgeek.synchro.net 2002 cp437
-mtlgeek.synchro.net 23
+mtlgeek.synchro.net 23 cp437 80 tall
 muinet.com 2323
 multinube.net 23
 multizork.icculus.org 23
 mutinybbs.com 2300
 mutiny.cigdangle.com 65023 cp437 80 tall
-mv2k.com 23
-mx2.ibbbs.be 23
-mx.hedron.io 2323
-mysticalrealmbbs.com 23
+mv2k.com 23 cp437
+mx2.ibbbs.be 23 cp437
+mysticalrealmbbs.com 23 cp437
 mystic-anet.online 23
 mystic-hobbies.com 23 utf-8
 mysticrealms.ddns.net 11000 utf-8
-mystic.wwivbbs.org 23
+mystic.wwivbbs.org 23 cp437 80 tall
 my-workspace.us 6764 utf-8
 n3hym.ddns.net 23
 n3hym.ddns.net 8010
+nachosbbs.com 23
 nebbs.servehttp.com 9223
 nerdragebbs.ddns.net 23 utf-8
 netasylum.com 2323
-nethack4.org 23 utf-8
+nethack4.org 23 ascii
 nethack.alt.org 14321
-nethack.alt.org 23 utf-8
+nethack.alt.org 23 ascii
 netpoint.webhop.me 2002
-netpoint.webhop.me 2003
 netpoint.webhop.me 23 utf-8
 nettwerked.synchronetbbs.org 23 utf-8
-neverneverlandbbs.com 2323
-news.belchi.org 2323
-newsmth.org 23 gbk
+neverneverlandbbs.com 2323 cp437 80 tall
+news.belchi.org 2323 cp437
+newsmth.org 23 gbk 80 tall
 nexus.aefinity.io 23 utf-8
-nightbite.redirectme.net 2323
+nightbite.redirectme.net 2323 cp437 80 tall
 nightowlbbs.ddns.net 6400
-nimbus.synchronetbbs.org 23
-nitelite.ddns.net 9000 atascii
+nimbus.synchronetbbs.org 23 cp437
+nitelite.ddns.net 9000 atascii 80 tall
 nix.synchro.net 23 utf-8
 nostalmania.com 23 utf-8
-nottinghambbs.com 2323
+nottinghambbs.com 2323 cp437
 noverdu.com 2002
-noverdu.com 23
+noverdu.com 23 cp437
 nuke.club 513
-oasisbbs.hopto.org 6400
+oasisbbs.hopto.org 6400 cp437
 ofo.tw 23 big5
 ofo.tw 3001 big5
 ofo.tw 3002 big5
-ofo.tw 3003 big5
+ofo.tw 3003 big5 80 tall
+oim.wolfpaw.net 1960 cp437 80 tall
 oldschool.synchronetbbs.org 513 utf-8
-oldtimebbs.com 23
+oldtimebbs.com 23 cp437
 omen.digital-genesis.com 1806
 onion.sscc.uos.ac.kr 8881
 onion.sscc.uos.ac.kr 8882
-onixbbs.servebbs.com 2525
-on.the.net.nz 23
+onixbbs.servebbs.com 2525 cp437 80 tall
+on.the.net.nz 23 cp437
 onyx.the.net.nz 23 utf-8
-ool-44c38ccf.dyn.optonline.net 2323
 opinsane.noip.me 23
 opivy-bbs.com 23
-optical.c64bbs.nu 64128 cp437
+optical.c64bbs.nu 64128 petscii
 osuny.bell-labs.co 17019
 osuny.bell-labs.co 17020
-osuny.bell-labs.co 666
-osuny.bell-labs.co 7734
-otherworldbbs.dyndns.org 6400
-otherworldbbs.dyndns.org 6502 petscii
+osuny.bell-labs.co 666 cp437 80 tall
+osuny.bell-labs.co 7734 cp437 80 tall
 otsbbs.ddns.net 2323
 outerwall.net 23
 outwest.synchro.net 23 utf-8
@@ -1210,105 +1101,86 @@ ov-85f53b.infomaniak.ch 6300
 ov-85f53b.infomaniak.ch 8023
 overfit.retrievo.xyz 8023 utf-8
 palace.brokedownpalace.online 2323 cp437 80 tall
-paladium.servebbs.com 20
-palantirbbs.ddns.net 23
-paradoxbbs.qc.to 57323 utf-8
+paladium.servebbs.com 20 cp437
+palantirbbs.ddns.net 23 cp437
+paradoxbbs.qc.to 57323 ascii
 paradoxbbs.qc.to 7777
-paradoxbbs.synchronetbbs.org 23
-particlesbbs.dyndns.org 6400 cp437
-partybowlbbs.ddns.net 2323
+paradoxbbs.synchronetbbs.org 23 cp437
+partybowlbbs.ddns.net 2323 cp437
 partybowlbbs.ddns.net 6464 petscii
 pathunknown.net 23 utf-8
-pebkac.lol 23
+pebkac.lol 23 cp437
 penisys.online 6502 ascii
-pepzi.se 23
+pepzi.se 23 cp437
 perlbbs.tw 23 big5
 phantasm.bbs.io 4489 topaz
-phantomrage.ddns.net 23
-phoenix.bnbbbs.net 2023
+phantomrage.ddns.net 23 cp437
 phoenix.bnbbbs.net 23
-phoenix.bnbbbs.net 2323
-phoenix.bnbbbs.net 3023
-phoenix.bnbbbs.net 60177
-phoenix.bnbbbs.net 60179
-phoenix.bnbbbs.net 60277
-phoenix.bnbbbs.net 60279
-phoenix.bnbbbs.net 60377
-phoenix.bnbbbs.net 60379
+phoenix.bnbbbs.net 2323 cp437 80 tall
 planetafr0.org 8888
-play.ddgame.us 23
+play.ddgame.us 23 cp437 80 tall
+playpenbbs.com 2323 cp437 80 tall
 playpenbbs.com 23 cp437
-playpenbbs.com 2323 cp437
-pocbbs.duckdns.org 23 cp437
 pocbbs.duckdns.org 2323 utf-8
-pocbbs.duckdns.org 6400
-pofobbs.ddns.net 1123 cp437
-pofobbs.ddns.net 1337
-pofobbs.ddns.net 2523
+pocbbs.duckdns.org 23 cp437
 pofobbs.ddns.net 992
-pool-108-15-36-45.bltmmd.fios.verizon.net 23
+pool-108-15-36-45.bltmmd.fios.verizon.net 23 cp437
 pool-108-29-0-206.nycmny.fios.verizon.net 2323 cp437
-pool-162-83-124-149.norf.east.verizon.net 23
-pool-173-63-126-200.nwrknj.fios.verizon.net 23
-pool-173-71-222-71.clppva.fios.verizon.net 2323
+pool-162-83-124-149.norf.east.verizon.net 23 cp437
+pool-173-63-126-200.nwrknj.fios.verizon.net 23 cp437
 pool-74-104-122-212.bstnma.fios.verizon.net 23
-pool-74-98-223-74.pitbpa.fios.verizon.net 2023
 pool-74-98-223-74.pitbpa.fios.verizon.net 23 cp437
-pool-96-244-116-76.bltmmd.fios.verizon.net 23
-pool-96-244-246-55.bltmmd.fios.verizon.net 10023
-portal.wanderingmad.com 23
-portugal-virtual.org 6969
+pool-96-244-116-76.bltmmd.fios.verizon.net 23 cp437
+pool-96-244-246-55.bltmmd.fios.verizon.net 10023 cp437
+portal.wanderingmad.com 23 cp437 80 tall
+portugal-virtual.org 6969 cp437 80 tall
 proline.ksherlock.com 6523
-pruffino.com 23
+pruffino.com 23 cp437 80 tall
 ps2.dc4.us 23
 ptt2.cc 23 big5
 pulsebbs.hopto.org 1984 utf-8
-px4.kitsunet.net 2069
-qeeai.com 23 gbk
-quazarbbs.dynu.net 1123 cp437
-quazarbbs.dynu.net 1337
+qeeai.com 23 gbk 80 tall
+quazarbbs.dynu.net 1337 utf-8
 quazarbbs.dynu.net 2523
-radiostream.amigaz.org 2323
-rapidfire.hopto.org 64128 cp437
-raveolution.hopto.org 64128 cp437
+radiostream.amigaz.org 2323 cp437
+rapidfire.hopto.org 64128 petscii 80 tall
+raveolution.hopto.org 64128 petscii 80 tall
 rbb.fidonet.fi 32
-rc2014.ddns.net 2014
+rc2014.ddns.net 2014 cp437 80 tall
 rdnetbbs.com 17
 rdnetbbs.com 23 utf-8
 react-bbs.nikoh.it 2323 cp437
 realitycheckbbs.org 23 utf-8
 realitypoint.com 12112
 reality.throwbackbbs.com 2323
-region15.net 23
-retrobbs.sinclair.homepc.it 23
+region15.net 23 cp437
+retrobbs.sinclair.homepc.it 23 cp437
 retroconnect.org 23 utf-8
-retrolair.amigaretro.net 6800
+retrolair.amigaretro.net 6800 topaz 80 tall
 retronetneo.synchronetbbs.org 23 utf-8
 retrorunning.ddns.net 8880 utf-8
 retrorunning.ddns.net 8881 petscii
 retrorunning.ddns.net 8882 petscii
+revertivepulse.net 23
 rg1.retrogoldbbs.com 6411
 ricksbbs.synchro.net 23
 riverstyx.ddns.net 2323
-rns.risenshinebbs.com 23
-rofbbs.ddns.net 2300
-rofbbs.ddns.net 6400
-rofbbs.ddns.net 6800
-ror.us.to 3000
-s010600d8615cc4b1.ok.shawcable.net 23
-s010600e067264634.mh.shawcable.net 23056
-s010600e067264634.mh.shawcable.net 23905
+rns.risenshinebbs.com 23 cp437
+rofbbs.ddns.net 2300 cp437
+rofbbs.ddns.net 6800 cp437
+s010600d8615cc4b1.ok.shawcable.net 23 cp437
 s0106244bfe41f828.vs.shawcable.net 23
 sanctuary.zapto.org 1541 topaz
+sanctumbbs.com 23 cp437
 sanctumbbs.com 6502
-sbbs.dmine.net 24
+sbbs.dmine.net 24 cp437
 sbbs.hologramcomputing.net 23 utf-8
 sbbs.kingdomsendbbs.net 23 utf-8
-sb-discovery.com 23
+sb-discovery.com 23 cp437
 scbbs.nsupdate.info 60177
 scbbs.nsupdate.info 60179
-scbbs.nsupdate.info 61023
-scbbs.nsupdate.info 61513
+scbbs.nsupdate.info 61023 cp437
+scbbs.nsupdate.info 61513 cp437
 scenelist.org 23 latin-1
 scenewall.bbs.io 4000 topaz
 scoobysdoo.ddns.net 2023
@@ -1316,294 +1188,257 @@ sc.scworlds.net 4321
 seabreeze.servegame.com 23
 seaoffantasy.synchronetbbs.org 23 utf-8
 seattle.tw 23 big5
-sector31.lorfinglab.com 2002
-secureconnection.multinube.com 23
-segaa.net 23 big5 no_ambig
-server3.camelothost.com 23
-sestar.synchro.net 23
-sf.a-net.online 2323
+sector31.lorfinglab.com 2002 cp437
+secureconnection.multinube.com 23 cp437
+segaa.net 23 big5
+server3.camelothost.com 23 cp437
+sestar.synchro.net 23 cp437
+sf.a-net.online 2323 cp437
 sgprobbs.com 1337
-shadowbbs.com 23
+shadowbbs.com 23 cp437
 shadowscope.noip.us 23 cp437
-shell.roughneckbbs.com 23 utf-8
-shenks.dyndns.org 23
-shibboleths.org 800
-shodanscore.com 8086
-shsbbs.net 23 cp437
+shell.roughneckbbs.com 23 ascii
+shenks.dyndns.org 23 cp437
+shibboleths.org 800 cp437
+shodanscore.com 8086 cp437
+shsbbs.net 23 cp437 80 tall
 silentnode.ddns.net 6400
 siliconu.com 23
 siliconu.com 27
 skatgame.net 5000
-sk-twgs.com 2002
+sk-twgs.com 2002 cp437
 sk-twgs.com 2003
 sk-twgs.com 2004
 sk-twgs.com 23
-slipstreambbs.net 23 utf-8
+slipstreambbs.net 23 ascii
 snobsoft.de 6401
-solarflow.dynu.net 23
-sos-bbs.net 23
-sotanomsxbbs.org 23 utf-8
-sotanomsxbbs.org 6400
+solarflow.dynu.net 23 cp437
+sos-bbs.net 23 cp437
+sotanomsxbbs.org 23 ascii
+sotanomsxbbs.org 6400 cp437
 southcentral.se 1023 topaz
 southernamis.ddns.net 23 atascii 40
-spaghettihut.amigaretro.net 6800
-spaghettihut.amigaretro.net 9600
+spaghettihut.amigaretro.net 6800 cp437
+spaghettihut.amigaretro.net 9600 cp437
 sparx.bbs.io 23 cp437 80 tall
 splatter.haus 23 cp437
-splatter.haus 666
-spobbs.servebbs.org 23
-ssbbs.ddns.net 6510
+splatter.haus 666 utf-8 80 tall
+spobbs.servebbs.org 23 cp437 80 tall
+ssbbs.ddns.net 6510 petscii
 static.171.117.235.167.clients.your-server.de 23
-static.200.102.47.78.clients.your-server.de 9000
-static.200.102.47.78.clients.your-server.de 9001
+static.200.102.47.78.clients.your-server.de 9001 ascii
 stevensbbs.stevenshive.xyz 23 utf-8
-stokmarknes.org 24
+stokmarknes.org 24 cp437 80 tall
 stormgate.synchronetbbs.org 23 utf-8
 storm-mountain.ddns.net 24000
 strangeplanet.org 6800
-streetcorner.ddns.net 6400
-subhuman.ddns.net 1338 topaz
+streetcorner.ddns.net 6400 cp437
+subhuman.ddns.net 1338 topaz 80 tall
 suga.se 42512 latin-1
-sursum-corda.com 2002
-swatsbbs.ddns.net 23
-swatsbbs.ddns.net 2323
-swatsbbs.ddns.net 516
-sylvanus.net 4343
-syn-047-049-255-012.biz.spectrum.com 23
+swatsbbs.ddns.net 2323 cp437
+swatsbbs.ddns.net 516 cp437
+sylvanus.net 4343 cp437 80 tall
+syn-047-049-255-012.biz.spectrum.com 23 cp437
 syn-047-049-255-014.biz.spectrum.com 1337 utf-8
 syn-047-049-255-014.biz.spectrum.com 23
-synerchat.com 23
+synerchat.com 23 cp437 80 tall
 sysgod.org 23000
 sysgod.org 60177
 sysgod.org 60179
-sysopsolaris.ddns.net 2323
+sysopsolaris.ddns.net 2323 cp437
 t0kerz.synchro.net 23
 tacopronto.bbs.io 2064 petscii
 tacopronto.bbs.io 2128 petscii
 tacopronto.bbs.io 23 utf-8
 tbrasilis.ddns.net 23000 latin-1
 tdod.org 2002
-tdod.org 2003
-tdod.org 23
-tdod.org 3000
+tdod.org 23 cp437 80 tall
+tdod.org 3000 cp437 80 tall
 tdod.org 5000
 technoanarchy.synchronetbbs.org 513 utf-8
 technotron.asuscomm.com 23
 technotron.asuscomm.com 3261
 techrono.synchro.net 23 utf-8
-teehill.adirondackpc.com 2020
+teehill.adirondackpc.com 2020 cp437
 telehack.com 1337
 telehack.com 23
 telehack.com 31173
 telehack.com 31337
 telehack.com 8080
-telnet.arcadiabbs.com 23
-telnetbible.com 23
+telnet.arcadiabbs.com 23 cp437
+telnetbible.com 23 cp437 80 tall
 telnetbible.com 2424
 telnetbible.com 6400
 telnet.bluewavebbs.com 23 utf-8
-telnet.deadmodemsociety.com 1337
+telnet.deadmodemsociety.com 1337 cp437
 telnet.harborbbs.com 23
 telnet.harborbbs.com 2323
-telnet.holdfastbbs.ca 2002
-telnet.holdfastbbs.ca 2323
 telnet.projectopengate.com 23 utf-8
-telnet.sanctumbbs.com 6502
-telnet.stormbbs.com 23
+telnet.stormbbs.com 23 cp437
 telnet.unknownrealm.org 23 utf-8
 terminal-obsession.hopto.org 1541 topaz
-tfb-bbs.org 23
+tfb-bbs.org 23 cp437
 tfb-bbs.org 3141 cp437
-tfb-bbs.org 992
-tgr.freeddns.org 23
+tfb-bbs.org 992 ssl
+tfu.mu-world.net 1976
+tgr.freeddns.org 23 ascii
 theaerodromebbs.com 6502
-the.alienmindbenders.net 23
+the.alienmindbenders.net 23 cp437
 theattic.v1cd3m1z3r.net 23 utf-8
-thebassplanet.com 64128
+thebassplanet.com 64128 petscii
 thebrewery.servebeer.com 6400
-thecabinbbs.com 6400
+thecabinbbs.com 6400 cp437
+thedarkestdeath.com 4000 utf-8 ssl tall
 thedigitalpost.freeddns.org 23
 the.ericade.net 23
-thegateb.synchro.net 23
-thegateb.synchro.net 2424
+thegateb.synchro.net 23 cp437
+thegateb.synchro.net 2424 cp437
 the.globalvillagebbs.net 2323 cp437
 the-hidden.hopto.org 64128 cp437
-thekeep.net 23
+thekeep.net 23 cp437 80 tall
 themegabbs.com 6400 utf-8
 themegabbs.ddns.net 6400 utf-8
-thenervoushospital.com 1996
-thenineworlds.dnshome.de 923 utf-8
-thenorthernpalace.com 2020 topaz
+thenervoushospital.com 1996 cp437 80 tall
+thenineworlds.dnshome.de 923 ascii
+thenorthernpalace.com 2020 topaz 80 tall
 theoldnet.com 6400 cp437
-thepenaltybox.org 23
+thepenaltybox.org 23 cp437 80 tall
 therockbbs.net 10023 cp437
-the-rotten-core.strangled.net 2323 utf-8
+the-rotten-core.strangled.net 2323 ascii
 theviperbbs.ddnsfree.com 2002
 theviperbbs.ddnsfree.com 23 utf-8
 threeblindmice.synchronetbbs.org 23 utf-8
-thunder.synchro.net 23
+thunder.synchro.net 23 cp437
 tiabbs.synchro.net 2002 rlogin
 tiabbs.synchro.net 2003 rlogin
-tiabbs.synchro.net 23
+tiabbs.synchro.net 23 cp437
 tigernet.dewindt.us 23
-time.synchro.net 24 utf-8
-tlcbbs.dynu.net 6400
-tlcbbs.dynu.net 6401 cp437
-tlcbbs.synchro.net 23 utf-8
+time.synchro.net 24 ascii
+tlcbbs.dynu.net 6400 cp437
+tlcbbs.dynu.net 6401 petscii
+tlcbbs.synchro.net 23 utf-8 80 tall
 tlcbbs.synchro.net 6023
-tlcbbs.synchro.net 6400
-tlcbbs.synchro.net 64 petscii 40
+tlcbbs.synchro.net 6400 cp437
+tlcbbs.synchro.net 64 petscii 80 tall
 tmzbbs01.synchro.net 23
-tmz.synchronetbbs.org 23 utf-8
+tmz.synchronetbbs.org 23 ascii
 tnabbs.org 2323 cp437
 toolazy.synchro.net 2323 utf-8
-toolshed.synchro.net 2323
-top-swadba.de 2323
+toolshed.synchro.net 2323 cp437
+top-swadba.de 2323 cp437
 toxicbbs.com 23 utf-8
-tqps.ddns.net 23
+tqps.ddns.net 23 cp437 80 tall
 tradewarsacademy.com 2002
 trmb.ca 2030
-ttb.rgbbs.info 23
+ttb.rgbbs.info 23 cp437
 turealm.no-ip.org 3023 utf-8
-tw2002.briancmoses.com 23
-twb.wrgnbr.com 10513
-twb.wrgnbr.com 23
-twb.wrgnbr.com 2300
-twb.wrgnbr.com 6400
-twb.wrgnbr.com 6405
-twb.wrgnbr.com 6800
-twb.wrgnbr.com 6896
-twb.wrgnbr.com 9600
-twgs.geekm0nkey.com 23
+twb.wrgnbr.com 10513 cp437
+twb.wrgnbr.com 6405 cp437
+twb.wrgnbr.com 6800 cp437
+twb.wrgnbr.com 6896 cp437
+twb.wrgnbr.com 9600 cp437
+twgs.geekm0nkey.com 23 cp437
 tw.internetking.us 23
-tw.worldsapart.net 2002
-tw.worldsapart.net 23
-u-2z-88-214-46.4bone.mynet.tn.it 23
-ufpgc.com 2323
+tw.worldsapart.net 23 cp437 80 tall
+ufpgc.com 2323 cp437 80 tall
 uncensored.citadel.org 23
 undercurrents.io 8088 utf8
-undercurrents.io 8451
-undernet.uy 23
+undercurrents.io 8451 cp437 80 tall
+undernet.uy 23 cp437
 userclub-bbs.com 23 utf-8
 uzisuicide.servebbs.org 23 topaz 80 tall
-v1ntagebbs.net 2323
-v2202508295374374773.hotsrv.de 23
-v95910.1blu.de 513
+v1ntagebbs.net 2323 cp437
+v2202508295374374773.hotsrv.de 23 cp437
+v95910.1blu.de 513 cp437
 vadv.fireballex.com 2323
 vague.ddns.net 17
 vague.ddns.net 23 utf-8
+valley64.com 6400
+velenobbs.net 23
 verify-nebula.kicks-ass.net 23 utf-8
 vern.cc 23
-vert.synchro.net 128 petscii 80
-vert.synchro.net 23 utf-8
-vert.synchro.net 64 petscii 40
-vintagecomputing.com 1984
+vert.synchro.net 128 petscii 80 tall
+vert.synchro.net 23 ascii
+vert.synchro.net 64 cp437
+vintagecomputing.com 1984 utf-8
 vintagecomputing.com 1990
-vintagecomputing.com 23
-vintagecomputing.com 2323
+vintagecomputing.com 2323 cp437
 vintagepi.asuscomm.com 23
-vintage.thcbbs.com 23 cp437
+vintage.thcbbs.com 23 cp437 80 tall
 violetyggdrasil.live 1144 utf-8
-vmi1943160.contaboserver.net 2323
-vmi2832463.contaboserver.net 2023
-vmi2939130.contaboserver.net 7238 cp437
-vmi3080475.contaboserver.net 23 utf-8
-voidbbs.com 23
-void.canerduh.com 23056 utf-8
-void.canerduh.com 23905
+vmi2832463.contaboserver.net 2023 cp437
+vmi2939130.contaboserver.net 7238 utf-8
+vmi3080475.contaboserver.net 23 cp437
+voidbbs.com 23 cp437
 vortexbbs.com 23 cp437
-vortex.redirectme.net 3777
-vps-223b2b1c.vps.ovh.us 23
-vps.unix.beer 23
+vortex.redirectme.net 3777 cp437
+vps.unix.beer 23 cp437
 wa7npx.org 2323 utf-8
-wabac.ccsnet.com 23
-waffle.c4bmore.com 2001
-wastelands-bbs.net 23
-wastelands-bbs.net 2323
+wabac.ccsnet.com 23 cp437 80 tall
+waffle.c4bmore.com 2001 cp437
+wastelands-bbs.net 23 cp437
+wastelands-bbs.net 2323 cp437
 wastelands-bbs.net 3141
-wccastle.synchro.net 24
+wc.a-net.online 23
+wccastle.synchro.net 24 cp437
 wd1cks.org 23 utf-8
-westwoodbbs.net 64738
+westwoodbbs.net 64738 cp437
 wh2bbs.us 2321 utf-8
 whodareswinsbbs.uk 23 utf-8
 wilco.ydns.eu 2300 utf-8
 willowcreekbbs.dynu.net 6400 cp437
 winnow.1q1.me 23 utf-8
-wintermutebbs.ddns.net 2014
-wintermutebbs.ddns.net 23
-wizardsrainbow.com 23
-wizardsrainbow.com 31337
+wintermutebbs.ddns.net 23 cp437 80 tall
+wizardsrainbow.com 23 cp437
 wizardsrainbow.com 8787 cp437
 wizardsrainbow.com 9898 cp437
 wizzybbs.win 23 utf-8
-wizzybbs.win 4000
-wn2.wrgnbr.com 10513
+wizzybbs.win 4000 cp437
+wn2.wrgnbr.com 10513 cp437
 wn2.wrgnbr.com 23
-wn2.wrgnbr.com 2300
-wn2.wrgnbr.com 6400
 wn2.wrgnbr.com 6405 utf-8
-wn2.wrgnbr.com 6800
-wn2.wrgnbr.com 9600
-wn3.wrgnbr.com 10513
-wn3.wrgnbr.com 23
-wn3.wrgnbr.com 2300
-wn3.wrgnbr.com 3000
-wn3.wrgnbr.com 6400
-wn3.wrgnbr.com 6405
-wn3.wrgnbr.com 6800
-wn4.wrgnbr.com 10513
-wn4.wrgnbr.com 23
-wn4.wrgnbr.com 2300
+wn3.wrgnbr.com 10513 cp437
+wn3.wrgnbr.com 6400 cp437
+wn3.wrgnbr.com 6405 cp437
+wn4.wrgnbr.com 10513 cp437
 wn4.wrgnbr.com 3000
-wn4.wrgnbr.com 6400
-wn4.wrgnbr.com 6405
-wn4.wrgnbr.com 6800
-wn4.wrgnbr.com 9600
-wn6.wrgnbr.com 10513
-wn6.wrgnbr.com 23
-wn6.wrgnbr.com 2300
-wn6.wrgnbr.com 6400
-wn6.wrgnbr.com 6405
-wn6.wrgnbr.com 6411
-wn6.wrgnbr.com 6800
-wn6.wrgnbr.com 9600
-wordbbs.hopto.org 64128 cp437
-workstation.ddmcomputers.com.au 2323
-workstation.ddmcomputers.com.au 8010
-wsip-72-215-52-60.ri.ri.cox.net 23
-wwiv.bsbbs.com 2323
-wwiv.dmine.net 2323
-www.amigaretro.com 23
-www.ateraan.com 4002
+wn4.wrgnbr.com 6405 cp437
+wn6.wrgnbr.com 10513 cp437
+wn6.wrgnbr.com 6405 cp437
+wn6.wrgnbr.com 6411 cp437 80 tall
+wordbbs.hopto.org 64128 cp437 80
+workstation.ddmcomputers.com.au 2323 cp437
+wwiv.bsbbs.com 2323 cp437 80 tall
+wwiv.dmine.net 2323 cp437
+www.amigaretro.com 23 cp437
 www.ems-bbs.com 2002 rlogin
 www.ems-bbs.com 2003 rlogin
-www.ems-bbs.com 23
-www.ems-bbs.com 2513
-www.ems-bbs.com 2514
+www.ems-bbs.com 23 cp437
+www.ems-bbs.com 2513 cp437 80 tall
+www.ems-bbs.com 2514 cp437 80 tall
 www.exciter.ws 2002
 www.exciter.ws 23 utf-8
 www.kimmoviitanen.fi 2323
-www.madworldbbs.com 2332
-www.madworldbbs.com 52146
+www.madworldbbs.com 2332 cp437 80 tall
+www.madworldbbs.com 52146 cp437
 www.madworldbbs.com 8010
 www.maruo.co.jp 23 shift-jis
 www.unleashedinet.org 23 utf-8
-wyldware.com 2020
-wyldware.com 2021
-wyldware.com 2424
+wyldware.com 2021 cp437 80 tall
+wyldware.com 2424 cp437 80 tall
 x22.ddns.net 9000
 x.a-net.online 1337 cp437
 x.a-net.online 2323 utf-8
 x-bit.org 1336 utf-8
 x-bit.org 2112
-x-bit.org 23230
-xibalba.l33t.codes 44510 utf-8
+x-bit.org 23230 cp437
 zahrl.ddns.net 2023 cp437
 zen.kawasu.wtf 2300
 zen.kawasu.wtf 23 cp437
 zenolab.synchro.net 23 utf-8
-zeus.cybercitizen.net 3337
-zl4kj.nz 23
+zeus.cybercitizen.net 3337 cp437 80 tall
+zl4kj.nz 23 cp437
 zonebbs.net 23 utf-8
+zoombrau.com 513
 zooropabbs.ddns.net 2323 cp437
 zthe-place.enyc.org.uk 8682

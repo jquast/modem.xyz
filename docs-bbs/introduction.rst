@@ -22,9 +22,28 @@ What is Telnet?
 `Telnet <https://en.wikipedia.org/wiki/Telnet>`_ is one of the earliest network protocols still in
 use today. Developed for `ARPANET <https://en.wikipedia.org/wiki/ARPANET>`_ in 1969 and described in
 `RFC 97 <https://datatracker.ietf.org/doc/html/rfc97>`_), it allowed systems to establish a two-way
-text-only connection over the internet. Despite its age, Telnet remains widely deployed and used all
-over the world and for embedded/IoT systems. Its longevity comes from its simplicity: it is
-portable, accessible, and easy to develop for.
+text-only connection over the internet. Telnet remains widely deployed and used all over the world
+and for embedded/IoT systems. Its longevity comes from its simplicity: it is portable, accessible,
+and easy to develop for.
+
+Any client or server not capable of Telnet protocol negotiation is assumed to be limited to ASCII
+linemode communication, and so a BBS Server and client should negotiate at least SGA (Supress
+Go-Ahead) and BINARY to ensure for compatibility with retro BBS systems.
+
+What is RLogin?
+---------------
+
+Many BBS servers and clients are connected to the internet by bridging serial with TCP/IP.
+
+`RLogin <https://en.wikipedia.org/wiki/Telnet>`_ is even simpler than Telnet, providing a
+"remote-echoed, locally flow-controlled virtual terminal with proper flushing of output" which
+exactly matches the behavior of Serial Modem communication of which BBSs were originally targeted.
+
+The RLogin protocol is only, "connect, optionally send credentials and terminal type, get an
+*interactive* shell", and so even retro BBS servers bridged over TCP/IP that are not able to
+parse the client's initial transmission are still otherwise compatible with the RLogin protocol.
+
+Any BBS Server not able to negotiate Telnet is considered RLogin for this census.
 
 See Also: MUDs
 ~~~~~~~~~~~~~~
@@ -72,6 +91,8 @@ The most popular open source clients with accurate font, color, and encoding pre
 - `Icy Term <https://github.com/mkrueger/icy_tools>`_
 - `SyncTERM <https://syncterm.bbsdev.net/>`_
 
+The author of this site has also authored a BBS Client, Telix_.
+
 Modern Terminals
 ~~~~~~~~~~~~~~~~
 
@@ -82,7 +103,7 @@ devices you can telnet from!
 .. hint::
 
    Most BBSs require that you set a window size of 80 ``COLUMNS`` by 25 ``LINES``,
-   or corruption of screen draw and cursor position can be expected.
+   or corruption of screen draws and cursor position can be expected.
 
 Color correction
 ----------------
@@ -102,8 +123,8 @@ somewhere in your Terminal's settings.  It is also suggested to enable "Bold as 
 available.
 
 **Alternatively**, the `Telix`_ project runs in a modern terminal and performs "color correction" by
-transliteration of ANSI color sequences to `24-bit Color Sequences
-<https://github.com/termstandard/colors>`_ bypassing the palette issue:
+transliteration of ANSI color sequences to their `24-bit Color Sequences
+<https://github.com/termstandard/colors>`_ bypassing the palette and "bold as bright" options:
 
 .. figure:: /_static/ghostty-telnetlib3.png
    :width: 551px
@@ -113,7 +134,7 @@ transliteration of ANSI color sequences to `24-bit Color Sequences
 Encoding correction
 -------------------
 
-For systems that do not support UTF-8 [#f1]_, you'll see encoding errors:
+For systems that do not support UTF-8 [#f1]_, you may see encoding errors:
 
 .. figure:: /_static/ghostty-cp437-telnet.png
    :width: 672px
@@ -134,6 +155,8 @@ it::
    :width: 672px
 
    The Main title and border are now correctly displayed as "block art".
+
+Alternatively, a special BBS client, most popularly 
 
 topaz
 ~~~~~
@@ -252,8 +275,7 @@ an encoding as a pull request.  Feel free to suggest any other changes or fixes.
 
 Telnet banners are rendered using the fonts described above, with `GNU Unifont
 <https://unifoundry.com/unifont/>`_ as fallback for remaining Unicode coverage.  Banner data is sent to `WezTerm
-<https://wezterm.org/index.html>`_ for a screenshot, and artificial scanlines and bloom effect are
-applied.
+<https://wezterm.org/index.html>`_ for a screenshot.
 
 .. _telnetlib3: https://telnetlib3.readthedocs.org/
 
@@ -283,6 +305,7 @@ Exercises for the reader!
 - Did you find a BBS with message areas? When was the last message posted?
 - Why is artwork so common? What common "themes" do you find in the art styles?
 - Why do BBS Servers require special clients?
+- Why were BBS so popular with piracy? What is a "WHQ" or a group distribution site?
 - Why is IBM PC-DOS (:ref:`CP437 <cp437>`) the most popular encoding behind ASCII?
 - Can you find the name of a historical BBSs that is no longer online?
 - Can you find a historical BBS that is still online today?

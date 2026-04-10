@@ -1,16 +1,14 @@
 ansi2html
+blessed
 cryptography
 matplotlib
 numpy
+rapidfuzz
 sphinx
 sphinxcontrib-jquery
 sphinxcontrib-youtube
 sphinx-datatables
 sphinx-rtd-theme
 tabulate
-wcwidth
-# telix.color_filter provides VGA palette matching (16-color SGR -> 24-bit
-# RGB) and iCE colors (blink-as-bright-background) for banner screenshots.
-# Replaces the old telnetlib3.color_match approach.
 telix
-pixelgreat
+wcwidth

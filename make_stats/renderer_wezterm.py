@@ -57,7 +57,7 @@ def _generate_mux_config(path, font_size, rows):
 local wezterm = require 'wezterm'
 local config = {{}}
 
-config.font = wezterm.font_with_fallback{{{unifont}}}
+config.font = wezterm.font_with_fallback{{"Px IBM VGA8", {unifont}}}
 config.font_size = {font_size}
 config.initial_cols = 120
 config.initial_rows = {rows}

@@ -42,9 +42,6 @@ def main():
         '--force', action='store_true',
         help='Regenerate all RST files, ignoring mtime checks')
     parser.add_argument(
-        '--no-crt-effects', action='store_true',
-        help='Disable CRT bloom and scanline post-processing on banners')
-    parser.add_argument(
         '--check-dupes', action='store_true',
         help='Enable duplicate-image detection between consecutive renders')
 

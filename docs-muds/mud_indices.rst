@@ -7,7 +7,6 @@ MUD Indices
    server_list
    codebases
    protocols
-   sequences
    tls
    locations
    encodings

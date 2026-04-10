@@ -18,7 +18,8 @@ Page {{ page_num }} of {{ total_pages }} {{ page_label|rst_escape }}
    :loading: lazy
 
 {% endif %}
-{% if count > 1 %}
+{% set total = count + group.get('similar_servers', [])|length %}
+{% if total > 1 %}
 *This banner is shared by the following {{ count }} servers:*
 
 {% endif %}
@@ -27,5 +28,15 @@ Page {{ page_num }} of {{ total_pages }} {{ page_label|rst_escape }}
   | Encoding: {{ s.get('display_encoding', 'utf-8')|rst_escape }}{% if s.get('display_encoding', '').lower().replace('-', '_') in ('big5', 'gbk', 'shift_jis', 'euc_kr', 'euc_jp', 'gb2312') %}{% if s.get('no_ambig_override') %} (narrow ambig){% else %} (wide ambig){% endif %}{% endif %}
 
 {% endfor %}
+{% if group.get('similar_servers') %}
+
+*This banner is more than {{ group.similar_servers[-1]._score }}% similar to {{ group.similar_servers|length }} other {{ 'server' if group.similar_servers|length == 1 else 'servers' }}:*
+
+{% for s in group.similar_servers %}
+{% if s.get('_detail_anchor') %}- {{ s._flag }} :ref:`{{ s._name|rst_escape }} <{{ s._detail_anchor }}>`{{ s._tls }} ({{ s._score }}% match){% else %}- {{ s._flag }} :doc:`{{ s._name|rst_escape }} <{{ detail_subdir }}/{{ s._detail_file }}>`{{ s._tls }} ({{ s._score }}% match){% endif %}
+  | Encoding: {{ s.get('display_encoding', 'utf-8')|rst_escape }}{% if s.get('display_encoding', '').lower().replace('-', '_') in ('big5', 'gbk', 'shift_jis', 'euc_kr', 'euc_jp', 'gb2312') %}{% if s.get('no_ambig_override') %} (narrow ambig){% else %} (wide ambig){% endif %}{% endif %}
+
+{% endfor %}
+{% endif %}
 
 {% endfor %}

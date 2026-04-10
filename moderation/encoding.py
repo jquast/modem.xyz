@@ -572,7 +572,7 @@ def _review_mojibake_group(issues, list_path, logs_dir, data_dir,
 def review_encoding_issues(mud_issues, bbs_issues, mud_list,
                            bbs_list, logs_dir, mud_data=None,
                            bbs_data=None, report_only=False,
-                           dry_run=False):
+                           dry_run=False, decisions=None):
     """Interactively review and apply encoding fixes.
 
     UTF-8 mojibake issues (auto-sensing servers) are grouped and
@@ -627,34 +627,66 @@ def review_encoding_issues(mud_issues, bbs_issues, mud_list,
             applied_count += max(result, 0)
 
         if cp437_petscii:
-            print(f"\n  cp437/ANSI banners incorrectly tagged"
-                  f" petscii: {len(cp437_petscii)}")
-            for issue in cp437_petscii:
-                host = issue['host']
-                port = issue['port']
-                ansi_count = issue['replacement_count']
-                reason_detail = (
-                    f"{ansi_count} ANSI escape(s)" if ansi_count
-                    else "double-line box-drawing, no PETSCII glyphs"
-                )
-                print(f"    {host}:{port}  ({reason_detail})")
-            if not report_only:
-                choice = _prompt(
-                    f"    Change all {len(cp437_petscii)}"
-                    f" to cp437? (y/n/q) ", "ynq")
-                if choice == 'q':
-                    return applied_count
-                if choice == 'y':
-                    fixes = {(i['host'], i['port']): 'cp437'
-                             for i in cp437_petscii}
-                    result = _apply_encoding_fixes_bulk(
-                        list_path, fixes, dry_run=dry_run)
-                    if not dry_run:
-                        servers = list(fixes.keys())
-                        deleted = _expunge_logs(logs_dir, servers)
-                        print(f"  Expunged {deleted} log files"
-                              f" (will re-scan as cp437)")
-                    applied_count += result
+            enc_cache = (decisions or {}).get("encoding", {})
+            uncached = [
+                i for i in cp437_petscii
+                if f"{i['host']}:{i['port']}" not in enc_cache
+            ]
+            cached_count = len(cp437_petscii) - len(uncached)
+            if cached_count:
+                print(f"\n  ({cached_count} petscii encoding"
+                      f" decision(s) cached)")
+            if uncached:
+                print(f"\n  cp437/ANSI banners incorrectly tagged"
+                      f" petscii: {len(uncached)}")
+                for issue in uncached:
+                    host = issue['host']
+                    port = issue['port']
+                    ansi_count = issue['replacement_count']
+                    reason_detail = (
+                        f"{ansi_count} ANSI escape(s)"
+                        if ansi_count
+                        else "double-line box-drawing,"
+                             " no PETSCII glyphs"
+                    )
+                    print(f"    {host}:{port}"
+                          f"  ({reason_detail})")
+                if not report_only:
+                    choice = _prompt(
+                        f"    Change all {len(uncached)}"
+                        f" to cp437? (y/n/q) ", "ynq")
+                    if choice == 'q':
+                        return applied_count
+                    if choice == 'y':
+                        fixes = {
+                            (i['host'], i['port']): 'cp437'
+                            for i in uncached
+                        }
+                        result = _apply_encoding_fixes_bulk(
+                            list_path, fixes,
+                            dry_run=dry_run)
+                        if not dry_run:
+                            servers = list(fixes.keys())
+                            deleted = _expunge_logs(
+                                logs_dir, servers)
+                            print(
+                                f"  Expunged {deleted}"
+                                f" log files"
+                                f" (will re-scan as cp437)")
+                        applied_count += result
+                        if decisions is not None:
+                            for i in uncached:
+                                key = (f"{i['host']}"
+                                       f":{i['port']}")
+                                decisions["encoding"][key] = \
+                                    "cp437"
+                    else:
+                        if decisions is not None:
+                            for i in uncached:
+                                key = (f"{i['host']}"
+                                       f":{i['port']}")
+                                decisions["encoding"][key] = \
+                                    "skip"
 
         if utf8_native:
             print(f"\n  UTF-8 native banners needing list"

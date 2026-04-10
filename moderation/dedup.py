@@ -1,6 +1,8 @@
 """Duplicate grouping, interactive review, and dead-server pruning."""
 
 import collections
+import csv
+import json
 import os
 import re
 import sys
@@ -26,6 +28,52 @@ from .util import (
     _prompt,
     _resolve_hostnames,
 )
+
+_UPSTREAM_TELNETSUPPORT = "telnetsupport.json"
+_UPSTREAM_IBBS_CSV = "ibbs_bbslist.csv"
+
+
+def _load_upstream_hostnames():
+    """Load hostnames known from upstream fetch sources.
+
+    Reads ``telnetsupport.json`` (MUD) and ``ibbs_bbslist.csv`` (BBS)
+    from the project root directory.
+
+    :returns: set of ``(host_lower, port)`` tuples
+    """
+    here = Path(__file__).resolve().parent.parent
+    upstream = set()
+
+    tspath = here / _UPSTREAM_TELNETSUPPORT
+    if tspath.is_file():
+        try:
+            with open(tspath, encoding="utf-8") as f:
+                for entry in json.load(f):
+                    host = entry.get("host", "").strip().lower()
+                    port = entry.get("port")
+                    if host and port:
+                        upstream.add((host, int(port)))
+        except (OSError, json.JSONDecodeError, ValueError):
+            pass
+
+    csvpath = here / _UPSTREAM_IBBS_CSV
+    if csvpath.is_file():
+        try:
+            with open(csvpath, encoding="utf-8",
+                      errors="replace") as f:
+                for row in csv.DictReader(f, skipinitialspace=True):
+                    host = (row.get("TelnetAddress", "")
+                            .strip().lower())
+                    port_str = row.get("bbsPort", "").strip()
+                    if host and port_str:
+                        try:
+                            upstream.add((host, int(port_str)))
+                        except ValueError:
+                            pass
+        except OSError:
+            pass
+
+    return upstream
 
 
 def _find_fp_ip_groups(records):
@@ -170,8 +218,9 @@ def _print_group_member(idx, rec, removals, source_label=None,
         if tls_port is not None and tls_port != 1:
             tls_info = f"  tls_port={tls_port}"
 
+    upstream = " [upstream]" if rec.get("_upstream") else ""
     print(f"  [{marker}] {idx}. {rec['host']}:{rec['port']}"
-          f"{tls_marker}"
+          f"{tls_marker}{upstream}"
           f"  ip={rec['ip']}"
           f"  fp={rec['fingerprint'][:12]}{mssp}"
           f"{tls_info}{source}")
@@ -838,6 +887,426 @@ def find_cross_list_conflicts(mud_list, bbs_list, mud_data_dir,
     return mud_removals, bbs_removals
 
 
+def find_cross_list_ip_conflicts(mud_list, bbs_list, mud_data_dir,
+                                 bbs_data_dir, report_only=False,
+                                 dry_run=False, decisions=None,
+                                 logs_dir=None):
+    """Find cross-list entries sharing an IP+port via DNS resolution.
+
+    Resolves all hostnames from both lists, then finds groups where
+    the same ``(ip, port)`` appears in both the MUD and BBS lists
+    under different hostnames.  Exact ``(host, port)`` matches (already
+    handled by :func:`find_cross_list_conflicts`) are excluded.
+
+    :param mud_list: path to mudlist.txt
+    :param bbs_list: path to bbslist.txt
+    :param mud_data_dir: path to MUD data directory
+    :param bbs_data_dir: path to BBS data directory
+    :param report_only: if True, only print report
+    :param dry_run: if True, don't write changes
+    :param decisions: mutable decisions dict for caching, or None
+    :param logs_dir: path to logs directory for rescan, or None
+    :returns: (mud_removals, bbs_removals) sets
+    """
+    mud_list = Path(mud_list)
+    bbs_list = Path(bbs_list)
+
+    print(f"\n--- Cross-list IP conflicts"
+          f" (same IP+port, different lists) ---")
+
+    mud_set = _parse_host_port_set(mud_list)
+    bbs_set = _parse_host_port_set(bbs_list)
+
+    # Collect all hostname entries (skip bare IPs).
+    mud_hostname_entries = [
+        (host, port) for host, port in mud_set
+        if not _is_ip_address(host)
+    ]
+    bbs_hostname_entries = [
+        (host, port) for host, port in bbs_set
+        if not _is_ip_address(host)
+    ]
+
+    all_hostnames = (
+        {h for h, _ in mud_hostname_entries}
+        | {h for h, _ in bbs_hostname_entries}
+    )
+    if not all_hostnames:
+        print("  No hostname entries to check.")
+        return set(), set()
+
+    print(f"  {len(mud_hostname_entries)} MUD +"
+          f" {len(bbs_hostname_entries)} BBS hostname entries"
+          f" ({len(all_hostnames)} unique hostnames)")
+
+    print("  Resolving hostnames ...", file=sys.stderr)
+    resolved = _resolve_hostnames(all_hostnames)
+
+    # Group by (ip, port) -> list of (host, port, source).
+    ip_port_members = collections.defaultdict(list)
+    for host, port in mud_hostname_entries:
+        for ip in resolved.get(host, ()):
+            ip_port_members[(ip, port)].append(
+                (host, port, "mud"))
+    for host, port in bbs_hostname_entries:
+        for ip in resolved.get(host, ()):
+            ip_port_members[(ip, port)].append(
+                (host, port, "bbs"))
+
+    # Keep only groups that span both lists.
+    cross_groups = {}
+    for (ip, port), members in ip_port_members.items():
+        sources = {src for _, _, src in members}
+        if len(sources) < 2:
+            continue
+        # Exclude exact (host, port) pairs already in both lists --
+        # those are handled by find_cross_list_conflicts.
+        hosts = {h for h, _, _ in members}
+        exact_overlap = any(
+            (h, port) in mud_set and (h, port) in bbs_set
+            for h in hosts
+        )
+        if exact_overlap and len(hosts) == 1:
+            continue
+        cross_groups[(ip, port)] = members
+
+    if not cross_groups:
+        print("  No cross-list IP+port conflicts found.")
+        return set(), set()
+
+    print(f"  {len(cross_groups)} group(s) sharing"
+          f" IP+port across lists")
+
+    # Load server records for banner display.
+    mud_records = {
+        (r["host"].lower(), r["port"]): r
+        for r in deduplicate_records(
+            load_server_records(Path(mud_data_dir)))
+    }
+    bbs_records = {
+        (r["host"].lower(), r["port"]): r
+        for r in deduplicate_records(
+            load_server_records(Path(bbs_data_dir)))
+    }
+
+    # Build groups for review, annotating each member with its
+    # source list.
+    groups = {}
+    for (ip, port), members in sorted(cross_groups.items()):
+        group_key = f"ip={ip}  port={port}"
+        group_members = []
+        seen = set()
+        for host, p, source in sorted(
+                members, key=lambda m: (m[2], m[0])):
+            if (host, p) in seen:
+                continue
+            seen.add((host, p))
+            rec = (mud_records.get((host, p))
+                   or bbs_records.get((host, p)))
+            if rec:
+                rec = dict(rec)
+            else:
+                rec = {
+                    "host": host,
+                    "port": p,
+                    "ip": ip,
+                    "fingerprint": "",
+                    "banner_hash": "",
+                    "banner_before": "",
+                    "banner_after": "",
+                    "mssp_name": "",
+                    "mssp": {},
+                    "encoding": "",
+                    "data_path": "",
+                }
+            rec["_source"] = source
+            group_members.append(rec)
+        groups[group_key] = group_members
+
+    if report_only:
+        for key, members in sorted(groups.items()):
+            print(f"\n--- {key} ---")
+            print(f"  {len(members)} entries:")
+            for rec in members:
+                src = rec.get("_source", "?")
+                fp = rec["fingerprint"][:12] or "?"
+                mssp = ""
+                if rec.get("mssp_name"):
+                    mssp = f"  name={rec['mssp_name']!r}"
+                print(f"    [{src}] {rec['host']}:{rec['port']}"
+                      f"  fp={fp}{mssp}")
+                before = rec.get("banner_before", "")
+                if before:
+                    displayed = _display_banner(
+                        before, maxlines=5)
+                    for line in displayed.splitlines():
+                        print(f"         {line}")
+        return set(), set()
+
+    cross_ip_cache = (decisions or {}).get("cross_ip", {})
+    mud_removals = set()
+    bbs_removals = set()
+    cached_count = 0
+
+    for idx, (key, members) in enumerate(
+            sorted(groups.items()), 1):
+        cache_key = key
+        cached = cross_ip_cache.get(cache_key)
+
+        if cached is not None:
+            for rec in members:
+                hp = (rec["host"], rec["port"])
+                src = rec.get("_source", "")
+                if cached == "m" and src == "bbs":
+                    bbs_removals.add(hp)
+                elif cached == "b" and src == "mud":
+                    mud_removals.add(hp)
+            cached_count += 1
+            continue
+
+        print(f"\n--- Group {idx}/{len(groups)}: {key} ---")
+        print(f"  {len(members)} entries:\n")
+
+        for i, rec in enumerate(members, 1):
+            src = rec.get("_source", "?").upper()
+            fp = rec["fingerprint"][:12] or "?"
+            ip = rec.get("ip", "?")
+            mssp = ""
+            if rec.get("mssp_name"):
+                mssp = f"  name={rec['mssp_name']!r}"
+            print(f"  {i}. [{src}] {rec['host']}:{rec['port']}"
+                  f"  ip={ip}  fp={fp}{mssp}")
+            before = rec.get("banner_before", "")
+            if before:
+                displayed = _display_banner(before, maxlines=5)
+                for line in displayed.splitlines():
+                    print(f"       {line}")
+            print()
+
+        print("  Keep in: [m]ud only, [b]bs only,"
+              " [k]eep both, [s]kip, [q]uit")
+
+        try:
+            choice = input("  > ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print("\nAborted.")
+            break
+
+        if choice == "q":
+            break
+        elif choice == "m":
+            for rec in members:
+                if rec.get("_source") == "bbs":
+                    bbs_removals.add(
+                        (rec["host"], rec["port"]))
+            print("    -> remove BBS entries")
+        elif choice == "b":
+            for rec in members:
+                if rec.get("_source") == "mud":
+                    mud_removals.add(
+                        (rec["host"], rec["port"]))
+            print("    -> remove MUD entries")
+        elif choice in ("k", "s", ""):
+            choice = "k" if choice == "k" else "s"
+
+        if (decisions is not None
+                and choice in ("m", "b", "k", "s")):
+            decisions.setdefault("cross_ip", {})[
+                cache_key] = choice
+
+    if cached_count:
+        print(f"\n  ({cached_count} group(s)"
+              f" auto-resolved from cache)")
+
+    if not mud_removals and not bbs_removals:
+        print("\n  No changes.")
+        return set(), set()
+
+    if mud_removals:
+        print(f"\n  {len(mud_removals)} to remove"
+              f" from MUD list:")
+        for host, port in sorted(mud_removals):
+            print(f"    {host}:{port}")
+    if bbs_removals:
+        print(f"\n  {len(bbs_removals)} to remove"
+              f" from BBS list:")
+        for host, port in sorted(bbs_removals):
+            print(f"    {host}:{port}")
+
+    answer = _prompt("\n  Apply changes? [y/N] ", "yn")
+    if answer != "y":
+        print("  Cancelled.")
+        return set(), set()
+
+    if mud_removals:
+        entries = load_server_list(mud_list)
+        write_filtered_list(
+            mud_list, entries, mud_removals, dry_run=dry_run)
+    if bbs_removals:
+        entries = load_server_list(bbs_list)
+        write_filtered_list(
+            bbs_list, entries, bbs_removals, dry_run=dry_run)
+
+    return mud_removals, bbs_removals
+
+
+def find_hostname_duplicates(list_path, data_dir, report_only=False,
+                             dry_run=False, decisions=None,
+                             logs_dir=None):
+    """Find entries where different hostnames resolve to the same IP and port.
+
+    Resolves all hostname entries in a single server list, then groups
+    by ``(resolved_ip, port)`` where two or more distinct hostnames
+    share the same address.  Presents groups for interactive review so
+    the user can pick the preferred hostname.
+
+    :param list_path: path to server list file
+    :param data_dir: path to data directory (containing server/)
+    :param report_only: if True, only print report
+    :param dry_run: if True, don't write changes
+    :param decisions: mutable decisions dict for caching, or None
+    :param logs_dir: path to logs directory for rescan, or None
+    :returns: set of (host, port) removed
+    """
+    list_path = Path(list_path)
+    data_dir = Path(data_dir)
+
+    print(f"\n--- Hostname duplicate detection"
+          f" in {list_path.name} ---")
+
+    current_entries = _parse_host_port_set(list_path)
+    hostname_entries = [
+        (host, port) for host, port in current_entries
+        if not _is_ip_address(host)
+    ]
+
+    if not hostname_entries:
+        print("  No hostname entries to check.")
+        return set()
+
+    hostnames = {host for host, _ in hostname_entries}
+    print(f"  {len(hostname_entries)} hostname entries"
+          f" ({len(hostnames)} unique hostnames)")
+
+    print("  Resolving hostnames ...", file=sys.stderr)
+    resolved = _resolve_hostnames(hostnames)
+
+    # Group by (ip, port) -> list of hostnames.
+    ip_port_hosts = collections.defaultdict(set)
+    for host, port in hostname_entries:
+        for ip in resolved.get(host, ()):
+            ip_port_hosts[(ip, port)].add(host)
+
+    # Keep only groups with multiple distinct hostnames.
+    multi_groups = {
+        k: v for k, v in ip_port_hosts.items() if len(v) > 1
+    }
+
+    if not multi_groups:
+        print("  No hostnames sharing an IP+port.")
+        return set()
+
+    print(f"  {len(multi_groups)} group(s) of hostnames"
+          f" sharing an IP+port")
+
+    # Load upstream hostnames to tag and auto-resolve.
+    upstream = _load_upstream_hostnames()
+    if upstream:
+        print(f"  {len(upstream)} upstream hostname+port entries"
+              f" loaded")
+
+    # Load server records for banner display.
+    records = load_server_records(data_dir)
+    records = deduplicate_records(records)
+    rec_by_hp = {
+        (r["host"].lower(), r["port"]): r for r in records
+    }
+
+    # Build groups keyed for _review_groups: each group is a list
+    # of record dicts (one per hostname+port in the group).
+    groups = {}
+    auto_removals = set()
+    auto_count = 0
+    for (ip, port), hosts in sorted(multi_groups.items()):
+        group_key = f"ip={ip}  port={port}"
+        members = []
+        for host in sorted(hosts):
+            rec = rec_by_hp.get((host, port))
+            if rec:
+                rec = dict(rec)
+            else:
+                rec = {
+                    "host": host,
+                    "port": port,
+                    "ip": ip,
+                    "fingerprint": "",
+                    "banner_hash": "",
+                    "banner_before": "",
+                    "banner_after": "",
+                    "mssp_name": "",
+                    "mssp": {},
+                    "encoding": "",
+                    "data_path": "",
+                }
+            if (host, port) in upstream:
+                rec["_upstream"] = True
+            members.append(rec)
+
+        # Auto-resolve: if exactly one member is upstream,
+        # keep it and remove the rest.
+        upstream_members = [
+            m for m in members if m.get("_upstream")]
+        if len(upstream_members) == 1:
+            auto_count += 1
+            keep = upstream_members[0]
+            for m in members:
+                if m is not keep:
+                    auto_removals.add((m["host"], m["port"]))
+                    print(f"  auto-remove"
+                          f" {m['host']}:{m['port']}"
+                          f" (keep upstream"
+                          f" {keep['host']}:{keep['port']})")
+            continue
+
+        groups[group_key] = members
+
+    if auto_count:
+        print(f"  {auto_count} group(s) auto-resolved"
+              f" (single upstream match)")
+
+    if report_only:
+        _report_groups(groups, "Hostname duplicates (same IP)")
+        return set()
+
+    removals = set(auto_removals)
+    if groups:
+        r = _review_groups(
+            groups, "Hostname duplicates (same IP+port)",
+            decisions, logs_dir=logs_dir,
+            data_dir=str(data_dir))
+        removals.update(r)
+
+    if not removals:
+        print("\n  No entries marked for removal.")
+        return set()
+
+    print(f"\n  {len(removals)} entry/entries"
+          f" marked for removal:")
+    for host, port in sorted(removals):
+        print(f"    {host}:{port}")
+
+    answer = _prompt("\n  Apply changes? [y/N] ", "yn")
+    if answer != "y":
+        print("  Cancelled.")
+        return set()
+
+    entries = load_server_list(list_path)
+    write_filtered_list(
+        list_path, entries, removals, dry_run=dry_run)
+
+    return removals
+
+
 def remove_rlogin_duplicates(list_path, report_only=False,
                              dry_run=False):
     """Remove rlogin (port 513) entries when the host has another port.
@@ -857,14 +1326,23 @@ def remove_rlogin_duplicates(list_path, report_only=False,
     entries = load_server_list(list_path)
 
     hosts_by_port = {}
-    for host, port, _ in entries:
+    ssh_ports = set()
+    for host, port, line in entries:
         if host is None:
             continue
         hosts_by_port.setdefault(host.lower(), set()).add(port)
+        if 'ssh' in line.split()[2:]:
+            ssh_ports.add((host.lower(), port))
 
     removals = set()
     for host_lower, ports in hosts_by_port.items():
-        if 513 in ports and len(ports) > 1:
+        if 513 not in ports:
+            continue
+        # Only count non-ssh ports as valid alternatives.
+        scannable = {p for p in ports
+                     if (host_lower, p) not in ssh_ports
+                     and p != 513}
+        if scannable:
             removals.add((host_lower, 513))
 
     if not removals:
@@ -872,7 +1350,9 @@ def remove_rlogin_duplicates(list_path, report_only=False,
         return set()
 
     for host, port in sorted(removals):
-        other = sorted(hosts_by_port[host] - {513})
+        other = sorted(hosts_by_port[host] - {513} -
+                        {p for h, p in ssh_ports
+                         if h == host})
         print(f"  remove {host}:513"
               f"  (also on port {', '.join(map(str, other))})")
 

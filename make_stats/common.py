@@ -264,10 +264,10 @@ def _load_no_ambig_overrides(path):
 def _load_ssh_overrides(path):
     """Load SSH port overrides from a server list file.
 
-    Looks for lines with format ``host ssh [port]``.
+    Looks for lines with format ``host port ssh``.
 
     :param path: path to server list file
-    :returns: dict mapping host_lower to ssh_port int (default 22)
+    :returns: dict mapping host_lower to ssh_port int
     """
     overrides = {}
     if not os.path.isfile(path):
@@ -280,12 +280,13 @@ def _load_ssh_overrides(path):
             parts = line.split()
             if len(parts) >= 2 and parts[1] == 'ssh':
                 host = parts[0].lower()
-                ssh_port = 22
                 if len(parts) >= 3:
                     try:
                         ssh_port = int(parts[2])
                     except ValueError:
                         continue
+                else:
+                    ssh_port = 22
                 overrides[host] = ssh_port
     return overrides
 
@@ -359,17 +360,24 @@ def _load_base_records(data_dir, encoding_overrides=None,
             if not banner_before and not banner_after:
                 continue
 
-            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
-                if banner_before:
-                    banner_before = _redecode_banner(
-                        banner_before, detected_encoding, 'utf-8')
-                if banner_after:
-                    banner_after = _redecode_banner(
-                        banner_after, detected_encoding, 'utf-8')
-
             host = session.get('host',
                                session.get('ip', 'unknown'))
             port = session.get('port', 0)
+
+            # Re-decode surrogate escapes as UTF-8 for servers that
+            # don't have an explicit encoding override.  Servers with
+            # an override (e.g. cp437) are handled later by
+            # _combine_banners which re-decodes with the correct
+            # target encoding — doing a premature UTF-8 re-decode here
+            # would destroy the surrogate escapes it needs.
+            if detected_encoding in ('ascii', 'utf-8', 'unknown'):
+                if (host, port) not in encoding_overrides:
+                    if banner_before:
+                        banner_before = _redecode_banner(
+                            banner_before, detected_encoding, 'utf-8')
+                    if banner_after:
+                        banner_after = _redecode_banner(
+                            banner_after, detected_encoding, 'utf-8')
 
             record = {
                 'host': host,
@@ -432,6 +440,22 @@ def _strip_ansi(text):
     return wcwidth.strip_sequences(text)
 
 
+# C0 control codes and DEL that produce no visible terminal output.
+_C0_CONTROLS = frozenset(
+    chr(c) for c in range(0x20) if chr(c) not in '\t\n\r'
+) | {'\x7f'}
+
+
+def _printable_text(text):
+    """Return only printable characters from text, stripping escapes and controls.
+
+    :param text: raw text possibly containing ANSI escapes and control codes
+    :returns: string with only printable characters
+    """
+    stripped = _strip_ansi(text).strip()
+    return ''.join(c for c in stripped if c not in _C0_CONTROLS)
+
+
 #def _rstrip_ansi_line(line, columns=80):
 #    """Strip trailing visible whitespace from lines that would cause wrapping.
 #
@@ -476,6 +500,74 @@ def _is_garbled(text, threshold=0.3):
     if not visible:
         return False
     return visible.count('\ufffd') / len(visible) > threshold
+
+
+def _collapse_double_spaced_rows(text):
+    """Remap cursor-positioned rows when every row is evenly spaced.
+
+    Some BBS software (e.g. Mystic BBS) sends art with cursor
+    positioning that skips every other row (rows 2,4,6,... or
+    4,6,8,10,...), producing unwanted double-spacing.  Detection
+    uses the unique row numbers from *all* CUP sequences (any
+    column), then remaps every CUP in the affected row range.
+
+    :param text: banner text after newline stripping
+    :returns: text with collapsed row positioning
+    """
+    _CUP_RE = re.compile(r'\x1b\[(\d+);(\d*)H')
+
+    cups = [(m.start(), m.end(), int(m.group(1)), int(m.group(2) or '1'))
+            for m in _CUP_RE.finditer(text)]
+    if not cups:
+        return text
+
+    # Build sorted list of unique row numbers across all CUP sequences.
+    unique_rows = sorted(set(r for _, _, r, _ in cups))
+    if len(unique_rows) < 3:
+        return text
+
+    # Find runs of unique rows with a constant stride > 1.
+    runs = []
+    i = 0
+    while i < len(unique_rows) - 1:
+        stride = unique_rows[i + 1] - unique_rows[i]
+        if stride < 2:
+            i += 1
+            continue
+        j = i + 1
+        while (j < len(unique_rows) - 1
+               and unique_rows[j + 1] - unique_rows[j] == stride):
+            j += 1
+        if j - i >= 2:  # at least 3 rows in the run
+            runs.append((i, j, stride))
+        i = j + 1
+
+    if not runs:
+        return text
+
+    # Build row mapping from detected runs.
+    row_map = {}
+    for run_start, run_end, stride in runs:
+        base_row = unique_rows[run_start]
+        for k in range(run_start, run_end + 1):
+            orig_row = unique_rows[k]
+            new_row = base_row + (k - run_start)
+            if new_row != orig_row:
+                row_map[orig_row] = new_row
+
+    if not row_map:
+        return text
+
+    # Replace all CUP sequences whose row is in the map (right-to-left).
+    replacements = []
+    for start, end, row, col in cups:
+        if row in row_map:
+            col_part = f';{col}' if col != 1 else ';1'
+            replacements.append((start, end, f'\x1b[{row_map[row]}{col_part}H'))
+
+    for start, end, new_seq in reversed(replacements):
+        text = text[:start] + new_seq + text[end:]
+    return text
 
 
 def _strip_mxp_sgml(text):
@@ -646,29 +738,29 @@ def _combine_banners(server, default_encoding=None):
 
 
 def _png_display_width(path):
-    """Read a PNG file's pixel width and return its HiDPI display width.
+    """Read a PNG file's pixel width for use as the CSS display width.
 
-    Banner PNGs are 2x upscaled before CRT effects, so the intended
-    display size is half the actual pixel width.  Falls back to None
-    if the file cannot be read.
+    Banner PNGs are captured at native terminal resolution (1:1 pixels)
+    so the display width equals the actual pixel width.  Falls back to
+    None if the file cannot be read.
 
     :param path: path to a PNG file
-    :returns: display width in pixels (``pixel_width // 2``), or None
+    :returns: display width in pixels, or None
     """
     import struct
     try:
         with open(path, 'rb') as fh:
             header = fh.read(24)
         if len(header) >= 24 and header[:8] == b'\x89PNG\r\n\x1a\n':
-            pixel_width = struct.unpack('>I', header[16:20])[0]
-            return pixel_width // 2
+            return struct.unpack('>I', header[16:20])[0]
     except OSError:
         pass
     return None
 
 
 def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
-                   rows=None, no_ambig=False, ice_colors=False):
+                   rows=None, no_ambig=False, ice_colors=False,
+                   server_label=None):
     """Render ANSI banner text to a deduplicated PNG file.
 
     Preprocesses the banner text, hashes it with the encoding and
@@ -683,9 +775,11 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     :param rows: optional terminal row height override
     :param no_ambig: if True, disable ambiguous-width-as-wide for CJK
     :param ice_colors: if True, treat SGR 5 (blink) as bright background
+    :param server_label: optional string identifying the server for error
+        messages (e.g. ``'host:port (data_path)'``)
     :returns: ``(filename, display_width)`` tuple, or ``(None, None)``
-        on failure.  *display_width* is the intended CSS pixel width
-        for HiDPI rendering (half the actual PNG pixel width).
+        on failure.  *display_width* is the PNG pixel width, used as
+        the CSS display width so banners render at natural size.
     """
     if _renderer_pool is None:
         return None, None
@@ -700,14 +794,45 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     text = _strip_mxp_sgml(text)
     # Strip terminal report/query sequences (DSR, DA, window ops)
     text = re.sub(r'\x1b\[[0-9;]*[nc]', '', text)
+    # Normalize clear-screen sequences.  CTerm (Synchronet's terminal)
+    # homes the cursor on ED 2 and treats form feed (0x0C) as clear +
+    # home; standard terminals like wezterm don't.  Normalize each
+    # clear to HOME + CLEAR + SGR-RESET so carried-over colors (e.g.
+    # black-on-black detection strings) don't make post-clear content
+    # invisible.  Also treat form feed as clear screen.
+    text = text.replace('\x0c', '\x1b[2J')
+    text = text.replace('\x1b[2J\x1b[H', '\x1b[2J')
+    text = text.replace('\x1b[2J', '\x1b[H\x1b[2J\x1b[0m')
+    # If a clear screen wipes visible content but leaves nothing
+    # visible after it, drop the clear and everything after so the
+    # pre-clear content is displayed instead.
+    _clear_token = '\x1b[H\x1b[2J\x1b[0m'
+    last_clear = text.rfind(_clear_token)
+    if last_clear > 0:
+        before_clear = text[:last_clear]
+        after_clear = text[last_clear + len(_clear_token):]
+        if (_printable_text(before_clear)
+                and not _printable_text(after_clear)):
+            # Clear wipes visible content but nothing follows — keep
+            # the pre-clear art (e.g. server clears on disconnect).
+            text = before_clear
+        elif _printable_text(after_clear):
+            # Clear screen replaces the display — keep only what a
+            # terminal would actually show (the post-clear content).
+            # This also strips pre-clear CUP positioning junk that
+            # would confuse row-stride detection below.
+            text = after_clear
     # Strip newlines before absolute cursor positioning — they are
     # redundant and produce unwanted blank lines (e.g. Mystic BBS).
     text = re.sub(r'\n(\x1b\[\d+;\d*H)', r'\1', text)
+    # Collapse double-spaced cursor positioning (rows 2,4,6,... or
+    # 1,3,5,...) to consecutive rows so art isn't stretched vertically.
+    text = _collapse_double_spaced_rows(text)
     text = text.rstrip()
 
     # Skip banners with no visible content — they all render to the same
     # blank image and waste renderer cycles.
-    if not _strip_ansi(text).strip():
+    if not _printable_text(text):
         return None, None
 
     # Apply VGA color matching: translate 16-color SGR codes to 24-bit
@@ -750,9 +875,10 @@ def _banner_to_png(text, banners_dir, encoding='cp437', columns=None,
     if instance_name:
         return fname, _png_display_width(output_path)
     # Cache failure as 0-byte file to avoid retrying on next run.
-    plain_len = len(_strip_ansi(text).strip())
+    plain_len = len(_printable_text(text))
+    label = f" [{server_label}]" if server_label else ""
     print(f"  banner render failed: {fname} "
-          f"({plain_len} visible chars, enc={encoding})",
+          f"({plain_len} visible chars, enc={encoding}){label}",
           file=sys.stderr)
     open(output_path, 'w').close()
     return None, None
@@ -865,10 +991,6 @@ _SEQ_NAMES = {
     '\x1b[H': 'Cursor Home',
     '\x1b[0;0H': 'Cursor Home (0,0)',
     '\x1b[1;1H': 'Cursor Home (1,1)',
-    '\x1b[?25h': 'Show Cursor',
-    '\x1b[?25l': 'Hide Cursor',
-    '\x1b[?7h': 'Autowrap On',
-    '\x1b[?7l': 'Autowrap Off',
     '\x1b[s': 'Save Cursor',
     '\x1b[u': 'Restore Cursor',
     '\x1b[K': 'Erase to EOL',
@@ -878,20 +1000,125 @@ _SEQ_NAMES = {
     '\x1b(B': 'ASCII Charset',
     '\x1b(0': 'Line Drawing',
     '\x1b)0': 'Line Drawing G1',
-    '\x1b[?1h': 'App Cursor Keys',
-    '\x1b[?1l': 'Normal Cursor Keys',
-    '\x1b[?1049h': 'Alt Screen On',
-    '\x1b[?1049l': 'Alt Screen Off',
     '\x1b[6n': 'DSR (cursor pos)',
+    '\x1b[0c': 'DA (device attributes)',
+    '\x1b[c': 'DA (device attributes)',
+    '\x1b[!_': 'Synchronet terminal query',
+    '\x1b[J': 'Erase Below',
+    '\x1b[0J': 'Erase Below',
+    '\x1b[1J': 'Erase Above',
+    '\x1b[3J': 'Erase Scrollback',
+    '\x1b[L': 'Insert Line',
+    '\x1b[M': 'Delete Line',
+    '\x1b[P': 'Delete Char',
+    '\x1b[@': 'Insert Char',
+    '\x1b[G': 'Cursor Column 1',
+    '\x1b7': 'Save Cursor (DEC)',
+    '\x1b8': 'Restore Cursor (DEC)',
+    '\x1bc': 'Full Reset (RIS)',
+    '\x1b': 'ESC (bare)',
+    '\x1b[0z': 'MXP Open Line',
+    '\x1b[1z': 'MXP Secure Line',
+    '\x1b[2z': 'MXP Locked Line',
+    '\x1b[3z': 'MXP Reset',
+    '\x1b[4z': 'MXP Temp Secure',
+    '\x1b[5z': 'MXP Lock Open',
+    '\x1b[6z': 'MXP Lock Secure',
+    '\x1b[7z': 'MXP Lock Locked',
 }
 
 _SGR_RE = re.compile(r'\x1b\[([\d;]*)m$')
 _CUP_RE = re.compile(r'\x1b\[(\d+);(\d+)H$')
-_CUR_MOVE_RE = re.compile(r'\x1b\[(\d*)([ABCD])$')
+_CUR_MOVE_RE = re.compile(r'\x1b\[(\d*)([ABCDEFG])$')
 _SCROLL_RE = re.compile(r'\x1b\[(\d+);(\d+)r$')
 _DEC_RE = re.compile(r'\x1b\[\?(\d+)([hl])$')
-_CUR_DIRS = {'A': 'Up', 'B': 'Down', 'C': 'Right', 'D': 'Left'}
+# Synchronet CTerm proprietary sequences (src/conio/cterm.txt)
+_CTERM_RE = re.compile(r'\x1b\[=([0-9;]*)([Mhln{])$')
+_FNT_RE = re.compile(r'\x1b\[([0-9;]*) D$')
+from blessed.dec_modes import DecPrivateMode as _DecPM
+_DEC_PRIVATE_MODES = {
+    val: _DecPM._LONG_DESCRIPTIONS.get(val, '')
+    for attr in dir(_DecPM)
+    if not attr.startswith('_')
+    and isinstance((val := getattr(_DecPM, attr)), int)
+    and val >= 0
+}
+_CSI_FINAL_RE = re.compile(r'\x1b\[([0-9;!?]*)([A-Za-z@`~_])$')
+_CUR_DIRS = {
+    'A': 'Up', 'B': 'Down', 'C': 'Right', 'D': 'Left',
+    'E': 'Next Line', 'F': 'Prev Line', 'G': 'Column',
+}
 _IAC_CMDS = {0xfb: 'WILL', 0xfc: 'WONT', 0xfd: 'DO', 0xfe: 'DONT', 0xfa: 'SB'}
+_SGR_PARAMS = {
+    0: 'Reset', 1: 'Bold', 2: 'Dim', 3: 'Italic', 4: 'Underline',
+    5: 'Blink', 7: 'Reverse', 8: 'Hidden', 9: 'Strikethrough',
+    22: 'Normal Intensity', 23: 'No Italic', 24: 'No Underline',
+    25: 'No Blink', 27: 'No Reverse', 28: 'No Hidden',
+    30: 'Black FG', 31: 'Red FG', 32: 'Green FG', 33: 'Yellow FG',
+    34: 'Blue FG', 35: 'Magenta FG', 36: 'Cyan FG', 37: 'White FG',
+    38: 'Extended FG', 39: 'Default FG',
+    40: 'Black BG', 41: 'Red BG', 42: 'Green BG', 43: 'Yellow BG',
+    44: 'Blue BG', 45: 'Magenta BG', 46: 'Cyan BG', 47: 'White BG',
+    48: 'Extended BG', 49: 'Default BG',
+    90: 'Bright Black FG', 91: 'Bright Red FG', 92: 'Bright Green FG',
+    93: 'Bright Yellow FG', 94: 'Bright Blue FG',
+    95: 'Bright Magenta FG', 96: 'Bright Cyan FG',
+    97: 'Bright White FG',
+    100: 'Bright Black BG', 101: 'Bright Red BG',
+    102: 'Bright Green BG', 103: 'Bright Yellow BG',
+    104: 'Bright Blue BG', 105: 'Bright Magenta BG',
+    106: 'Bright Cyan BG', 107: 'Bright White BG',
+}
+_CSI_FINALS = {
+    'J': 'Erase Display', 'K': 'Erase Line', 'L': 'Insert Lines',
+    'M': 'Delete Lines', 'P': 'Delete Chars', '@': 'Insert Chars',
+    'X': 'Erase Chars', 'S': 'Scroll Up', 'T': 'Scroll Down',
+    'n': 'Device Status', 'c': 'Device Attributes',
+    's': 'Save Cursor', 'u': 'Restore Cursor',
+    'r': 'Scroll Region', 't': 'Window Op',
+    'd': 'Cursor Row', 'f': 'Cursor Position',
+}
+
+
+def _name_sgr(params_str):
+    """Return a human-readable name for SGR parameters.
+
+    :param params_str: semicolon-separated SGR parameter string
+    :returns: descriptive name
+    """
+    if not params_str:
+        return 'SGR Reset'
+    parts = params_str.split(';')
+    names = []
+    i = 0
+    while i < len(parts):
+        try:
+            p = int(parts[i]) if parts[i] else 0
+        except ValueError:
+            i += 1
+            continue
+        if p in (38, 48) and i + 1 < len(parts):
+            try:
+                mode = int(parts[i + 1])
+            except ValueError:
+                mode = 0
+            if mode == 2 and i + 4 < len(parts):
+                prefix = 'FG' if p == 38 else 'BG'
+                names.append(f'24-bit {prefix}')
+                i += 5
+                continue
+            if mode == 5 and i + 2 < len(parts):
+                prefix = 'FG' if p == 38 else 'BG'
+                names.append(f'256-color {prefix}')
+                i += 3
+                continue
+        name = _SGR_PARAMS.get(p)
+        if name:
+            names.append(name)
+        else:
+            names.append(str(p))
+        i += 1
+    return 'SGR ' + ', '.join(names)
 
 
 def _classify_seq(seq):
@@ -905,11 +1132,11 @@ def _classify_seq(seq):
 
     m = _SGR_RE.match(seq)
     if m:
-        return f'SGR ({m.group(1)})'
+        return _name_sgr(m.group(1))
 
     m = _CUP_RE.match(seq)
     if m:
-        return f'CUP ({m.group(1)},{m.group(2)})'
+        return f'Cursor Position ({m.group(1)},{m.group(2)})'
 
     m = _CUR_MOVE_RE.match(seq)
     if m:
@@ -922,11 +1149,44 @@ def _classify_seq(seq):
 
     m = _DEC_RE.match(seq)
     if m:
-        mode = 'Set' if m.group(2) == 'h' else 'Reset'
-        return f'DEC {mode} ?{m.group(1)}'
+        num = int(m.group(1))
+        action = 'Set' if m.group(2) == 'h' else 'Reset'
+        desc = _DEC_PRIVATE_MODES.get(num)
+        if desc:
+            return f'{action}: {desc}'
+        return f'DEC Private Mode {action} ?{num}'
+
+    # Synchronet CTerm proprietary CSI = sequences (cterm.txt)
+    m = _CTERM_RE.match(seq)
+    if m:
+        params, final = m.group(1), m.group(2)
+        cterm_names = {
+            'M': 'CTerm Set ANSI Music',
+            'h': 'CTerm Mode Set',
+            'l': 'CTerm Mode Reset',
+            'n': 'CTerm State Request',
+            '{': 'CTerm Set Font (deprecated)',
+        }
+        name = cterm_names.get(final, f'CTerm {final}')
+        return f'{name} ({params})' if params else name
+
+    # CSI Ps1 ; Ps2 SP D — FNT font select (cterm.txt)
+    m = _FNT_RE.match(seq)
+    if m:
+        return f'FNT Font Select ({m.group(1)})'
+
+    m = _CSI_FINAL_RE.match(seq)
+    if m:
+        name = _CSI_FINALS.get(m.group(2))
+        if name:
+            params = m.group(1)
+            return f'{name} ({params})' if params else name
 
     if seq.startswith('\x1b]'):
         return 'OSC'
+
+    if seq == '\x1b[':
+        return 'CSI (truncated)'
 
     if seq.startswith('\xff'):
         if len(seq) >= 2:
@@ -970,6 +1230,53 @@ def analyze_escape_sequences(servers):
             category_servers[cat] += 1
 
     return category_servers, total_with_banner
+
+
+def display_top_sequences(servers, limit=100):
+    """Print RST table of the most common escape sequences across banners.
+
+    Counts distinct banners containing each raw escape sequence and
+    displays the top *limit* entries ranked by frequency.
+
+    :param servers: list of server record dicts
+    :param limit: number of sequences to show
+    """
+    seq_banners = Counter()
+    total_with_banner = 0
+
+    for s in servers:
+        banner = (s.get('banner_before') or '') + (s.get('banner_after') or '')
+        if not banner:
+            continue
+        total_with_banner += 1
+
+        seen = set()
+        for segment, is_seq in wcwidth.iter_sequences(banner):
+            if is_seq:
+                seen.add(segment)
+        for seq in seen:
+            seq_banners[seq] += 1
+
+    if not seq_banners:
+        return
+
+    _rst_heading("Common Escape Sequences", '-')
+    print(f"Top {limit} escape sequences by number of unique banners"
+          f" (of {total_with_banner:,} total).")
+    print()
+
+    rows = []
+    for seq, count in seq_banners.most_common(limit):
+        pct = f'{count / total_with_banner * 100:.1f}%'
+        rows.append({
+            'Sequence': f'``{repr(seq)}``',
+            'Name': _classify_seq(seq),
+            'Banners': str(count),
+            '%': pct,
+        })
+
+    table_str = tabulate_mod.tabulate(rows, headers='keys', tablefmt='rst')
+    print_datatable(table_str, caption="Common Escape Sequences")
 
 
 # ---------------------------------------------------------------------------
@@ -1055,6 +1362,193 @@ def _group_by_banner(servers, default_encoding=None):
     for group in groups.values():
         group['servers'].sort(key=lambda s: s['host'].lower())
     return groups
+
+
+def _find_similar_banners(servers, default_encoding=None, threshold=95.0):
+    """Find servers whose banners are similar but not identical.
+
+    Compares normalized visible banner text across servers using fuzzy
+    string matching.  Exact duplicates (already handled by
+    :func:`_group_by_banner`) are excluded from the results.
+
+    To keep the comparison tractable, banners are first bucketed by
+    approximate length and only cross-compared within a window where
+    similarity above *threshold* is geometrically possible.
+
+    :param servers: list of server records
+    :param default_encoding: passed to :func:`_combine_banners`
+    :param threshold: minimum similarity ratio (0--100) to report
+    :returns: dict mapping ``(host, port)`` to list of dicts with
+        keys ``server`` and ``score``
+    """
+    from rapidfuzz import fuzz
+
+    # Build normalized text per server, keyed by (host, port).
+    entries = []
+    for s in servers:
+        banner = _combine_banners(s, default_encoding=default_encoding)
+        if not banner or _is_garbled(banner):
+            continue
+        visible = _strip_mxp_sgml(_strip_ansi(banner))
+        normalized = ' '.join(visible.split())
+        if not normalized:
+            continue
+        key = hashlib.sha256(normalized.encode('utf-8')).hexdigest()
+        entries.append({
+            'server': s,
+            'text': normalized,
+            'length': len(normalized),
+            'hash': key,
+        })
+
+    # Sort by length for efficient windowed comparison.
+    entries.sort(key=lambda e: e['length'])
+
+    # Pre-compute the minimum length ratio required.
+    ratio_floor = threshold / 100.0
+
+    result = {}
+    n = len(entries)
+    for i in range(n):
+        for j in range(i + 1, n):
+            # Length pre-filter: short/long < ratio_floor means
+            # similarity cannot reach threshold.
+            if entries[i]['length'] < entries[j]['length'] * ratio_floor:
+                break
+            # Skip exact duplicates — already grouped elsewhere.
+            if entries[i]['hash'] == entries[j]['hash']:
+                continue
+            score = fuzz.ratio(
+                entries[i]['text'], entries[j]['text'],
+                score_cutoff=threshold)
+            if score:
+                for src, tgt in ((i, j), (j, i)):
+                    src_key = (entries[src]['server']['host'],
+                               entries[src]['server']['port'])
+                    rec = {'server': entries[tgt]['server'],
+                           'score': score}
+                    result.setdefault(src_key, []).append(rec)
+
+    # Sort each server's similar list by descending score.
+    for similars in result.values():
+        similars.sort(key=lambda r: -r['score'])
+
+    if result:
+        total_pairs = sum(len(v) for v in result.values()) // 2
+        print(f"  found {total_pairs} similar-banner pairs"
+              f" across {len(result)} servers"
+              f" (threshold {threshold}%)", file=sys.stderr)
+
+    return result
+
+
+def _merge_similar_banner_groups(groups, default_encoding=None,
+                                 threshold=95.0):
+    """Merge banner groups whose representative text is fuzzy-similar.
+
+    Groups produced by :func:`_group_by_banner` are compared pairwise
+    (using the same length pre-filter and rapidfuzz ratio as
+    :func:`_find_similar_banners`).  Similar groups are merged: the
+    largest group keeps its banner image and the smaller groups' servers
+    are added as ``similar_servers`` with their similarity score.
+
+    :param groups: dict from :func:`_group_by_banner`
+    :param default_encoding: used only for logging context
+    :param threshold: minimum similarity ratio (0--100)
+    :returns: list of group dicts, each with an additional
+        ``similar_servers`` key (list of ``(server, score)`` tuples)
+    """
+    from rapidfuzz import fuzz
+
+    # Build an indexed list of (hash_key, normalized_text, group).
+    entries = []
+    for key, group in groups.items():
+        banner = group['banner']
+        visible = _strip_mxp_sgml(_strip_ansi(banner))
+        normalized = ' '.join(visible.split())
+        entries.append({
+            'key': key,
+            'text': normalized,
+            'length': len(normalized),
+            'group': group,
+        })
+    entries.sort(key=lambda e: e['length'])
+
+    ratio_floor = threshold / 100.0
+
+    # Union-Find to cluster similar groups.
+    parent = list(range(len(entries)))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            # Attach smaller cluster to larger.
+            sa = len(entries[ra]['group']['servers'])
+            sb = len(entries[rb]['group']['servers'])
+            if sa < sb:
+                ra, rb = rb, ra
+            parent[rb] = ra
+
+    scores = {}
+    n = len(entries)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if entries[i]['length'] < entries[j]['length'] * ratio_floor:
+                break
+            score = fuzz.ratio(
+                entries[i]['text'], entries[j]['text'],
+                score_cutoff=threshold)
+            if score:
+                union(i, j)
+                scores[(i, j)] = score
+                scores[(j, i)] = score
+
+    # Collect clusters.
+    clusters = {}
+    for i in range(n):
+        root = find(i)
+        clusters.setdefault(root, []).append(i)
+
+    merged = []
+    total_merged = 0
+    for root, members in clusters.items():
+        # The root's group is the primary (largest).
+        primary = entries[root]['group']
+        result_group = dict(primary)
+        result_group['similar_servers'] = []
+        for idx in members:
+            if idx == root:
+                continue
+            score = scores.get((root, idx)) or scores.get((idx, root))
+            if score is None:
+                # Transitive — find best score via any shared member.
+                for other in members:
+                    s = scores.get((idx, other)) or scores.get(
+                        (other, idx))
+                    if s is not None:
+                        score = s
+                        break
+            if score is None:
+                score = threshold
+            for s in entries[idx]['group']['servers']:
+                result_group['similar_servers'].append((s, score))
+            total_merged += 1
+        result_group['similar_servers'].sort(
+            key=lambda t: (-t[1], t[0]['host'].lower()))
+        merged.append(result_group)
+
+    if total_merged:
+        print(f"  merged {total_merged} similar banner groups"
+              f" in gallery (threshold {threshold}%)",
+              file=sys.stderr)
+
+    return merged
 
 
 def _most_common_hostname(group_servers):
@@ -1202,33 +1696,39 @@ def _setup_plot_style():
     })
 
 
-def _group_small_slices(labels, counts, threshold=0.02,
+def _group_small_slices(labels, counts, max_other=0.25,
                         min_count=None):
     """Group pie slices into 'Other'.
 
-    Slices are grouped if they fall at or below *threshold* fraction of
-    the total, or if *min_count* is given and their count is at or below
-    that value.
+    Keeps the largest slices until they cover at least
+    ``1 - max_other`` of the total, then groups the remainder.
+    If *min_count* is given, slices at or below that absolute count
+    are always grouped regardless of their share.
 
     :param labels: list of label strings
     :param counts: list of corresponding counts
-    :param threshold: fraction of total at or below which slices are grouped
+    :param max_other: maximum fraction of total allowed in 'Other'
     :param min_count: absolute count at or below which slices are grouped
     :returns: (labels, counts) with small entries merged into 'Other'
     """
     total = sum(counts)
     if total == 0:
         return labels, counts
+    # Sort descending so we keep the largest slices first.
+    paired = sorted(zip(labels, counts), key=lambda x: -x[1])
     keep_labels, keep_counts = [], []
+    kept_total = 0
     other = 0
-    for label, count in zip(labels, counts):
+    target = total * (1 - max_other)
+    for label, count in paired:
         if min_count is not None and count <= min_count:
             other += count
-        elif min_count is None and count / total <= threshold:
+        elif kept_total >= target:
             other += count
         else:
             keep_labels.append(label)
             keep_counts.append(count)
+            kept_total += count
     if other > 0:
         keep_labels.append('Other')
         keep_counts.append(other)
@@ -1255,13 +1755,15 @@ def _pie_colors(n, labels=None):
     return colors
 
 
-def _create_pie_chart(sorted_items, output_path, min_count=None, top_n=None):
+def _create_pie_chart(sorted_items, output_path, min_count=None, top_n=None,
+                      group=True):
     """Create a standard pie chart from sorted (label, count) pairs.
 
     :param sorted_items: list of (label, count) tuples, sorted descending
     :param output_path: path to write the output PNG
     :param min_count: group slices at or below this count into 'Other'
     :param top_n: if set, keep only the top N items before grouping
+    :param group: if False, skip grouping small slices into 'Other'
     """
     if not sorted_items:
         return
@@ -1269,9 +1771,10 @@ def _create_pie_chart(sorted_items, output_path, min_count=None, top_n=None):
         sorted_items = sorted_items[:top_n]
     labels = [s for s, _ in sorted_items]
     counts = [c for _, c in sorted_items]
-    labels, counts = _group_small_slices(
-        labels, counts,
-        min_count=min_count)
+    if group:
+        labels, counts = _group_small_slices(
+            labels, counts,
+            min_count=min_count)
     colors = _pie_colors(len(labels), labels)
 
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -1579,6 +2082,17 @@ def _prepare_banner_page_groups(page_groups, file_key,
             sd['_flag'] = _country_flag(s.get('_country_code', ''))
             enriched_servers.append(sd)
         g['servers'] = enriched_servers
+        enriched_similar = []
+        for s, score in group.get('similar_servers', []):
+            sd = dict(s)
+            sd['_name'] = server_name_fn(s)
+            sd['_detail_file'] = s[file_key]
+            sd['_detail_anchor'] = s.get('_detail_anchor', '')
+            sd['_tls'] = _copy_btn_markup(s, tls_fn)
+            sd['_flag'] = _country_flag(s.get('_country_code', ''))
+            sd['_score'] = f"{score:.0f}"
+            enriched_similar.append(sd)
+        g['similar_servers'] = enriched_similar
         enriched.append(g)
     return enriched
 
@@ -1617,12 +2131,14 @@ def generate_banner_gallery(servers, docs_path, page_size=100,
 
     groups = _group_by_banner(
         servers, default_encoding=default_encoding)
+    merged = _merge_similar_banner_groups(
+        groups, default_encoding=default_encoding)
 
     if server_sort_key is None:
         server_sort_key = lambda g: g['servers'][0]['host'].lower()  # noqa: E731
 
     sorted_groups = sorted(
-        groups.values(),
+        merged,
         key=server_sort_key)
 
     total_groups = len(sorted_groups)
@@ -1814,13 +2330,13 @@ def create_option_pie_chart(servers, option_name, output_path):
     none_count = (len(servers)
                   - len(both) - len(will_only) - len(do_only))
     items = [
-        (f'Bi-directional ({len(both)})', len(both)),
-        (f'WILL only ({len(will_only)})', len(will_only)),
-        (f'DO only ({len(do_only)})', len(do_only)),
-        (f'None ({none_count})', none_count),
+        ('Bi-directional', len(both)),
+        ('WILL only', len(will_only)),
+        ('DO only', len(do_only)),
+        ('None', none_count),
     ]
     items = [(label, count) for label, count in items if count > 0]
-    _create_pie_chart(items, output_path)
+    _create_pie_chart(items, output_path, group=False)
 
 
 def display_charset_section(servers):
@@ -1897,12 +2413,15 @@ def _render_banner_section(server, banners_path, default_encoding=None,
     effective_enc = server.get('encoding_override') or (
         default_encoding or server['display_encoding'])
     if banner and not _is_garbled(banner):
+        label = (f"{server['host']}:{server['port']}"
+                 f" ({server.get('data_path', '?')})")
         banner_fname, display_w = _banner_to_png(
             banner, banners_path, effective_enc,
             columns=server.get('column_override'),
             rows=server.get('row_override'),
             no_ambig=server.get('no_ambig_override', False),
-            ice_colors=ice_colors)
+            ice_colors=ice_colors,
+            server_label=label)
         if banner_fname:
             server['_banner_png'] = banner_fname
             if display_w:
@@ -1919,6 +2438,42 @@ def _render_banner_section(server, banners_path, default_encoding=None,
         return ("*Banner not shown -- this server likely"
                 " uses a legacy encoding such as CP437.*\n\n")
     return ''
+
+
+def _render_similar_banners(server, similar_banners, file_key,
+                            server_name_fn=None):
+    """Render similar-banner note for a server detail page.
+
+    :param server: server record dict
+    :param similar_banners: dict from :func:`_find_similar_banners`
+    :param file_key: record key for detail filename (e.g. ``'_bbs_file'``)
+    :param server_name_fn: callable(server) -> display name
+    :returns: RST string (may be empty)
+    """
+    if not similar_banners:
+        return ''
+    key = (server['host'], server['port'])
+    similars = similar_banners.get(key)
+    if not similars:
+        return ''
+    if server_name_fn is None:
+        server_name_fn = lambda s: f"{s['host']}:{s['port']}"  # noqa: E731
+    from .geoip import _country_flag
+    enriched = []
+    for sim in similars:
+        s = sim['server']
+        enriched.append({
+            '_name': server_name_fn(s),
+            '_detail_file': s.get(file_key, ''),
+            '_detail_anchor': s.get('_detail_anchor', ''),
+            '_flag': _country_flag(s.get('_country_code', '')),
+            '_score': f"{sim['score']:.0f}",
+        })
+    min_score = enriched[-1]['_score']
+    return _render_template(
+        'similar_banners.rst.j2',
+        similars=enriched,
+        min_score=min_score) + '\n'
 
 
 def _render_json_section(server, data_dir, mode):

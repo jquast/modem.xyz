@@ -304,3 +304,235 @@ def discover_from_nmap(bbs_list, mud_list, chunk_dir=None):
 
     return sorted(host_data.values(),
                   key=lambda d: (d['category'], d['host'], d['port']))
+
+
+# SSH banner patterns that identify BBS-bundled SSH servers.
+# Each entry is (regex_pattern, software_label).
+_BBS_SSH_PATTERNS = [
+    (re.compile(r'^SSH-2\.0-cryptlib\(SBBS\)'), 'Synchronet'),
+    (re.compile(r'^SSH-2\.0-cryptlib$'), 'Synchronet'),
+    (re.compile(r'^SSH-2\.0-enigma-bbs-'), 'ENiGMA½'),
+    (re.compile(r'^SSH-2\.0-WWIV$'), 'WWIV'),
+    (re.compile(r'^SSH-2\.0-bbs-sshd$'), 'PTT BBS'),
+    (re.compile(r'^SSH-2\.0-tel/os$'), 'tel/os'),
+    (re.compile(r'^SSH-2\.0-ROSSSH$'), 'ROSSSH'),
+    (re.compile(r'^SSH-2\.0-BinktermPHP'), 'Binkterm'),
+    (re.compile(r'^SSH-2\.0-\d+\.\d+\s+FlowSsh.*Bitvise'), 'Bitvise'),
+]
+
+# ISP PTR record patterns — prefer real domains over these.
+_ISP_RE = re.compile(
+    r'^\d+[-.].*\.(spectrum|comcast|verizon|frontier|sbcglobal)\.'
+    r'|\.static\.'
+    r'|^pool-'
+    r'|\.dsl\.'
+    r'|\.lightspeed\.'
+    r'|\.res\.'
+    r'|\.cpe\.'
+    r'|\.hsd\d'
+    r'|\.ip\.linodeusercontent\.'
+    r'|\.vultrusercontent\.'
+    r'|\.googleusercontent\.'
+    r'|\.contaboserver\.'
+    r'|\.bc\.googleusercontent\.'
+)
+
+
+def _match_bbs_ssh(banner):
+    """Match an SSH banner against known BBS SSH patterns.
+
+    :param banner: SSH banner string from nmap
+    :returns: software label string, or ``None``
+    """
+    for pattern, label in _BBS_SSH_PATTERNS:
+        if pattern.search(banner):
+            return label
+    return None
+
+
+def _best_ssh_hostname(ip, hostnames):
+    """Pick the best hostname, filtering ISP PTR records.
+
+    :param ip: IP address string
+    :param hostnames: list of hostname strings
+    :returns: best hostname or IP
+    """
+    real = [h for h in hostnames if not _ISP_RE.search(h)]
+    if real:
+        return sorted(real, key=len)[0]
+    if hostnames:
+        return sorted(hostnames, key=len)[0]
+    return ip
+
+
+def discover_ssh_from_nmap(bbs_list, mud_list, chunk_dir=None):
+    """Discover BBS-bundled SSH services from nmap banner-scan data.
+
+    Finds SSH ports whose banners match known BBS SSH server
+    patterns (Synchronet cryptlib, ENiGMA, WWIV, etc.) and
+    cross-references against existing server lists by hostname
+    and resolved IP.
+
+    :param bbs_list: path to bbslist.txt
+    :param mud_list: path to mudlist.txt
+    :param chunk_dir: path to banner-scan chunks (default: auto)
+    :returns: list of discovery dicts with host, port, banner,
+        software, category, is_new_host
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
+    if chunk_dir is None:
+        chunk_dir = str(_CHUNK_DIR)
+
+    known_hosts, known_ips = _parse_lists(bbs_list, mud_list)
+    known_pairs = _parse_known_pairs(bbs_list, mud_list)
+
+    # Forward-resolve known hostnames to IPs for cross-reference.
+    hostnames_to_resolve = [h for h in known_hosts
+                            if h not in known_ips]
+    print(f"  Resolving {len(hostnames_to_resolve)}"
+          f" known hostnames ...", end='\r')
+
+    def _fwd(hostname):
+        try:
+            return hostname, socket.gethostbyname(hostname)
+        except (socket.herror, socket.gaierror, OSError):
+            return hostname, None
+
+    # Map resolved IP → set of known hostnames for that IP.
+    ip_to_known = defaultdict(set)
+    with ThreadPoolExecutor(max_workers=32) as pool:
+        for hostname, ip in pool.map(_fwd, hostnames_to_resolve):
+            if ip:
+                known_ips.add(ip)
+                ip_to_known[ip].add(hostname)
+
+    # Also map IPs that appear directly in the lists.
+    for h in known_hosts:
+        try:
+            socket.inet_aton(h)
+            ip_to_known[h].add(h)
+        except OSError:
+            pass
+
+    print(f"  Resolved {len(ip_to_known)} IPs from known lists"
+          + ' ' * 20)
+
+    # Scan nmap chunks for BBS SSH banners.
+    ssh_hits = {}
+    for xml_path in sorted(glob.glob(os.path.join(chunk_dir, '*.xml'))):
+        try:
+            tree = ET.parse(xml_path)
+        except ET.ParseError:
+            continue
+        for host_el in tree.getroot().findall('host'):
+            addrs = []
+            for addr in host_el.findall('address'):
+                if addr.get('addrtype') == 'ipv4':
+                    addrs.append(addr.get('addr'))
+            hostnames = []
+            hn_el = host_el.find('hostnames')
+            if hn_el is not None:
+                for hn in hn_el.findall('hostname'):
+                    name = hn.get('name')
+                    if name:
+                        hostnames.append(name.lower())
+
+            ports_el = host_el.find('ports')
+            if ports_el is None:
+                continue
+
+            for port_el in ports_el.findall('port'):
+                for script in port_el.findall('script'):
+                    if script.get('id') != 'banner':
+                        continue
+                    banner = script.get('output', '')
+                    if not banner.startswith('SSH-'):
+                        continue
+                    software = _match_bbs_ssh(banner)
+                    if not software:
+                        continue
+
+                    portid = int(port_el.get('portid'))
+                    ip = addrs[0] if addrs else '?'
+
+                    # Find the best hostname: prefer known list
+                    # hostname for this IP, then nmap hostnames.
+                    known_for_ip = ip_to_known.get(ip, set())
+                    all_names = list(known_for_ip) + hostnames
+                    best_host = _best_ssh_hostname(ip, all_names)
+
+                    # Classify: check if any known hostname for
+                    # this IP is in the mud or bbs list.
+                    category = _classify_ssh_host(
+                        best_host, ip, known_for_ip,
+                        bbs_list, mud_list)
+
+                    # Check if already in a list with ssh tag.
+                    all_check = set(hostnames) | set(addrs)
+                    if known_for_ip:
+                        all_check |= known_for_ip
+                    pair_known = any(
+                        (h, portid) in known_pairs
+                        for h in all_check)
+
+                    is_known_host = bool(
+                        (set(addrs) & known_ips)
+                        or (set(hostnames) & known_hosts)
+                    )
+
+                    key = (best_host, portid)
+                    if key not in ssh_hits:
+                        ssh_hits[key] = {
+                            'host': best_host,
+                            'ip': ip,
+                            'port': portid,
+                            'banner': banner[:120],
+                            'software': software,
+                            'category': category,
+                            'is_new_host': not is_known_host,
+                            'already_listed': pair_known,
+                        }
+
+    return sorted(ssh_hits.values(),
+                  key=lambda d: (d['software'], d['host'],
+                                 d['port']))
+
+
+def _classify_ssh_host(best_host, ip, known_for_ip,
+                       bbs_list, mud_list):
+    """Classify an SSH discovery as 'mud' or 'bbs'.
+
+    Checks whether the resolved IP or hostname already appears
+    in one of the server lists.
+
+    :param best_host: best hostname for the host
+    :param ip: IP address
+    :param known_for_ip: set of known hostnames for this IP
+    :param bbs_list: path to bbslist.txt
+    :param mud_list: path to mudlist.txt
+    :returns: 'mud', 'bbs', or 'other'
+    """
+    if not hasattr(_classify_ssh_host, '_cache'):
+        _classify_ssh_host._cache = {}
+        for path, label in [(mud_list, 'mud'), (bbs_list, 'bbs')]:
+            if not os.path.isfile(path):
+                continue
+            with open(path) as f:
+                for line in f:
+                    stripped = line.split('#')[0].strip()
+                    if not stripped:
+                        continue
+                    parts = stripped.split()
+                    if parts:
+                        _classify_ssh_host._cache[
+                            parts[0].lower()] = label
+
+    cache = _classify_ssh_host._cache
+    # Check known hostnames for this IP first.
+    for h in known_for_ip:
+        if h in cache:
+            return cache[h]
+    if best_host.lower() in cache:
+        return cache[best_host.lower()]
+    return 'other'

@@ -15,6 +15,8 @@ import argparse
 import os
 import random
 import signal
+import socket
+import ssl
 import subprocess
 import sys
 import threading
@@ -28,11 +30,13 @@ _running_procs_lock = threading.Lock()
 
 
 def parse_server_list(path):
-    """Parse a server list into a list of (host, port, encoding, ssl, rlogin) tuples.
+    """Parse a server list into a list of (host, port, encoding, ssl, rlogin, ssh) tuples.
 
     :param path: path to server list file
-    :returns: list of (host, port_str, encoding_or_None, ssl_bool, rlogin_bool) tuples
+    :returns: list of (host, port_str, encoding_or_None, ssl_bool,
+        rlogin_bool, ssh_bool) tuples
     """
+    _FLAGS = {'ssl', 'rlogin', 'ssh'}
     entries = []
     with open(path) as f:
         for line in f:
@@ -44,11 +48,11 @@ def parse_server_list(path):
                 continue
             host = parts[0]
             port = parts[1]
-            ssl_flag = 'ssl' in parts[2:]
-            rlogin_flag = 'rlogin' in parts[2:]
-            remaining = [p for p in parts[2:] if p not in ('ssl', 'rlogin')]
+            flags = set(parts[2:]) & _FLAGS
+            remaining = [p for p in parts[2:] if p not in _FLAGS]
             encoding = remaining[0] if remaining else None
-            entries.append((host, port, encoding, ssl_flag, rlogin_flag))
+            entries.append((host, port, encoding, 'ssl' in flags,
+                            'rlogin' in flags, 'ssh' in flags))
     return entries
 
 
@@ -71,8 +75,73 @@ def _kill_process_group(proc):
         proc.wait(timeout=5)
 
 
+def _probe_tls(host, port, timeout=5):
+    """Try a TLS handshake on host:port, return True if it succeeds.
+
+    :param host: server hostname
+    :param port: server port number
+    :param timeout: connection timeout in seconds
+    :returns: True if TLS handshake succeeded (verified or not)
+    """
+    # Try with certificate verification first.
+    try:
+        ctx = ssl.create_default_context()
+        with ctx.wrap_socket(
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+                server_hostname=host) as s:
+            s.settimeout(timeout)
+            s.connect((host, int(port)))
+            return True
+    except ssl.SSLCertVerificationError:
+        pass
+    except (OSError, socket.timeout):
+        return False
+
+    # Retry without verification — self-signed certs still mean TLS works.
+    try:
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        with ctx.wrap_socket(
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+                server_hostname=host) as s:
+            s.settimeout(timeout)
+            s.connect((host, int(port)))
+            return True
+    except (OSError, socket.timeout):
+        return False
+
+
+def _update_list_file(list_path, tls_hosts):
+    """Append 'ssl' flag to matching lines in a server list file.
+
+    :param list_path: path to the server list file
+    :param tls_hosts: set of ``(host, port)`` tuples that support TLS
+    """
+    with open(list_path, 'r') as f:
+        lines = f.readlines()
+
+    tmp_path = list_path + '.tmp'
+    updated = 0
+    with open(tmp_path, 'w') as f:
+        for line in lines:
+            stripped = line.split('#')[0].strip()
+            if stripped:
+                parts = stripped.split()
+                if (len(parts) >= 2
+                        and (parts[0], parts[1]) in tls_hosts
+                        and 'ssl' not in parts):
+                    line = line.rstrip('\n') + ' ssl\n'
+                    updated += 1
+            f.write(line)
+
+    os.replace(tmp_path, list_path)
+    print(f"Updated {list_path} ({updated} lines updated)",
+          file=sys.stderr)
+
+
 def scan_host(host, port, data_dir, logs_dir, encoding=None,
-              ssl=False, rlogin=False, banner_max_wait=20, connect_timeout=60):
+              ssl=False, rlogin=False, banner_max_wait=25, connect_timeout=60):
     """Scan a single server.
 
     :param host: server hostname
@@ -101,7 +170,7 @@ def scan_host(host, port, data_dir, logs_dir, encoding=None,
         "telnetlib3-fingerprint", host, port,
         "--data", data_dir,
         f"--banner-max-wait={banner_max_wait}",
-        "--banner-quiet-time=5",
+        "--banner-quiet-time=10",
         f"--connect-timeout={connect_timeout}",
         "--silent",
         "--ttype", "xterm-256color",
@@ -195,7 +264,7 @@ def main():
         '--num-workers', type=int, default=20,
         help='Number of parallel workers (default: 16)')
     parser.add_argument(
-        '--banner-max-wait', type=int, default=20,
+        '--banner-max-wait', type=int, default=25,
         help='Seconds to wait for banner data')
     parser.add_argument(
         '--connect-timeout', type=int, default=30,
@@ -209,6 +278,13 @@ def main():
     parser.add_argument(
         '--connect-delay', type=float, default=0.05,
         help='Seconds between launching each scan')
+    parser.add_argument(
+        '--tls-probe', action='store_true',
+        help='Probe each server for implicit TLS (TELNETS) support on'
+             ' its standard port and update the list file with ssl flag')
+    parser.add_argument(
+        '--tls-timeout', type=int, default=5,
+        help='Timeout in seconds for TLS probe handshake (default: 5)')
     parser.add_argument(
         '--shodan-bbs', action='store_true',
         help='Search Shodan for new BBS servers and save discoveries')
@@ -288,11 +364,58 @@ def main():
                 os.unlink(combined_path)
         return
 
+    # TLS probe mode — test every server for implicit TLS and update list.
+    if args.tls_probe:
+        if not args.list:
+            parser.error("--list is required for --tls-probe")
+        if not os.path.isfile(args.list):
+            print(f"Error: {args.list} not found", file=sys.stderr)
+            sys.exit(1)
+
+        entries = parse_server_list(args.list)
+        # Skip entries already marked ssl.
+        to_probe = [(h, p) for h, p, _enc, ssl_flag, _rlogin, _ssh
+                     in entries if not ssl_flag and p.isdigit()]
+        print(f"Probing {len(to_probe)} servers for TLS"
+              f" ({len(entries) - len(to_probe)} already marked ssl) ...",
+              file=sys.stderr)
+
+        tls_hosts = set()
+        with ThreadPoolExecutor(max_workers=args.num_workers) as pool:
+            future_map = {
+                pool.submit(_probe_tls, h, p, args.tls_timeout): (h, p)
+                for h, p in to_probe
+            }
+            for done_count, future in enumerate(
+                    as_completed(future_map), 1):
+                host, port = future_map[future]
+                result = future.result()
+                if result:
+                    tls_hosts.add((host, port))
+                    print(f"{host}:{port} -- TLS supported")
+                if done_count % 50 == 0 or done_count == len(future_map):
+                    print(f"  probed {done_count}/{len(future_map)}",
+                          file=sys.stderr, end="\r")
+        print(file=sys.stderr)
+
+        print(f"\n{len(tls_hosts)} of {len(to_probe)} servers"
+              f" support TLS", file=sys.stderr)
+        if tls_hosts:
+            _update_list_file(args.list, tls_hosts)
+        return
+
     if not args.list:
         parser.error("--list is required for scanning")
     if not os.path.isfile(args.list):
         print(f"Error: {args.list} not found", file=sys.stderr)
         sys.exit(1)
+
+    # Auto-detect default encoding from list filename when not specified.
+    # BBS servers typically use CP437; MUD servers use UTF-8.
+    if args.default_encoding is None:
+        basename = os.path.basename(args.list).lower()
+        if 'bbs' in basename:
+            args.default_encoding = 'cp437'
 
     if args.data_dir is None:
         args.data_dir = os.path.dirname(args.list) or '.'
@@ -309,9 +432,11 @@ def main():
     # that will be skipped, so --connect-delay only affects real scans.
     to_scan = []
     skipped = 0
-    for host, port, encoding, ssl_flag, rlogin_flag in entries:
+    for host, port, encoding, ssl_flag, rlogin_flag, ssh_flag in entries:
         if not host or not port:
             print(f"{host}:{port} -- skip: empty host or port")
+            skipped += 1
+        elif ssh_flag:
             skipped += 1
         elif not args.refresh and os.path.isfile(
                 os.path.join(args.logs_dir, f"{host}:{port}.log")):

@@ -25,8 +25,10 @@ from .banner_analysis import (
 from .decisions import load_decisions, record_rejections, save_decisions
 from .dedup import (
     find_cross_list_conflicts,
+    find_cross_list_ip_conflicts,
     find_dns_duplicates,
     find_duplicates,
+    find_hostname_duplicates,
     prune_dead,
     remove_rlogin_duplicates,
 )
@@ -95,6 +97,11 @@ def _get_argument_parser():
         help="only remove IP entries that duplicate a hostname",
     )
     mode_mx.add_argument(
+        "--only-hostname-dupes", action="store_true",
+        help="find different hostnames resolving to the same"
+             " IP+port and pick the preferred one",
+    )
+    mode_mx.add_argument(
         "--only-rlogin", action="store_true",
         help="only remove rlogin (port 513) entries that"
              " duplicate another port for the same host",
@@ -158,6 +165,11 @@ def _get_argument_parser():
         "--only-nmap", action="store_true",
         help="discover new telnet/rlogin services from nmap"
              " banner-scan data",
+    )
+    mode_mx.add_argument(
+        "--only-ssh", action="store_true",
+        help="discover BBS-bundled SSH services from nmap"
+             " banner-scan data (Synchronet, ENiGMA, etc.)",
     )
     mode_mx.add_argument(
         "--only-misplaced", action="store_true",
@@ -433,9 +445,108 @@ def main():
                       f" {len(bbs_accepted)} to {args.bbs_list}")
         return
 
+    if args.only_ssh:
+        from .nmap_discover import discover_ssh_from_nmap
+        from .util import _prompt
+
+        discoveries = discover_ssh_from_nmap(
+            args.bbs_list, args.mud_list)
+        if not discoveries:
+            print("No BBS-bundled SSH services found in nmap data.")
+            return
+
+        already = [d for d in discoveries if d['already_listed']]
+        new = [d for d in discoveries if not d['already_listed']]
+
+        if already:
+            print(f"\n  {len(already)} SSH services already in lists"
+                  f" (skipped)")
+        if not new:
+            print("All BBS SSH services are already listed.")
+            return
+
+        muds = [d for d in new if d['category'] == 'mud']
+        bbs = [d for d in new if d['category'] in ('bbs', 'other')]
+        new_hosts = [d for d in new if d.get('is_new_host')]
+        known_hosts = [d for d in new
+                       if not d.get('is_new_host')]
+
+        print(f"\nFound {len(new)} new BBS SSH services:"
+              f" {len(muds)} MUD, {len(bbs)} BBS/other"
+              f" ({len(new_hosts)} new hosts,"
+              f" {len(known_hosts)} on known hosts)\n")
+
+        if args.report_only:
+            for d in new:
+                new_tag = ' [NEW]' if d.get('is_new_host') else ''
+                cat = d['category'].upper()
+                print(f"  {d['host']} {d['port']} ssh"
+                      f"  # [{cat}] {d['software']}"
+                      f" — {d['banner'][:60]}{new_tag}")
+            return
+
+        def _review_ssh(label, items, target):
+            accepted = []
+            print(f"  === {label} ({len(items)})"
+                  f" → {target} ===")
+            for d in items:
+                new_tag = ' [NEW]' if d.get('is_new_host') else ''
+                ans = _prompt(
+                    f"\n  {d['host']} {d['port']} ssh"
+                    f"{new_tag}"
+                    f"\n    {d['software']}: {d['banner'][:60]}"
+                    f"\n  Add? [y/n/a(ll)/s(kip)] ", "ynas")
+                if ans == 's':
+                    break
+                if ans == 'a':
+                    accepted.append(d)
+                    idx = items.index(d)
+                    accepted.extend(items[idx + 1:])
+                    print(f"  Accepting all remaining"
+                          f" ({len(accepted)} total).")
+                    break
+                if ans == 'y':
+                    accepted.append(d)
+            return accepted
+
+        mud_accepted = []
+        bbs_accepted = []
+
+        if muds:
+            mud_accepted = _review_ssh(
+                'MUD SSH services', muds, args.mud_list)
+        if bbs:
+            bbs_accepted = _review_ssh(
+                'BBS SSH services', bbs, args.bbs_list)
+
+        if not args.dry_run:
+            if mud_accepted:
+                with open(args.mud_list, 'a') as f:
+                    for d in mud_accepted:
+                        f.write(f"{d['host']} {d['port']}"
+                                f" ssh\n")
+                print(f"  Appended {len(mud_accepted)} to"
+                      f" {args.mud_list}")
+            if bbs_accepted:
+                with open(args.bbs_list, 'a') as f:
+                    for d in bbs_accepted:
+                        f.write(f"{d['host']} {d['port']}"
+                                f" ssh\n")
+                print(f"  Appended {len(bbs_accepted)} to"
+                      f" {args.bbs_list}")
+        else:
+            if mud_accepted:
+                print(f"  Dry run: would append"
+                      f" {len(mud_accepted)} to {args.mud_list}")
+            if bbs_accepted:
+                print(f"  Dry run: would append"
+                      f" {len(bbs_accepted)} to {args.bbs_list}")
+        return
+
     only_flags = (
         args.only_prune, args.only_dupes,
         args.only_cross, args.only_dns,
+        args.only_hostname_dupes,
         args.only_rlogin, args.only_rlogin_tags, args.only_codepage,
         args.only_encodings, args.only_columns,
         args.only_empty, args.only_renders_empty,
@@ -445,21 +556,22 @@ def main():
     )
     any_only = any(only_flags)
     do_prune = args.only_prune or not any_only
-    do_dupes = args.only_dupes
-    do_cross = args.only_cross
-    do_dns = args.only_dns
+    do_dupes = args.only_dupes or not any_only
+    do_cross = args.only_cross or not any_only
+    do_dns = args.only_dns or not any_only
+    do_hostname_dupes = args.only_hostname_dupes or not any_only
     do_rlogin = args.only_rlogin or not any_only
-    do_rlogin_tags = args.only_rlogin_tags
-    do_codepage = args.only_codepage
+    do_rlogin_tags = args.only_rlogin_tags or not any_only
+    do_codepage = args.only_codepage or not any_only
     do_encodings = args.only_encodings or not any_only
-    do_columns = args.only_columns
+    do_columns = args.only_columns or not any_only
     do_empty = args.only_empty or not any_only
-    do_renders_empty = args.only_renders_empty
-    do_renders_small = args.only_renders_small
+    do_renders_empty = args.only_renders_empty or not any_only
+    do_renders_small = args.only_renders_small or not any_only
     do_http = args.only_http or not any_only
-    do_nontelnet = args.only_nontelnet
-    do_tls = args.only_tls
-    do_misplaced = args.only_misplaced
+    do_nontelnet = args.only_nontelnet or not any_only
+    do_tls = args.only_tls or not any_only
+    do_misplaced = args.only_misplaced or not any_only
 
     if do_cross and (args.mud or args.bbs):
         do_cross = False
@@ -482,6 +594,28 @@ def main():
                     decisions, "mud", mud_rm, "dns")
                 record_rejections(
                     decisions, "bbs", bbs_rm, "dns")
+
+    if do_hostname_dupes:
+        if do_mud and os.path.isfile(args.mud_list):
+            removed = find_hostname_duplicates(
+                args.mud_list, args.mud_data,
+                report_only=args.report_only,
+                dry_run=args.dry_run,
+                decisions=decisions,
+                logs_dir=args.logs)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "mud", removed, "hostname_dupe")
+        if do_bbs and os.path.isfile(args.bbs_list):
+            removed = find_hostname_duplicates(
+                args.bbs_list, args.bbs_data,
+                report_only=args.report_only,
+                dry_run=args.dry_run,
+                decisions=decisions,
+                logs_dir=args.logs)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "bbs", removed, "hostname_dupe")
 
     if do_rlogin:
         if do_mud and os.path.isfile(args.mud_list):
@@ -596,6 +730,19 @@ def main():
                 record_rejections(
                     decisions, "bbs", bbs_rm, "cross")
 
+            mud_rm2, bbs_rm2 = find_cross_list_ip_conflicts(
+                args.mud_list, args.bbs_list,
+                args.mud_data, args.bbs_data,
+                report_only=args.report_only,
+                dry_run=args.dry_run,
+                decisions=decisions,
+                logs_dir=args.logs)
+            if decisions and not args.dry_run:
+                record_rejections(
+                    decisions, "mud", mud_rm2, "cross_ip")
+                record_rejections(
+                    decisions, "bbs", bbs_rm2, "cross_ip")
+
     if do_encodings:
         mud_issues = []
         bbs_issues = []
@@ -614,7 +761,8 @@ def main():
                 mud_data=args.mud_data,
                 bbs_data=args.bbs_data,
                 report_only=args.report_only,
-                dry_run=args.dry_run)
+                dry_run=args.dry_run,
+                decisions=decisions)
         else:
             print("No encoding issues detected.")
 
@@ -822,7 +970,8 @@ def main():
                 bbs_issues, mud_issues,
                 args.bbs_list, args.mud_list,
                 report_only=args.report_only,
-                dry_run=args.dry_run)
+                dry_run=args.dry_run,
+                decisions=decisions)
         else:
             print("No misplaced servers detected.")
 
